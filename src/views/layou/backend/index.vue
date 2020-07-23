@@ -286,8 +286,6 @@ export default {
       box-shadow: 0 10px 10px rgba(1, 1, 1, 0.1);
       height: 100%;
       overflow: hidden;
-      .menu {
-      }
       .el-menu-vertical-demo:not(.el-menu--collapse) {
         width: 200px;
         min-height: 400px;
