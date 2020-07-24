@@ -1,9 +1,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Store from '../store'
+import Store from '../store';
 import config from '../config';
 import backend from './backend';
 import client from './client';
+import minApp from './minApp';
+import app from './app';
+import web from './web';
 Vue.use(VueRouter);
 // 基础路由表
 const routes = [
@@ -46,10 +49,11 @@ const routeOption = {
 let userinfo = localStorage.getItem('userinfo');
 VueRouter.prototype.setRoles = setRoles;
 const router = new VueRouter(routeOption);
+let target = [];
 // 刷新页面时，重新加载路由表
 if (userinfo) {
   userinfo = JSON.parse(userinfo);
-  setRoles(userinfo, backend);
+  setRoles();
 }
 router.beforeEach(beforeRouter)
 export default router;
@@ -73,9 +77,8 @@ function beforeRouter(to, from, next) {
   }
   // 页面访问权限
   if (to.meta.role) {
-    console.log('需要权限');
     if (!userinfo || !userinfo.role.includes(to.meta.role)) {
-      console.log(!to.meta.role, !userinfo, userinfo.role, (to.meta.role));
+      console.log('需要权限');
       next('/error401');
       return
     }
@@ -91,13 +94,15 @@ function beforeRouter(to, from, next) {
 function mapRouter(obj, userinfo) {
   let arr = [];
   obj.forEach(e => {
-    if (e.children && e.children.length) {
-      arr.push({
-        ...e,
-        children: mapRouter(e.children, userinfo)
-      });
-    } else if (userinfo.role.includes(e.meta.role)) {
-      arr.push(e);
+    if (userinfo.role.includes(e.meta.role)) {
+      if (e.children && e.children.length) {
+        arr.push({
+          ...e,
+          children: mapRouter(e.children, userinfo)
+        });
+      } else {
+        arr.push(e);
+      }
     }
   });
   return arr;
@@ -108,23 +113,33 @@ function mapRouter(obj, userinfo) {
  * @param {Array} userinfo 用户权限
  * @param {Array} backend 后台路由 
  */
-function setRoles(userinfo, backend) {
-  let children = mapRouter(backend, userinfo);
+function setRoles() {
+  let userinfo = localStorage.getItem('userinfo');
+  let targetIndex = sessionStorage.getItem('xitong') || 'crm';
+  let xitong = backend;
+  if (userinfo) userinfo = JSON.parse(userinfo);
+  if (targetIndex == 'crm') xitong = backend;
+  if (targetIndex == 'app') xitong = app;
+  if (targetIndex == 'web') xitong = web;
+  if (targetIndex == 'minapp') xitong = minApp;
+  let children = mapRouter(xitong, userinfo);
   // 存入Vuex
-  Store.commit('setUserinfo', userinfo)
-  Store.commit('setMenu', children)
+  Store.commit('setUserinfo', userinfo);
+  Store.commit('setMenu', children);
   let routes = [
     {
-      path: "/backend",
-      name: "Backend",
+      path: "/" + targetIndex,
+      name: targetIndex.charAt(0).toUpperCase() + targetIndex.slice(1),
       component: () => import("@/views/layou/backend"),
-      meta: { isAuth: true },
-      redirect: "backend/home",
+      meta: { keepAlive: true, isAuth: true },
+      redirect: targetIndex + '/' + children[0].path,
       children,
     }
   ];
-  router.addRoutes(routes.concat(client));
-  return true
+  if (!target.includes(targetIndex)) {
+    target.push(targetIndex)
+    router.addRoutes(routes.concat(client));
+  }
 }
 
 

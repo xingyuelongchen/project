@@ -1,17 +1,15 @@
 <!--
-Template Name: home
+Template Name: quality
 Create author: qinglong
-Create Time  : 2020-07-22
+Create Time  : 2020-07-24
 -->
 <template>
-  <div>
-    <el-button type="primary">sdf</el-button>
-  </div>
+<div>quality</div>
 </template>
 <script>
 export default {
-  name: "Home",
-  data() {
+name:"Qualityindex",
+ data() {
     return {};
   }
 };

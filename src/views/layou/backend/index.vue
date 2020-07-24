@@ -4,9 +4,14 @@ Create author: qinglong
 Create Time  : 2020-07-22
 -->
 <template>
-  <div class="app-body">
-    <div class="app-header">
+  <div class="app-body user">
+    <div class="app-header" user="primary">
       <div class="left">
+        <div class="item logo" :class="{scale:isCollapse}">
+          <img
+            :src="isCollapse?'http://www.guangyizhou.cn/public/home/assets/logo.png':'http://www.guangyizhou.cn/public/home/assets/logo.png'"
+          />
+        </div>
         <div class="item icon">
           <el-tooltip effect="dark" :content="isCollapse?'展开侧边栏':'折叠侧边栏'" placement="right-end">
             <i
@@ -15,21 +20,45 @@ Create Time  : 2020-07-22
             ></i>
           </el-tooltip>
         </div>
+        <div
+          class="itema"
+          :class="{active:targetIndex == 'crm'}"
+          @click="toggle('crm')"
+          v-role="1"
+        >管理系统</div>
+        <div
+          class="itema"
+          :class="{active:targetIndex == 'app'}"
+          @click="toggle('app')"
+          v-role="2"
+        >应用程序</div>
+        <div
+          class="itema"
+          :class="{active:targetIndex == 'web'}"
+          @click="toggle('web')"
+          v-role="3"
+        >官网</div>
+        <div
+          class="itema"
+          :class="{active:targetIndex == 'minapp'}"
+          @click="toggle('minapp')"
+          v-role="4"
+        >小程序</div>
       </div>
       <div class="center"></div>
       <div class="right">
         <div class="item">
-          <el-color-picker v-model="theme"></el-color-picker>
+          <!-- <el-color-picker v-model="theme" size="small"></el-color-picker> -->
         </div>
         <div class="item">
           <el-avatar :size="40" :src="$store.state.userinfo.pic">{{$store.state.userinfo.name}}</el-avatar>
         </div>
         <div class="item">{{$store.state.userinfo.name}}</div>
-        <div class="item">
-          <el-dropdown>
+        <div class="itema">
+          <el-dropdown trigger="click">
             <i class="el-icon-s-tools" style="font-size:18px;cursor: pointer;"></i>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>退出登录</el-dropdown-item>
+              <el-dropdown-item @click.stop.native="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -38,10 +67,16 @@ Create Time  : 2020-07-22
     <div class="app-container">
       <div class="app-side">
         <el-scrollbar style="height:100%">
-          <el-menu default-active="0" :collapse="isCollapse" class="el-menu-vertical-demo" router>
+          <el-menu
+            :default-active="$route.name"
+            :collapse="isCollapse"
+            class="el-menu-vertical-demo"
+            router
+            unique-opened
+          >
             <template v-for="(item,index) in $store.state.menu">
               <el-submenu
-                :index="''+index"
+                :index="item.name"
                 :key="index"
                 :route="item"
                 v-if="item.children && item.children.length"
@@ -51,13 +86,13 @@ Create Time  : 2020-07-22
                   <span slot="title">{{item.title || item.meta.title}}</span>
                 </template>
                 <template v-for="(k,i) in item.children">
-                  <el-menu-item :index="index+'-'+i" :key="i" :route="k">
+                  <el-menu-item :index="k.name" :key="i" :route="k">
                     <i :class="k.icon"></i>
                     <span slot="title">{{k.title || k.meta.title}}</span>
                   </el-menu-item>
                 </template>
               </el-submenu>
-              <el-menu-item :index="''+index" :key="index" :route="item" v-else>
+              <el-menu-item :index="item.name" :key="index" :route="item" v-else>
                 <i :class="item.icon"></i>
                 <span slot="title">{{item.title || item.meta.title}}</span>
               </el-menu-item>
@@ -67,13 +102,8 @@ Create Time  : 2020-07-22
       </div>
       <div class="app-content">
         <keep-alive>
-          <transition mode="out-in">
-            <router-view v-if="$route.meta.keepAlice !== false" />
-          </transition>
+          <router-view />
         </keep-alive>
-        <transition mode="out-in">
-          <router-view v-if="$route.meta.keepAlice === false" />
-        </transition>
       </div>
     </div>
   </div>
@@ -83,14 +113,26 @@ const version = require("element-ui/package.json").version;
 export default {
   name: "Backend",
   data() {
-    return { isCollapse: false, theme: this.$store.state.userinfo.theme };
-  },
-  watch: {
-    theme(val) {
-      this.updateTheme(val);
-    }
+    return {
+      // 菜单折叠
+      isCollapse: false,
+      // 风格主题
+      theme: this.$store.state.userinfo.theme,
+      // 当前管理系统
+      targetIndex: sessionStorage.getItem("xitong")
+    };
   },
   methods: {
+    toggle(val) {
+      this.targetIndex = val;
+      sessionStorage.setItem("xitong", val);
+      this.$router.setRoles();
+      let path = sessionStorage.getItem("xitong") || "crm";
+      this.$router.replace("/" + path + "/" + this.$store.state.menu[0].path);
+    },
+    logout() {
+      this.$router.replace("/login");
+    },
     updateTheme(val, oldVal = "#409EFF") {
       if (typeof val !== "string") return;
       const head = document.getElementsByTagName("head")[0];
@@ -241,6 +283,7 @@ export default {
 .app-body {
   overflow: hidden;
   width: 100vw;
+  min-width: 1200px;
   height: 100vh;
   .app-header {
     height: 60px;
@@ -253,6 +296,27 @@ export default {
       flex: auto;
       display: flex;
       justify-content: flex-start;
+      align-items: center;
+      height: 100%;
+      .logo {
+        max-width: 170px;
+        width: 170px;
+        height: 90%;
+        overflow: hidden;
+        margin: 0 5px;
+        transition: all 0.6s;
+        &.scale {
+          max-width: 50px;
+          width: 50px;
+          transition: all 0.7s;
+          padding: 0 5px;
+        }
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
     }
     .center {
       flex: auto;
@@ -270,11 +334,23 @@ export default {
       overflow: hidden;
       cursor: pointer;
     }
-    .item {
+    .item,
+    .itema {
       margin: 0 15px;
+      padding: 0 10px;
       display: flex;
       align-items: center;
       justify-content: center;
+      vertical-align: middle;
+      transition: all 0.6s;
+      &.active {
+        // opacity: 0.5;
+        background: rgba(1, 1, 1, 0.2);
+        height: 90%;
+      }
+    }
+    .itema {
+      cursor: pointer;
     }
   }
   .app-container {

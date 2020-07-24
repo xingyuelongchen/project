@@ -1,16 +1,14 @@
 <!--
-Template Name: aaa
+Template Name: thtor
 Create author: qinglong
-Create Time  : 2020-07-22
+Create Time  : 2020-07-24
 -->
 <template>
-  <div>
-    <router-link to="home">home</router-link>
-  </div>
+  <div>thtor</div>
 </template>
 <script>
 export default {
-  name: "Aaa",
+  name: "Tutorindex",
   data() {
     return {};
   }

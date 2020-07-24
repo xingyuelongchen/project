@@ -9,28 +9,33 @@ Create Time  : 2020-07-22
   </div>
 </template>
 <script>
-import backend from "@/router/backend";
 export default {
   name: "Login",
   data() {
-    return { userinfo: {} };
+    return {
+      userinfo: {
+        id: 1,
+        name: "测试",
+        theme: "#ffffff",
+        pic:
+          "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+        role: [...Array(320)].map((e, i) => i + 1),
+        dateTime: Date.now() + 1000 * 60 * 60 * 24
+      }
+    };
+  },
+  created() {
+    localStorage.removeItem("userinfo");
   },
   methods: {
     setRoutes() {
-      let userinfo = {
-        id: 1,
-        name: "测试",
-        theme: "#409EFF",
-        pic:
-          "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        role: [10, 11, 111],
-        dateTime: Date.now() + 1000 * 60 * 60 * 24
-      };
+      let userinfo = this.userinfo;
       localStorage.setItem("userinfo", JSON.stringify(userinfo));
       this.$store.commit("setUserinfo", userinfo);
       if (userinfo) {
-        this.$router.setRoles(userinfo, backend);
-        this.$router.replace("/backend/home");
+        this.$router.setRoles();
+        let path = sessionStorage.getItem("xitong") || "crm";
+        this.$router.replace("/" + path + "/" + this.$store.state.menu[0].path);
       }
     }
   }
