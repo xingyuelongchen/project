@@ -45,16 +45,28 @@ const routeOption = {
     }
   }
 }
-// 
+const originalPush = VueRouter.prototype.push;
+const originalReplace = VueRouter.prototype.replace;
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+VueRouter.prototype.replace = function replace(location) {
+  return originalReplace.call(this, location).catch(err => err)
+}
+// 获取用户登录信息
 let userinfo = localStorage.getItem('userinfo');
 VueRouter.prototype.setRoles = setRoles;
 const router = new VueRouter(routeOption);
 let target = [];
-// 刷新页面时，重新加载路由表
+
 if (userinfo) {
   userinfo = JSON.parse(userinfo);
+  // 刷新页面时，重新加载路由表
   setRoles();
+  // 页面刷新保持选项卡
+  cache()
 }
+
 router.beforeEach(beforeRouter)
 export default router;
 
@@ -68,6 +80,7 @@ function beforeRouter(to, from, next) {
   // 获取用户信息
   let userinfo = localStorage.getItem('userinfo')
   if (userinfo) userinfo = JSON.parse(userinfo);
+
   // 是否需要登录权限,如果用户信息过期，清空用户信息并跳转到登录
   if (to.matched.some(e => e.meta.isAuth) && (!userinfo || userinfo.dateTime < Date.now())) {
     console.log('需要登录');
@@ -75,6 +88,7 @@ function beforeRouter(to, from, next) {
     next('/login')
     return;
   }
+
   // 页面访问权限
   if (to.meta.role) {
     if (!userinfo || !userinfo.role.includes(to.meta.role)) {
@@ -82,6 +96,15 @@ function beforeRouter(to, from, next) {
       next('/error401');
       return
     }
+  }
+  if (!/(login)/.test(to.fullPath)) {
+    let option = {
+      name: to.name,
+      fullPath: to.fullPath,
+      path: to.path,
+      title: to.meta.title
+    };
+    Store.commit("setTabmenu", option);
   }
   next()
 }
@@ -114,6 +137,7 @@ function mapRouter(obj, userinfo) {
  * @param {Array} backend 后台路由 
  */
 function setRoles() {
+
   let userinfo = localStorage.getItem('userinfo');
   let targetIndex = sessionStorage.getItem('xitong') || 'crm';
   let xitong = backend;
@@ -140,6 +164,19 @@ function setRoles() {
     target.push(targetIndex)
     router.addRoutes(routes.concat(client));
   }
+}
+/**
+ * 缓存tab选项卡
+ */
+function cache() {
+  window.onbeforeunload = () => {
+    sessionStorage.setItem("Store", JSON.stringify(Store.state));
+  };
+  window.addEventListener("load", () => {
+    let data = sessionStorage.getItem("Store") || false;
+    if (data) Store.commit("setInit", JSON.parse(data));
+    sessionStorage.removeItem("Store");
+  });
 }
 
 

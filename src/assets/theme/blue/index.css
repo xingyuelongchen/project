@@ -9,6 +9,14 @@
   background: #00BA00;
   border-color: #00BA00;
 }
+.user .top .item[user=active].active {
+  border-bottom-color: #00BABD !important;
+  color: #00BABD;
+}
+.user .el-menu-item.is-active {
+  background: #00BABD;
+  color: #fff;
+}
 .el-pagination--small .arrow.disabled,
 .el-table .hidden-columns,
 .el-table td.is-hidden > *,

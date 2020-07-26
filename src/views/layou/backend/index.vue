@@ -37,7 +37,7 @@ Create Time  : 2020-07-22
           :class="{active:targetIndex == 'web'}"
           @click="toggle('web')"
           v-role="3"
-        >官网</div>
+        >官网管理</div>
         <div
           class="itema"
           :class="{active:targetIndex == 'minapp'}"
@@ -101,9 +101,25 @@ Create Time  : 2020-07-22
         </el-scrollbar>
       </div>
       <div class="app-content">
-        <keep-alive>
-          <router-view />
-        </keep-alive>
+        <div class="top">
+          <el-tabs
+            :value="activeName"
+            :closable="$store.state.tabmenu.length>1"
+            :key="key"
+            type="card"
+            @tab-remove="delTab"
+            @tab-click="onTab"
+          >
+            <template v-for="item in $store.state.tabmenu">
+              <el-tab-pane :key="item.fullPath" :label="item.title" :name="item.fullPath"></el-tab-pane>
+            </template>
+          </el-tabs>
+        </div>
+        <div class="bottom">
+          <keep-alive>
+            <router-view />
+          </keep-alive>
+        </div>
       </div>
     </div>
   </div>
@@ -112,23 +128,41 @@ Create Time  : 2020-07-22
 const version = require("element-ui/package.json").version;
 export default {
   name: "Backend",
+
   data() {
     return {
+      key: 0,
       // 菜单折叠
       isCollapse: false,
       // 风格主题
       theme: this.$store.state.userinfo.theme,
       // 当前管理系统
-      targetIndex: sessionStorage.getItem("xitong")
+      targetIndex: sessionStorage.getItem("xitong") || "crm"
     };
   },
+  computed: {
+    activeName() {
+      let name = this.$store.state.tabmenu.filter(e => e.active);
+      name = name[0];
+      return name && name.fullPath;
+    }
+  },
   methods: {
+    delTab(name) {
+      this.$store.commit("delTabmenu", name);
+    },
+    onTab(item) {
+      this.$router.push(item.name);
+    },
     toggle(val) {
+      if (this.targetIndex == val) return;
       this.targetIndex = val;
       sessionStorage.setItem("xitong", val);
+      // 初始化路由表
       this.$router.setRoles();
-      let path = sessionStorage.getItem("xitong") || "crm";
-      this.$router.replace("/" + path + "/" + this.$store.state.menu[0].path);
+      // 初始化tabmenu
+      this.$store.commit("removeTabmenu");
+      this.$router.push("/" + val + "/" + this.$store.state.menu[0].path);
     },
     logout() {
       this.$router.replace("/login");
@@ -287,7 +321,6 @@ export default {
   height: 100vh;
   .app-header {
     height: 60px;
-    border-bottom: 1px solid #eee;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -327,6 +360,7 @@ export default {
       flex: auto;
       display: flex;
       justify-content: flex-end;
+      align-items: center;
     }
     .icon {
       font-size: 22px;
@@ -344,13 +378,12 @@ export default {
       vertical-align: middle;
       transition: all 0.6s;
       &.active {
-        // opacity: 0.5;
         background: rgba(1, 1, 1, 0.2);
-        height: 90%;
       }
     }
     .itema {
       cursor: pointer;
+      height: 100%;
     }
   }
   .app-container {
@@ -362,6 +395,7 @@ export default {
       box-shadow: 0 10px 10px rgba(1, 1, 1, 0.1);
       height: 100%;
       overflow: hidden;
+      // background: #222;
       .el-menu-vertical-demo:not(.el-menu--collapse) {
         width: 200px;
         min-height: 400px;
@@ -374,8 +408,15 @@ export default {
     .app-content {
       flex: auto;
       height: 100%;
-      padding: 20px;
       overflow: hidden;
+      .top {
+        .el-tab-pane {
+          min-width: 120px;
+        }
+      }
+      .bottom {
+        padding: 20px;
+      }
     }
   }
 }
