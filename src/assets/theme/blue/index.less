@@ -13,15 +13,33 @@
         border-color: #00BA00;
     }
 
-    .top .item[user=active].active {
-        border-bottom-color: #00BABD !important;
-        // background: #00BABD;
-        color: #00BABD;
+    .top {
+        .item[user=active].active {
+            border-bottom-color: #00BABD !important;
+            color: #00BABD;
+
+            .el-tabs {
+                .el-tabs__header.is-top {
+                    border-color: #00BABD;
+                }
+            }
+        }
     }
 
     .el-menu-item.is-active {
         background: #00BABD;
         color: #fff
+    }
+
+
+    .el-card .item[user=card-active] {
+
+        &:hover,
+        &.active {
+            background: #00BABD;
+            color: #fff;
+            transition: all .2s;
+        }
     }
 }
 

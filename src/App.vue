@@ -10,6 +10,19 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  .el-scrollbar__wrap {
+    overflow-x: hidden;
+  }
+  .content-box {
+    display: grid;
+    height: calc(100vh - 150px);
+    grid-template-rows: 60px auto 60px;
+    padding: 20px 0;
+  }
+  .content-wrap {
+    height: calc(100vh - 130px);
+    padding: 20px 0;
+  }
 }
 body,
 html {
@@ -23,8 +36,6 @@ html {
 <script>
 export default {
   name: "App",
-  created() {
-   
-  }
+  created() {}
 };
 </script>

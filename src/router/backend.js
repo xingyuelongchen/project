@@ -6,13 +6,14 @@ export default
     {
       path: 'admin', name: 'Admin', meta: { keepAlive: true, role: 20, title: '行政管理', }, component: () => import('@/views/layou'),
       children: [
-        { path: 'index', name: 'Adminindex', meta: { keepAlive: true, role: 21, title: '员工管理', }, component: () => import('@/views/backend/crm/admin/index') },
+        { path: 'member', name: 'Adminmenber', meta: { keepAlive: true, role: 21, title: '员工管理', }, component: () => import('@/views/backend/crm/admin/member') },
+        { path: 'roles', name: 'Adminroles', meta: { keepAlive: true, role: 22, title: '权限分配', }, component: () => import('@/views/backend/crm/admin/roles') },
       ]
     },
     {
       path: 'sales', name: 'Sales', meta: { keepAlive: true, role: 40, title: '销售中心', }, component: () => import('@/views/layou'),
       children: [
-        { path: 'index', name: 'Salesindex', meta: { keepAlive: true, role: 41, title: '数据管理', }, component: () => import('@/views/backend/crm/sales/index') },
+        { path: 'index', name: 'Salesindex', meta: { keepAlive: true, role: 41, title: '数据管理', }, component: () => import('@/views/backend/crm/sales/index/') },
         { path: 'receive', name: 'Salesreceive', meta: { keepAlive: true, role: 42, title: '接待设置', }, component: () => import('@/views/backend/crm/sales/receive') },
       ]
     },

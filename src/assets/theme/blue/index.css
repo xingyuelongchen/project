@@ -13,9 +13,18 @@
   border-bottom-color: #00BABD !important;
   color: #00BABD;
 }
+.user .top .item[user=active].active .el-tabs .el-tabs__header.is-top {
+  border-color: #00BABD;
+}
 .user .el-menu-item.is-active {
   background: #00BABD;
   color: #fff;
+}
+.user .el-card .item[user=card-active]:hover,
+.user .el-card .item[user=card-active].active {
+  background: #00BABD;
+  color: #fff;
+  transition: all 0.2s;
 }
 .el-pagination--small .arrow.disabled,
 .el-table .hidden-columns,

@@ -4,9 +4,7 @@ Create author: qinglong
 Create Time  : 2020-07-24
 -->
 <template>
-  <div>
-    <el-input v-model="value" />
-  </div>
+  <div></div>
 </template>
 <script>
 export default {

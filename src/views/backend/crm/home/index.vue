@@ -4,10 +4,7 @@ Create author: qinglong
 Create Time  : 2020-07-22
 -->
 <template>
-  <div>
-    <el-button type="primary">sdf</el-button>
-    
-  </div>
+  <div>紧张筹备中</div>
 </template>
 <script>
 export default {

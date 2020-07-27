@@ -17,7 +17,7 @@ module.exports = {
         // https: true,   //是否使用https协议
         // hotOnly: true, //是否开启热更新
         proxy: {
-            "/api": {
+            "/adminapi": {
                 target: "http://192.168.33.10",
                 ws: true,
                 changeOrigin: true

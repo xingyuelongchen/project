@@ -1,5 +1,10 @@
 module.exports = {
-    routeMode: "history",// hash
-    routePath: '/',//打包路径
-    storeKey: 'myaa'
+    // hash
+    routeMode: "history",
+    //打包路径
+    routePath: '/',
+    // 本地缓存前缀
+    storeKey: 'myaa',
+    // 接口URL
+    baseUrl: process.env.NODE_ENV == 'development' ? '' : ''
 }

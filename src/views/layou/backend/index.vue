@@ -47,9 +47,7 @@ Create Time  : 2020-07-22
       </div>
       <div class="center"></div>
       <div class="right">
-        <div class="item">
-          <!-- <el-color-picker v-model="theme" size="small"></el-color-picker> -->
-        </div>
+        <div class="itema">主题色</div>
         <div class="item">
           <el-avatar :size="40" :src="$store.state.userinfo.pic">{{$store.state.userinfo.name}}</el-avatar>
         </div>
@@ -104,22 +102,25 @@ Create Time  : 2020-07-22
         <div class="top">
           <el-tabs
             :value="activeName"
-            :closable="$store.state.tabmenu.length>1"
             :key="key"
             type="card"
             @tab-remove="delTab"
             @tab-click="onTab"
+            user="el-tabs"
           >
-            <template v-for="item in $store.state.tabmenu">
-              <el-tab-pane :key="item.fullPath" :label="item.title" :name="item.fullPath"></el-tab-pane>
+            <template v-for="(item,index) in $store.state.tabmenu">
+              <el-tab-pane
+                :key="item.fullPath"
+                :label="item.title"
+                :name="item.fullPath"
+                :closable="index>0"
+              ></el-tab-pane>
             </template>
           </el-tabs>
         </div>
-        <div class="bottom">
-          <keep-alive>
-            <router-view />
-          </keep-alive>
-        </div>
+        <keep-alive>
+          <router-view class="bottom" />
+        </keep-alive>
       </div>
     </div>
   </div>
@@ -162,7 +163,7 @@ export default {
       this.$router.setRoles();
       // 初始化tabmenu
       this.$store.commit("removeTabmenu");
-      this.$router.push("/" + val + "/" + this.$store.state.menu[0].path);
+      this.$router.replace("/" + val + "/" + this.$store.state.menu[0].path);
     },
     logout() {
       this.$router.replace("/login");
@@ -324,7 +325,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 0 20px rgba(1, 1, 1, 0.1);
+    border-bottom: 1px solid #fff;
     .left {
       flex: auto;
       display: flex;
@@ -389,7 +390,7 @@ export default {
   .app-container {
     display: flex;
     justify-content: space-between;
-    height: 100%;
+    height: calc(100% - 61px);
     .app-side {
       border-right: 1px solid #e6e6e6;
       box-shadow: 0 10px 10px rgba(1, 1, 1, 0.1);
@@ -410,12 +411,15 @@ export default {
       height: 100%;
       overflow: hidden;
       .top {
-        .el-tab-pane {
-          min-width: 120px;
+        box-shadow: 0 0 20px rgba(1, 1, 1, 0.1);
+        /deep/ .el-tabs__header.is-top {
+          margin: 0;
         }
       }
       .bottom {
-        padding: 20px;
+        overflow: hidden;
+        height: 100%;
+        padding: 0 20px;
       }
     }
   }
