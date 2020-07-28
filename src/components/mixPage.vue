@@ -12,6 +12,7 @@ Create Time  : 2020-07-27
       :page-sizes="value.sizes "
       :total="value.total"
       @current-change="currentChange"
+      hide-on-single-page
     ></el-pagination>
   </div>
 </template>

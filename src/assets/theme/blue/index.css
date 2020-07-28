@@ -26,6 +26,20 @@
   color: #fff;
   transition: all 0.2s;
 }
+.user .el-list .el-item {
+  padding: 0 20px;
+  transition: all 0.2s;
+}
+.user .el-list .el-item:hover {
+  transition: all 0.2s;
+  cursor: pointer;
+  background: #e6f8f8;
+  padding: 0 20px;
+}
+.user .el-list .el-item.active {
+  color: #fff;
+  background: #00BABD;
+}
 .el-pagination--small .arrow.disabled,
 .el-table .hidden-columns,
 .el-table td.is-hidden > *,

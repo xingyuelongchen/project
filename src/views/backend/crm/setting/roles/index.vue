@@ -7,35 +7,36 @@ Create Time  : 2020-07-27
   <div class="content-wrap">
     <el-card class="left" shadow="never">
       <div slot="header">
-        <el-button type="primary" size="12px" @click=" dialogFormVisible = true;">添加</el-button>
+        <el-button type="primary" size="mini" @click="treeAddTop">添加</el-button>
       </div>
       <div style="height:100%">
         <el-scrollbar style="height:100%">
           <el-tree
             :data="treeData"
             :props="defaultProps"
-            :expand-on-click-node="false"
+            :expand-on-click-node="true"
+            :default-expanded-keys="treeKey"
             highlight-current
             node-key="id"
             check-strictly
             @node-click="handleNodeClick"
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
-              <span>{{ node.title }}</span>
+              <span>{{ node.label }}</span>
               <span>
                 <i
                   class="el-icon-plus"
-                  @click="() => treeAdd(data)"
+                  @click.self.stop="() => treeAdd(data)"
                   style="color:#00BABD;padding:0 5px"
                 ></i>
                 <i
                   class="el-icon-edit"
-                  @click="() => treeChange(data)"
+                  @click.stop.self="() => treeChange(data)"
                   style="color:#ff6600;padding:0 5px"
                 ></i>
                 <i
                   class="el-icon-delete"
-                  @click="() => treeDel(data)"
+                  @click.stop.self="() => treeDel(data)"
                   style="color:#ee3333;padding:0 5px"
                 ></i>
               </span>
@@ -44,17 +45,19 @@ Create Time  : 2020-07-27
         </el-scrollbar>
       </div>
     </el-card>
-    <el-card shadow="never">
+    <el-card class="right" shadow="never">
       <div slot="header">权限列表</div>
-      <!-- <mixTable v-model="" /> -->
-      <mixPage v-model="page" />
+      <div class="content-item">
+        <mixTable v-model="tableData" :fields="tableFields" />
+        <mixPage v-model="page" />
+      </div>
     </el-card>
     <el-dialog
-      title="添加权限菜单"
+      :title="title"
       :visible.sync="dialogFormVisible"
       width="400px"
       :modal="true"
-      top="30vh"
+      top="15vh"
     >
       <mixForm v-model="roles" :fields="rolesFields" />
     </el-dialog>
@@ -62,21 +65,25 @@ Create Time  : 2020-07-27
 </template>
 <script>
 export default {
-  name: "",
+  name: "Roles",
   data() {
     return {
       dialogFormVisible: false,
-      roles: { pid: 0 },
+      index: 0,
+      roles: {},
+      treeKey: [],
+      title: "",
       rolesFields: [
         {
-          label: "顶级",
-          type: "text",
+          label: "上级",
+          type: "selectTree",
           labelWidth: "40",
           prop: "pid",
-          readonly: true
+          options: []
         },
         { label: "名称", type: "text", labelWidth: "40", prop: "title" },
         { label: "图标", type: "text", labelWidth: "40", prop: "icon" },
+        { label: "排序", type: "number", labelWidth: "40", prop: "sort" },
         { label: "路径", type: "text", labelWidth: "40", prop: "name" },
         {
           type: "button",
@@ -86,65 +93,126 @@ export default {
           click: this.addRoleMenu
         }
       ],
-      treeData: [{}],
+      treeData: [],
+      tableData: [],
+      tableFields: [
+        {
+          label: "id",
+          prop: "id",
+          width: 60
+        },
+        {
+          label: "pid",
+          prop: "pid",
+          width: 60
+        },
+        {
+          label: "status",
+          prop: "status",
+          type: "switch",
+          change: this.tableChange,
+          width: 100
+        },
+        {
+          label: "name",
+          prop: "name",
+          type: "input",
+          change: this.tableChange
+        },
+
+        {
+          label: "title",
+          prop: "title",
+          type: "input",
+          change: this.tableChange
+        }
+      ],
       defaultProps: {
         children: "children",
-        label: "label"
+        label: "title"
       },
       page: {
         page: 1,
         limie: 10,
-        total: 100
+        total: 0
       }
     };
   },
   created() {
-    this.dep([{ pid: 0 }, { pid: 1 }, { pid: 2 }, { pid: 5 }, { pid: 3 }]);
-    this.getData();
+    this.getMenuData();
   },
   methods: {
     handleNodeClick(data) {
       console.log("点击树节点");
-      console.log(data);
+      this.treeKey[0] = data.id;
+      this.getData(data.id);
     },
-    async treeAdd() {
-      console.log("添加菜单项");
+    async treeAdd(data) {
+      this.title = "添加子菜单";
+      this.roles = {
+        pid: data.id
+      };
+      this.dialogFormVisible = true;
+    },
+    treeAddTop() {
+      this.title = "添加顶级菜单";
+      this.roles = { pid: 0 };
+      this.dialogFormVisible = true;
     },
     async addRoleMenu() {
-      console.log(this.roles);
-      let { data } = await this.axios("/adminapi/Authrule/add", {
+      let url = this.url || "/adminapi/Authrule/add";
+      let { data } = await this.axios(url, {
         method: "post",
         data: this.roles
       });
       if (data.code) {
-        console.log(data);
+        this.roles = {};
+        this.dialogFormVisible = false;
+        this.getMenuData();
       }
     },
     async treeChange(data) {
       this.roles = { ...data };
+      this.dialogFormVisible = true;
+      this.title = "修改权限菜单";
+      this.url = "/adminapi/Authrule/edit";
     },
-    async treeDel() {
-      console.log("删除菜单项");
-    },
-    async getData() {
-      let { data } = await this.axios("/adminapi/Authrule/list");
-      if (data.code) this.treeData = data.data;
-    },
-    dep(a) {
-      a = a.sort((b, c) => b.pid - c.pid);
-      let b = this.aaa(a, a[a.length - 1].pid);
-      console.log(b);
-    },
-    aaa(b, index) {
-      if (index == 0) return;
-      let arr = [];
-      b.forEach(e => {
-        if (e.pid == index - index) {
-          arr.push(e);
-        }
+    async tableChange(a) {
+      let { data } = await this.axios("/adminapi/Authrule/edit", {
+        method: "post",
+        data: a
       });
-      index--;
-      return arr;
+      if (data.code) {
+        this.$message.success(data.msg);
+      }
+    },
+    async treeDel(val) {
+      let { data } = await this.axios("/adminapi/Authrule/del", {
+        data: val
+      });
+      if (data.code) {
+        this.$message.success(data.msg);
+        this.getMenuData();
+        this.roles = {};
+      }
+    },
+    async getMenuData() {
+      let { data } = await this.axios("/adminapi/Authrule/list");
+      let list = data.data;
+      if (data.code) {
+        this.treeData = list;
+        this.rolesFields[0].options = list;
+        this.url = "";
+        this.getData(list[0].id);
+      }
+    },
+    async getData(pid) {
+      let { data } = await this.axios("/adminapi/Authrule/listPid", {
+        data: { pid }
+      });
+      if (data.code) {
+        this.tableData = data.data;
+      }
     }
   }
 };
@@ -154,12 +222,12 @@ export default {
   display: grid;
   grid-template-columns: 25% auto;
   grid-gap: 2%;
-  .left.el-card {
+  .el-card {
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
     /deep/ .el-card__body {
-      height: 100%;
+      flex: 1 1 auto;
     }
   }
   .custom-tree-node {

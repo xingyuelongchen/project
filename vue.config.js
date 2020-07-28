@@ -8,14 +8,14 @@ module.exports = {
             return args;
         });
     },
-    // publicPath: "/",
+    // publicPath: config.routePath,
     devServer: {
         // open: true, //是否自动弹出浏览器页面
         // host: "192.168.101.102",
         // host: 'localhost',
         // port: '8080',
         // https: true,   //是否使用https协议
-        // hotOnly: true, //是否开启热更新
+        hotOnly: true, //是否开启热更新
         proxy: {
             "/adminapi": {
                 target: "http://192.168.33.10",

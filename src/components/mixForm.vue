@@ -244,6 +244,9 @@ Create Time  : 2020-03-31
                   :stroke-width="25"
                 ></el-progress>
               </template>
+              <template v-if="item.type=='selectTree'">
+                <select-tree v-model="fieldsData[item.prop]" :options="item.options" />
+              </template>
             </el-form-item>
           </el-col>
         </template>
@@ -254,6 +257,7 @@ Create Time  : 2020-03-31
 <script>
 export default {
   name: "MixForm",
+  components: { selectTree: () => import("@/components/mixSelectTree") },
   model: {
     prop: "fieldsData"
   },
@@ -429,7 +433,7 @@ export default {
       if (!click) return;
       this.onClick(click, item, index, type);
     },
-    click(item, index, option) { 
+    click(item, index, option) {
       let click = item["click"];
       if (!click) return;
       this.onClick(click, item, index, option);

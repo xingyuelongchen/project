@@ -41,6 +41,24 @@
             transition: all .2s;
         }
     }
+
+    .el-list .el-item {
+        padding: 0 20px;
+        transition: all .2s;
+
+        &:hover {
+            transition: all .2s;
+            cursor: pointer;
+            background: #e6f8f8;
+            padding: 0 20px;
+        }
+
+        &.active {
+            color: #fff;
+            background: #00BABD;
+        }
+    }
+
 }
 
 .el-pagination--small .arrow.disabled,

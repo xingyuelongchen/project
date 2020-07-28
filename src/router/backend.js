@@ -11,6 +11,12 @@ export default
       ]
     },
     {
+      path: 'data', name: 'Data', meta: { keepAlive: true, role: 30, title: '数据管理', }, component: () => import('@/views/layou'),
+      children: [
+        { path: 'index', name: 'Dataindex', meta: { keepAlive: true, role: 31, title: '数据概览', }, component: () => import('@/views/backend/crm/data/index/') },
+      ]
+    },
+    {
       path: 'sales', name: 'Sales', meta: { keepAlive: true, role: 40, title: '销售中心', }, component: () => import('@/views/layou'),
       children: [
         { path: 'index', name: 'Salesindex', meta: { keepAlive: true, role: 41, title: '数据管理', }, component: () => import('@/views/backend/crm/sales/index/') },
@@ -41,7 +47,8 @@ export default
     {
       path: 'setting', name: 'Setting', meta: { keepAlive: true, role: 140, title: '设置', }, component: () => import('@/views/layou'),
       children: [
-        { path: 'roles', name: 'Roles', meta: { keepAlive: true, role: 141, title: '权限管理', }, component: () => import('@/views/backend/crm/setting/roles') },
+        { path: 'roles', name: 'Roles', meta: { keepAlive: true, role: 141, title: '权限菜单', }, component: () => import('@/views/backend/crm/setting/roles') },
+        { path: 'role-group', name: 'Rolegroup', meta: { keepAlive: true, role: 141, title: '权限组', }, component: () => import('@/views/backend/crm/setting/roleGroup') },
       ]
     },
 

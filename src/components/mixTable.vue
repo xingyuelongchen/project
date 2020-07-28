@@ -9,7 +9,7 @@ Create Time  : 2020-03-28
     row-key="id"
     height="100%"
     max-height="100%"
-    style="width:100%"
+    style="width:100%;max-height:100%"
     tooltip-effect="dark"
     :header-row-style="{background:'#f9f9f9'}"
     :header-cell-style="{background:'none'}"
@@ -124,7 +124,10 @@ Create Time  : 2020-03-28
             <template v-if="item.type == 'switch'">
               <el-switch
                 v-model="scope.row[item.prop]"
+                :active-value="1"
+                :inactive-value="0"
                 @change="onInput(item,scope,'change',$event)"
+                inactive-color="#ccc"
                 :disabled="item.readonly"
               />
             </template>
