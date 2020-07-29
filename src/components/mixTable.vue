@@ -7,10 +7,10 @@ Create Time  : 2020-03-28
   <el-table
     ref="table"
     row-key="id"
-    height="100%"
-    max-height="100%"
-    style="width:100%;max-height:100%"
+    :height="options.height || '100%'"
+    :max-height="options.height || '100%'"
     tooltip-effect="dark"
+    :size="options.size || 'mini'"
     :header-row-style="{background:'#f9f9f9'}"
     :header-cell-style="{background:'none'}"
     :border="true"
@@ -70,7 +70,7 @@ Create Time  : 2020-03-28
           :resizable="item.resizable || false"
           :header-align="item.headAlign||'left'"
           :align="item.align||item.headAlign||'left'"
-          :width="item.width||item.minWidth ||'auto'"
+          :width="item.width||item.minWidth ||''"
           :show-overflow-tooltip="item.tootip || true"
           :reserve-selection="item.reserveSelection||false"
           :min-width="item.minWidth || item.type=='manage'?'178':'0'"
@@ -89,7 +89,11 @@ Create Time  : 2020-03-28
             </template>
             <template v-if="item.type == 'select'">
               <!-- {{typeof scope.row[item.prop]}} -->
-              <el-select v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')">
+              <el-select
+                v-model="scope.row[item.prop]"
+                @change="onInput(item,scope,'change')"
+                :size="item.size||options.size||'mini'"
+              >
                 <el-option v-for="(k,i) in item.options" :key="i" :label="k.label" :value="k.value"></el-option>
               </el-select>
             </template>
@@ -123,6 +127,7 @@ Create Time  : 2020-03-28
             </template>
             <template v-if="item.type == 'switch'">
               <el-switch
+                :size="item.size||options.size||'mini'"
                 v-model="scope.row[item.prop]"
                 :active-value="1"
                 :inactive-value="0"
@@ -133,6 +138,7 @@ Create Time  : 2020-03-28
             </template>
             <template v-if="item.type == 'cascader'">
               <el-cascader
+                :size="item.size||options.size||'mini'"
                 v-model="scope.row[item.prop]"
                 :options="item.config || {}"
                 @change="onInput(item,scope,'change',$event)"
@@ -142,12 +148,14 @@ Create Time  : 2020-03-28
               <div class="input" :key="showKey+index">
                 <el-input
                   readonly
+                  :size="item.size||options.size||'mini'"
                   v-if="!item['readonly'+scope.$index]"
                   :value="scope.row[item.prop]"
                   @focus="onInput(item,scope)"
                 ></el-input>
                 <el-input
                   v-else
+                  :size="item.size||options.size||'mini'"
                   v-model="scope.row[item.prop]"
                   @change="onInput(item,scope,'change')"
                   @blur="onInput(item,scope,'blur')"
@@ -612,7 +620,7 @@ export default {
 </script>
 <style lang='less' scoped>
 .demo-table-expand {
-  width: 75vw;
+  // width: 75vw;
   display: grid;
   grid-template-columns: 25% repeat(auto-fit, 25%);
   // border: 1px dashed #ccc;

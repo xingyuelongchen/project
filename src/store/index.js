@@ -9,6 +9,18 @@ export default new Vuex.Store({
     tabmenu: [],
   },
   mutations: {
+    // 清空数据
+    setClear(state) {
+      for (let k in state) {
+        if (state[k].constructor == Array) state[k] = [];
+        if (state[k].constructor == Object) state[k] = {};
+        if (state[k].constructor == Boolean) state[k] = false;
+        if (state[k].constructor == String) state[k] = '';
+        if (state[k].constructor == Number) state[k] = 0;
+      }
+      sessionStorage.removeItem("xitong");
+    },
+    // 刷新后初始化
     setInit(state, data) {
       for (let k in state) {
         state[k] = data[k]

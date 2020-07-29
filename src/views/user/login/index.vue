@@ -26,6 +26,7 @@ export default {
   },
   created() {
     localStorage.removeItem("userinfo");
+    this.$store.commit("setClear");
   },
   methods: {
     setRoutes() {

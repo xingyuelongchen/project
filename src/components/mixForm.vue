@@ -162,21 +162,19 @@ Create Time  : 2020-03-31
                 </el-radio-group>
               </template>
               <template v-if="item.type == 'button'">
-                <div v-if="!item.options || !item.options.length">
-                  <el-button
-                    :key="index"
-                    :type="item.style || 'primary'"
-                    @click.stop="click(item,index,item)"
-                  >{{item.label}}</el-button>
-                </div>
-                <div v-else>
-                  <el-button
-                    v-for="(k,i) in item.options"
-                    :key="i"
-                    :type="k.style  || 'primary'"
-                    @click.stop="click(k,i,item)"
-                  >{{k.label}}</el-button>
-                </div>
+                <el-button
+                  v-if="!item.options || !item.options.length"
+                  :key="index"
+                  :type="item.style || 'primary'"
+                  @click.stop="click(item,index,item)"
+                >{{item.label}}</el-button>
+                <el-button
+                  v-else
+                  v-for="(k,i) in item.options"
+                  :key="i"
+                  :type="k.style || 'primary'"
+                  @click.stop="click(k,index,item)"
+                >{{k.label}}</el-button>
               </template>
               <template v-if="['date','datetime'].indexOf(item.type)>=0">
                 <el-date-picker

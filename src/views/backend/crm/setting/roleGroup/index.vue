@@ -57,12 +57,33 @@ Create Time  : 2020-07-28
             show-checkbox
             node-key="id"
             ref="tree"
-          />
+          >
+            <template slot-scope="{data}">
+              <div style="flex: 1;display:flex;justify-content:space-between">
+                <span>{{data.title}}</span>
+                <span>
+                  <el-button
+                    type="primary"
+                    style="padding:3px;font-size:12px"
+                    @click.stop="nodeClick(data)"
+                  >查看</el-button>
+                </span>
+              </div>
+            </template>
+          </el-tree>
         </el-scrollbar>
       </el-card>
       <el-card class="right">
-        <div slot="header">权限子列表</div>
-        <mixTable v-model="rolesList" :fields="rolesFields" />
+        <div slot="header">
+          权限子列表
+          <el-button
+            style="float: right; padding: 6px"
+            type="primary"
+            size="mini"
+            @click="saveList"
+          >保存权限</el-button>
+        </div>
+        <mixTable v-model="rolesList" :fields="rolesFields" @select="listCheck" ref="table" />
       </el-card>
     </div>
     <el-dialog
@@ -106,8 +127,9 @@ export default {
         { type: "textarea", labelWidth: 60, prop: "reamk", label: "描述" },
         { type: "button", label: "修改", labelWidth: 60, click: this.change }
       ],
-      rolesList:[],
-      rolesFields:[]
+      rolesList: [],
+      rolesFields: [],
+      selectTableField: { laytables_editable: [], laytables: [] }
     };
   },
   created() {
@@ -116,38 +138,108 @@ export default {
   },
   methods: {
     changeGroup(val, item) {
+      // 修改权限组
       this.url = "/adminapi/Authgroup/edit";
       this.roleData = item;
       this.title = val + "权限组";
       this.dialogFormVisible = true;
     },
     cloneGroup(item) {
+      // 复制权限组
       this.url = "/adminapi/Authgroup/clone";
       this.roleData = { id: item.id };
       this.change();
     },
     delGroup(item) {
+      // 删除权限组
       this.url = "/adminapi/Authgroup/del";
       this.roleData = { id: item.id };
       this.change();
     },
     addGroup(val) {
+      // 添加权限组
       this.title = val + "权限组";
       this.dialogFormVisible = !this.dialogFormVisible;
       this.url = "/adminapi/Authgroup/add";
     },
     checkChange() {
+      // 选中的权限菜单
       let checked = this.$refs.tree.getCheckedKeys();
       let checkedParent = this.$refs.tree.getHalfCheckedKeys();
       this.role.rules = checkedParent.concat(checked).sort((a, b) => a - b);
     },
+    listCheck(val) {
+      // 选中的授权字段
+      console.log(val);
+      this.selectTableField.laytables = val.map(e => e.id);
+    },
+    async nodeClick(val) {
+      this.selectTableField.id = val.id;
+      // 点击权限菜单，查询菜单下的授权字段
+      let { data } = await this.axios("/adminapi/Authgroup/table_list", {
+        data: { id: val.id, table_id: this.role.id }
+      });
+      if (data.code) {
+        let a = Object.keys(data.data.column[0]).map(e => {
+          return {
+            label: e,
+            prop: e,
+            type: e == "edit" ? "switch" : "",
+            change: this.listChange
+          };
+        });
+        let id = data.data.lay.laytables[val.id];
+        let status = data.data.lay.laytables_editable[val.id];
+        this.rolesList = data.data.column.map(e => {
+          return {
+            ...e,
+            checked: id.includes(e.id),
+            edit: status.includes(e.id) ? 1 : 0
+          };
+        });
+        this.rolesFields = [{ type: "selection" }].concat(a);
+        this.selectTableField.laytables = id;
+        this.selectTableField.laytables_editable = status;
+      } else {
+        this.rolesList = [];
+      }
+    },
+    async listChange(item) {
+      // 获取授权字段开启列表
+      let a = this.selectTableField.laytables_editable;
+      let index = a && a.indexOf(item.id);
+      if (index >= 0) {
+        console.log(index);
+        this.selectTableField.laytables_editable.splice(index, 1);
+      } else {
+        console.log(index);
+        this.selectTableField.laytables_editable.push(item.id);
+      }
+    },
+    async saveList() {
+      // 保存授权字段更改
+      this.selectTableField.table_id = this.role.id;
+      let form = JSON.parse(JSON.stringify(this.selectTableField));
+      let { data } = await this.axios("/adminapi/Authgroup/table_add", {
+        data: form
+      });
+      if (data.code) {
+        this.selectTableField = {
+          laytables_editable: [],
+          laytables: []
+        };
+        this.nodeClick({ id: form.id });
+      }
+    },
     async getMenuData() {
+      // 获取权限菜单
       let { data } = await this.axios("/adminapi/Authgroup/lis");
       if (data.code) {
         this.treeData = data.data;
       }
     },
     async change() {
+      // 修改权限组数据
       let { data } = await this.axios(this.url, {
         data: this.roleData
       });
@@ -159,12 +251,14 @@ export default {
       }
     },
     async getData() {
+      // 获取权限组
       let { data } = await this.axios("/adminapi/Authgroup/list");
       if (data.code) {
         this.list = data.data;
       }
     },
     async saveRole() {
+      // 保存权限菜单
       let { data } = await this.axios("/adminapi/Authgroup/preservation", {
         data: this.role
       });
@@ -173,6 +267,7 @@ export default {
       }
     },
     async getRole(item) {
+      // 获取权限菜单
       this.role = { id: item.id };
       let { data } = await this.axios("/adminapi/Authgroup/info", {
         data: this.role
@@ -186,8 +281,8 @@ export default {
         this.role = data.data;
       }
     },
-
     checked(id, data, newArr) {
+      // 遍历回显数据，剔除父节点
       data.forEach(item => {
         if (item.id == id) {
           if (!item.children || !item.children.length) {
@@ -206,7 +301,7 @@ export default {
 <style lang='less' scoped>
 .content-wrap {
   display: grid;
-  grid-template-columns: 20% 20% 48%;
+  grid-template-columns: minmax(300px, 21%) 25% auto;
   grid-gap: 1%;
   .el-list {
     .el-item {

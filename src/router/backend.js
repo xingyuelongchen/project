@@ -38,7 +38,8 @@ export default
     {
       path: 'customer', name: 'Customer', meta: { keepAlive: true, role: 100, title: '客户管理', }, component: () => import('@/views/layou'),
       children: [
-        { path: 'index', name: 'Customerindex', meta: { keepAlive: true, role: 101, title: '数据管理', }, component: () => import('@/views/backend/crm/customer') }
+        { path: 'list', name: 'Customerlist', meta: { keepAlive: true, role: 102, title: '咨询列表', }, component: () => import('@/views/backend/crm/customer/list') },
+        { path: 'index', name: 'Customerindex', meta: { keepAlive: true, role: 101, title: '数据管理', }, component: () => import('@/views/backend/crm/customer/index/') }
       ]
     },
     {
@@ -48,7 +49,9 @@ export default
       path: 'setting', name: 'Setting', meta: { keepAlive: true, role: 140, title: '设置', }, component: () => import('@/views/layou'),
       children: [
         { path: 'roles', name: 'Roles', meta: { keepAlive: true, role: 141, title: '权限菜单', }, component: () => import('@/views/backend/crm/setting/roles') },
-        { path: 'role-group', name: 'Rolegroup', meta: { keepAlive: true, role: 141, title: '权限组', }, component: () => import('@/views/backend/crm/setting/roleGroup') },
+        { path: 'role-field', name: 'RoleField', meta: { keepAlive: true, role: 142, title: '字段管理', }, component: () => import('@/views/backend/crm/setting/roleField') },
+        { path: 'role-group', name: 'Rolegroup', meta: { keepAlive: true, role: 143, title: '权限组', }, component: () => import('@/views/backend/crm/setting/roleGroup') },
+        { path: 'system-setting', name: 'Systemsetting', meta: { keepAlive: true, role: 144, title: '系统设置', }, component: () => import('@/views/backend/crm/setting/systemSetting') },
       ]
     },
 

@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-07-22
 -->
 <template>
-  <div class="app-body user">
+  <div class="app-body user" :key="refreshKey">
     <div class="app-header" user="primary">
       <div class="left">
         <div class="item logo" :class="{scale:isCollapse}">
@@ -47,6 +47,9 @@ Create Time  : 2020-07-22
       </div>
       <div class="center"></div>
       <div class="right">
+        <div class="itema">
+          <i class="el-icon-refresh" @click="refresh"></i>
+        </div>
         <div class="itema">主题色</div>
         <div class="item">
           <el-avatar :size="40" :src="$store.state.userinfo.pic">{{$store.state.userinfo.name}}</el-avatar>
@@ -133,6 +136,7 @@ export default {
   data() {
     return {
       key: 0,
+      refreshKey:0,
       // 菜单折叠
       isCollapse: false,
       // 风格主题
@@ -303,6 +307,11 @@ export default {
       }
       clusters.push(shadeColor(theme, 0.1));
       return clusters;
+    },
+    refresh() {
+      this.$store.commit("setClear");
+      this.$router.setRoles();
+      this.refreshKey = Math.random();
     }
   }
 };
@@ -396,9 +405,9 @@ export default {
       box-shadow: 0 10px 10px rgba(1, 1, 1, 0.1);
       height: 100%;
       overflow: hidden;
-      // background: #222;
       .el-menu-vertical-demo:not(.el-menu--collapse) {
         width: 200px;
+        min-width: 200px;
         min-height: 400px;
         border: none;
       }

@@ -31,8 +31,24 @@
     padding: 20px 0;
     overflow: hidden;
   }
-  .el-card__body{
-    height:calc(100% - 56px)
+  .el-card__body {
+    height: calc(100% - 56px);
+  }
+  .el-tabs {
+    width: 100%;
+    // overflow: hidden;
+    .el-tabs {
+      height: 100%;
+    }
+    .el-tabs__content {
+      height: calc(100% - 40px);
+      .el-tab-pane {
+        height: 100%;
+      }
+    }
+  }
+  .el-scrollbar {
+    height: 100%;
   }
 }
 body,

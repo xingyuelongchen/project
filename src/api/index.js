@@ -17,13 +17,21 @@ function reqError(error) {
 }
 function res(res) {
     // console.log(res);
-    if (!res.data.code) { 
+    if (!res.data.code) {
         Notification.error({
             title: '错误',
             message: res.data.msg,
             // showClose: false
         })
     }
+    if (res.data.code == 4) {
+        Notification({
+            type: 'success',
+            title: '成功',
+            message: res.data.msg,
+        })
+    }
+
     return res
 }
 function resError(error) {

@@ -136,8 +136,7 @@ function mapRouter(obj, userinfo) {
  * @param {Array} userinfo 用户权限
  * @param {Array} backend 后台路由 
  */
-function setRoles() {
-
+function setRoles() { 
   let userinfo = localStorage.getItem('userinfo');
   let targetIndex = sessionStorage.getItem('xitong') || 'crm';
   let xitong = backend;
@@ -147,9 +146,6 @@ function setRoles() {
   if (targetIndex == 'web') xitong = web;
   if (targetIndex == 'minapp') xitong = minApp;
   let children = mapRouter(xitong, userinfo);
-  // 存入Vuex
-  Store.commit('setUserinfo', userinfo);
-  Store.commit('setMenu', children);
   let routes = [
     {
       path: "/" + targetIndex,
@@ -160,9 +156,13 @@ function setRoles() {
       children,
     }
   ];
+ 
+  // 存入Vuex
+  Store.commit('setUserinfo', userinfo);
+  Store.commit('setMenu', children);  
   if (!target.includes(targetIndex)) {
-    target.push(targetIndex)
-    router.addRoutes(routes.concat(client));
+    target.push(targetIndex); 
+    router.addRoutes(routes.concat(client)); 
   }
 }
 /**
