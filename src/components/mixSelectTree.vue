@@ -78,6 +78,8 @@ export default {
         ]; // 初始化显示
         this.$refs.selectTree.setCurrentKey(this.valueId); // 设置默认选中
         this.defaultExpandedKey = [this.valueId]; // 设置默认展开
+      } else {
+        this.$refs.selectTree.setCurrentKey(null);
       }
       this.$nextTick(() => {
         let scrollWrap = document.querySelectorAll(

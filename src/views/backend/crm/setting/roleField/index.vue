@@ -216,28 +216,30 @@ export default {
           prop: "order",
           label: "排序",
           type: "input",
-          change: this.tableEdit
+          change: this.tableEdit,
+          width: 110
         },
         {
           prop: "type",
           label: "类型",
           type: "tagdown",
           change: this.tableEdit,
-          options: table
+          options: table,
+          width: 150
         },
         {
           prop: "minWidth",
           label: "最小宽度",
           type: "input",
-          change: this.tableEdit
+          change: this.tableEdit,
+          width: 80
         },
         {
           prop: "prop",
           label: "字段名",
           type: "input",
           esizable: true,
-          change: this.tableEdit,
-          width: 200
+          change: this.tableEdit
         },
         {
           prop: "label",
@@ -250,14 +252,16 @@ export default {
           label: "排序",
           align: "center",
           type: "switch",
-          change: this.tableEdit
+          change: this.tableEdit,
+          width: 80
         },
         {
           prop: "visible",
           label: "启用",
           align: "center",
           type: "switch",
-          change: this.tableEdit
+          change: this.tableEdit,
+          width: 80
         },
         {
           type: "manage",
@@ -280,7 +284,8 @@ export default {
           prop: "prop",
           label: "prop",
           type: "input",
-          resizable: true
+          resizable: true,
+          width: 250
         },
         {
           change: this.formEdit,
@@ -295,28 +300,32 @@ export default {
           prop: "type",
           label: "type",
           type: "tagdown",
-          options: form
+          options: form,
+          width: 120
         },
         {
           change: this.formEdit,
           prop: "visible",
           label: "visible",
           align: "center",
-          type: "switch"
+          type: "switch",
+          width: 100
         },
         {
           change: this.formEdit,
           prop: "visible_add",
           label: "visible_add",
           align: "center",
-          type: "switch"
+          type: "switch",
+          width: 100
         },
         {
           change: this.formEdit,
           prop: "visible_edit",
           label: "visible_edit",
           align: "center",
-          type: "switch"
+          type: "switch",
+          width: 100
         },
         {
           change: this.formEdit,
@@ -368,6 +377,7 @@ export default {
       addFieldFormData: {
         fieldFun: true,
         visible: true,
+        minWidth:100,
         editable: { type: "text" }
       },
       addFieldFormFields: [
@@ -406,7 +416,8 @@ export default {
           span: 15,
           label: "单列宽度",
           type: "number",
-          prop: "minWidth"
+          prop: "minWidth",
+          placeholder: "默认100px"
         },
         {
           wrap: true,
@@ -519,12 +530,9 @@ export default {
     },
     async tableChange(item) {
       // 修改关联表
-      let { data } = await this.axios("/admin/Tables/TablesEdit", {
+      await this.axios("/adminapi/Column/table_edit", {
         data: item
       });
-      if (data.code) {
-        this.$message.success(data.msg);
-      }
     },
     async views(item) {
       let a = JSON.parse(JSON.stringify(this.addFieldFormData));

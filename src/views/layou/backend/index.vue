@@ -136,7 +136,7 @@ export default {
   data() {
     return {
       key: 0,
-      refreshKey:0,
+      refreshKey: 0,
       // 菜单折叠
       isCollapse: false,
       // 风格主题
@@ -171,6 +171,12 @@ export default {
     },
     logout() {
       this.$router.replace("/login");
+    },
+    refresh() {
+      // 清空缓存
+      this.$store.commit("setClear");
+      this.$router.setRoles();
+      this.refreshKey = Math.random();
     },
     updateTheme(val, oldVal = "#409EFF") {
       if (typeof val !== "string") return;
@@ -307,11 +313,6 @@ export default {
       }
       clusters.push(shadeColor(theme, 0.1));
       return clusters;
-    },
-    refresh() {
-      this.$store.commit("setClear");
-      this.$router.setRoles();
-      this.refreshKey = Math.random();
     }
   }
 };
@@ -398,7 +399,6 @@ export default {
   }
   .app-container {
     display: flex;
-    justify-content: space-between;
     height: calc(100% - 61px);
     .app-side {
       border-right: 1px solid #e6e6e6;
@@ -416,7 +416,7 @@ export default {
       }
     }
     .app-content {
-      flex: auto;
+      flex: 1;
       height: 100%;
       overflow: hidden;
       .top {

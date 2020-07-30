@@ -70,9 +70,9 @@ export default {
     return {
       dialogFormVisible: false,
       index: 0,
-      roles: {},
       treeKey: [],
       title: "",
+      roles: {},
       rolesFields: [
         {
           label: "上级",
@@ -147,16 +147,16 @@ export default {
       this.treeKey[0] = data.id;
       this.getData(data.id);
     },
+    treeAddTop() {
+      this.title = "添加顶级菜单";
+      this.roles = { pid: 0 };
+      this.dialogFormVisible = true;
+    },
     async treeAdd(data) {
       this.title = "添加子菜单";
       this.roles = {
         pid: data.id
       };
-      this.dialogFormVisible = true;
-    },
-    treeAddTop() {
-      this.title = "添加顶级菜单";
-      this.roles = { pid: 0 };
       this.dialogFormVisible = true;
     },
     async addRoleMenu() {
@@ -177,15 +177,6 @@ export default {
       this.title = "修改权限菜单";
       this.url = "/adminapi/Authrule/edit";
     },
-    async tableChange(a) {
-      let { data } = await this.axios("/adminapi/Authrule/edit", {
-        method: "post",
-        data: a
-      });
-      if (data.code) {
-        this.$message.success(data.msg);
-      }
-    },
     async treeDel(val) {
       let { data } = await this.axios("/adminapi/Authrule/del", {
         data: val
@@ -196,6 +187,15 @@ export default {
         this.roles = {};
       }
     },
+    async tableChange(a) {
+      let { data } = await this.axios("/adminapi/Authrule/edit", {
+        method: "post",
+        data: a
+      });
+      if (data.code) {
+        this.$message.success(data.msg);
+      }
+    }, 
     async getMenuData() {
       let { data } = await this.axios("/adminapi/Authrule/list");
       let list = data.data;

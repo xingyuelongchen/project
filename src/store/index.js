@@ -18,7 +18,6 @@ export default new Vuex.Store({
         if (state[k].constructor == String) state[k] = '';
         if (state[k].constructor == Number) state[k] = 0;
       }
-      sessionStorage.removeItem("xitong");
     },
     // 刷新后初始化
     setInit(state, data) {

@@ -8,7 +8,7 @@ axios.interceptors.response.use(res, resError);
 export default axios;
 function req(config) {
     // console.log(config);
-    config.method = 'post'
+    config.method = config.url.indexOf('/verify') >= 0 ? config.method : 'post'
     return config
 }
 function reqError(error) {
@@ -17,7 +17,7 @@ function reqError(error) {
 }
 function res(res) {
     // console.log(res);
-    if (!res.data.code) {
+    if (res.data.code == 0) {
         Notification.error({
             title: '错误',
             message: res.data.msg,

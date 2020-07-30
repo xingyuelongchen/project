@@ -243,7 +243,11 @@ Create Time  : 2020-03-31
                 ></el-progress>
               </template>
               <template v-if="item.type=='selectTree'">
-                <select-tree v-model="fieldsData[item.prop]" :options="item.options" />
+                <select-tree
+                  v-model="fieldsData[item.prop]"
+                  :options="item.options"
+                  :props="item.props"
+                />
               </template>
             </el-form-item>
           </el-col>

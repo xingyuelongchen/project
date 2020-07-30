@@ -136,7 +136,7 @@ function mapRouter(obj, userinfo) {
  * @param {Array} userinfo 用户权限
  * @param {Array} backend 后台路由 
  */
-function setRoles() { 
+function setRoles() {
   let userinfo = localStorage.getItem('userinfo');
   let targetIndex = sessionStorage.getItem('xitong') || 'crm';
   let xitong = backend;
@@ -146,6 +146,7 @@ function setRoles() {
   if (targetIndex == 'web') xitong = web;
   if (targetIndex == 'minapp') xitong = minApp;
   let children = mapRouter(xitong, userinfo);
+  // 
   let routes = [
     {
       path: "/" + targetIndex,
@@ -156,13 +157,21 @@ function setRoles() {
       children,
     }
   ];
- 
+
   // 存入Vuex
   Store.commit('setUserinfo', userinfo);
-  Store.commit('setMenu', children);  
+  Store.commit('setMenu', children);
+  // 清空缓存后，添加首页到第一个tabs标签
+  Store.commit('setTabmenu', {
+    path: children[0].path,
+    fullPath: routes[0].path + '/' + children[0].path,
+    active: true,
+    name: children[0].name,
+    title: children[0].meta.title
+  })
   if (!target.includes(targetIndex)) {
-    target.push(targetIndex); 
-    router.addRoutes(routes.concat(client)); 
+    target.push(targetIndex);
+    router.addRoutes(routes.concat(client));
   }
 }
 /**

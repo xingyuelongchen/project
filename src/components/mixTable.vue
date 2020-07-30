@@ -68,7 +68,7 @@ Create Time  : 2020-03-28
           :formatter="item.formatter"
           :class-name="item.className||''"
           :resizable="item.resizable || false"
-          :header-align="item.headAlign||'left'"
+          :header-align="item.headAlign||item.align||'left'"
           :align="item.align||item.headAlign||'left'"
           :width="item.width||item.minWidth ||''"
           :show-overflow-tooltip="item.tootip || true"
@@ -519,7 +519,26 @@ export default {
     isShow(k, item, scope) {
       // 按钮是否显示
       if (k.isShow) {
-        return scope.row[k.isShow];
+        let bool = false;
+        if (k.isShow.type == "==") {
+          bool = scope.row[k.isShow.prop] == k.isShow.val;
+        }
+        if (k.isShow.type == ">=") {
+          bool = scope.row[k.isShow.prop] >= k.isShow.val;
+        }
+        if (k.isShow.type == "<=") {
+          bool = scope.row[k.isShow.prop] <= k.isShow.val;
+        }
+        if (k.isShow.type == "===") {
+          bool = scope.row[k.isShow.prop] === k.isShow.val;
+        }
+        if (k.isShow.type == "!==") {
+          bool = scope.row[k.isShow.prop] !== k.isShow.val;
+        }
+        if (k.isShow.type == "!=") {
+          bool = scope.row[k.isShow.prop] != k.isShow.val;
+        }
+        return bool;
       } else {
         return true;
       }

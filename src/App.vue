@@ -16,9 +16,12 @@
   }
   .content-box {
     display: grid;
-    height: calc(100vh - 150px);
-    grid-template-rows: 60px auto 60px;
+    height: calc(100vh - 82px);
+    grid-template-rows: 50px auto 60px;
+    grid-auto-columns: 100%;
     padding: 20px 0;
+    overflow: hidden;
+    width: 100%;
   }
   .content-wrap {
     height: calc(100vh - 100px);
