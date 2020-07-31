@@ -5,9 +5,14 @@ import store from "./store";
 import Element from 'element-ui';
 import axios from './api';
 import template from './components';
-import '@/assets/theme/blue/index.css'
-import '@/assets/iconfont/iconfont.css'
+import '@/assets/theme/blue/index.css';
+import '@/assets/iconfont/iconfont.css';
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/index.css'
 Vue.config.productionTip = false;
+Vue.use(VXETable)
+Vue.prototype.$modal = VXETable.modal
 Vue.directive('role', {
   // 校验权限
   inserted(el, binding) {
@@ -16,9 +21,9 @@ Vue.directive('role', {
     }
   }
 });
-Vue.prototype.axios = axios
+Vue.prototype.axios = axios;
 Vue.use(Element);
-Vue.use(template)
+Vue.use(template);
 new Vue({
   router,
   store,

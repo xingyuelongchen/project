@@ -256,8 +256,16 @@ export default {
           width: 80
         },
         {
+          prop: "search",
+          label: "查询",
+          align: "center",
+          type: "switch",
+          change: this.tableEdit,
+          width: 80
+        },
+        {
           prop: "visible",
-          label: "启用",
+          label: "显示",
           align: "center",
           type: "switch",
           change: this.tableEdit,

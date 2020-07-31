@@ -34,6 +34,7 @@
     padding: 20px 0;
     overflow: hidden;
   }
+ 
   .el-card__body {
     height: calc(100% - 56px);
   }

@@ -10,6 +10,7 @@ import web from './web';
 Vue.use(VueRouter);
 // 基础路由表
 const routes = [
+  { path: '/test', component: () => import('@/test.vue') },
   {
     path: '/',
     redirect: '/login'
@@ -106,6 +107,7 @@ function beforeRouter(to, from, next) {
     };
     Store.commit("setTabmenu", option);
   }
+
   next()
 }
 
@@ -171,6 +173,7 @@ function setRoles() {
   })
   if (!target.includes(targetIndex)) {
     target.push(targetIndex);
+    sessionStorage.setItem('xitong', targetIndex)
     router.addRoutes(routes.concat(client));
   }
 }

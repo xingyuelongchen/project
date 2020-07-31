@@ -427,7 +427,7 @@ export default {
       }
       .bottom {
         overflow: hidden;
-        height: 100%;
+        height: calc(100% - 40px);
         padding: 0 20px;
       }
     }
