@@ -1,89 +1,68 @@
 <!--
 Template Name: 
 Create author: qinglong
-Create Time  : 2020-07-31
+Create Time  : 2020-08-02
 -->
 <template>
-  <div style="height:100%">
-    <!-- <div style="height:60px">
-
-    </div> -->
-    <div style="height:calc(100% - 100px)">
-      <vxe-grid ref="table" v-bind="tableOption" :data="data" :columns="fields">
-        <template v-slot:buttons>
-          <slot name="head"></slot>
-        </template>
-        <template v-slot:empty>
-          <span>
-            <img src="https://xuliangzhan_admin.gitee.io/vxe-table/static/other/img1.gif">
-            <p>没有更多数据了！</p>
-          </span>
-        </template>
-      </vxe-grid>
-    </div>
-    <vxe-pager background auto-hidden :current-page.sync="page.page" :page-size.sync="page.limit" :total="page.total" :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']" @page-change="pageChange"></vxe-pager>
+  <div style="overflow:hidden;height:100%">
+    <vxe-form :data="searchData" :items="searchFields" title-align="right" title-width="100" @submit="getSearch" @reset="reset"></vxe-form>
+    <vxe-grid ref="table" v-bind="tableOption" :data="data" :columns="fields">
+      <template v-slot:empty>
+        <span>
+          <img src="https://xuliangzhan_admin.gitee.io/vxe-table/static/other/img1.gif">
+          <p>没有更多数据了！</p>
+        </span>
+      </template>
+    </vxe-grid>
+    <vxe-pager background :current-page.sync="page.page" :page-size.sync="page.limit" :total="page.total" :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']" @page-change="pageChange"></vxe-pager>
+    <vxe-modal v-model="showEdit" title="编辑&保存" width="800" :loading="submitLoading" resize destroy-on-close>
+      <vxe-form :data="data" :items="update.data" :rules="update.rules" title-align="right" title-width="100" @submit="setUpdate"></vxe-form>
+    </vxe-modal>
   </div>
 </template>
 <script>
 export default {
-  name: "mixNewTable",
+  name: "mixUpdateTable",
   model: {
     prop: "data"
   },
   props: {
-    options: {
-      // 表格配置
-      type: Object,
-      default() {
-        return {
-          border: true //none ,inner,outer,full,false
-        };
-      }
-    },
-    search: {
-      type: Object,
-      default() {
-        return {};
-      }
-    },
-    loading: Boolean,
     data: {
-      // 表格数据
       type: Array,
       default() {
-        return [
-          { seq: 10, name: 1, sex: 1, age: 30, meta: { name: 0 } },
-          { seq: 10, name: 1, sex: "", age: 30 }
-        ];
+        return [];
       }
     },
     fields: {
-      // 表格列配置
       type: Array,
       default() {
         return [
-          { title: "html", type: "html" },
-          { title: "展开", type: "expand" },
-          { title: "序号", type: "seq" },
-          { title: "单选", type: "radio" },
-          { title: "复选", type: "checkbox" },
-          { title: "性别", field: "sex", readonly: true },
-          { title: "姓名", field: "name" },
-          // { title: "编辑", type: "manage",click:(a)=>console.log(a) }
-          {
-            title: "编辑",
-            type: "manage",
-            icon: "vxe-icon--edit-outline",
-            click: a => console.log(a)
-            // options: [
-            //   { click: a => console.log(a), title: "编辑" },
-            //   { click: a => console.log(a), title: "删除" }
-            // ]
-          }
+          // {
+          //   field: "nickname",
+          //   title: "nickname"
+          // },
+          // {
+          //   field: "nickname",
+          //   title: "nickname",
+          //   remoteSort: true,
+          //   minWidth: 200,
+          //   filters: [
+          //     { label: "前端开发", value: "前端" },
+          //     { label: "后端开发", value: "后端" },
+          //     { label: "测试", value: "测试" },
+          //     { label: "程序员鼓励师", value: "程序员鼓励师" }
+          //   ],
+          //   filterMultiple: true
+          // }
         ];
       }
     },
-    formData: Object,
+    searchFields: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
     page: {
       type: Object,
       default() {
@@ -93,10 +72,19 @@ export default {
           total: 0
         };
       }
+    },
+    update: {
+      type: Object,
+      default() {
+        return { data: [], rules: {} };
+      }
     }
   },
   data() {
     return {
+      searchData: {},
+      showEdit: false,
+      submitLoading: false,
       tableOption: {
         border: true,
         resizable: true,
@@ -121,7 +109,7 @@ export default {
           // import: true,
           export: true,
           print: true,
-          //   refresh: true,
+        //   refresh: true,
           zoom: true,
           custom: true
         },
@@ -147,20 +135,6 @@ export default {
     };
   },
   methods: {
-    activeCellMethod({ columnIndex }) {
-      return !!this.fields[columnIndex].readonly;
-    },
-    change(item) {
-      if (typeof this.$parent.change == "function") this.$parent.change(item);
-      else {
-        console.log("父组件没有change函数");
-      }
-    },
-    btnClick(item, row) {
-      if (typeof item.click == "function") {
-        item.click(row);
-      }
-    },
     pageChange() {
       if (typeof this.$parent.getData == "function") {
         this.$parent.getData();
@@ -168,9 +142,19 @@ export default {
         console.error("error:", "未找到getData函数");
       }
     },
-    getSearch() {
+    reset() {
+      console.log(0);
+    },
+    getSearch(item) {
       if (typeof this.$parent.getData == "function") {
-        this.$parent.getData();
+        this.$parent.getData(item.data);
+      } else {
+        console.error("error:", "未找到getData函数");
+      }
+    },
+    setUpdate(item) {
+      if (typeof this.$parent.update == "function") {
+        this.$parent.update(item.data);
       } else {
         console.error("error:", "未找到getData函数");
       }
@@ -201,15 +185,6 @@ export default {
     },
     scrollEvent({ scrollTop, scrollLeft }) {
       console.log(`滚动事件scrollTop=${scrollTop} scrollLeft=${scrollLeft}`);
-    },
-    currentChange({ row }) {
-      console.log(row);
-    },
-    editEvent(row) {
-      console.log(row);
-    },
-    removeEvent(row) {
-      console.log(row);
     }
   }
 };

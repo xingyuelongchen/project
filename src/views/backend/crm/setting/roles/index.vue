@@ -11,34 +11,13 @@ Create Time  : 2020-07-27
       </div>
       <div style="height:100%">
         <el-scrollbar style="height:100%">
-          <el-tree
-            :data="treeData"
-            :props="defaultProps"
-            :expand-on-click-node="true"
-            :default-expanded-keys="treeKey"
-            highlight-current
-            node-key="id"
-            check-strictly
-            @node-click="handleNodeClick"
-          >
+          <el-tree :data="treeData" :props="defaultProps" :expand-on-click-node="true" :default-expanded-keys="treeKey" highlight-current node-key="id" check-strictly @node-click="handleNodeClick">
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ node.label }}</span>
               <span>
-                <i
-                  class="el-icon-plus"
-                  @click.self.stop="() => treeAdd(data)"
-                  style="color:#00BABD;padding:0 5px"
-                ></i>
-                <i
-                  class="el-icon-edit"
-                  @click.stop.self="() => treeChange(data)"
-                  style="color:#ff6600;padding:0 5px"
-                ></i>
-                <i
-                  class="el-icon-delete"
-                  @click.stop.self="() => treeDel(data)"
-                  style="color:#ee3333;padding:0 5px"
-                ></i>
+                <i class="el-icon-plus" @click.self.stop="() => treeAdd(data)" style="color:#00BABD;padding:0 5px"></i>
+                <i class="el-icon-edit" @click.stop.self="() => treeChange(data)" style="color:#ff6600;padding:0 5px"></i>
+                <i class="el-icon-delete" @click.stop.self="() => treeDel(data)" style="color:#ee3333;padding:0 5px"></i>
               </span>
             </span>
           </el-tree>
@@ -52,13 +31,7 @@ Create Time  : 2020-07-27
         <mixPage v-model="page" />
       </div>
     </el-card>
-    <el-dialog
-      :title="title"
-      :visible.sync="dialogFormVisible"
-      width="400px"
-      :modal="true"
-      top="15vh"
-    >
+    <el-dialog :title="title" :visible.sync="dialogFormVisible" width="400px" :modal="true" top="15vh">
       <mixForm v-model="roles" :fields="rolesFields" />
     </el-dialog>
   </div>
@@ -79,7 +52,8 @@ export default {
           type: "selectTree",
           labelWidth: "40",
           prop: "pid",
-          options: []
+          options: [],
+          props: { label: "title", value: "id",children:'children' }
         },
         { label: "名称", type: "text", labelWidth: "40", prop: "title" },
         { label: "图标", type: "text", labelWidth: "40", prop: "icon" },
@@ -195,7 +169,7 @@ export default {
       if (data.code) {
         this.$message.success(data.msg);
       }
-    }, 
+    },
     async getMenuData() {
       let { data } = await this.axios("/adminapi/Authrule/list");
       let list = data.data;

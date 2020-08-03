@@ -91,19 +91,23 @@ function beforeRouter(to, from, next) {
   }
 
   // 页面访问权限
-  if (to.meta.role) {
+  if (to.meta.role && userinfo.role[0] !== 0) {
     if (!userinfo || !userinfo.role.includes(to.meta.role)) {
       console.log('需要权限');
       next('/error401');
       return
     }
   }
-  if (!/(login)/.test(to.fullPath)) {
+  if (/(crm|app|minapp|web)/.test(to.fullPath)) {
+    let title = to.meta.title;
+    if (to.matched[to.matched.length - 2].meta.title) {
+      title = to.matched[to.matched.length - 2].meta.title + '/' + to.meta.title;
+    }
     let option = {
       name: to.name,
       fullPath: to.fullPath,
       path: to.path,
-      title: to.meta.title
+      title
     };
     Store.commit("setTabmenu", option);
   }
@@ -117,6 +121,7 @@ function beforeRouter(to, from, next) {
  * @param {Array} userinfo 用户权限
  */
 function mapRouter(obj, userinfo) {
+
   let arr = [];
   obj.forEach(e => {
     if (userinfo.role.includes(e.meta.role)) {
@@ -142,13 +147,14 @@ function setRoles() {
   let userinfo = localStorage.getItem('userinfo');
   let targetIndex = sessionStorage.getItem('xitong') || 'crm';
   let xitong = backend;
+
   if (userinfo) userinfo = JSON.parse(userinfo);
   if (targetIndex == 'crm') xitong = backend;
   if (targetIndex == 'app') xitong = app;
   if (targetIndex == 'web') xitong = web;
   if (targetIndex == 'minapp') xitong = minApp;
   let children = mapRouter(xitong, userinfo);
-  // 
+  if (userinfo && userinfo.role[0] === 0) children = xitong;
   let routes = [
     {
       path: "/" + targetIndex,

@@ -5,7 +5,7 @@ Create Time  : 2020-07-29
 -->
 <template>
   <div class="content-wrap">
-    <mixNewTable v-model="tableData" :fields="tableFields" :page="page" :search="tableSearch" />
+    <mixNewTable v-model="tableData" :fields="tableFields" :page="page" :search="tableSearch" :loading="loading" />
   </div>
 </template>
 <script>
@@ -16,6 +16,7 @@ export default {
       tableData: [],
       tableFields: [],
       tableSearch: {},
+      loading: false,
       page: {
         total: 0,
         page: 1,
@@ -37,20 +38,28 @@ export default {
           return {
             title: e.label,
             field: e.prop,
+            readonly: true,
             "min-width": e.minWidth
           };
         });
       }
     },
     async getData() {
-      this.tableData = [];
+      this.loading = true;
       let { data } = await this.axios("/adminapi/Customer/list", {
         params: Object.assign({}, this.page, this.tableSearch)
       });
       if (data.code) {
+        this.loading = false;
         this.tableData = data.data;
         this.page.total = data.count;
       }
+    },
+    async change(item) {
+      console.log(item);
+      // let { data } = await this.axios("/adminapi/Customer/edit", {
+      //   data: item.row
+      // });
     }
   }
 };

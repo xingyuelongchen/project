@@ -5,6 +5,7 @@ axios.defaults['baseURL'] = config.baseUrl;
 axios.defaults['withCredentials'] = true;
 axios.interceptors.request.use(req, reqError);
 axios.interceptors.response.use(res, resError);
+var notification = null;
 export default axios;
 function req(config) {
     // console.log(config);
@@ -17,6 +18,7 @@ function reqError(error) {
 }
 function res(res) {
     // console.log(res);
+
     if (res.data.code == 0) {
         Notification.error({
             title: '错误',
@@ -25,7 +27,8 @@ function res(res) {
         })
     }
     if (res.data.code == 4) {
-        Notification({
+        notification && notification.close();
+        notification = Notification({
             type: 'success',
             title: '成功',
             message: res.data.msg,

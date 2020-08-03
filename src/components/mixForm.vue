@@ -4,38 +4,15 @@ Create author: qinglong
 Create Time  : 2020-03-31
 -->
 <template>
-  <el-form
-    ref="form"
-    :model="fieldsData"
-    :size="options.size"
-    :inline="options.inline||false"
-    @validate="validated"
-  >
+  <el-form ref="form" :model="fieldsData" :size="options.size" :inline="options.inline||false" @validate="validated">
     <template v-for="(v,i) in mapFields">
       <el-row :key="i">
         <template v-for="(item,index) in v">
-          <el-col :key="index" :span="item.span||24" :xs="item.xs||24">
-            <el-form-item
-              :label-width="item.labelWidth?item.labelWidth+'px' :'120px'"
-              :label="item.type == 'button' ?'': item.label"
-              :prop="item.prop"
-              :rules="item.rule"
-              :required="!!item.required"
-            >
-              <template
-                v-if="['text','textarea','number','email','password'].indexOf(item.type)!==-1"
-              >
-                <el-input
-                  class="input"
-                  v-model="fieldsData[item.prop]"
-                  inline-message
-                  :placeholder="item.placeholder"
-                  :readonly="!!item.readonly"
-                  :disabled="!!item.disabled"
-                  :type="item.type"
-                  @change="change(item,index,'change')"
-                  @input="change(item,index,'input')"
-                >
+          <template v-if="item.type == 'hidden'"></template>
+          <el-col :key="index" :span="item.span||24" :xs="item.xs||24" v-else>
+            <el-form-item :label-width="item.labelWidth?item.labelWidth+'px' :'120px'" :label="item.type == 'button' ?'': item.label" :prop="item.prop" :rules="item.rule" :required="!!item.required">
+              <template v-if="['text','textarea','number','email','password'].indexOf(item.type)!==-1">
+                <el-input class="input" v-model="fieldsData[item.prop]" inline-message :placeholder="item.placeholder" :readonly="!!item.readonly" :disabled="!!item.disabled" :type="item.type" @change="change(item,index,'change')" @input="change(item,index,'input')">
                   <span v-if="item.prepend" slot="prepend" @click.stop="click(item,index)">
                     <template v-if="/^(el-icon|my-icon).*/.test(item.prepend)">
                       <i :class="item.prepend"></i>
@@ -51,162 +28,57 @@ Create Time  : 2020-03-31
                 </el-input>
               </template>
               <template v-if="item.type == 'select'">
-                <el-select
-                  v-if="!item.readonly"
-                  v-model="fieldsData[item.prop]"
-                  :disabled="!!item.disabled"
-                  :multiple="item.multiple"
-                  :collapse-tags="item.multiple"
-                  @change="change(item,index,'change')"
-                >
-                  <el-option
-                    v-for="(k,i) in item.options"
-                    :key="i"
-                    :disabled="k.disabled"
-                    :value-id="k.id"
-                    :label="k.label || k[item.config.label]"
-                    :value="k.value || k[item.config.value] || k"
-                  />
+                <el-select v-if="!item.readonly" v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :multiple="item.multiple" :collapse-tags="item.multiple" @change="change(item,index,'change')">
+                  <el-option v-for="(k,i) in item.options" :key="i" :disabled="k.disabled" :value-id="k.id" :label="k.label || k[item.config.label]" :value="k.value || k[item.config.value] || k" />
                 </el-select>
-                <el-input
-                  v-else
-                  v-model="fieldsData[item.prop]"
-                  :disabled="!!item.disabled"
-                  :readonly="!!item.readonly"
-                ></el-input>
+                <el-input v-else v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :readonly="!!item.readonly"></el-input>
               </template>
               <template v-if="item.type == 'switch'">
                 <el-switch v-model="fieldsData[item.prop]" :disabled="!!item.disabled" />
               </template>
               <template v-if="item.type == 'slider'">
-                <el-slider
-                  v-model="fieldsData[item.prop]"
-                  :format-tooltip="item.formatTooltip"
-                  :disabled="!!item.disabled"
-                />
+                <el-slider v-model="fieldsData[item.prop]" :format-tooltip="item.formatTooltip" :disabled="!!item.disabled" />
               </template>
               <template v-if="item.type == 'checkbox'">
                 <template v-if="item.options && item.options.length">
-                  <el-checkbox
-                    v-model="fieldsData[item.prop]"
-                    v-for="(k,i) in item.options"
-                    :key="i"
-                    :label="k.value ||k[item.config.value] || k.id || k.label"
-                    :disabled="k.disabled"
-                    :checked="k.checked"
-                  >{{k.label || k[item.config.label] }}</el-checkbox>
+                  <el-checkbox v-model="fieldsData[item.prop]" v-for="(k,i) in item.options" :key="i" :label="k.value ||k[item.config.value] || k.id || k.label" :disabled="k.disabled" :checked="k.checked">{{k.label || k[item.config.label] }}</el-checkbox>
                 </template>
-                <el-checkbox
-                  v-else
-                  v-model="fieldsData[item.prop]"
-                  :label="item.options.value"
-                  :disabled="!!item.disabled"
-                  :checked="item.checked"
-                >{{item.options.label}}</el-checkbox>
+                <el-checkbox v-else v-model="fieldsData[item.prop]" :label="item.options.value" :disabled="!!item.disabled" :checked="item.checked">{{item.options.label}}</el-checkbox>
               </template>
               <template v-if="item.type == 'cascader'">
-                <el-cascader
-                  v-if="!item.readonly"
-                  v-model="fieldsData[item.prop]"
-                  :disabled="!!item.disabled"
-                  :readonly="!!item.readonly"
-                  :checkStrictly="true"
-                  :emitPath="false"
-                  :options="item.options"
-                  :props="item.config"
-                  @change="change(item,index,'change')"
-                ></el-cascader>
-                <el-input
-                  v-else
-                  v-model="fieldsData[item.prop]"
-                  :disabled="!!item.disabled"
-                  :readonly="!!item.readonly"
-                ></el-input>
+                <el-cascader v-if="!item.readonly" v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :readonly="!!item.readonly" :checkStrictly="true" :emitPath="false" :options="item.options" :props="item.config" @change="change(item,index,'change')"></el-cascader>
+                <el-input v-else v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :readonly="!!item.readonly"></el-input>
               </template>
               <template v-if="item.type == 'checkboxgroup'">
                 <el-checkbox-group v-model="fieldsData[item.prop]" :disabled="!!item.disabled">
-                  <el-checkbox
-                    v-for="(k,i) in item.options"
-                    :label="k.value||k.id||k.label"
-                    :key="i"
-                    :disabled="k.disabled"
-                    :checked="k.checked"
-                  >{{k.label || k[item.config.label] }}</el-checkbox>
+                  <el-checkbox v-for="(k,i) in item.options" :label="k.value||k.id||k.label" :key="i" :disabled="k.disabled" :checked="k.checked">{{k.label || k[item.config.label] }}</el-checkbox>
                 </el-checkbox-group>
               </template>
               <template v-if="item.type == 'radio'">
                 <template v-if="item.options && item.options.length">
-                  <el-radio
-                    v-model="fieldsData[item.prop]"
-                    v-for="(k,i) in item.options"
-                    :key="i"
-                    :label="k.value"
-                    :disabled="k.disabled"
-                  >{{k.label}}</el-radio>
+                  <el-radio v-model="fieldsData[item.prop]" v-for="(k,i) in item.options" :key="i" :label="k.value" :disabled="k.disabled">{{k.label}}</el-radio>
                 </template>
-                <el-radio
-                  v-else
-                  v-model="fieldsData[item.prop]"
-                  :label="item.options.value"
-                  :disabled="!!item.disabled"
-                >{{item.options.label}}</el-radio>
+                <el-radio v-else v-model="fieldsData[item.prop]" :label="item.options.value" :disabled="!!item.disabled">{{item.options.label}}</el-radio>
               </template>
               <template v-if="item.type == 'radiogroup'">
                 <el-radio-group v-model="fieldsData[item.prop]" :disabled="!!item.disabled">
-                  <el-radio
-                    v-for="(k,i) in item.options"
-                    :label="k.value"
-                    :key="i"
-                    :disabled="k.disabled"
-                  >{{k.label}}</el-radio>
+                  <el-radio v-for="(k,i) in item.options" :label="k.value" :key="i" :disabled="k.disabled">{{k.label}}</el-radio>
                 </el-radio-group>
               </template>
               <template v-if="item.type == 'button'">
-                <el-button
-                  v-if="!item.options || !item.options.length"
-                  :key="index"
-                  :type="item.style || 'primary'"
-                  @click.stop="click(item,index,item)"
-                >{{item.label}}</el-button>
-                <el-button
-                  v-else
-                  v-for="(k,i) in item.options"
-                  :key="i"
-                  :type="k.style || 'primary'"
-                  @click.stop="click(k,index,item)"
-                >{{k.label}}</el-button>
+                <el-button v-if="!item.options || !item.options.length" :key="index" :type="item.style || 'primary'" @click.stop="click(item,index,item)">{{item.label}}</el-button>
+                <el-button v-else v-for="(k,i) in item.options" :key="i" :type="k.style || 'primary'" @click.stop="click(k,index,item)">{{k.label}}</el-button>
               </template>
               <template v-if="['date','datetime'].indexOf(item.type)>=0">
-                <el-date-picker
-                  :type="item.type"
-                  :value-format="item.type =='date'?'yyyy-MM-dd':'yyyy-MM-dd HH:mm:ss'"
-                  v-model="fieldsData[item.prop]"
-                  :placeholder="item.label"
-                  :disabled="!!item.disabled"
-                  :readonly="!!item.readonly"
-                ></el-date-picker>
+                <el-date-picker :type="item.type" :value-format="item.type =='date'?'yyyy-MM-dd':'yyyy-MM-dd HH:mm:ss'" v-model="fieldsData[item.prop]" :placeholder="item.label" :disabled="!!item.disabled" :readonly="!!item.readonly"></el-date-picker>
               </template>
               <template v-if="item.type == 'image'">
                 <div :key="key" class="image">
-                  <el-input
-                    v-model="files[item.prop]"
-                    type="text"
-                    @paste.native.capture.prevent="onPaste($event,item,index)"
-                    placeholder="粘贴截图上传"
-                  >
+                  <el-input v-model="files[item.prop]" type="text" @paste.native.capture.prevent="onPaste($event,item,index)" placeholder="粘贴截图上传">
                     <el-button slot="append" @click.native.stop="$refs.upload[0].click()">本地上传</el-button>
                   </el-input>
-                  <input
-                    ref="upload"
-                    type="file"
-                    accept="image/png, image/jpg, image/jpeg, image/gif, image/svg"
-                    @input="upload($event,item)"
-                    v-show="false"
-                  />
-                  <div
-                    v-if="fieldsData[item.prop] && fieldsData[item.prop].length"
-                    class="image-box"
-                  >
+                  <input ref="upload" type="file" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg" @input="upload($event,item)" v-show="false" />
+                  <div v-if="fieldsData[item.prop] && fieldsData[item.prop].length" class="image-box">
                     <template v-for="(v,i) in fieldsData[item.prop]">
                       <div class="image-item" :key="i">
                         <el-image :src="v" :preview-src-list="fieldsData[item.prop]" fit="cover" />
@@ -217,37 +89,17 @@ Create Time  : 2020-03-31
                 </div>
               </template>
               <template v-if="item.type == 'upload'">
-                <el-button
-                  @click="$refs.upload[0].click()"
-                  :type="item.style || 'primary'"
-                  :icon="item.icon || 'el-icon-upload2'"
-                >点击上传</el-button>
-                <input
-                  type="file"
-                  ref="upload"
-                  @change="onUpload($event,item)"
-                  multiple
-                  v-show="false"
-                  accept="application/pdf, image/jpg, image/jpeg, image/png"
-                />
+                <el-button @click="$refs.upload[0].click()" :type="item.style || 'primary'" :icon="item.icon || 'el-icon-upload2'">点击上传</el-button>
+                <input type="file" ref="upload" @change="onUpload($event,item)" multiple v-show="false" accept="application/pdf, image/jpg, image/jpeg, image/png" />
                 <div v-if="fileList && fileList.length" style="margin-top: 10px;">
                   <span class="file-list" v-for="(k,i) in fileList" :key="i">{{k.name}}</span>
                 </div>
               </template>
               <template v-if="item.type == 'plan'">
-                <el-progress
-                  :percentage="fieldsData[item.prop]"
-                  text-inside
-                  type="line"
-                  :stroke-width="25"
-                ></el-progress>
+                <el-progress :percentage="fieldsData[item.prop]" text-inside type="line" :stroke-width="25"></el-progress>
               </template>
               <template v-if="item.type=='selectTree'">
-                <select-tree
-                  v-model="fieldsData[item.prop]"
-                  :options="item.options"
-                  :props="item.props"
-                />
+                <select-tree v-model="fieldsData[item.prop]" :options="item.options" :props="item.props||{label:'label',value:'value',children:'children'}" />
               </template>
             </el-form-item>
           </el-col>

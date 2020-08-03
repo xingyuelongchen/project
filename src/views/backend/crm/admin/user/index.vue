@@ -4,12 +4,21 @@ Create author: qinglong
 Create Time  : 2020-07-26
 -->
 <template>
+
   <div class="content-box">
     <mixSearch v-model="search" :fields="searchFields" />
     <div>
       <mixTable v-model="tableData" :fields="tableFields" />
     </div>
-    <mixPage v-model="page" />
+    <div>
+      <mixPage v-model="page" />
+      <el-dialog :visible.sync="dialogShow" title="编辑">
+        <mixForm v-model="editForm" :fields="editFormField" />
+        <div slot="footer">
+          <el-button type="primary" @click="save">保存</el-button>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -57,7 +66,13 @@ export default {
         limit: 10,
         total: 0,
         event: this.getData
-      }
+      },
+      dialogShow: false,
+      editForm: { "nickname[a]": 0 },
+      editFormField: [
+        // { label: "姓名", prop: "nickname", type: "text" },
+        { label: "姓名", prop: "nickname[a]", type: "text" }
+      ]
     };
   },
   activated() {
@@ -75,10 +90,18 @@ export default {
             label: "操作",
             type: "manage",
             fixed: "right",
+            width: 250,
             options: [
               {
                 label: "编辑",
-                style: "primary"
+                style: "primary",
+                click: this.tableEdit
+              },
+              {
+                label: "重置密码",
+                style: "danger",
+                isShow: { type: "==", val: "正常", prop: "status" },
+                click: this.reset
               },
               {
                 label: "审核",
@@ -101,6 +124,29 @@ export default {
             ]
           }
         ]);
+      }
+    },
+    async tableEdit(item) {
+      let { data } = await this.axios("/adminapi/Publics/TableFormEdit", {
+        data: {
+          table_id: 2,
+          type: "edit"
+        }
+      });
+      if (data.code) {
+        this.editFormField = data.data.map(e => {
+          return {
+            span: 12,
+            labelWidth: 80,
+            ...e
+          };
+        });
+        let obj = {};
+        data.data.forEach(e => {
+          obj[e.prop] = item[e.prop];
+        });
+        this.editForm = obj;
+        this.dialogShow = true;
       }
     },
     async getData() {
@@ -131,6 +177,26 @@ export default {
         data: { id: item.id }
       });
       this.getData();
+    },
+    async save() {
+      let { data } = await this.axios("/adminapi/User/edit", {
+        data: this.editForm
+      });
+      if (data.code) {
+        this.dialogShow = false;
+        this.getData();
+      }
+    },
+    async reset(item) {
+      let { data } = await this.axios("/adminapi/user/reset", {
+        data: { id: item.id }
+      });
+      if (data.code) {
+        this.$alert("密码重置成功，新密码是：" + data.data, {
+          type: "success",
+          title: data.msg
+        });
+      }
     }
   }
 };

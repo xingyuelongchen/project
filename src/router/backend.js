@@ -8,7 +8,6 @@ export default
       children: [
         { path: 'user', name: 'Adminmenber', meta: { keepAlive: true, role: 21, title: '员工列表', }, component: () => import('@/views/backend/crm/admin/user') },
         { path: 'roles', name: 'Adminroles', meta: { keepAlive: true, role: 22, title: '权限分配', }, component: () => import('@/views/backend/crm/admin/roles') },
-        { path: 'organization', name: 'Adminorganization', meta: { keepAlive: true, role: 23, title: '组织构架', }, component: () => import('@/views/backend/crm/admin/organization') },
       ]
     },
     {
@@ -47,12 +46,13 @@ export default
       path: 'extend', name: 'Ether', meta: { keepAlive: true, role: 120, title: '扩展管理', }, component: () => import('@/views/layou'),
     },
     {
-      path: 'setting', name: 'Setting', meta: { keepAlive: true, role: 140, title: '设置', }, component: () => import('@/views/layou'),
+      path: 'setting', name: 'Setting', meta: { keepAlive: true, role: 140, title: '系统设置', }, component: () => import('@/views/layou'),
       children: [
         { path: 'roles', name: 'Roles', meta: { keepAlive: true, role: 141, title: '权限菜单', }, component: () => import('@/views/backend/crm/setting/roles') },
         { path: 'role-field', name: 'RoleField', meta: { keepAlive: true, role: 142, title: '字段管理', }, component: () => import('@/views/backend/crm/setting/roleField') },
         { path: 'role-group', name: 'Rolegroup', meta: { keepAlive: true, role: 143, title: '角色权限', }, component: () => import('@/views/backend/crm/setting/roleGroup') },
-        { path: 'system-setting', name: 'Systemsetting', meta: { keepAlive: true, role: 144, title: '系统设置', }, component: () => import('@/views/backend/crm/setting/systemSetting') },
+        { path: 'system-setting', name: 'Systemsetting', meta: { keepAlive: true, role: 144, title: '系统配置', }, component: () => import('@/views/backend/crm/setting/systemSetting') },
+        { path: 'organization', name: 'Adminorganization', meta: { keepAlive: true, role: 145, title: '组织构架', }, component: () => import('@/views/backend/crm/setting/organization') },
       ]
     },
 

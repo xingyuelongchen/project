@@ -98,6 +98,8 @@ export default {
       this.valueTitle = node[this.props.label];
       this.valueId = node[this.props.value];
       this.$emit("getValue", this.valueId);
+      this.$emit("input", this.valueId);
+      console.log(0);
       this.defaultExpandedKey = [];
     },
     // 清除选中
@@ -107,6 +109,7 @@ export default {
       this.defaultExpandedKey = [];
       this.clearSelected();
       this.$emit("getValue", null);
+      this.$emit("input", this.valueId);
     },
     /* 清空选中样式 */
     clearSelected() {

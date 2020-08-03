@@ -4,36 +4,10 @@ Create author: qinglong
 Create Time  : 2020-03-28
 -->
 <template>
-  <el-table
-    ref="table"
-    row-key="id"
-    :height="options.height || '100%'"
-    :max-height="options.height || '100%'"
-    tooltip-effect="dark"
-    :size="options.size || 'mini'"
-    :header-row-style="{background:'#f9f9f9'}"
-    :header-cell-style="{background:'none'}"
-    :border="true"
-    :fit="true"
-    :data="fieldsData"
-    :lazy="options.lazy|| false"
-    :load="options.load || null"
-    :tree-props="options.treeProps || {hasChildren:'children'}"
-    @cell-click="cellClick"
-    @cell-dblclick="cellDblClick"
-    @selection-change="selectionChange"
-  >
+  <el-table ref="table" row-key="id" :height="options.height || '100%'" :max-height="options.height || '100%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
     <template v-for="(item,index ) in field">
       <template v-if="'expand'==item.type">
-        <el-table-column
-          :key="index+'key'"
-          :type="item.type"
-          :label="item.label"
-          :fixed="item.fixed"
-          :align="item.align||item.headAlign||'left'"
-          :header-align="item.headAlign||'left'"
-          :resizable="item.resizable"
-        >
+        <el-table-column :key="index+'key'" :type="item.type" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable">
           <template slot-scope="props">
             <div class="demo-table-expand">
               <template v-for="(k,i) in fields">
@@ -47,53 +21,20 @@ Create Time  : 2020-03-28
         </el-table-column>
       </template>
       <template v-else-if="['selection','index','expand'].includes(item.type)">
-        <el-table-column
-          :key="index+'key'"
-          :type="item.type"
-          :label="item.label"
-          :fixed="item.fixed"
-          :align="item.align||item.headAlign||'left'"
-          :header-align="item.headAlign||'left'"
-          :resizable="item.resizable"
-        />
+        <el-table-column :key="index+'key'" :type="item.type" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable" />
       </template>
       <template v-else-if="item.type && !['selection','index','expand'].includes(item.type)">
-        <el-table-column
-          :key="index"
-          :prop="item.prop"
-          :label="item.label"
-          :filters="item.filters"
-          :sortable="!!item.sort"
-          :fixed="item.fixed||false"
-          :formatter="item.formatter"
-          :class-name="item.className||''"
-          :resizable="item.resizable || false"
-          :header-align="item.headAlign||item.align||'left'"
-          :align="item.align||item.headAlign||'left'"
-          :width="item.width||item.minWidth ||''"
-          :show-overflow-tooltip="item.tootip || true"
-          :reserve-selection="item.reserveSelection||false"
-          :min-width="item.minWidth || item.type=='manage'?'178':'0'"
-        >
+        <el-table-column :key="index" :prop="item.prop" :label="item.label" :filters="item.filters" :sortable="!!item.sort" :fixed="item.fixed||false" :formatter="item.formatter" :class-name="item.className||''" :resizable="item.resizable || false" :header-align="item.headAlign||item.align||'left'" :align="item.align||item.headAlign||'left'" :width="item.width||item.minWidth ||''" :show-overflow-tooltip="item.tootip || true" :reserve-selection="item.reserveSelection||false" :min-width="item.minWidth || item.type=='manage'?'178':'0'">
           <template slot-scope="scope">
             <template v-if="item.type == 'tag'">
               <div v-if="item.options" class="box">
-                <el-tag
-                  effect="plain"
-                  v-for="(k,i) in item.options"
-                  :type="k.style"
-                  :key="i"
-                >{{k.label || k}}</el-tag>
+                <el-tag effect="plain" v-for="(k,i) in item.options" :type="k.style" :key="i">{{k.label || k}}</el-tag>
               </div>
               <el-tag v-else>{{ scope.row[item.prop] || '空'}}</el-tag>
             </template>
             <template v-if="item.type == 'select'">
               <!-- {{typeof scope.row[item.prop]}} -->
-              <el-select
-                v-model="scope.row[item.prop]"
-                @change="onInput(item,scope,'change')"
-                :size="item.size||options.size||'mini'"
-              >
+              <el-select v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" :size="item.size||options.size||'mini'">
                 <el-option v-for="(k,i) in item.options" :key="i" :label="k.label" :value="k.value"></el-option>
               </el-select>
             </template>
@@ -101,65 +42,28 @@ Create Time  : 2020-03-28
               <el-dropdown>
                 <span>{{scope.row[item.prop]}}</span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item
-                    v-for="(k,i) in item.options"
-                    :key="i"
-                    @click.stop.native="dropDown(item,k,scope)"
-                  >{{k.label}}</el-dropdown-item>
+                  <el-dropdown-item v-for="(k,i) in item.options" :key="i" @click.stop.native="dropDown(item,k,scope)">{{k.label}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </template>
             <template v-if="item.type == 'tagdown'">
               <el-dropdown>
-                <el-tag
-                  class="hover"
-                  effect="plain"
-                  :type="toogle(item,scope.row[item.prop])"
-                >{{ getTagDownLabel(item,scope) }}</el-tag>
+                <el-tag class="hover" effect="plain" :type="toogle(item,scope.row[item.prop])">{{ getTagDownLabel(item,scope) }}</el-tag>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item
-                    v-for="(k,i) in item.options"
-                    :key="i"
-                    @click.self.stop.native="dropDown(item,k,scope)"
-                  >{{k.label}}</el-dropdown-item>
+                  <el-dropdown-item v-for="(k,i) in item.options" :key="i" @click.self.stop.native="dropDown(item,k,scope)">{{k.label}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </template>
             <template v-if="item.type == 'switch'">
-              <el-switch
-                :size="item.size||options.size||'mini'"
-                v-model="scope.row[item.prop]"
-                :active-value="1"
-                :inactive-value="0"
-                @change="onInput(item,scope,'change',$event)"
-                inactive-color="#ccc"
-                :disabled="item.readonly"
-              />
+              <el-switch :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" :active-value="1" :inactive-value="0" @change="onInput(item,scope,'change',$event)" inactive-color="#ccc" :disabled="item.readonly" />
             </template>
             <template v-if="item.type == 'cascader'">
-              <el-cascader
-                :size="item.size||options.size||'mini'"
-                v-model="scope.row[item.prop]"
-                :options="item.config || {}"
-                @change="onInput(item,scope,'change',$event)"
-              />
+              <el-cascader :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" :options="item.config || {}" @change="onInput(item,scope,'change',$event)" />
             </template>
             <template v-if="item.type == 'input'">
               <div class="input" :key="showKey+index">
-                <el-input
-                  readonly
-                  :size="item.size||options.size||'mini'"
-                  v-if="!item['readonly'+scope.$index]"
-                  :value="scope.row[item.prop]"
-                  @focus="onInput(item,scope)"
-                ></el-input>
-                <el-input
-                  v-else
-                  :size="item.size||options.size||'mini'"
-                  v-model="scope.row[item.prop]"
-                  @change="onInput(item,scope,'change')"
-                  @blur="onInput(item,scope,'blur')"
-                ></el-input>
+                <el-input readonly :size="item.size||options.size||'mini'" v-if="!item['readonly'+scope.$index]" :value="scope.row[item.prop]" @focus="onInput(item,scope)"></el-input>
+                <el-input v-else :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="onInput(item,scope,'blur')"></el-input>
               </div>
             </template>
             <template v-if="item.type == 'manage'">
@@ -167,29 +71,13 @@ Create Time  : 2020-03-28
                 <template v-for="(k,i) in item.options">
                   <template v-if="k.type == 'tagdown'">
                     <el-dropdown :key="i">
-                      <el-tag
-                        class="hover"
-                        effect="plain"
-                        :type="toogle(k,scope.row[item.prop])"
-                      >{{ getTagDownLabel(k,scope) }}</el-tag>
+                      <el-tag class="hover" effect="plain" :type="toogle(k,scope.row[item.prop])">{{ getTagDownLabel(k,scope) }}</el-tag>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item
-                          v-for="(j,t) in k.options"
-                          :key="t"
-                          @click.self.stop.native="dropDown(k,j,scope)"
-                        >{{j.label}}</el-dropdown-item>
+                        <el-dropdown-item v-for="(j,t) in k.options" :key="t" @click.self.stop.native="dropDown(k,j,scope)">{{j.label}}</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </template>
-                  <el-button
-                    v-else
-                    v-show="isShow(k,item,scope)"
-                    :underline="false"
-                    :key="i"
-                    :type="k.style || 'default'"
-                    size="mini"
-                    @click="click(k.click,scope.row,scope.column)"
-                  >{{k.label}}</el-button>
+                  <el-button v-else v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'" size="mini" @click="click(k.click,scope.row,scope.column)">{{k.label}}</el-button>
                 </template>
               </div>
             </template>
@@ -197,13 +85,7 @@ Create Time  : 2020-03-28
               <i :class="scope.row[item.prop]"></i>
             </template>
             <template v-if="item.type == 'plan'">
-              <el-progress
-                :percentage="scope.row[item.prop]"
-                text-inside
-                type="line"
-                :status="progressStatus(scope.row[item.prop])"
-                :stroke-width="15"
-              ></el-progress>
+              <el-progress :percentage="scope.row[item.prop]" text-inside type="line" :status="progressStatus(scope.row[item.prop])" :stroke-width="15"></el-progress>
             </template>
             <template v-if="item.type == 'image'">
               <template v-if="scope.row[item.prop] && scope.row[item.prop].length">
@@ -215,22 +97,7 @@ Create Time  : 2020-03-28
         </el-table-column>
       </template>
       <template v-else>
-        <el-table-column
-          :key="index"
-          :prop="item.prop"
-          :label="item.label"
-          :sortable="!!item.sort"
-          :fixed="item.fixed||false"
-          :formatter="item.formatter"
-          :width="item.width||'auto'"
-          :align="item.align||item.headAlign||'left'"
-          :class-name="item.className||''"
-          :min-width="item.minWidth || 100"
-          :resizable="item.resizable || false"
-          :header-align="item.headAlign||'left'"
-          :show-overflow-tooltip="item.tootip || true"
-          :reserve-selection="item.reserveSelection||false"
-        ></el-table-column>
+        <el-table-column :key="index" :prop="item.prop" :label="item.label" :sortable="!!item.sort" :fixed="item.fixed||false" :formatter="item.formatter" :width="item.width||'auto'" :align="item.align||item.headAlign||'left'" :class-name="item.className||''" :min-width="item.minWidth || 100" :resizable="item.resizable || false" :header-align="item.headAlign||'left'" :show-overflow-tooltip="item.tootip || true" :reserve-selection="item.reserveSelection||false"></el-table-column>
       </template>
     </template>
   </el-table>
@@ -468,6 +335,9 @@ export default {
   },
   created() {
     this.init();
+    window.onresize = () => {
+      this.$refs.table.doLayout();
+    };
   },
 
   methods: {

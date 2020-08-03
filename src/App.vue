@@ -9,11 +9,8 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
   color: #2c3e50;
-  .el-scrollbar__wrap {
-    overflow-x: hidden;
-  }
+
   .content-box {
     display: grid;
     height: calc(100vh - 82px);
@@ -34,7 +31,7 @@
     padding: 20px 0;
     overflow: hidden;
   }
- 
+
   .el-card__body {
     height: calc(100% - 56px);
   }
@@ -53,6 +50,9 @@
   }
   .el-scrollbar {
     height: 100%;
+    .el-scrollbar__wrap {
+      overflow-x: hidden;
+    }
   }
 }
 body,

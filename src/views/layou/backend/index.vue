@@ -8,42 +8,17 @@ Create Time  : 2020-07-22
     <div class="app-header" user="primary">
       <div class="left">
         <div class="item logo" :class="{scale:isCollapse}">
-          <img
-            :src="isCollapse?'http://www.guangyizhou.cn/public/home/assets/logo.png':'http://www.guangyizhou.cn/public/home/assets/logo.png'"
-          />
+          <img :src="isCollapse?'http://www.guangyizhou.cn/public/home/assets/logo.png':'http://www.guangyizhou.cn/public/home/assets/logo.png'" />
         </div>
         <div class="item icon">
           <el-tooltip effect="dark" :content="isCollapse?'展开侧边栏':'折叠侧边栏'" placement="right-end">
-            <i
-              :class="[isCollapse?'el-icon-s-unfold':'el-icon-s-fold']"
-              @click="isCollapse=!isCollapse"
-            ></i>
+            <i :class="[isCollapse?'el-icon-s-unfold':'el-icon-s-fold']" @click="isCollapse=!isCollapse"></i>
           </el-tooltip>
         </div>
-        <div
-          class="itema"
-          :class="{active:targetIndex == 'crm'}"
-          @click="toggle('crm')"
-          v-role="1"
-        >管理系统</div>
-        <div
-          class="itema"
-          :class="{active:targetIndex == 'app'}"
-          @click="toggle('app')"
-          v-role="2"
-        >应用程序</div>
-        <div
-          class="itema"
-          :class="{active:targetIndex == 'web'}"
-          @click="toggle('web')"
-          v-role="3"
-        >官网管理</div>
-        <div
-          class="itema"
-          :class="{active:targetIndex == 'minapp'}"
-          @click="toggle('minapp')"
-          v-role="4"
-        >小程序</div>
+        <div class="itema" :class="{active:targetIndex == 'crm'}" @click="toggle('crm')" v-role="1">管理系统</div>
+        <div class="itema" :class="{active:targetIndex == 'app'}" @click="toggle('app')" v-role="2">应用程序</div>
+        <div class="itema" :class="{active:targetIndex == 'web'}" @click="toggle('web')" v-role="3">官网管理</div>
+        <div class="itema" :class="{active:targetIndex == 'minapp'}" @click="toggle('minapp')" v-role="4">小程序</div>
       </div>
       <div class="center"></div>
       <div class="right">
@@ -67,21 +42,10 @@ Create Time  : 2020-07-22
     </div>
     <div class="app-container">
       <div class="app-side">
-        <el-scrollbar style="height:100%">
-          <el-menu
-            :default-active="$route.name"
-            :collapse="isCollapse"
-            class="el-menu-vertical-demo"
-            router
-            unique-opened
-          >
+        <el-scrollbar>
+          <el-menu :collapse-transition="false" :default-active="$route.name" :collapse="isCollapse" class="el-menu-vertical-demo" router unique-opened>
             <template v-for="(item,index) in $store.state.menu">
-              <el-submenu
-                :index="item.name"
-                :key="index"
-                :route="item"
-                v-if="item.children && item.children.length"
-              >
+              <el-submenu :index="item.name" :key="index" :route="item" v-if="item.children && item.children.length">
                 <template slot="title">
                   <i :class="item.icon"></i>
                   <span slot="title">{{item.title || item.meta.title}}</span>
@@ -103,21 +67,9 @@ Create Time  : 2020-07-22
       </div>
       <div class="app-content">
         <div class="top">
-          <el-tabs
-            :value="activeName"
-            :key="key"
-            type="card"
-            @tab-remove="delTab"
-            @tab-click="onTab"
-            user="el-tabs"
-          >
+          <el-tabs :value="activeName" :key="key" type="card" @tab-remove="delTab" @tab-click="onTab" user="el-tabs">
             <template v-for="(item,index) in $store.state.tabmenu">
-              <el-tab-pane
-                :key="item.fullPath"
-                :label="item.title"
-                :name="item.fullPath"
-                :closable="index>0"
-              ></el-tab-pane>
+              <el-tab-pane :key="item.fullPath" :label="item.title" :name="item.fullPath" :closable="index>0"></el-tab-pane>
             </template>
           </el-tabs>
         </div>
@@ -177,6 +129,19 @@ export default {
       this.$store.commit("setClear");
       this.$router.setRoles();
       this.refreshKey = Math.random();
+      let to = this.$route;
+      let title = to.meta.title;
+      if (to.matched[to.matched.length - 2].meta.title) {
+        title =
+          to.matched[to.matched.length - 2].meta.title + "/" + to.meta.title;
+      }
+      let option = {
+        name: to.name,
+        fullPath: to.fullPath,
+        path: to.path,
+        title
+      };
+      this.$store.commit("setTabmenu", option);
     },
     updateTheme(val, oldVal = "#409EFF") {
       if (typeof val !== "string") return;
@@ -348,11 +313,11 @@ export default {
         height: 90%;
         overflow: hidden;
         margin: 0 5px;
-        transition: all 0.6s;
+        // transition: all 0.6s;
         &.scale {
           max-width: 50px;
           width: 50px;
-          transition: all 0.7s;
+          // transition: all 0.7s;
           padding: 0 5px;
         }
         img {
@@ -387,7 +352,7 @@ export default {
       align-items: center;
       justify-content: center;
       vertical-align: middle;
-      transition: all 0.6s;
+      // transition: all 0.6s;
       &.active {
         background: rgba(1, 1, 1, 0.2);
       }
@@ -399,6 +364,7 @@ export default {
   }
   .app-container {
     display: flex;
+    justify-content: space-between;
     height: calc(100% - 61px);
     .app-side {
       border-right: 1px solid #e6e6e6;
@@ -409,8 +375,8 @@ export default {
         width: 200px;
         min-width: 200px;
         min-height: 400px;
-        border: none;
       }
+
       .el-menu {
         border: none;
       }

@@ -102,6 +102,7 @@ export default {
       { label: "text - 文本框", value: "text" },
       { label: "textarea - 文本域", value: "textarea" },
       { label: "select - 下拉框", value: "select" },
+      { label: "selectTree - 下拉树形选项", value: "selectTree" },
       { label: "cascader - 级联选择器", value: "cascader" },
       { label: "radio - 单选", value: "radio" },
       { label: "checkbox - 复选", value: "checkbox" },
@@ -311,6 +312,7 @@ export default {
           options: form,
           width: 120
         },
+        { change: this.formEdit, prop: "options", label: "options", type: "input",width: 250 },
         {
           change: this.formEdit,
           prop: "visible",

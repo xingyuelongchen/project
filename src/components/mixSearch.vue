@@ -9,110 +9,33 @@ Create Time  : 2020-04-02
       <template v-for="(item,index) in fields">
         <el-col :span="item.span" :key="index">
           <template v-if="['text','textarea','number'].indexOf(item.type)>=0">
-            <el-input
-              v-model="form[item.prop]"
-              :type="item.type"
-              :size="item.size||'mini'"
-              :placeholder="item.label"
-              clearable
-              :default-value="new Date()"
-            ></el-input>
+            <el-input v-model="form[item.prop]" :type="item.type" :size="item.size||'mini'" :placeholder="item.label" clearable :default-value="new Date()"></el-input>
           </template>
           <template v-if="item.type == 'select'">
-            <el-select
-              v-model="form[item.prop]"
-              :placeholder="item.label"
-              :size="item.size||'mini'"
-              :multiple="item.multiple"
-              clearable
-            >
+            <el-select v-model="form[item.prop]" :placeholder="item.label" :size="item.size||'mini'" :multiple="item.multiple" clearable>
               <template v-if="item.options">
-                <el-option
-                  v-for="(k,i) in item.options"
-                  :key="i"
-                  :label="k.label|| k[item.config.label]"
-                  :value="k.value || item.config && item.config.value && k[item.config.value] || item.config&& item.config.label&& k[item.config.label]"
-                ></el-option>
+                <el-option v-for="(k,i) in item.options" :key="i" :label="k.label|| k[item.config.label]" :value="k.value || item.config && item.config.value && k[item.config.value] || item.config&& item.config.label&& k[item.config.label]"></el-option>
               </template>
             </el-select>
           </template>
           <template v-if="['datetime','date','daterange','month'].indexOf(item.type)>=0">
             <template v-if="['date','','month'].indexOf(item.type)>=0">
-              <el-date-picker
-                v-model="form[item.prop]"
-                align="right"
-                :key="item.type"
-                :format="item.format || item.valueFormat ||'yyyy-MM-dd'"
-                :value-format="item.format || item.valueFormat ||'yyyy-MM-dd'"
-                :placeholder="item.placeholder || item.label"
-                :type="item.type"
-                :size="item.size||'mini'"
-              ></el-date-picker>
+              <el-date-picker v-model="form[item.prop]" align="right" :key="item.type" :format="item.format || item.valueFormat ||'yyyy-MM-dd'" :value-format="item.format || item.valueFormat ||'yyyy-MM-dd'" :placeholder="item.placeholder || item.label" :type="item.type" :size="item.size||'mini'"></el-date-picker>
             </template>
-            <el-date-picker
-              v-else
-              v-model="form[item.prop]"
-              align="right"
-              :key="item.type"
-              :format="item.format || item.valueFormat ||'yyyy-MM-dd'"
-              :value-format="item.format || item.valueFormat ||'yyyy-MM-dd'"
-              :start-placeholder="item.label+'开始日期'"
-              :end-placeholder="item.label+'结束日期'"
-              :placeholder="item.placeholder || item.label"
-              :type="item.type"
-              :size="item.size||'mini'"
-              :default-time="['00:00:00', '23:59:59']"
-            ></el-date-picker>
+            <el-date-picker v-else v-model="form[item.prop]" align="right" :key="item.type" :format="item.format || item.valueFormat ||'yyyy-MM-dd'" :value-format="item.format || item.valueFormat ||'yyyy-MM-dd'" :start-placeholder="item.label+'开始日期'" :end-placeholder="item.label+'结束日期'" :placeholder="item.placeholder || item.label" :type="item.type" :size="item.size||'mini'" :default-time="['00:00:00', '23:59:59']" :picker-options="pickerOptions"></el-date-picker>
           </template>
           <template v-if="item.type == 'time'">
-            <el-time-select
-              v-model="form[item.prop]"
-              :size="item.size||'mini'"
-              :picker-options="{ start:item.start|| '08:30', step:item.step|| '00:01', end:item.end|| '18:30' }"
-              :placeholder="item.label||'选择时间'"
-            ></el-time-select>
+            <el-time-select v-model="form[item.prop]" :size="item.size||'mini'" :picker-options="{ start:item.start|| '08:30', step:item.step|| '00:01', end:item.end|| '18:30' }" :placeholder="item.label||'选择时间'"></el-time-select>
           </template>
           <template v-if="item.type == 'button'">
-            <el-button
-              v-if="!item.options"
-              :type="item.style || 'primary'"
-              :size="item.size||'mini'"
-              :icon="item.icon"
-              @click.stop="click(item)"
-            >{{item.label}}</el-button>
+            <el-button v-if="!item.options" :type="item.style || 'primary'" :size="item.size||'mini'" :icon="item.icon" @click.stop="click(item)">{{item.label}}</el-button>
             <template v-else>
-              <el-button
-                v-for="(k,i) in item.options"
-                :key="i"
-                :icon="k.icon"
-                :type="k.style||item.style || 'primary'"
-                :size="k.size || item.size || 'mini'"
-                @click.stop="click(k)"
-              >{{k.label}}</el-button>
+              <el-button v-for="(k,i) in item.options" :key="i" :icon="k.icon" :type="k.style||item.style || 'primary'" :size="k.size || item.size || 'mini'" @click.stop="click(k)">{{k.label}}</el-button>
             </template>
           </template>
           <template v-if="item.type == 'cascader'">
-            <el-cascader
-              clearable
-              v-if="!item.readonly"
-              v-model="form[item.prop]"
-              :placeholder="item.placeholder || item.label"
-              :show-all-levels="false"
-              :collapse-tags="true"
-              :disabled="item.disabled"
-              :readonly="item.readonly"
-              :checkStrictly="true"
-              :emitPath="false"
-              :options="item.options"
-              :size="item.size || 'mini'"
-              :props="item.config || { value:'id', checkStrictly: true}"
-            ></el-cascader>
-            <el-input
-              v-else
-              v-model="form[item.prop]"
-              :disabled="item.disabled"
-              :readonly="item.readonly"
-            ></el-input>
+            <el-cascader clearable v-if="!item.readonly" v-model="form[item.prop]" :placeholder="item.placeholder || item.label" :show-all-levels="false" :collapse-tags="true" :disabled="item.disabled" :readonly="item.readonly" :checkStrictly="true" :emitPath="false" :options="item.options" :size="item.size || 'mini'" :props="item.config || { value:'id', checkStrictly: true}"></el-cascader>
+            <el-input v-else v-model="form[item.prop]" :disabled="item.disabled" :readonly="item.readonly"></el-input>
           </template>
         </el-col>
       </template>
@@ -136,7 +59,58 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "昨天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 2);
+              end.setTime(start.getTime());
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "今天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime());
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      }
+    };
   },
   methods: {
     click(type, index, item) {

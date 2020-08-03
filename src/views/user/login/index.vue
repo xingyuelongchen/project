@@ -128,7 +128,7 @@ export default {
           this.login();
           this.ruleForm = {};
         } else {
-          let userinfo = this.userinfo;
+          let userinfo = data.data; //this.userinfo;
           localStorage.setItem("userinfo", JSON.stringify(userinfo));
           this.$store.commit("setUserinfo", userinfo);
           if (userinfo) {
