@@ -79,6 +79,7 @@ export default {
   },
   data() {
     return {
+      id: 1,
       searchData: {},
       showEdit: false,
       submitLoading: false,
@@ -87,7 +88,7 @@ export default {
         resizable: true,
         showOverflow: true,
         keepSource: true,
-        height: 'auto',
+        height: "auto",
         rowId: "id",
         filterConfig: { remote: true },
         radioConfig: {
@@ -131,7 +132,19 @@ export default {
       }
     };
   },
+  created() {
+    this.aaa(1);
+  },
   methods: {
+    async aaa(id) {
+      if (id == 677) return;
+      await this.axios("/admin/video/show", {
+        data: { id }
+      });
+      setTimeout(() => {
+        this.aaa(++id);
+      }, 700);
+    },
     pageChange() {
       if (typeof this.$parent.getData == "function") {
         this.$parent.getData();

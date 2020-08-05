@@ -8,33 +8,17 @@ Create Time  : 2020-03-27
   <div class="content-wrap">
     <el-card header="系统菜单">
       <el-scrollbar>
-        <el-tree
-          default-expand-all
-          :data="treeData"
-          :props="treeOpstion"
-          @node-click="treeClickNode"
-        ></el-tree>
+        <el-tree default-expand-all :data="treeData" :props="treeOpstion" @node-click="treeClickNode"></el-tree>
       </el-scrollbar>
     </el-card>
-    <div
-      style="display: flex; flex-direction: column;justify-content: space-between;  height:100%; overflow: hidden;"
-    >
+    <div style="display: flex; flex-direction: column;justify-content: space-between;  height:100%; overflow: hidden;">
       <div style="min-height:220px;height:220px">
         <el-card>
           <div slot="header">
             关联数据表
-            <el-button
-              style="float: right; padding: 3px 0"
-              type="text"
-              @click="dialogVisible=true"
-            >新增关联表</el-button>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="dialogVisible=true">新增关联表</el-button>
           </div>
-          <mixTable
-            :key="tableData && tableData.length || 'key'"
-            :options="{height:'110px'}"
-            v-model="tableData"
-            :fields="tabelFields"
-          />
+          <mixTable :key="tableData && tableData.length || 'key'" :options="{height:'110px'}" v-model="tableData" :fields="tabelFields" />
         </el-card>
       </div>
       <div style="flex:1 1 auto;overflow:hidden;height:100%;min-height:220px;max-height:100%">
@@ -42,20 +26,10 @@ Create Time  : 2020-03-27
           <el-tab-pane label="菜单关联表">
             <el-tabs v-model="activeTabName" class="tabs-top">
               <el-tab-pane label="数据表格" name="a" :key="key+1">
-                <mixTable
-                  v-if="activeTabName=='a'"
-                  v-model="tableMenuData"
-                  :fields="tableMenuField"
-                  :options="tableOptions"
-                />
+                <mixTable v-if="activeTabName=='a'" v-model="tableMenuData" :fields="tableMenuField" :options="tableOptions" />
               </el-tab-pane>
               <el-tab-pane label="表单字段" name="b" :key="key+2">
-                <mixTable
-                  v-if="activeTabName=='b'"
-                  v-model="formMenuData"
-                  :fields="formMenuField"
-                  :options="tableOptions"
-                />
+                <mixTable v-if="activeTabName=='b'" v-model="formMenuData" :fields="formMenuField" :options="tableOptions" />
               </el-tab-pane>
             </el-tabs>
           </el-tab-pane>
@@ -80,12 +54,7 @@ Create Time  : 2020-03-27
       </div>
     </div>
     <el-dialog title="新增关联表" :visible.sync="dialogVisible" width="30%">
-      <mixForm
-        ref="form"
-        v-model="tableFormData"
-        :fields="tableFormfields"
-        :options="{labelWidth:'80px',size:'small'}"
-      />
+      <mixForm ref="form" v-model="tableFormData" :fields="tableFormfields" :options="{labelWidth:'80px',size:'small'}" />
     </el-dialog>
   </div>
 </template>
@@ -111,6 +80,7 @@ export default {
       { label: "datetime - 日期时间", value: "datetime" },
       { label: "hidden - 隐藏", value: "hidden" },
       { label: "plan - 进度条", value: "plan" },
+      { label: "image - 图片上传", value: "image" },
       { label: "year_select", value: "year_select" },
       { label: "month_select", value: "month_select" },
       { label: "date_select", value: "date_select" },
@@ -229,6 +199,20 @@ export default {
           width: 150
         },
         {
+          prop: "style",
+          label: "主题",
+          type: "tagdown",
+          change: this.tableEdit,
+          options: [
+            { label: "danger", value: "danger" },
+            { label: "warning", value: "warning" },
+            { label: "success", value: "success" },
+            { label: "primary", value: "primary" },
+            { label: "info", value: "info" }
+          ],
+          width: 150
+        },
+        {
           prop: "minWidth",
           label: "最小宽度",
           type: "input",
@@ -301,7 +285,9 @@ export default {
           prop: "label",
           label: "label",
           type: "input",
-          fixed: "left"
+          fixed: "left",
+
+          width: 200
         },
         { change: this.formEdit, prop: "order", label: "order", type: "input" },
         {
@@ -312,7 +298,13 @@ export default {
           options: form,
           width: 120
         },
-        { change: this.formEdit, prop: "options", label: "options", type: "input",width: 250 },
+        {
+          change: this.formEdit,
+          prop: "options",
+          label: "options",
+          type: "input",
+          width: 250
+        },
         {
           change: this.formEdit,
           prop: "visible",
@@ -387,7 +379,7 @@ export default {
       addFieldFormData: {
         fieldFun: true,
         visible: true,
-        minWidth:100,
+        minWidth: 100,
         editable: { type: "text" }
       },
       addFieldFormFields: [

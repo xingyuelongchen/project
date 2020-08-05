@@ -6,15 +6,17 @@ axios.defaults['withCredentials'] = true;
 axios.interceptors.request.use(req, reqError);
 axios.interceptors.response.use(res, resError);
 var notification = null;
+var message = null;
 export default axios;
 function req(config) {
     // console.log(config);
     config.method = config.url.indexOf('/verify') >= 0 ? config.method : 'post'
     return config
 }
-function reqError(error) {
-    console.log(error);
-    Message.error('错误请求，请联系管理员')
+function reqError() {
+    console.dir(message);
+    message && message.close();
+    message = Message.error('错误请求，请联系管理员')
 }
 function res(res) {
     // console.log(res);
@@ -38,7 +40,8 @@ function res(res) {
     return res
 }
 function resError(error) {
-    Message.error('服务器响应错误，请联系管理员')
+    message && message.close();
+    message = Message.error('服务器响应错误，请联系管理员')
     console.log('Server Error:', error);
 }
 

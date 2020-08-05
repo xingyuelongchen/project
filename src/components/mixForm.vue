@@ -34,7 +34,7 @@ Create Time  : 2020-03-31
                 <el-input v-else v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :readonly="!!item.readonly"></el-input>
               </template>
               <template v-if="item.type == 'switch'">
-                <el-switch v-model="fieldsData[item.prop]" :disabled="!!item.disabled" />
+                <el-switch v-model="fieldsData[item.prop]" inactive-color="#ccc" :disabled="!!item.disabled" />
               </template>
               <template v-if="item.type == 'slider'">
                 <el-slider v-model="fieldsData[item.prop]" :format-tooltip="item.formatTooltip" :disabled="!!item.disabled" />
@@ -210,7 +210,7 @@ export default {
       this.fileList.forEach(e => {
         formData.append("files", e);
       });
-      let { data } = await this.fnAxios("/admin/Publics/UploadFiles", {
+      let { data } = await this.axios("/admin/Publics/UploadFiles", {
         data: formData
       });
       if (data.code) {
@@ -257,7 +257,7 @@ export default {
     async update(file, mime, item) {
       let obj = new FormData();
       obj.append("files", file);
-      let { data } = await this.fnAxios("/admin/Publics/uploadsImage", {
+      let { data } = await this.axios("/adminapi/Publics/uploadsImage", {
         data: obj
       });
       if (data.code) {
@@ -376,8 +376,8 @@ export default {
   .image-item {
     // width: 50px;
     // height: 50px;
-    max-width: 150px;
-    min-width: 150px;
+    max-width: 50px;
+    min-width: 50px;
     border: 1px solid #ccc;
     margin: 5px;
     position: relative;

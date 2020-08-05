@@ -5,7 +5,15 @@ Create Time  : 2020-07-29
 -->
 <template>
   <div class="content-wrap">
-    <mixNewTable v-model="tableData" :fields="tableFields" :page="page" :search="tableSearch" :loading="loading" />
+    <mixSearch v-model="searchData" :fields="searchFields" />
+    <!-- <mixNewTable v-model="tableData" :fields="tableFields" :page="page" :search="tableSearch" :loading="loading" /> -->
+    <div style="height:calc(100% - 70px)">
+      <mixTable v-model="tableData" :fields="tableFields" />
+    </div>
+    <mixPage v-model="page" />
+    <el-dialog title="编辑" :visible.sync="show" width="30%">
+      <mixForm v-model="editData" :fields="editFields" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -15,39 +23,60 @@ export default {
     return {
       tableData: [],
       tableFields: [],
-      tableSearch: {},
       loading: false,
+      searchData: {},
+      editData: {},
+      show: false,
+      searchFields: [
+        {
+          type: "text",
+          span: 3,
+          prop: "search"
+        },
+        {
+          span: 3,
+          type: "button",
+          label: "搜索",
+          click: this.search
+        }
+      ],
+      editFields: [
+        {
+          label: "修改二维码",
+          type: "image",
+          prop: "screenshot"
+        }
+      ],
       page: {
-        total: 0,
         page: 1,
-        limit: 20
+        limit: 15,
+        total: 0
       }
     };
   },
-  // activated() {
-  //   this.getData();
-  //   this.getHeadeData();
-  // },
+  activated() {
+    this.getData();
+    this.getHeadeData();
+  },
   methods: {
     async getHeadeData() {
       let { data } = await this.axios("/adminapi/Publics/table_th", {
-        data: { table_id: 1 }
+        data: { table_id: 3 }
       });
       if (data.code) {
-        this.tableFields = data.data.map(e => {
-          return {
-            title: e.label,
-            field: e.prop,
-            readonly: true,
-            "min-width": e.minWidth
-          };
-        });
+        this.tableFields = data.data.concat([
+          {
+            type: "manage",
+            fixed: "right",
+            options: [{ label: "编辑", style: "primary", click: this.dialog }]
+          }
+        ]);
       }
     },
     async getData() {
       this.loading = true;
-      let { data } = await this.axios("/adminapi/Customer/list", {
-        params: Object.assign({}, this.page, this.tableSearch)
+      let { data } = await this.axios("/adminapi/Sale/list", {
+        params: Object.assign({}, this.page, this.searchData)
       });
       if (data.code) {
         this.loading = false;
@@ -57,9 +86,21 @@ export default {
     },
     async change(item) {
       console.log(item);
-      // let { data } = await this.axios("/adminapi/Customer/edit", {
-      //   data: item.row
-      // });
+      let { data } = await this.axios("/adminapi/Customer/edit", {
+        data: item.row
+      });
+      if (data.code) {
+        console.log(data);
+      }
+    },
+    dialog(row) {
+      console.log(row);
+      this.editData = row;
+      // this.editFields = [{ type: "upload", fie }];
+      this.show = true;
+    },
+    search() {
+      this.getData();
     }
   }
 };

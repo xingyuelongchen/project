@@ -19,7 +19,7 @@ export default
     {
       path: 'sales', name: 'Sales', meta: { keepAlive: true, role: 40, title: '销售中心', }, component: () => import('@/views/layou'),
       children: [
-        { path: 'index', name: 'Salesindex', meta: { keepAlive: true, role: 41, title: '数据管理', }, component: () => import('@/views/backend/crm/sales/index/') },
+        { path: 'index', name: 'Salesindex', meta: { keepAlive: true, role: 41, title: '记录管理', }, component: () => import('@/views/backend/crm/sales/index/') },
         { path: 'receive', name: 'Salesreceive', meta: { keepAlive: true, role: 42, title: '接待设置', }, component: () => import('@/views/backend/crm/sales/receive') },
       ]
     },
@@ -51,6 +51,7 @@ export default
         { path: 'roles', name: 'Roles', meta: { keepAlive: true, role: 141, title: '权限菜单', }, component: () => import('@/views/backend/crm/setting/roles') },
         { path: 'role-field', name: 'RoleField', meta: { keepAlive: true, role: 142, title: '字段管理', }, component: () => import('@/views/backend/crm/setting/roleField') },
         { path: 'role-group', name: 'Rolegroup', meta: { keepAlive: true, role: 143, title: '角色权限', }, component: () => import('@/views/backend/crm/setting/roleGroup') },
+        { path: 'option', name: 'option', meta: { keepAlive: true, role: 146, title: '选项管理', }, component: () => import('@/views/backend/crm/setting/option') },
         { path: 'system-setting', name: 'Systemsetting', meta: { keepAlive: true, role: 144, title: '系统配置', }, component: () => import('@/views/backend/crm/setting/systemSetting') },
         { path: 'organization', name: 'Adminorganization', meta: { keepAlive: true, role: 145, title: '组织构架', }, component: () => import('@/views/backend/crm/setting/organization') },
       ]

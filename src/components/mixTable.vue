@@ -28,9 +28,11 @@ Create Time  : 2020-03-28
           <template slot-scope="scope">
             <template v-if="item.type == 'tag'">
               <div v-if="item.options" class="box">
-                <el-tag effect="plain" v-for="(k,i) in item.options" :type="k.style" :key="i">{{k.label || k}}</el-tag>
+                <template v-for="(k,i) in item.options">
+                  <el-tag effect="plain" disable-transitions v-if="k.value==scope.row[item.prop]" :type="k.style" :key="i">{{k.label || k}}</el-tag>
+                </template>
               </div>
-              <el-tag v-else>{{ scope.row[item.prop] || '空'}}</el-tag>
+              <el-tag v-else disable-transitions :type="item.style">{{ scope.row[item.prop] || '空'}}</el-tag>
             </template>
             <template v-if="item.type == 'select'">
               <!-- {{typeof scope.row[item.prop]}} -->
@@ -88,8 +90,11 @@ Create Time  : 2020-03-28
               <el-progress :percentage="scope.row[item.prop]" text-inside type="line" :status="progressStatus(scope.row[item.prop])" :stroke-width="15"></el-progress>
             </template>
             <template v-if="item.type == 'image'">
-              <template v-if="scope.row[item.prop] && scope.row[item.prop].length">
-                <el-image v-for="(k,i) in scope.row[item.prop]" :key="i" :src="k" fit="cover" />
+              <template v-if="typeof scope.row[item.prop] == 'object'  && scope.row[item.prop].length">
+                <el-image class="image" v-for="(k,i) in scope.row[item.prop]" :key="i" :src="k" fit="cover" :preview-src-list="scope.row[item.prop]" />
+              </template>
+              <template class="image" v-else-if="typeof scope.row[item.prop] == 'string' ">
+                <el-image :key="index" :src="scope.row[item.prop]" fit="cover" :preview-src-list="[scope.row[item.prop]]" />
               </template>
               <span v-else>无</span>
             </template>
@@ -331,6 +336,7 @@ export default {
     },
     fieldsData() {
       this.toggleRowSelection();
+      this.$refs.table.doLayout();
     }
   },
   created() {
@@ -339,7 +345,9 @@ export default {
       this.$refs.table.doLayout();
     };
   },
-
+  mounted() {
+    this.$refs.table.doLayout();
+  },
   methods: {
     async outTab() {
       // 导出表格
@@ -567,5 +575,10 @@ export default {
 }
 .el-image {
   width: 30px;
+  height: 20px;
+  /deep/ .el-image-viewer__close .el-icon-circle-close {
+    font-size: 30px;
+    color: #fff;
+  }
 }
 </style>

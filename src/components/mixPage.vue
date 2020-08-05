@@ -5,15 +5,7 @@ Create Time  : 2020-07-27
 -->
 <template>
   <div class="page">
-    <el-pagination
-      background
-      :layout="value.layout||'prev, pager, next'"
-      :page-size="value.limit"
-      :page-sizes="value.sizes "
-      :total="value.total"
-      @current-change="currentChange"
-      hide-on-single-page
-    ></el-pagination>
+    <el-pagination background :layout="value.layout||'prev, pager, next'" :page-size="value.limit" :page-sizes="value.sizes " :total="value.total || total" @current-change="currentChange" hide-on-single-page></el-pagination>
   </div>
 </template>
 <script>
@@ -22,8 +14,14 @@ export default {
   props: {
     value: {
       type: Object,
-      required: true
-    }
+      default() {
+        return {
+          page: 1,
+          limit: 20
+        };
+      }
+    },
+    total: Number
   },
   data() {
     return {};
@@ -36,7 +34,8 @@ export default {
       } else if (typeof this.event == "function") {
         this.event();
       } else {
-        this.$parent.getData();
+        let a = Object.assign({}, this.value, { page: val });
+        this.$parent.getData(a);
       }
     }
   }
@@ -44,7 +43,7 @@ export default {
 </script>
 <style lang='less' scoped>
 .page {
-  height: 100%;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: flex-start;

@@ -18,11 +18,12 @@ Create Time  : 2020-04-02
               </template>
             </el-select>
           </template>
-          <template v-if="['datetime','date','daterange','month'].indexOf(item.type)>=0">
-            <template v-if="['date','','month'].indexOf(item.type)>=0">
-              <el-date-picker v-model="form[item.prop]" align="right" :key="item.type" :format="item.format || item.valueFormat ||'yyyy-MM-dd'" :value-format="item.format || item.valueFormat ||'yyyy-MM-dd'" :placeholder="item.placeholder || item.label" :type="item.type" :size="item.size||'mini'"></el-date-picker>
-            </template>
-            <el-date-picker v-else v-model="form[item.prop]" align="right" :key="item.type" :format="item.format || item.valueFormat ||'yyyy-MM-dd'" :value-format="item.format || item.valueFormat ||'yyyy-MM-dd'" :start-placeholder="item.label+'开始日期'" :end-placeholder="item.label+'结束日期'" :placeholder="item.placeholder || item.label" :type="item.type" :size="item.size||'mini'" :default-time="['00:00:00', '23:59:59']" :picker-options="pickerOptions"></el-date-picker>
+          <template v-if="['datetime','date','daterange','month','datetimerange'].indexOf(item.type)>=0">
+
+            <el-date-picker v-if="item.type=='datetime'" v-model="form[item.prop]" align="right" :key="item.type" :format="item.format || item.valueFormat ||'yyyy-MM-dd HH:mm:ss'" :value-format="item.format || item.valueFormat ||'yyyy-MM-dd HH:mm:ss'" :placeholder="item.placeholder || item.label" :type="item.type" :size="item.size||'mini'"></el-date-picker>
+            <el-date-picker v-if="['date', 'month'].indexOf(item.type)>=0" v-model="form[item.prop]" align="right" :key="item.type" :format="item.format || item.valueFormat ||'yyyy-MM-dd'" :value-format="item.format || item.valueFormat ||'yyyy-MM-dd'" :placeholder="item.placeholder || item.label" :type="item.type" :size="item.size||'mini'"></el-date-picker>
+            <el-date-picker v-if="item.type=='daterange'" v-model="form[item.prop]" align="right" :key="item.type" :format="item.format || item.valueFormat ||'yyyy-MM-dd'" :value-format="item.format || item.valueFormat ||'yyyy-MM-dd'" :start-placeholder="item.label+'开始日期'" :end-placeholder="item.label+'结束日期'" :placeholder="item.placeholder || item.label" type="daterange" :size="item.size||'mini'" :default-time="['00:00:00', '23:59:59']" :picker-options="pickerOptions"></el-date-picker>
+            <el-date-picker v-if="item.type=='datetimerange'" v-model="form[item.prop]" align="right" :key="item.type" :format="item.format || item.valueFormat ||'yyyy-MM-dd HH:mm:ss'" :value-format="item.format || item.valueFormat ||'yyyy-MM-dd HH:mm:ss'" :start-placeholder="item.label+'开始日期'" :end-placeholder="item.label+'结束日期'" :placeholder="item.placeholder || item.label" type="datetimerange" :size="item.size||'mini'" :default-time="['00:00:00', '23:59:59']" :picker-options="pickerOptions"></el-date-picker>
           </template>
           <template v-if="item.type == 'time'">
             <el-time-select v-model="form[item.prop]" :size="item.size||'mini'" :picker-options="{ start:item.start|| '08:30', step:item.step|| '00:01', end:item.end|| '18:30' }" :placeholder="item.label||'选择时间'"></el-time-select>
@@ -61,6 +62,9 @@ export default {
   data() {
     return {
       pickerOptions: {
+        disabledDate: time => {
+          return (new Date().getMonth() - new Date(time).getMonth()) > 3;
+        },
         shortcuts: [
           {
             text: "昨天",
@@ -131,6 +135,9 @@ export default {
 </script>
 <style lang='less' scoped>
 .mix-search {
+  margin: 5px 0;
+  padding: 5px;
+  background: #f0f0f0;
 }
 .el-col {
   margin: 3px;

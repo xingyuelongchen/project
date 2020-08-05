@@ -54,6 +54,10 @@
       overflow-x: hidden;
     }
   }
+  .el-image .el-image-viewer__close .el-icon-circle-close {
+    font-size: 30px;
+    color: #fff;
+  }
 }
 body,
 html {
