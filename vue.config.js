@@ -8,7 +8,7 @@ module.exports = {
             return args;
         });
     },
-    // publicPath: config.routePath,
+    publicPath: config.routePath,
     devServer: {
         // open: true, //是否自动弹出浏览器页面
         // host: "192.168.101.102",

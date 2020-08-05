@@ -2,6 +2,8 @@
   "name": "project",
   "version": "0.1.0",
   "private": true,
+  "main": "electron.js",
+  "author":"xingyuelongchen",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -10,6 +12,7 @@
     "electron-build": "electron-packager ./dist/ --arch=x64 --icon=logo.ico --overwrite"
   },
   "dependencies": {
+    "electron": "^9.1.2",
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",
@@ -30,7 +33,6 @@
     "@vue/cli-service": "~4.4.0",
     "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "^10.1.0",
-    "electron": "^9.1.2",
     "electron-packager": "^15.0.0",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.1.3",
