@@ -29,17 +29,11 @@ module.exports = {
                 target: "http://192.168.33.10",
                 ws: true,
                 changeOrigin: true
-                // pathRewrite: {
-                //     '^/api': '/homes'
-                // }
             },
             "/admin": {
                 target: "http://192.168.33.10",
                 ws: true,
                 changeOrigin: true
-                // pathRewrite: {
-                //     '^/api': '/homes'
-                // }
             }
         }
     }

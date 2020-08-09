@@ -15,34 +15,20 @@ Create Time  : 2020-07-22
           <el-form-item label="手机号码" prop="mobile" :rules="{required:true,message:'请输入账号'}">
             <el-input clearable v-model="ruleForm.mobile" autocomplete="on"></el-input>
           </el-form-item>
-          <el-form-item
-            label="花名"
-            prop="nickname"
-            :rules="{required:true,message:'请输入账号'}"
-            v-if="isLogin"
-          >
+          <el-form-item label="花名" prop="nickname" :rules="{required:true,message:'请输入账号'}" v-if="isLogin">
             <el-input clearable v-model="ruleForm.nickname" autocomplete="on"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password" :rules="{required:true,message:'请输入密码'}">
             <el-input clearable type="password" v-model="ruleForm.password" autocomplete="on"></el-input>
           </el-form-item>
-          <el-form-item
-            label="确认密码"
-            prop="password_confirm"
-            :rules="{required:true,message:'请输入密码'}"
-            v-if="isLogin"
-          >
-            <el-input
-              clearable
-              type="password"
-              v-model="ruleForm.password_confirm"
-              autocomplete="on"
-            ></el-input>
+          <el-form-item label="确认密码" prop="password_confirm" :rules="{required:true,message:'请输入密码'}" v-if="isLogin">
+            <el-input clearable type="password" v-model="ruleForm.password_confirm" autocomplete="on"></el-input>
           </el-form-item>
           <el-form-item label="验证码" prop="code" :rules="{required:true,message:'请输入验证码'}">
             <div class="yzm">
               <div class="code" @click="getCode">
-                <img :src="code" alt />
+                <img :src="code" alt='验证码' />
+                <!-- <img src="http://192.168.33.10/adminapi/Login/verify" alt /> -->
               </div>
               <el-input clearable v-model="ruleForm.code" autocomplete="on"></el-input>
             </div>
@@ -62,6 +48,7 @@ Create Time  : 2020-07-22
   </div>
 </template>
 <script>
+// import request from "request";
 export default {
   name: "Login",
   data() {
@@ -83,6 +70,7 @@ export default {
   },
   created() {
     localStorage.removeItem("userinfo");
+    localStorage.removeItem("Store");
     this.$store.commit("setClear");
     this.getCode();
   },
@@ -102,7 +90,10 @@ export default {
     async getCode() {
       this.axios
         .get("/adminapi/Login/verify?v=" + Math.random(), {
-          responseType: "arraybuffer"
+          responseType: "arraybuffer",
+          headers: {
+            "Content-Type": "image/png; charset=utf-8"
+          }
         })
         .then(e => {
           return (
@@ -127,17 +118,21 @@ export default {
         if (this.isLogin) {
           this.login();
           this.ruleForm = {};
-        } else {
-          let userinfo = data.data; //this.userinfo;
-          localStorage.setItem("userinfo", JSON.stringify(userinfo));
-          this.$store.commit("setUserinfo", userinfo);
-          if (userinfo) {
-            this.$router.setRoles();
-            let path = sessionStorage.getItem("xitong") || "crm";
-            this.$router.replace(
-              "/" + path + "/" + this.$store.state.menu[0].path
-            );
+          return;
+        }
+        let userinfo = data.data; 
+        localStorage.setItem("userinfo", JSON.stringify(userinfo));
+        this.$store.commit("setUserinfo", userinfo);
+        if (userinfo) {
+          this.$router.setRoles();
+          let path = this.$store.state.menu[0].path;
+          if (this.$store.state.menu[0].children[0]) {
+            path =
+              this.$store.state.menu[0].path +
+              "/" +
+              this.$store.state.menu[0].children[0].path;
           }
+          this.$router.replace(path);
         }
       }
       this.getCode();

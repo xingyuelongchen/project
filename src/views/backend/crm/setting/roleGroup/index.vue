@@ -9,12 +9,7 @@ Create Time  : 2020-07-28
       <el-card class="left">
         <div slot="header">
           权限组
-          <el-button
-            style="float: right; padding: 3px 0"
-            type="text"
-            size="mini"
-            @click="addGroup('添加')"
-          >添加新组</el-button>
+          <el-button style="float: right; padding: 3px 0" type="text" size="mini" @click="addGroup('添加')">添加新组</el-button>
         </div>
         <el-scrollbar style="height:100%">
           <div class="el-list">
@@ -38,35 +33,16 @@ Create Time  : 2020-07-28
       <el-card class="center">
         <div slot="header">
           权限组修改
-          <el-button
-            style="float: right; padding: 6px"
-            type="primary"
-            size="mini"
-            @click="saveRole"
-          >保存权限</el-button>
+          <el-button style="float: right; padding: 6px" type="primary" size="mini" @click="saveRole">保存权限</el-button>
         </div>
 
         <el-scrollbar style="height:100%" v-if="role.id">
-          <el-tree
-            :data="treeData"
-            :props="{label:'title'}"
-            :expand-on-click-node="true"
-            :check-strictly="false"
-            @check-change="checkChange"
-            highlight-current
-            show-checkbox
-            node-key="id"
-            ref="tree"
-          >
+          <el-tree :data="treeData" :props="{label:'title'}" :expand-on-click-node="true" :check-strictly="false" @check-change="checkChange" highlight-current show-checkbox node-key="id" ref="tree">
             <template slot-scope="{data}">
               <div style="flex: 1;display:flex;justify-content:space-between">
                 <span>{{data.title}}</span>
                 <span>
-                  <el-button
-                    type="primary"
-                    style="padding:3px;font-size:12px"
-                    @click.stop="nodeClick(data)"
-                  >查看</el-button>
+                  <el-button type="primary" style="padding:3px;font-size:12px" @click.stop="nodeClick(data)">查看</el-button>
                 </span>
               </div>
             </template>
@@ -76,23 +52,13 @@ Create Time  : 2020-07-28
       <el-card class="right">
         <div slot="header">
           权限子列表
-          <el-button
-            style="float: right; padding: 6px"
-            type="primary"
-            size="mini"
-            @click="saveList"
-          >保存权限</el-button>
+          <el-button style="float: right; padding: 6px; margin:0 5px" type="primary" size="mini" @click="saveList">保存权限</el-button>
+          <el-button style="float: right; padding: 6px; margin:0 5px" type="danger" size=" mini" @click="oneOpen">一键开启</el-button>
         </div>
         <mixTable v-model="rolesList" :fields="rolesFields" @select="listCheck" ref="table" />
       </el-card>
     </div>
-    <el-dialog
-      :title="title"
-      :visible.sync="dialogFormVisible"
-      width="400px"
-      :modal="true"
-      top="15vh"
-    >
+    <el-dialog :title="title" :visible.sync="dialogFormVisible" width="400px" :modal="true" top="15vh">
       <mixForm v-model="roleData" :fields="roleFields" />
     </el-dialog>
   </div>
@@ -170,7 +136,6 @@ export default {
     },
     listCheck(val) {
       // 选中的授权字段
-      console.log(val);
       this.selectTableField.laytables = val.map(e => e.id);
     },
     async nodeClick(val) {
@@ -188,8 +153,8 @@ export default {
             change: this.listChange
           };
         });
-        let id = data.data.lay.laytables[val.id];
-        let status = data.data.lay.laytables_editable[val.id];
+        let id = data.data.lay.laytables[val.id] || [];
+        let status = data.data.lay.laytables_editable[val.id] || [];
         this.rolesList = data.data.column.map(e => {
           return {
             ...e,
@@ -230,6 +195,9 @@ export default {
         };
         this.nodeClick({ id: form.id });
       }
+    },
+    oneOpen() {
+      // 一键开启
     },
     async getMenuData() {
       // 获取权限菜单

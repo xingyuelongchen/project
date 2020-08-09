@@ -12,7 +12,14 @@ Create Time  : 2020-07-29
     </div>
     <mixPage v-model="page" />
     <el-dialog title="编辑" :visible.sync="show" width="30%">
-      <mixForm v-model="editData" :fields="editFields" />
+      <div style="height:500px;overflow:hidden">
+        <el-scrollbar>
+          <mixForm v-model="editData" :fields="editFields" style="padding-right:20px" />
+        </el-scrollbar>
+      </div>
+    </el-dialog>
+    <el-dialog title="更正" :visible.sync="showa" width="30%">
+      <mixForm v-model="editData" :fields="editFields" style="padding-right:20px" />
     </el-dialog>
   </div>
 </template>
@@ -27,6 +34,7 @@ export default {
       searchData: {},
       editData: {},
       show: false,
+      showa: false,
       searchFields: [
         {
           type: "text",
@@ -40,13 +48,7 @@ export default {
           click: this.search
         }
       ],
-      editFields: [
-        {
-          label: "修改二维码",
-          type: "image",
-          prop: "screenshot"
-        }
-      ],
+      editFields: [],
       page: {
         page: 1,
         limit: 15,
@@ -66,9 +68,14 @@ export default {
       if (data.code) {
         this.tableFields = data.data.concat([
           {
+            label: "操作",
             type: "manage",
+            align: "center",
             fixed: "right",
-            options: [{ label: "编辑", style: "primary", click: this.dialog }]
+            options: [
+              { label: "编辑", style: "primary", click: this.dialog },
+              { label: "更正", style: "danger", click: this.dialoga }
+            ]
           }
         ]);
       }
@@ -84,20 +91,65 @@ export default {
         this.page.total = data.count;
       }
     },
-    async change(item) {
-      console.log(item);
-      let { data } = await this.axios("/adminapi/Customer/edit", {
-        data: item.row
+    async change() {
+      let form = {};
+      for (let k of this.editFields) {
+        form[k.prop] = this.editData[k.prop];
+      }
+      await this.axios("/adminapi/Sale/edit", {
+        data: form
       });
+      this.show = false;
+    },
+    async changea() {
+      await this.axios("/adminapi/Sale/corrections", {
+        data: this.editData
+      });
+      this.getData();
+      this.showa = false;
+    },
+    async dialoga(row) {
+      let { data } = await this.axios("/adminapi/Sale/p_tool");
       if (data.code) {
-        console.log(data);
+        this.editFields = [
+          {
+            label: "业绩类型",
+            options: data.data,
+            type: "radio",
+            prop: "type"
+          },
+          {
+            label: "销售时间",
+            type: "datetime",
+            prop: "create_time"
+          },
+          {
+            label: "保存",
+            style: "primary",
+            type: "button",
+            click: this.changea
+          }
+        ];
+        this.editData = {
+          id: row.id,
+          create_time: row.create_time,
+          type: row.type
+        };
+        this.showa = true;
       }
     },
-    dialog(row) {
-      console.log(row);
-      this.editData = row;
+    async dialog(row) {
+      let { data } = await this.axios("/adminapi/Publics/TableFormEdit", {
+        data: { type: "edit", table_id: 3 }
+      });
+      if (data.code) {
+        this.editFields = data.data.concat([
+          { type: "button", label: "保存", click: this.change }
+        ]);
+        this.editData = row;
+        this.show = true;
+      }
       // this.editFields = [{ type: "upload", fie }];
-      this.show = true;
     },
     search() {
       this.getData();

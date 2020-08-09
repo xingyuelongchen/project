@@ -1,20 +1,19 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog } = require('electron')
+const {app, BrowserWindow} = require('electron')
 const path = require('path')
 
-function createWindow() {
+function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   })
 
   // and load the index.html of the app.
-  mainWindow.loadFile('dist/index.html')
+  mainWindow.loadFile('index.html')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -25,6 +24,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow()
+  
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -32,12 +32,6 @@ app.whenReady().then(() => {
   })
 })
 
-app.on('ready', () => {
-  application.createWindow();
-  // 拖盘图标
-  application.initTrayIcon();
-  dialog.showMessageBox({ "title": "支付", "message": "你愿意付多少钱", buttons: ["5元", "10元", "20元"], type: "info", cancelId: 3 });
-})
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.

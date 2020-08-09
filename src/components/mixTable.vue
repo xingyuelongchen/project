@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-03-28
 -->
 <template>
-  <el-table ref="table" row-key="id" :height="options.height || '100%'" :max-height="options.height || '100%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
+  <el-table ref="table" row-key="id" v-loading="!!!fieldsData.length && loading" :height="options.height || '100%'" :max-height="options.height || '100%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
     <template v-for="(item,index ) in field">
       <template v-if="'expand'==item.type">
         <el-table-column :key="index+'key'" :type="item.type" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable">
@@ -90,7 +90,7 @@ Create Time  : 2020-03-28
               <el-progress :percentage="scope.row[item.prop]" text-inside type="line" :status="progressStatus(scope.row[item.prop])" :stroke-width="15"></el-progress>
             </template>
             <template v-if="item.type == 'image'">
-              <template v-if="typeof scope.row[item.prop] == 'object'  && scope.row[item.prop].length">
+              <template v-if="scope.row[item.prop] && typeof scope.row[item.prop] == 'object'  && scope.row[item.prop].length">
                 <el-image class="image" v-for="(k,i) in scope.row[item.prop]" :key="i" :src="k" fit="cover" :preview-src-list="scope.row[item.prop]" />
               </template>
               <template class="image" v-else-if="typeof scope.row[item.prop] == 'string' ">
@@ -326,6 +326,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       showKey: "key",
       field: []
     };
@@ -346,7 +347,9 @@ export default {
     };
   },
   mounted() {
-    this.$refs.table.doLayout();
+    setTimeout(() => {
+      this.loading = false;
+    }, 5000);
   },
   methods: {
     async outTab() {

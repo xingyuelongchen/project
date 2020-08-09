@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Store from '../store';
@@ -58,7 +59,7 @@ VueRouter.prototype.replace = function replace(location) {
 let userinfo = localStorage.getItem('userinfo');
 VueRouter.prototype.setRoles = setRoles;
 const router = new VueRouter(routeOption);
-let target = [];
+let target = true;
 
 if (userinfo) {
   userinfo = JSON.parse(userinfo);
@@ -100,7 +101,7 @@ function beforeRouter(to, from, next) {
   }
   if (/(crm|app|minapp|web)/.test(to.fullPath)) {
     let title = to.meta.title;
-    if (to.matched[to.matched.length - 2].meta.title) {
+    if (to.matched[to.matched.length - 2] && to.matched[to.matched.length - 2].meta.title) {
       title = to.matched[to.matched.length - 2].meta.title + '/' + to.meta.title;
     }
     let option = {
@@ -121,7 +122,6 @@ function beforeRouter(to, from, next) {
  * @param {Array} userinfo 用户权限
  */
 function mapRouter(obj, userinfo) {
-
   let arr = [];
   obj.forEach(e => {
     if (userinfo.role.includes(e.meta.role)) {
@@ -137,6 +137,36 @@ function mapRouter(obj, userinfo) {
   });
   return arr;
 }
+function mapRole(routes, menu, roles) {
+  let arr = [];
+  menu.forEach(e => {
+    let obj = routes.filter(k => k.meta.role == e.id);
+    
+    if (obj.length) {
+      if (e.children && e.children.length) {
+        if (roles[0] == 0 || roles.includes(obj[0].meta.role)) {
+          // 
+          arr.push({
+            ...obj[0],
+            meta: { ...obj[0].meta, title: e.title, },
+            ...e,
+            children: mapRole(routes, e.children, roles)
+          })
+        }
+      } else {
+        if (roles[0] == 0 || roles.includes(obj[0].meta.role)) {
+
+          arr.push({
+            ...obj[0],
+            meta: { ...obj[0].meta, title: e.title, },
+            ...e,
+          })
+        }
+      }
+    }
+  });
+  return arr;
+}
 
 /**
  * 调用用户权限，匹配路由，并注入路由表
@@ -144,43 +174,39 @@ function mapRouter(obj, userinfo) {
  * @param {Array} backend 后台路由 
  */
 function setRoles() {
+  Store.commit("setClear");
+  // 获取账号信息
   let userinfo = localStorage.getItem('userinfo');
+  // 获取当前所在系统，默认为： crm
   let targetIndex = sessionStorage.getItem('xitong') || 'crm';
-  let xitong = backend;
-
+  // 拼接路由地址
+  let xitong = backend.concat(app, web, minApp);
+  // 解析账号信息
   if (userinfo) userinfo = JSON.parse(userinfo);
-  if (targetIndex == 'crm') xitong = backend;
-  if (targetIndex == 'app') xitong = app;
-  if (targetIndex == 'web') xitong = web;
-  if (targetIndex == 'minapp') xitong = minApp;
-  let children = mapRouter(xitong, userinfo);
-  if (userinfo && userinfo.role[0] === 0) children = xitong;
-  let routes = [
-    {
-      path: "/" + targetIndex,
-      name: targetIndex.charAt(0).toUpperCase() + targetIndex.slice(1),
-      component: () => import("@/views/layou/backend"),
-      meta: { keepAlive: true, isAuth: true },
-      redirect: targetIndex + '/' + children[0].path,
-      children,
-    }
-  ];
-
+  // 匹配路由权限
+  let route = mapRole(xitong, userinfo.menu, userinfo.role);
+  // 获取当前系统菜单
+  let frist = route.filter(e => e.name == targetIndex);
   // 存入Vuex
   Store.commit('setUserinfo', userinfo);
-  Store.commit('setMenu', children);
-  // 清空缓存后，添加首页到第一个tabs标签
-  Store.commit('setTabmenu', {
-    path: children[0].path,
-    fullPath: routes[0].path + '/' + children[0].path,
-    active: true,
-    name: children[0].name,
-    title: children[0].meta.title
-  })
-  if (!target.includes(targetIndex)) {
-    target.push(targetIndex);
-    sessionStorage.setItem('xitong', targetIndex)
-    router.addRoutes(routes.concat(client));
+  // 设置菜单缓存
+  Store.commit('setMenu', frist);
+  if (frist[0].children && frist[0].children.length) {
+    // 清空缓存后，添加首页到第一个tabs标签
+    Store.commit('setTabmenu', {
+      path: frist[0].children[0].path,
+      fullPath: frist[0].path + '/' + frist[0].children[0].path,
+      active: true,
+      name: frist[0].name,
+      title: frist[0].meta.title + '/' + frist[0].children[0].meta.title
+    })
+  }
+  if (target) {
+    // 动态添加一次即可
+    target = false;
+    // 添加当前管理系统
+    sessionStorage.setItem('xitong', targetIndex);
+    router.addRoutes(route.concat(client));
   }
 }
 /**

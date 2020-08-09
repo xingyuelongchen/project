@@ -16,9 +16,9 @@ Create Time  : 2020-07-22
           </el-tooltip>
         </div>
         <div class="itema" :class="{active:targetIndex == 'crm'}" @click="toggle('crm')" v-role="1">管理系统</div>
-        <div class="itema" :class="{active:targetIndex == 'app'}" @click="toggle('app')" v-role="2">应用程序</div>
+        <div class="itema" :class="{active:targetIndex == 'app'}" @click="toggle('app')" v-role="24">应用程序</div>
         <div class="itema" :class="{active:targetIndex == 'web'}" @click="toggle('web')" v-role="3">官网管理</div>
-        <div class="itema" :class="{active:targetIndex == 'minapp'}" @click="toggle('minapp')" v-role="4">小程序</div>
+        <div class="itema" :class="{active:targetIndex == 'MinApp'}" @click="toggle('MinApp')" v-role="22">小程序</div>
       </div>
       <div class="center"></div>
       <div class="right">
@@ -44,7 +44,7 @@ Create Time  : 2020-07-22
       <div class="app-side">
         <el-scrollbar>
           <el-menu :collapse-transition="false" :default-active="$route.name" :collapse="isCollapse" class="el-menu-vertical-demo" router unique-opened>
-            <template v-for="(item,index) in $store.state.menu">
+            <template v-for="(item,index) in $store.state.menu[0].children">
               <el-submenu :index="item.name" :key="index" :route="item" v-if="item.children && item.children.length">
                 <template slot="title">
                   <i :class="item.icon"></i>
@@ -74,7 +74,7 @@ Create Time  : 2020-07-22
           </el-tabs>
         </div>
         <keep-alive>
-          <router-view class="bottom" />
+          <router-view class="bottom"></router-view>
         </keep-alive>
       </div>
     </div>
@@ -94,7 +94,9 @@ export default {
       // 风格主题
       theme: this.$store.state.userinfo.theme,
       // 当前管理系统
-      targetIndex: sessionStorage.getItem("xitong") || "crm"
+      targetIndex: sessionStorage.getItem("xitong") || "crm",
+      // 用户信息
+      userinfo: JSON.parse(localStorage.getItem("userinfo")) || {}
     };
   },
   computed: {
@@ -119,19 +121,36 @@ export default {
       this.$router.setRoles();
       // 初始化tabmenu
       this.$store.commit("removeTabmenu");
-      this.$router.replace("/" + val + "/" + this.$store.state.menu[0].path);
+      let path = this.$store.state.menu[0].path;
+      if (this.$store.state.menu[0].children[0]) {
+        path =
+          this.$store.state.menu[0].path +
+          "/" +
+          this.$store.state.menu[0].children[0].path;
+      }
+      this.$router.replace(path);
     },
     logout() {
       this.$router.replace("/login");
     },
-    refresh() {
-      // 清空缓存
-      this.$store.commit("setClear");
+    async refresh() {
+      let { data } = await this.axios("/adminapi/User/information", {
+        data: { uid: this.userinfo.uid }
+      });
+
+      if (!data.code) {
+        this.$router.replace("/login");
+        return;
+      }
+      localStorage.setItem("userinfo", JSON.stringify(data.data));
       this.$router.setRoles();
       this.refreshKey = Math.random();
       let to = this.$route;
       let title = to.meta.title;
-      if (to.matched[to.matched.length - 2].meta.title) {
+      if (
+        to.matched[to.matched.length - 2] &&
+        to.matched[to.matched.length - 2].meta.title
+      ) {
         title =
           to.matched[to.matched.length - 2].meta.title + "/" + to.meta.title;
       }

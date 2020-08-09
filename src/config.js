@@ -1,10 +1,11 @@
 module.exports = {
     // hash
-    routeMode: "history",
+    // routeMode: "history",
+    routeMode: "hash",
     //打包路径
     routePath: './',
     // 本地缓存前缀
     storeKey: 'myaa',
     // 接口URL
-    baseUrl: process.env.NODE_ENV == 'development' ? '' : 'http://192.168.33.10'
+    baseUrl: 'http://192.168.33.10'
 }

@@ -375,8 +375,11 @@ export default {
   align-items: center;
   .image-item {
     // width: 50px;
-    // height: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    height: 50px;
     max-width: 50px;
+    width: 50px;
     min-width: 50px;
     border: 1px solid #ccc;
     margin: 5px;

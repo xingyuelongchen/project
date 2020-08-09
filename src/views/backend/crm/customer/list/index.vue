@@ -25,8 +25,8 @@ Create Time  : 2020-03-27
             <el-tag>{{maxOrder.count || '--'}}</el-tag>
           </span>
           <span v-if="maxOrder.control">
-            暂停接单：
-            <el-switch v-model="maxOrder.status" @change="stopOrder" inactive-color="#ccc" />
+            接单开关：
+            <el-switch v-model="maxOrder.status" @change="stopOrder" inactive-color="#ccc" :active-value="1" :inactive-value="0" />
           </span>
         </template>
       </div>
@@ -43,13 +43,17 @@ Create Time  : 2020-03-27
       <mixTable v-model="tableSalesData" :fields="tableSales" v-if="!show" />
       <mixForm v-model="addOrderData" :fields="addOrderFields" v-if="show" style="border:none" />
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">关闭窗口</el-button>
+        <!-- <el-button @click="dialogVisible = false">关闭窗口</el-button> -->
       </span>
     </el-dialog>
-    <el-dialog title="客户二维码" :visible.sync="qrcode" width="50%">
-      <mixForm v-model="editForm" :fields="qrocdeFields" style="border:none" />
+    <el-dialog title="添加业绩" :visible.sync="qrcode" width="50%">
+      <div style="max-height:500px;height:500px;overflow:hidden">
+        <el-scrollbar>
+          <mixForm v-model="qrocdeData" :fields="qrocdeFields" style="border:none;padding-right:20px" />
+        </el-scrollbar>
+      </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="changeImageSave">确定修改</el-button>
+        <el-button type="primary" @click="saveOrder">保存</el-button>
       </span>
     </el-dialog>
   </div>
@@ -189,13 +193,8 @@ export default {
         }
       ],
       qrcode: false,
-      qrocdeFields: [
-        {
-          label: "修改二维码",
-          type: "image",
-          prop: "screenshot"
-        }
-      ],
+      qrocdeData: {},
+      qrocdeFields: [],
       editForm: {},
       editFields: [],
       close: null,
@@ -265,8 +264,13 @@ export default {
               label: "删除",
               style: "danger",
               click: this.tableDel
+            },
+            {
+              size: "mini",
+              label: "添加业绩",
+              style: "primary",
+              click: this.addOrder
             }
-            // { size:'mini',label: "添加订单", style: "primary", click: this.addOrder }
           ]
         }
       ];
@@ -363,7 +367,7 @@ export default {
           prop: "referer_info",
           type: "textarea",
           input: this.quick
-        },
+        }
         // {
         //   label: "粘贴图片",
         //   prop: "screenshot",
@@ -470,7 +474,7 @@ export default {
       }
     },
     selection(select) {
-      this.id = select.map(e => e.customer_id);
+      this.id = select.map(e => e.id);
     },
     async autoDistribution(bool = false) {
       // 批量自动分配
@@ -510,15 +514,21 @@ export default {
       }
     },
     async onDistribution(item) {
-      let { data } = await this.axios("/adminapi/Customer/manual    ", {
+      let url = "/adminapi/Customer/manual";
+      if (this.id && this.id.constructor == Array) {
+        url = "/adminapi/Customer/many_manual";
+      }
+      let { data } = await this.axios(url, {
         data: { uid: item.id, id: this.id }
       });
       if (data.code) {
         this.getData();
+        this.dialogVisible = false;
+        this.id = null;
       }
     },
     distribution(item) {
-      this.id = item.customer_id;
+      this.id = item.id;
       this.$confirm("是否执行自动分配?", "提示", {
         confirmButtonText: "自动分配",
         cancelButtonText: "手动分配",
@@ -558,179 +568,32 @@ export default {
         this.getData();
       }
     },
-    toggleForm(item) {
-      let a = [
-        {
-          label: "业务类型",
-          prop: "business",
-          type: "cascader",
-          options: this.options,
-          config: { label: "title", value: "id" }
-        }
-      ];
-      let b = {
-        type: "button",
-        options: [
-          {
-            label: "确定",
-            click: this.onConfirm,
-            style: "primary"
-          }
-        ]
-      };
-      let business = item.business;
-
-      // 切换选择不同类目，显示不同填写表单
-      if (business[0]) {
-        if (business[0] == 1) {
-          if (business[1] != 8 && business[1] != 9) {
-            let arr = {
-              label: "店铺类型",
-              type: "select",
-              prop: "shop_type",
-              rule: {
-                rule: { required: false, message: "必填项" },
-                message: "必填项"
-              },
-              options: [
-                { label: "旗舰店", value: "旗舰店" },
-                { label: "专营店", value: "专营店" },
-                { label: "专卖店", value: "专卖店" }
-              ]
-            };
-            a.push(arr);
-          }
-          let arr = [
-            {
-              label: "商标类型",
-              type: "text",
-              rule: { required: false, message: "必填项" },
-              prop: "trademark_type"
-            },
-            {
-              label: "入驻商标名称",
-              type: "text",
-              rule: { required: false, message: "必填项" },
-              prop: "trademark_name"
-            },
-            {
-              label: "商标注册号",
-              type: "text",
-              rule: { required: false, message: "必填项" },
-              prop: "trademarking_number"
-            },
-            {
-              label: "入驻公司",
-              type: "text",
-              rule: { required: false, message: "必填项" },
-              prop: "entry_company"
-            },
-            {
-              label: "入驻产品",
-              type: "text",
-              rule: { required: false, message: "必填项" },
-              prop: "settled"
-            },
-            {
-              label: "入驻类目",
-              type: "cascader",
-              prop: "categories",
-              rule: { required: false, message: "必填项" },
-              options: this.categorieList,
-              config: {
-                label: "title",
-                value: "id",
-                lazy: true,
-                lazyLoad: async (node, resolve) => {
-                  const { id } = node.data;
-                  let { data } = await this.axios(
-                    "/adminapi/Saleorders/CategorieList",
-                    {
-                      data: { pid: id }
-                    }
-                  );
-                  if (data.code) {
-                    let arr = data.data.map(e => {
-                      e.leaf = false;
-                      if (!e.children) {
-                        e.leaf = true;
-                      }
-                      return e;
-                    });
-                    resolve(arr);
-                  }
-                }
-              }
-            },
-
-            {
-              label: "合同",
-              type: "upload",
-              rule: { required: false, message: "必填项" },
-              prop: "contract"
-            }
-          ];
-          a.push(...arr);
-        }
-        if (business[1] !== 17 && business[0] !== 3) {
-          let arr = [
-            {
-              label: "商标名称",
-              type: "text",
-              rule: { required: false, message: "必填项" },
-              prop: "trademark_name"
-            },
-            {
-              label: "商标类型",
-              type: "text",
-              rule: { required: false, message: "必填项" },
-              prop: "trademark_type"
-            },
-            {
-              label: "商标注册号",
-              type: "text",
-              rule: { required: false, message: "必填项" },
-              prop: "trademarking_number"
-            }
-          ];
-          a.push(...arr);
-        }
-        a.push(
-          {
-            label: "订单金额",
-            type: "number",
-            rule: { required: false, message: "必填项" },
-            prop: "order_amount"
-          },
-          {
-            label: "备注",
-            type: "textarea",
-            rule: { required: false, message: "必填项" },
-            prop: "remarks"
-          }
-        );
+    async saveOrder() {
+      // 添加业绩保存
+      let form = {};
+      for (let k in this.qrocdeFields) {
+        form[k.prop] = this.qrocdeData[k.prop];
       }
-
-      a.push(b);
-      let obj = [];
-      a = a.filter(e => {
-        if (obj.indexOf(e.prop) == -1) {
-          obj.push(e.prop);
-          return true;
-        }
+      let { data } = await this.axios("/adminapi/Sale/add", {
+        data: form
       });
-      this.addOrderFields = a;
+      if (data.code) {
+        this.getData();
+        this.qrcode = false;
+      }
     },
-    addOrder(item) {
-      // console.log("添加订单", item);
-      // 入驻类目
-      this.CategorieList();
-      // 业务类型
-      this.getNaves();
-      this.addOrderData.customer_id = item.id;
-      this.show = true;
-      this.dialogVisible = true;
-      this.dialogName = "添加订单";
+    async addOrder(item) {
+      // 添加业绩
+      let { data } = await this.axios("/adminapi/Publics/TableFormEdit", {
+        data: { type: "add", table_id: 3 }
+      });
+      if (data.code) {
+        let obj = JSON.parse(JSON.stringify(item));
+        delete obj.remark;
+        this.qrocdeData = obj;
+        this.qrocdeFields = data.data;
+        this.qrcode = true;
+      }
     },
     onSearch() {
       console.log("搜索");
@@ -748,14 +611,6 @@ export default {
     drawerClose() {
       this.drawer = false;
       this.editFields = [];
-    },
-    sizeChange(a) {
-      this.page.limit = a;
-      this.getData();
-    },
-    currentChange(a) {
-      this.page.page = a;
-      this.getData();
     },
     async onExport() {
       // 导出表格
@@ -778,27 +633,6 @@ export default {
         });
       }
     },
-    async onConfirm() {
-      // 确定添加订单
-      let obj = {};
-      this.addOrderFields.forEach(e => {
-        if (this.addOrderData[e.prop]) {
-          obj[e.prop] = this.addOrderData[e.prop];
-        }
-      });
-      obj.customer_id = this.addOrderData["customer_id"];
-      let { data } = await this.axios("/adminapi/Saleorders/SaleordersAdd", {
-        data: obj
-      });
-      if (data.code) {
-        this.$notify.success({
-          title: "成功",
-          message: data.msg
-        });
-        this.dialogVisible = false;
-        this.toggleForm();
-      }
-    },
     async onSave() {
       // 添加咨询信息
       let body = this.editForm;
@@ -811,9 +645,10 @@ export default {
         this.getData(false);
         let obj = {};
         this.editFields.forEach(e => (obj[e.prop] = null));
-        obj["source"] = this.editForm.source;
+        obj["channel"] = this.editForm.channel;
         this.editForm = obj;
-        this.drawer = false;
+        url == "edit" && (this.drawer = false);
+        this.getData();
       }
     }
   }

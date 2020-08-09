@@ -53,7 +53,7 @@ export default {
           labelWidth: "40",
           prop: "pid",
           options: [],
-          props: { label: "title", value: "id",children:'children' }
+          props: { label: "title", value: "id", children: "children" }
         },
         { label: "名称", type: "text", labelWidth: "40", prop: "title" },
         { label: "图标", type: "text", labelWidth: "40", prop: "icon" },
@@ -86,6 +86,12 @@ export default {
           type: "switch",
           change: this.tableChange,
           width: 100
+        },
+        {
+          label: "sort",
+          prop: "sort",
+          type: "input",
+          change: this.tableChange
         },
         {
           label: "name",
@@ -123,11 +129,14 @@ export default {
     },
     treeAddTop() {
       this.title = "添加顶级菜单";
+      console.log("添加顶级菜单");
       this.roles = { pid: 0 };
       this.dialogFormVisible = true;
     },
     async treeAdd(data) {
+      this.url = "";
       this.title = "添加子菜单";
+      console.log("添加子菜单");
       this.roles = {
         pid: data.id
       };
@@ -162,18 +171,15 @@ export default {
       }
     },
     async tableChange(a) {
-      let { data } = await this.axios("/adminapi/Authrule/edit", {
+      await this.axios("/adminapi/Authrule/edit", {
         method: "post",
         data: a
       });
-      if (data.code) {
-        this.$message.success(data.msg);
-      }
     },
     async getMenuData() {
       let { data } = await this.axios("/adminapi/Authrule/list");
-      let list = data.data;
       if (data.code) {
+        let list = data.data;
         this.treeData = list;
         this.rolesFields[0].options = list;
         this.url = "";

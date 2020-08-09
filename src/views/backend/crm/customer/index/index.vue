@@ -4,16 +4,10 @@ Create author: qinglong
 Create Time  : 2020-07-24
 -->
 <template>
-  <div style="height:100%">
-    <!-- <el-tabs v-model="tab" @tab-click="handleClick">
-      <el-tab-pane label="日数据" name="1" />
-      <el-tab-pane label="月数据" name="2" />
-    </el-tabs> -->
-    <mixNewTable v-model="tableData" :fields="tableFields1">
-      <template #head>
-        <mixSearch v-model="search" :fields="searchField1" />
-      </template>
-    </mixNewTable>
+  <div class="content-box">
+    <mixSearch v-model="search" :fields="searchField1" />
+    <mixTable v-model="tableData" :fields="tableFields" />
+    <mixPage v-model="page" />
   </div>
 </template>
 <script>
@@ -24,11 +18,6 @@ export default {
       tab: "1",
       status: "",
       search: {},
-      searchField: [
-        { prop: "date", type: "month", span: 3, label: "选择" },
-        { prop: "name", type: "text", span: 3, label: "名称" },
-        { type: "button", click: this.getSearch, label: "搜索", span: 3 }
-      ],
       searchField1: [
         { prop: "date", type: "daterange", span: 5.5, label: "选择" },
         { prop: "name", type: "text", span: 3, label: "名称" },
@@ -36,23 +25,19 @@ export default {
       ],
       tableData: [],
       tableFields: [
-        { field: "date_time", title: "date_time" },
-        { field: "crm_uid", title: "crm_uid" },
-        { field: "dept", title: "dept" },
-        { field: "dept_id", title: "dept_id" },
-        { field: "id", title: "id" },
-        { field: "jie", title: "jie" },
-        { field: "nickname", title: "nickname" }
+        { prop: "date_time", label: "日期" },
+        { prop: "crm_uid", label: "系统ID" },
+        { prop: "dept", label: "部门" },
+        { prop: "dept_id", label: "部门" },
+        { prop: "id", label: "id" },
+        { prop: "jie", label: "接单量" },
+        { prop: "nickname", label: "花名" }
       ],
-      tableFields1: [
-        { field: "date_time", title: "date_time" },
-        { field: "crm_uid", title: "crm_uid" },
-        { field: "dept", title: "dept" },
-        { field: "dept_id", title: "dept_id" },
-        { field: "id", title: "id" },
-        { field: "jie", title: "jie" },
-        { field: "nickname", title: "nickname" }
-      ]
+      page: {
+        page: 1,
+        limit: 15,
+        total: 0
+      }
     };
   },
   activated() {
@@ -65,6 +50,7 @@ export default {
       });
       if (data.code) {
         this.tableData = data.data;
+        this.page.total = data.count;
       }
     },
     getSearch() {

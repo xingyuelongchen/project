@@ -1,20 +1,29 @@
 {
-  "name": "project",
-  "version": "0.1.0",
-  "private": true,
+  "name": "guangyizhou",
+  "version": "1.0.0",
+  "main": "electron.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron-dev": "vue-cli-service build && electron electron.js",
-    "electron-build": "electron-packager ./dist/ --arch=x64 --icon=logo.ico --overwrite"
+    "start": "electron .",
+    "electron-build": "vue-cli-service build && electron-packager ./dist 广艺舟 --arch=x64 --icon=dist/favicon.ico  --overwrite"
   },
+  "repository": "https://github.com/electron/electron-quick-start --all",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",
     "file-saver": "^2.0.2",
     "less-loader": "^6.2.0",
+    "request": "^2.88.2",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0",
