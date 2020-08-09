@@ -50,11 +50,13 @@ Create Time  : 2020-07-22
                   <i :class="item.icon"></i>
                   <span slot="title">{{item.title || item.meta.title}}</span>
                 </template>
-                <template v-for="(k,i) in item.children">
-                  <el-menu-item :index="k.name" :key="i" :route="k">
-                    <i :class="k.icon"></i>
-                    <span slot="title">{{k.title || k.meta.title}}</span>
-                  </el-menu-item>
+                <template v-if="item.children">
+                  <template v-for="(k,i) in item.children">
+                    <el-menu-item :index="k.name" :key="i" :route="k">
+                      <i :class="k.icon"></i>
+                      <span slot="title">{{k.title || k.meta.title}}</span>
+                    </el-menu-item>
+                  </template>
                 </template>
               </el-submenu>
               <el-menu-item :index="item.name" :key="index" :route="item" v-else>

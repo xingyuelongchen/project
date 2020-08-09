@@ -16,6 +16,7 @@ Vue.prototype.$modal = VXETable.modal
 Vue.directive('role', {
   // 校验权限
   inserted(el, binding) {
+    if (store.state.userinfo.role.includes(0)) return;
     if (!store.state.userinfo.role.includes(binding.value)) {
       el.style.display = 'none'
     }

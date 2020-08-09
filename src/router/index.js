@@ -141,7 +141,6 @@ function mapRole(routes, menu, roles) {
   let arr = [];
   menu.forEach(e => {
     let obj = routes.filter(k => k.meta.role == e.id);
-    
     if (obj.length) {
       if (e.children && e.children.length) {
         if (roles[0] == 0 || roles.includes(obj[0].meta.role)) {
