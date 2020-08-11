@@ -1,6 +1,6 @@
 {
   "name": "guangyizhou",
-  "version": "1.0.3",
+  "version": "1.0.1",
   "main": "main.js",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -83,7 +83,7 @@
     },
     "nsis": {
       "oneClick": false,
-      "perMachine": false,
+      "perMachine": true,
       "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
       "installerIcon": "./public/favicon.ico",
@@ -98,7 +98,8 @@
     "publish": [
       {
         "provider": "generic",
-        "url": "http://localhost:3000/app"
+        "url": "http://192.168.101.27",
+        "channel": "latest"
       }
     ],
     "files": [

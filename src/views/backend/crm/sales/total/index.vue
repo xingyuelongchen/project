@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     async getData() {
-      let { data } = await this.axios("/adminapi/Salepersonal/list", {
+      let { data } = await this.axios("/adminapi/Saletotal/list", {
         data: Object.assign({}, this.page, this.searchData)
       });
       if (data.code) {
