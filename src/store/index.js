@@ -7,6 +7,7 @@ export default new Vuex.Store({
     menu: [],
     userinfo: {},
     tabmenu: [],
+    routes: []
   },
   mutations: {
     // 清空数据
@@ -26,6 +27,10 @@ export default new Vuex.Store({
       }
     },
     // 动态路由表
+    setRoutes(state, data) {
+      state.routes = data
+    },
+    // 动态菜单
     setMenu(state, data) {
       state.menu = data
     },

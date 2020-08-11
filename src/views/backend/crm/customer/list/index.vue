@@ -7,13 +7,12 @@ Create Time  : 2020-03-27
   <div>
     <div class="content-wrap">
       <mixSearch v-model="search" :fields="searchFields" />
-
       <div class="info">
         <span>
-          <el-button @click="handDistribution" type="primary" size="mini">手动分配</el-button>
+          <el-button @click="handDistribution(null,true)" type="primary" size="mini">手动分配</el-button>
         </span>
         <span>
-          <el-button @click="autoDistribution(true)" type="warning" size="mini">自动分配</el-button>
+          <el-button @click="autoDistribution(null,true)" type="warning" size="mini">自动分配</el-button>
         </span>
         <template v-if="maxOrder">
           <span>
@@ -67,10 +66,15 @@ export default {
       show: false,
       maxOrder: null,
       page: {
-        limit: 10,
+        limit: 15,
         page: 1,
         total: 0
       },
+      shareTableData: [],
+      shareTableFields: [
+        { label: "花名", prop: "nickname" },
+        { label: "部门", prop: "dept" }
+      ],
       id: null,
       drawerName: "编辑",
       drawer: false,
@@ -87,13 +91,12 @@ export default {
         { label: "最大上限", prop: "limit" },
         {
           label: "状态",
-          prop: "status"
-          // --fix
-          // formatter: (a, b, c) => (c ? "接单中" : "休息中")
+          prop: "status",
+          formatter: (a, b, c) => (c ? "接单中" : "休息中")
         },
         {
           label: "操作",
-          type: "manage",
+          type: "button",
           options: [
             { label: "分配", click: this.onDistribution, style: "primary" }
           ]
@@ -215,9 +218,7 @@ export default {
       deep: true
     }
   },
-  created() {
-    // this.init();
-  },
+  
   activated() {
     this.init();
   },
@@ -245,31 +246,45 @@ export default {
           label: "操作",
           type: "manage",
           fixed: "right",
-          width: 310,
+          width: 110,
           options: [
             {
               size: "mini",
-              label: "编辑",
+              label: "编辑信息",
               style: "success",
               click: this.tableEdit
             },
             {
               size: "mini",
-              label: "分配",
-              style: "wraning",
-              click: this.distribution
-            },
-            {
-              size: "mini",
-              label: "删除",
-              style: "danger",
-              click: this.tableDel
+              label: "共享客户",
+              style: "success",
+              click: this.share
             },
             {
               size: "mini",
               label: "添加业绩",
               style: "primary",
               click: this.addOrder
+            },
+            {
+              size: "mini",
+              label: "手动分配",
+              style: "warning",
+              click: this.handDistribution,
+              isShow: { type: "==", prop: "saler", val: "" }
+            },
+            {
+              size: "mini",
+              label: "自动分配",
+              style: "warning",
+              click: this.autoDistributiona,
+              isShow: { type: "==", prop: "saler", val: "" }
+            },
+            {
+              size: "mini",
+              label: "删除",
+              style: "danger",
+              click: this.tableDel
             }
           ]
         }
@@ -339,14 +354,52 @@ export default {
         });
       }
     },
-
+    async setShare(item) {
+      item = {
+        sale_id: item.id,
+        nickname: item.nickname,
+        customer_id: this.id
+      };
+      await this.axios("adminapi/Customer/share", {
+        data: item
+      });
+      this.dialogVisible = false;
+      this.id = null;
+    },
+    async share(item) {
+      this.id = item.id;
+      this.getDepartment();
+      this.tableSales = [
+        { label: "昵称", prop: "nickname" },
+        { label: "部门", prop: "saler_group_zid" },
+        { label: "累计接待量", prop: "count" },
+        { label: "最大上限", prop: "limit" },
+        {
+          label: "状态",
+          prop: "status",
+          formatter: (a, b, c) => (c ? "接单中" : "休息中")
+        },
+        {
+          label: "操作",
+          type: "button",
+          options: [{ label: "共享", click: this.setShare, style: "primary" }]
+        }
+      ];
+      let { data } = await this.axios("/adminapi/Customer/refunder");
+      if (data.code) {
+        this.dialogVisible = true;
+        this.dialogName = "选择共享人员";
+        this.show = false;
+        this.tableSalesData = data.data;
+      }
+    },
     async getTable() {
       let { data } = await this.axios("/adminapi/Publics/table_th", {
         data: { table_id: 1 }
       });
       if (data.code) {
         let arr = data.data.concat(this.tableFields);
-        arr.unshift({ type: "selection", fixed: "left" }, { type: "expand" });
+        arr.unshift({ type: "selection", fixed: "left" });
         this.tableFields = arr;
       }
     },
@@ -476,13 +529,13 @@ export default {
     selection(select) {
       this.id = select.map(e => e.id);
     },
-    async autoDistribution(bool = false) {
+    async autoDistribution(item, type) {
       // 批量自动分配
       if (!this.id) {
         this.$message.error("请选择数据");
         return;
       }
-      if (bool) {
+      if (type) {
         let { data } = await this.axios("/adminapi/Customer/many_automatic ", {
           data: { id: this.id }
         });
@@ -491,6 +544,11 @@ export default {
         }
         return;
       }
+    },
+    async autoDistributiona(item, type) {
+      if (!type) {
+        this.id = item.id;
+      }
       let { data } = await this.axios("/adminapi/Customer/automatic ", {
         data: { id: this.id }
       });
@@ -498,7 +556,10 @@ export default {
         this.getData();
       }
     },
-    async handDistribution() {
+    async handDistribution(item, type) {
+      if (!type) {
+        this.id = item.id;
+      }
       // 批量手动分配
       if (!this.id) {
         this.$message.error("请选择数据");

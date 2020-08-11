@@ -15,17 +15,19 @@ Create Time  : 2020-07-22
             <i :class="[isCollapse?'el-icon-s-unfold':'el-icon-s-fold']" @click="isCollapse=!isCollapse"></i>
           </el-tooltip>
         </div>
-        <div class="itema" :class="{active:targetIndex == 'crm'}" @click="toggle('crm')" v-role="1">管理系统</div>
-        <div class="itema" :class="{active:targetIndex == 'app'}" @click="toggle('app')" v-role="24">应用程序</div>
+        <template v-for="(item,index) in $store.state.routes">
+          <div class="itema" :key="index" :class="{active:targetIndex == item.name}" @click="toggle(item.name)" v-role="item.id">{{item.meta.title}}</div>
+        </template>
+        <!-- <div class="itema" :class="{active:targetIndex == 'app'}" @click="toggle('app')" v-role="24">应用程序</div>
         <div class="itema" :class="{active:targetIndex == 'web'}" @click="toggle('web')" v-role="3">官网管理</div>
-        <div class="itema" :class="{active:targetIndex == 'MinApp'}" @click="toggle('MinApp')" v-role="22">小程序</div>
+        <div class="itema" :class="{active:targetIndex == 'MinApp'}" @click="toggle('MinApp')" v-role="22">小程序</div> -->
       </div>
       <div class="center"></div>
       <div class="right">
         <div class="itema">
           <i class="el-icon-refresh" @click="refresh"></i>
         </div>
-        <div class="itema">主题色</div>
+        <!-- <div class="itema">主题色</div> -->
         <div class="item">
           <el-avatar :size="40" :src="$store.state.userinfo.pic">{{$store.state.userinfo.name}}</el-avatar>
         </div>
@@ -47,20 +49,18 @@ Create Time  : 2020-07-22
             <template v-for="(item,index) in $store.state.menu[0].children">
               <el-submenu :index="item.name" :key="index" :route="item" v-if="item.children && item.children.length">
                 <template slot="title">
-                  <i :class="item.icon"></i>
+                  <i :class="['iconfont ',item.icon]"></i>
                   <span slot="title">{{item.title || item.meta.title}}</span>
                 </template>
-                <template v-if="item.children">
-                  <template v-for="(k,i) in item.children">
-                    <el-menu-item :index="k.name" :key="i" :route="k">
-                      <i :class="k.icon"></i>
-                      <span slot="title">{{k.title || k.meta.title}}</span>
-                    </el-menu-item>
-                  </template>
+                <template v-for="(k,i) in item.children">
+                  <el-menu-item :index="k.name" :key="i" :route="k">
+                    <i :class="['iconfont',k.icon]"></i>
+                    <span slot="title">{{k.title || k.meta.title}}</span>
+                  </el-menu-item>
                 </template>
               </el-submenu>
               <el-menu-item :index="item.name" :key="index" :route="item" v-else>
-                <i :class="item.icon"></i>
+                <i :class="['iconfont',item.icon]"></i>
                 <span slot="title">{{item.title || item.meta.title}}</span>
               </el-menu-item>
             </template>
@@ -124,12 +124,16 @@ export default {
       // 初始化tabmenu
       this.$store.commit("removeTabmenu");
       let path = this.$store.state.menu[0].path;
-      if (this.$store.state.menu[0].children[0]) {
+      if (
+        this.$store.state.menu[0].children &&
+        this.$store.state.menu[0].children[0]
+      ) {
         path =
           this.$store.state.menu[0].path +
           "/" +
           this.$store.state.menu[0].children[0].path;
       }
+      // console.log(path);
       this.$router.replace(path);
     },
     logout() {
@@ -419,5 +423,9 @@ export default {
       }
     }
   }
+}
+.iconfont {
+  font-size: 22px;
+  margin-right: 8px;
 }
 </style>

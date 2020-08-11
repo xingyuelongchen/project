@@ -8,6 +8,7 @@ import client from './client';
 import minApp from './minApp';
 import app from './app';
 import web from './web';
+import setting from './setting';
 Vue.use(VueRouter);
 // 基础路由表
 const routes = [
@@ -140,7 +141,9 @@ function mapRouter(obj, userinfo) {
 function mapRole(routes, menu, roles) {
   let arr = [];
   menu.forEach(e => {
-    let obj = routes.filter(k => k.meta.role == e.id);
+    let obj = routes.filter(k => {
+      return k.meta.role == e.id
+    });
     if (obj.length) {
       if (e.children && e.children.length) {
         if (roles[0] == 0 || roles.includes(obj[0].meta.role)) {
@@ -154,7 +157,6 @@ function mapRole(routes, menu, roles) {
         }
       } else {
         if (roles[0] == 0 || roles.includes(obj[0].meta.role)) {
-
           arr.push({
             ...obj[0],
             meta: { ...obj[0].meta, title: e.title, },
@@ -179,10 +181,10 @@ function setRoles() {
   // 获取当前所在系统，默认为： crm
   let targetIndex = sessionStorage.getItem('xitong') || 'crm';
   // 拼接路由地址
-  let xitong = backend.concat(app, web, minApp);
+  let xitong = backend.concat(app, web, minApp, setting);
   // 解析账号信息
   if (userinfo) userinfo = JSON.parse(userinfo);
-  // 匹配路由权限
+  // 匹配路由权限  
   let route = mapRole(xitong, userinfo.menu, userinfo.role);
   // 获取当前系统菜单
   let frist = route.filter(e => e.name == targetIndex);
@@ -190,6 +192,8 @@ function setRoles() {
   Store.commit('setUserinfo', userinfo);
   // 设置菜单缓存
   Store.commit('setMenu', frist);
+  // 设置路由缓存
+  Store.commit('setRoutes', route);
   if (frist[0].children && frist[0].children.length) {
     // 清空缓存后，添加首页到第一个tabs标签
     Store.commit('setTabmenu', {

@@ -68,18 +68,18 @@ Create Time  : 2020-03-28
                 <el-input v-else :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="onInput(item,scope,'blur')"></el-input>
               </div>
             </template>
-            <template v-if="item.type == 'manage'">
+            <template v-if="['manage','button'].includes(item.type)">
               <div class="box">
-                <template v-for="(k,i) in item.options">
-                  <template v-if="k.type == 'tagdown'">
-                    <el-dropdown :key="i">
-                      <el-tag class="hover" effect="plain" :type="toogle(k,scope.row[item.prop])">{{ getTagDownLabel(k,scope) }}</el-tag>
-                      <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item v-for="(j,t) in k.options" :key="t" @click.self.stop.native="dropDown(k,j,scope)">{{j.label}}</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </el-dropdown>
-                  </template>
-                  <el-button v-else v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'" size="mini" @click="click(k.click,scope.row,scope.column)">{{k.label}}</el-button>
+                <el-dropdown v-if="item.type == 'manage'">
+                  <el-button class="hover" :size="item.size || 'mini'" type="primary">{{ item.label || '操作'}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <template v-for="(k,i) in item.options">
+                      <el-dropdown-item v-show="isShow(k,item,scope)" :key="i" @click.native="click(k.click,scope.row,scope.column)">{{k.label}}</el-dropdown-item>
+                    </template>
+                  </el-dropdown-menu>
+                </el-dropdown>
+                <template v-else>
+                  <el-button v-for="(k,i) in item.options" v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'" size="mini" @click="click(k.click,scope.row,scope.column)">{{k.label}}</el-button>
                 </template>
               </div>
             </template>
@@ -342,11 +342,11 @@ export default {
   },
   created() {
     this.init();
-    window.onresize = () => {
-      this.$refs.table.doLayout();
-    };
   },
   mounted() {
+    setTimeout(() => {
+      this.$refs.table.doLayout();
+    }, 500);
     setTimeout(() => {
       this.loading = false;
     }, 5000);
@@ -547,6 +547,7 @@ export default {
   }
 }
 .box {
+  white-space: nowrap;
   /deep/ .el-input__inner {
     padding: 0;
   }

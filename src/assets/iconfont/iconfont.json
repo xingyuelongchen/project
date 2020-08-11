@@ -6,11 +6,116 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "4933216",
-      "name": "铃铛",
-      "font_class": "lingdang",
-      "unicode": "e6f1",
-      "unicode_decimal": 59121
+      "icon_id": "1256466",
+      "name": "应用程序",
+      "font_class": "yingyongchengxu",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "1509757",
+      "name": "质检",
+      "font_class": "quality",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
+      "icon_id": "1727372",
+      "name": "30应用程序",
+      "font_class": "yingyongchengxu1",
+      "unicode": "e8a1",
+      "unicode_decimal": 59553
+    },
+    {
+      "icon_id": "2958937",
+      "name": "行政管理",
+      "font_class": "hangzhengguanli",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "5191257",
+      "name": "质检审核",
+      "font_class": "zhijianshenhe",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "7033512",
+      "name": "组织信息 ",
+      "font_class": "zuzhixinxi",
+      "unicode": "e51c",
+      "unicode_decimal": 58652
+    },
+    {
+      "icon_id": "7366414",
+      "name": "财务",
+      "font_class": "caiwu",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "10359983",
+      "name": "行政班课程",
+      "font_class": "hangzhengbankecheng",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "11058856",
+      "name": "小程序",
+      "font_class": "xiaochengxu",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "11641888",
+      "name": "客户",
+      "font_class": "kehu",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "11808038",
+      "name": "销售预测",
+      "font_class": "xiaoshouyuce",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "11982742",
+      "name": "Home, homepage, menu",
+      "font_class": "Homehomepagemenu",
+      "unicode": "e9db",
+      "unicode_decimal": 59867
+    },
+    {
+      "icon_id": "15023387",
+      "name": "财务",
+      "font_class": "caiwu1",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "15597603",
+      "name": "组织架构",
+      "font_class": "zuzhijiagou",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
+      "icon_id": "15994136",
+      "name": "审批",
+      "font_class": "shenpi",
+      "unicode": "e6da",
+      "unicode_decimal": 59098
+    },
+    {
+      "icon_id": "16065744",
+      "name": "组织机构1",
+      "font_class": "zuzhijigou1",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
     }
   ]
 }

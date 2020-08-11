@@ -18,7 +18,7 @@ module.exports = {
         hotOnly: true, //是否开启热更新
         proxy: {
             "/adminapi": {
-                target: "http://192.168.33.10",
+                target: config.baseUrl,
                 ws: true,
                 changeOrigin: true
                 // pathRewrite: {
@@ -26,12 +26,12 @@ module.exports = {
                 // }
             },
             "/uploads": {
-                target: "http://192.168.33.10",
+                target: config.baseUrl,
                 ws: true,
                 changeOrigin: true
             },
             "/admin": {
-                target: "http://192.168.33.10",
+                target: config.baseUrl,
                 ws: true,
                 changeOrigin: true
             }

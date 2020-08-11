@@ -14,13 +14,13 @@ export default
     { path: 'index', name: 'Customerindex', meta: { keepAlive: true, role: 20, title: '咨询统计', }, component: () => import('@/views/backend/crm/customer/index/') },
 
     { path: 'sales', name: 'Sales', meta: { keepAlive: true, role: 7, title: '销售中心', }, component: () => import('@/views/layou'), },
+    { path: 'total', name: 'Salestotal', meta: { keepAlive: true, role: 77, title: '数据总览', }, component: () => import('@/views/backend/crm/sales/total') },
     { path: 'index', name: 'Salesindex', meta: { keepAlive: true, role: 16, title: '顾问记录', }, component: () => import('@/views/backend/crm/sales/index/') },
+    { path: 'forming', name: 'Salesforming', meta: { keepAlive: true, role: 79, title: '个人目标', }, component: () => import('@/views/backend/crm/sales/forming') },
     { path: 'receive', name: 'Salesreceive', meta: { keepAlive: true, role: 17, title: '顾问接待', }, component: () => import('@/views/backend/crm/sales/receive') },
     { path: 'personal', name: 'Salespersonal', meta: { keepAlive: true, role: 76, title: '个人数据', }, component: () => import('@/views/backend/crm/sales/personal') },
-    { path: 'total', name: 'Salestotal', meta: { keepAlive: true, role: 77, title: '数据总览', }, component: () => import('@/views/backend/crm/sales/total') },
     { path: 'commission', name: 'Salescommission', meta: { keepAlive: true, role: 78, title: '提成设置', }, component: () => import('@/views/backend/crm/sales/commission') },
     { path: 'coefficient', name: 'Salescoefficient', meta: { keepAlive: true, role: 80, title: '提成系数', }, component: () => import('@/views/backend/crm/sales/coefficient') },
-    { path: 'forming', name: 'Salesforming', meta: { keepAlive: true, role: 79, title: '个人目标', }, component: () => import('@/views/backend/crm/sales/forming') },
 
     { path: 'data', name: 'Data', meta: { keepAlive: true, role: 13, title: '数据管理', }, component: () => import('@/views/layou'), },
     { path: 'index', name: 'Dataindex', meta: { keepAlive: true, role: 31, title: '数据概览', }, component: () => import('@/views/backend/crm/data/index/') },
@@ -31,14 +31,6 @@ export default
 
     { path: 'quality', name: 'Quality', meta: { keepAlive: true, role: 9, title: '质检中心', }, component: () => import('@/views/layou'), },
     { path: 'index', name: 'Qualityindex', meta: { keepAlive: true, role: 19, title: '数据管理', }, component: () => import('@/views/backend/crm/quality') },
-
     { path: 'extend', name: 'Ether', meta: { keepAlive: true, role: 11, title: '扩展管理', }, component: () => import('@/views/layou'), },
 
-    { path: 'setting', name: 'Setting', meta: { keepAlive: true, role: 12, title: '系统设置', }, component: () => import('@/views/layou'), },
-    { path: 'roles', name: 'Roles', meta: { keepAlive: true, role: 21, title: '权限菜单', }, component: () => import('@/views/backend/crm/setting/roles') },
-    { path: 'role-field', name: 'RoleField', meta: { keepAlive: true, role: 45, title: '字段管理', }, component: () => import('@/views/backend/crm/setting/roleField') },
-    { path: 'role-group', name: 'Rolegroup', meta: { keepAlive: true, role: 30, title: '角色权限', }, component: () => import('@/views/backend/crm/setting/roleGroup') },
-    { path: 'option', name: 'option', meta: { keepAlive: true, role: 86, title: '选项管理', }, component: () => import('@/views/backend/crm/setting/option') },
-    { path: 'system-setting', name: 'Systemsetting', meta: { keepAlive: true, role: 46, title: '系统配置', }, component: () => import('@/views/backend/crm/setting/systemSetting') },
-    { path: 'organization', name: 'Adminorganization', meta: { keepAlive: true, role: 75, title: '组织构架', }, component: () => import('@/views/backend/crm/setting/organization') },
   ]

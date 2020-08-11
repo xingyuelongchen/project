@@ -7,5 +7,6 @@ module.exports = {
     // 本地缓存前缀
     storeKey: 'myaa',
     // 接口URL
-    baseUrl: 'http://192.168.33.10'
+    baseUrl: 'http://192.168.101.30',
+    updateApp:'http://192.168.101.27:3000/api/app'
 }

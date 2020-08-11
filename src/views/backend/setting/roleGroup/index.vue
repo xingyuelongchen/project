@@ -153,8 +153,9 @@ export default {
             change: this.listChange
           };
         });
-        let id = data.data.lay.laytables[val.id] || [];
-        let status = data.data.lay.laytables_editable[val.id] || [];
+        this.role.table_id = data.data.table_id;
+        let id = data.data.lay.laytables[data.data.table_id] || [];
+        let status = data.data.lay.laytables_editable[data.data.table_id] || [];
         this.rolesList = data.data.column.map(e => {
           return {
             ...e,
@@ -183,7 +184,8 @@ export default {
     },
     async saveList() {
       // 保存授权字段更改
-      this.selectTableField.table_id = this.role.id;
+      this.selectTableField.auth_id = this.role.id;
+      this.selectTableField.table_id = this.role.table_id;
       let form = JSON.parse(JSON.stringify(this.selectTableField));
       let { data } = await this.axios("/adminapi/Authgroup/table_add", {
         data: form
@@ -214,7 +216,6 @@ export default {
       if (data.code) {
         this.dialogFormVisible = false;
         this.roleData = {};
-        this.$message.success(data.msg);
         this.getData();
       }
     },
@@ -227,12 +228,9 @@ export default {
     },
     async saveRole() {
       // 保存权限菜单
-      let { data } = await this.axios("/adminapi/Authgroup/preservation", {
+      await this.axios("/adminapi/Authgroup/preservation", {
         data: this.role
       });
-      if (data.code) {
-        this.$message.success(data.msg);
-      }
     },
     async getRole(item) {
       // 获取权限菜单

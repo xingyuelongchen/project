@@ -1,8 +1,8 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain } = require('electron')
-const { autoUpdater } = require('electron-updater')
-const config = require('./src/config');
-const path = require('path')
+const { app, BrowserWindow, ipcMain } = require('electron');
+const { autoUpdater } = require('electron-updater');
+const path = require('path');
+const updateAppUrl="http://192.168.101.27/app"
 
 // 检测更新，在你想要检查更新的时候执行，renderer事件触发后的操作自行编写
 function updateHandle() {
@@ -14,7 +14,7 @@ function updateHandle() {
   };
   const os = require('os');
 
-  autoUpdater.setFeedURL(config.updateApp);
+  autoUpdater.setFeedURL(updateAppUrl);
   autoUpdater.on('error', function (error) {
     sendUpdateMessage(message.error)
   });
@@ -54,11 +54,6 @@ function updateHandle() {
 function sendUpdateMessage(text) {
   mainWindow.webContents.send('message', text)
 }
-
-
-
-
-
 
 
 

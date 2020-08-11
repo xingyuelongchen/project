@@ -24,15 +24,7 @@ export default {
         { type: "button", click: this.getSearch, label: "搜索", span: 3 }
       ],
       tableData: [],
-      tableFields: [
-        { prop: "date_time", label: "日期" },
-        { prop: "crm_uid", label: "系统ID" },
-        { prop: "dept", label: "部门" },
-        { prop: "dept_id", label: "部门" },
-        { prop: "id", label: "id" },
-        { prop: "jie", label: "接单量" },
-        { prop: "nickname", label: "花名" }
-      ],
+      tableFields: [],
       page: {
         page: 1,
         limit: 15,
@@ -42,6 +34,7 @@ export default {
   },
   activated() {
     this.getData();
+    this.getTable();
   },
   methods: {
     async getData() {
@@ -51,6 +44,14 @@ export default {
       if (data.code) {
         this.tableData = data.data;
         this.page.total = data.count;
+      }
+    },
+    async getTable() {
+      let { data } = await this.axios("/adminapi/Publics/table_th", {
+        data: { table_id: 5 }
+      });
+      if (data.code) {
+        this.tableFields = data.data;
       }
     },
     getSearch() {

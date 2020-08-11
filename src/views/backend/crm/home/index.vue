@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-07-22
 -->
 <template>
-  <div>紧张筹备中</div>
+  <div>紧张筹备中……更新过了</div>
 </template>
 <script>
 export default {
