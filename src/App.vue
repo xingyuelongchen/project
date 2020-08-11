@@ -1,10 +1,66 @@
 <template>
   <div id="app">
-    <router-view />
+    <router-view v-loading="" />
+
   </div>
 </template>
+<script>
+import isElectron from "is-electron";
+export default {
+  mounted() {
+    let vm = this;
+    if (isElectron()) {
+      vm.ipcRenderer = window.ipcRenderer;
+      vm.ipcRenderer.on("message", (event, data) => {
+        console.log(event, data.msg);
+      });
+      vm.ipcRenderer.on("downloadProgress", (event, progressObj) => {
+        console.log("downloadProgress", progressObj);
+        // 可自定义下载渲染效果
+        let loading = vm.$loading({
+          lock: true,
+          text: "已下载" + progressObj.percent + "%",
+          spinner: "el-icon-loading",
+          background: "rgba(0, 0, 0, 0.7)"
+        });
+        if (progressObj.percent == 100) {
+          loading.close();
+        }
+      });
+      vm.ipcRenderer.on("isUpdateNow", (event, versionInfo) => {
+        // 自定义选择效果，效果自行编写
+        vm.$confirm(
+          "检测到新版本" + versionInfo.version + ",是否立即升级？",
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            showCancelButton: false,
+            type: "warning"
+          }
+        ).then(() => {
+          vm.ipcRenderer.send("updateNow");
+        });
+      });
+      vm.autoUpdate(); // electron应用启动后主动触发检查更新函数
+    }
+  },
+  beforeDestroy() {
+    // 移除ipcRenderer所有事件
+    if (isElectron()) {
+      this.ipcRenderer.removeAllListeners();
+    }
+  },
+  methods: {
+    autoUpdate() {
+      // 用来触发更新函数
+      this.ipcRenderer.send("checkForUpdate");
+    }
+  }
+};
+</script>
 
-<style lang="scss">
+<style lang="less">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -70,9 +126,4 @@ html {
   box-sizing: border-box;
 }
 </style>
-<script>
-export default {
-  name: "App",
-  created() {}
-};
-</script>
+

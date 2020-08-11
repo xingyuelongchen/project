@@ -61,6 +61,7 @@ export default {
       let { type } = this.searchData;
       this.searchData = { type };
       this.searchFields = arr;
+      this.getData();
     },
     async getData() {
       let { data } = await this.axios("/adminapi/Salepersonal/list", {
