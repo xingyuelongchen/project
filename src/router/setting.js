@@ -8,4 +8,6 @@ export default [
     { path: 'option', name: 'option', meta: { keepAlive: true, role: 86, title: '选项管理', }, component: () => import('@/views/backend/setting/option') },
     { path: 'system-setting', name: 'Systemsetting', meta: { keepAlive: true, role: 46, title: '系统配置', }, component: () => import('@/views/backend/setting/systemSetting') },
     { path: 'organization', name: 'Adminorganization', meta: { keepAlive: true, role: 75, title: '组织构架', }, component: () => import('@/views/backend/setting/organization') },
+
+    { path: 'contract', name: 'Admincontract', meta: { keepAlive: true, role: 121, title: '合同管理', }, component: () => import('@/views/backend/setting/contract') },
 ] 

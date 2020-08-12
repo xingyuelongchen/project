@@ -7,7 +7,7 @@ Create Time  : 2020-08-06
   <div class="content-wrap">
     <el-tabs v-model="searchData.type" @tab-click="handleClick">
       <el-tab-pane label="日数据" name="1" />
-      <el-tab-pane label="指定时间" name="2" />
+      <!-- <el-tab-pane label="指定时间" name="2" /> -->
       <el-tab-pane label="月数据" name="3" />
     </el-tabs>
     <mixSearch v-model="searchData" :fields="searchFields" />
@@ -20,7 +20,7 @@ Create Time  : 2020-08-06
 </template>
 <script>
 export default {
-  name: "Salestotal",
+  name: "Tutortotal",
   data() {
     return {
       key: 0,
@@ -59,7 +59,7 @@ export default {
       this.getData();
     },
     async getData() {
-      let { data } = await this.axios("/adminapi/Saletotal/list", {
+      let { data } = await this.axios("/adminapi/Servicetotal/list", {
         data: Object.assign({}, this.page, this.searchData)
       });
       if (data.code) {
@@ -69,7 +69,7 @@ export default {
     },
     async getTable() {
       let { data } = await this.axios("/adminapi/Publics/table_th", {
-        data: { table_id: 7 }
+        data: { table_id: 9 }
       });
       if (data.code) {
         this.key = Math.random();

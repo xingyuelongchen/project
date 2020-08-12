@@ -25,6 +25,7 @@
   background: #00BABD;
   color: #fff;
   transition: all 0.2s;
+  cursor: pointer;
 }
 .user .el-list .el-item {
   padding: 0 20px;

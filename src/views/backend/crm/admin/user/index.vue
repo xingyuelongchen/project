@@ -7,18 +7,14 @@ Create Time  : 2020-07-26
 
   <div class="content-box">
     <mixSearch v-model="search" :fields="searchFields" />
-    <div>
-      <mixTable v-model="tableData" :fields="tableFields" />
-    </div>
-    <div>
-      <mixPage v-model="page" />
-      <el-dialog :visible.sync="dialogShow" title="编辑">
-        <mixForm v-model="editForm" :fields="editFormField" />
-        <div slot="footer">
-          <el-button type="primary" @click="save">保存</el-button>
-        </div>
-      </el-dialog>
-    </div>
+    <mixTable v-model="tableData" :fields="tableFields" />
+    <mixPage v-model="page" />
+    <el-dialog :visible.sync="dialogShow" title="编辑">
+      <mixForm v-model="editForm" :fields="editFormField" />
+      <div slot="footer">
+        <el-button type="primary" @click="save">保存</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>

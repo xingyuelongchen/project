@@ -1,17 +1,17 @@
 const { app, BrowserWindow, ipcMain } = require('electron') // ipcMain 主线程
 const { autoUpdater } = require('electron-updater')
 const path = require('path');
+const config = require('./src/config')
 var uploadUrl, feedUrl;
 if (app.isPackaged) {
   // 线上地址
-  uploadUrl = 'http://192.168.101.27/' // 更新地址
-  feedUrl = 'http://192.168.101.27:8080' // 页面地址
+  uploadUrl = config.uploadUrl // 更新地址
+  feedUrl = config.feedUrl // 页面地址
 } else {
   // 线下地址
-  uploadUrl = 'http://192.168.101.27/' // 更新地址
-  feedUrl = 'http://192.168.101.27:8080' // 页面地址
+  uploadUrl = config.uploadUrlDev // 更新地址
+  feedUrl = config.feedUrlDev // 页面地址
 }
-
 function createWindow() {
   const mainWindow = new BrowserWindow({
     minWidth: 1200,
@@ -80,6 +80,9 @@ function createWindow() {
       checkInfo.then(function (data) {
         versionInfo = data.versionInfo // 获取更新包版本等信息
       })
+    })
+    ipcMain.on('message', (data) => {
+      console.log(...data);
     })
   }
 

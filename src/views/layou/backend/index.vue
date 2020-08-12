@@ -18,20 +18,15 @@ Create Time  : 2020-07-22
         <template v-for="(item,index) in $store.state.routes">
           <div class="itema" :key="index" :class="{active:targetIndex == item.name}" @click="toggle(item.name)" v-role="item.id">{{item.meta.title}}</div>
         </template>
-        <!-- <div class="itema" :class="{active:targetIndex == 'app'}" @click="toggle('app')" v-role="24">应用程序</div>
-        <div class="itema" :class="{active:targetIndex == 'web'}" @click="toggle('web')" v-role="3">官网管理</div>
-        <div class="itema" :class="{active:targetIndex == 'MinApp'}" @click="toggle('MinApp')" v-role="22">小程序</div> -->
       </div>
       <div class="center"></div>
       <div class="right">
-        <div class="itema">
-          <i class="el-icon-refresh" @click="refresh"></i>
+        <div class="itema" @click="refresh">
+          <i class="el-icon-refresh"></i>刷新
         </div>
-        <!-- <div class="itema">主题色</div> -->
-        <div class="item">
+        <div class="item" @click="$router.push('/user/info')">
           <el-avatar :size="40" :src="$store.state.userinfo.pic">{{$store.state.userinfo.name}}</el-avatar>
         </div>
-        <div class="item">{{$store.state.userinfo.name}}</div>
         <div class="itema">
           <el-dropdown trigger="click">
             <i class="el-icon-s-tools" style="font-size:18px;cursor: pointer;"></i>
@@ -67,7 +62,7 @@ Create Time  : 2020-07-22
           </el-menu>
         </el-scrollbar>
       </div>
-      <div class="app-content">
+      <div class="app-content" v-loading="loading" element-loading-text="正在释放缓存……" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
         <div class="top">
           <el-tabs :value="activeName" :key="key" type="card" @tab-remove="delTab" @tab-click="onTab" user="el-tabs">
             <template v-for="(item,index) in $store.state.tabmenu">
@@ -90,6 +85,7 @@ export default {
   data() {
     return {
       key: 0,
+      loading: false,
       refreshKey: 0,
       // 菜单折叠
       isCollapse: false,
@@ -140,6 +136,10 @@ export default {
       this.$router.replace("/login");
     },
     async refresh() {
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+      }, 2000);
       let { data } = await this.axios("/adminapi/User/information", {
         data: { uid: this.userinfo.uid }
       });

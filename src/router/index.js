@@ -100,7 +100,7 @@ function beforeRouter(to, from, next) {
       return
     }
   }
-  if (/(crm|app|minapp|web)/.test(to.fullPath)) {
+  if (/(crm|app|minapp|web|user)/.test(to.fullPath)) {
     let title = to.meta.title;
     if (to.matched[to.matched.length - 2] && to.matched[to.matched.length - 2].meta.title) {
       title = to.matched[to.matched.length - 2].meta.title + '/' + to.meta.title;

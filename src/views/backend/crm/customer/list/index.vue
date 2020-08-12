@@ -218,7 +218,7 @@ export default {
       deep: true
     }
   },
-  
+
   activated() {
     this.init();
   },
@@ -240,7 +240,7 @@ export default {
         data: this.maxOrder
       });
     },
-    init() {
+    async init() {
       this.tableFields = [
         {
           label: "操作",
@@ -289,33 +289,11 @@ export default {
           ]
         }
       ];
-      // 表格内容数据
-      this.getData(false);
       // 表头数据
-      this.getTable();
-      this.getSelect();
-      this.stopMaxOrder();
-    },
-    async getSelect() {
-      let { data: result } = await this.axios("/adminapi/Customer/p_tool", {
-        data: { id: 4 }
-      });
-      if (result.code) {
-        this.searchFields = this.searchFields.map(e => {
-          if (e.prop == "trace_status") e.options = result.data;
-          return e;
-        });
-      }
-
-      let { data } = await this.axios("/adminapi/Customer/p_tool", {
-        data: { id: 5 }
-      });
-      if (data.code) {
-        this.searchFields = this.searchFields.map(e => {
-          if (e.prop == "label") e.options = data.data;
-          return e;
-        });
-      }
+      await this.getTable();
+      // 表格内容数据
+      await this.getData(false);
+      await this.stopMaxOrder();
     },
     changeImage(item) {
       this.qrcode = true;
@@ -675,23 +653,17 @@ export default {
     },
     async onExport() {
       // 导出表格
-      let { data } = await this.axios("/adminapi/Customer/CustomersExcel", {
-        data: Object.assign({}, this.page, this.search)
+      let { data } = await this.axios("/adminapi/Customer/export", {
+        data: this.search
       });
       if (data.code) {
-        this.$confirm("是否下载导出数据", "提示", {
-          confirmButtonText: "下载",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          const link = document.createElement("a");
-          link.href = data.data.url;
-          link.setAttribute("target", "_blank");
-          link.setAttribute("download", data.data.title);
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        });
+        const link = document.createElement("a");
+        link.href = data.data.url;
+        link.setAttribute("target", "_blank");
+        link.setAttribute("download", data.data.title);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
     },
     async onSave() {

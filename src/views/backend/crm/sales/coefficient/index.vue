@@ -129,9 +129,10 @@ export default {
     },
     async addGrade() {
       await this.axios("adminapi/Salerate/add", {
-        data: { grade: this.grade }
+        data: { grade: this.grade,...this.searchData }
       });
       this.getData();
+      this.addShow = false;
     },
     edit(item) {
       this.show = true;

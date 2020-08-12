@@ -34,7 +34,19 @@ export default {
             { label: "已审核", value: "1" }
           ]
         },
-        { label: "搜索", type: "button", click: this.getData, span: 10 }
+        {
+          type: "button",
+          span: 10,
+          options: [
+            { label: "搜索", type: "button", click: this.getData },
+            {
+              label: "导出",
+              type: "button",
+              style: "danger",
+              click: this.onExport
+            }
+          ]
+        }
       ],
       tableData: [],
       tableFields: []
@@ -54,7 +66,7 @@ export default {
         this.tableFields = data.data.concat([
           {
             label: "操作",
-            type: "manage",
+            type: "button",
             align: "center",
             fixed: "right",
             width: 90,
@@ -85,6 +97,21 @@ export default {
       });
       if (data.code) {
         this.getData();
+      }
+    },
+    async onExport() {
+      // 导出表格
+      let { data } = await this.axios("/adminapi/Finance/export", {
+        data: this.searchData
+      });
+      if (data.code) {
+        const link = document.createElement("a");
+        link.href = data.data.url;
+        link.setAttribute("target", "_blank");
+        link.setAttribute("download", data.data.title);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
     }
   }

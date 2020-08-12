@@ -20,7 +20,7 @@ Create Time  : 2020-08-06
 </template>
 <script>
 export default {
-  name: "Salestotal",
+  name: "Tutordata",
   data() {
     return {
       key: 0,
@@ -44,13 +44,18 @@ export default {
         arr[0] = { label: "选择", type: "date", prop: "date", span: 3 };
       }
       if (this.searchData.type == "2") {
-        arr[0] = { label: "选择", type: "date", prop: "date", span: 5.5 };
+        arr[0] = {
+          label: "选择",
+          type: "daterange",
+          prop: "date",
+          span: 5.5
+        };
       }
       if (this.searchData.type == "3") {
         arr[0] = { label: "选择", type: "month", prop: "date", span: 3 };
       }
       arr.push(
-        // { label: "昵称", type: "text", prop: "nickname", span: 3 },
+        { label: "昵称", type: "text", prop: "nickname", span: 3 },
         { label: "搜索", type: "button", click: this.getData, span: 3 }
       );
       let { type } = this.searchData;
@@ -59,7 +64,7 @@ export default {
       this.getData();
     },
     async getData() {
-      let { data } = await this.axios("/adminapi/Saletotal/list", {
+      let { data } = await this.axios("/adminapi/Servicepersonal/list", {
         data: Object.assign({}, this.page, this.searchData)
       });
       if (data.code) {
@@ -69,7 +74,7 @@ export default {
     },
     async getTable() {
       let { data } = await this.axios("/adminapi/Publics/table_th", {
-        data: { table_id: 7 }
+        data: { table_id: 8 }
       });
       if (data.code) {
         this.key = Math.random();

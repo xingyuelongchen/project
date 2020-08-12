@@ -170,7 +170,7 @@ export default {
         },
         {
           label: "操作",
-          type: "manage",
+          type: "button",
           //   minWidth: "200",
           options: [
             { label: "查看", click: this.views, style: "primary" },
@@ -233,6 +233,13 @@ export default {
           change: this.tableEdit
         },
         {
+          prop: "export",
+          label: "是否导出",
+          type: "switch",
+          change: this.tableEdit,
+          width: 80
+        },
+        {
           prop: "sort",
           label: "排序",
           align: "center",
@@ -257,7 +264,7 @@ export default {
           width: 80
         },
         {
-          type: "manage",
+          type: "button",
           label: "操作",
           fixed: "right",
           width: 80,
@@ -364,7 +371,7 @@ export default {
           type: "switch"
         },
         {
-          type: "manage",
+          type: "button",
           label: "操作",
           fixed: "right",
           options: [
