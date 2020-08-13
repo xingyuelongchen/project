@@ -1,12 +1,19 @@
 <!--
-Template Name: customer
+Template Name: 
 Create author: qinglong
-Create Time  : 2020-07-24
+Create Time  : 2020-08-06
 -->
 <template>
-  <div class="content-box">
-    <mixSearch v-model="search" :fields="searchField1" />
-    <mixTable v-model="tableData" :fields="tableFields" />
+  <div class="content-wrap">
+    <el-tabs v-model="searchData.type" @tab-click="handleClick">
+      <el-tab-pane label="日数据" name="1" />
+      <el-tab-pane label="指定时间" name="2" />
+      <el-tab-pane label="月数据" name="3" />
+    </el-tabs>
+    <mixSearch v-model="searchData" :fields="searchFields" />
+    <div style="height:calc(100% - 160px)">
+      <mixTable :key="key" v-model="tableData" :fields="tableFields" ref="table" />
+    </div>
     <mixPage v-model="page" />
   </div>
 </template>
@@ -15,35 +22,64 @@ export default {
   name: "Customerindex",
   data() {
     return {
-      tab: "1",
-      status: "",
-      search: {},
-      searchField1: [
-        { prop: "date", type: "daterange", span: 5.5, label: "选择" },
-        { prop: "name", type: "text", span: 3, label: "名称" },
-        { type: "button", click: this.getSearch, label: "搜索", span: 3 }
-      ],
+      key: 0,
+      searchData: { type: "1" },
+      searchFields: [],
       tableData: [],
       tableFields: [],
-      page: {
-        page: 1,
-        limit: 15,
-        total: 0
-      }
+      page: { page: 1, limit: 15, total: 0 }
     };
   },
   activated() {
     this.getData();
     this.getTable();
+    this.handleClick();
   },
+
   methods: {
+    handleClick() {
+      let arr = [];
+      if (this.searchData.type == "1") {
+        arr[0] = { label: "选择", type: "date", prop: "date", span: 3 };
+      }
+      if (this.searchData.type == "2") {
+        arr[0] = {
+          label: "选择",
+          type: "daterange",
+          prop: "date",
+          span: 5.5
+        };
+      }
+      if (this.searchData.type == "3") {
+        arr[0] = { label: "选择", type: "month", prop: "date", span: 3 };
+      }
+      arr.push(
+        { label: "昵称", type: "text", prop: "nickname", span: 3 },
+        {
+          type: "button",
+          span: 3,
+          options: [
+            { label: "搜索", click: this.getData },
+            { label: "导出", style: "danger", click: this.export }
+          ]
+        }
+      );
+      let { type } = this.searchData;
+      this.searchData = { type };
+      this.searchFields = arr;
+      this.getData();
+    },
+    export() {
+      this.axios("/adminapi/Customerstatistics/export");
+      this.$refs.table.outTab();
+    },
     async getData() {
       let { data } = await this.axios("/adminapi/Customerstatistics/list", {
-        params: Object.assign({}, { type: this.tab }, this.search)
+        data: Object.assign({}, this.page, this.searchData)
       });
       if (data.code) {
-        this.tableData = data.data;
         this.page.total = data.count;
+        this.tableData = data.data;
       }
     },
     async getTable() {
@@ -51,14 +87,9 @@ export default {
         data: { table_id: 5 }
       });
       if (data.code) {
+        this.key = Math.random();
         this.tableFields = data.data;
       }
-    },
-    getSearch() {
-      this.getData();
-    },
-    handleClick() {
-      this.getData();
     }
   }
 };

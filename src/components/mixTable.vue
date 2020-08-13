@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-03-28
 -->
 <template>
-  <el-table ref="table" row-key="id" v-loading="!!!fieldsData.length && loading" :height="options.height || '100%'" :max-height="options.height || '100%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
+  <el-table ref="table" id="exportTab" row-key="id" v-loading="!fieldsData.length && loading" :height="options.height || '100%'" :max-height="options.height || '100%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
     <template v-for="(item,index ) in field">
       <template v-if="'expand'==item.type">
         <el-table-column :key="index+'key'" :type="item.type" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable">
@@ -328,7 +328,8 @@ export default {
     return {
       loading: true,
       showKey: "key",
-      field: []
+      field: [],
+      refs: null
     };
   },
   watch: {
@@ -337,56 +338,43 @@ export default {
     },
     fieldsData() {
       this.toggleRowSelection();
-      this.$refs.table.doLayout();
     }
   },
   created() {
     this.init();
   },
+  updated() {
+    this.refs = this.$refs.tablea;
+  },
   mounted() {
-    setTimeout(() => {
-      this.$refs.table.doLayout();
-    }, 500);
     setTimeout(() => {
       this.loading = false;
     }, 5000);
   },
   methods: {
     async outTab() {
-      // 导出表格
-      let bool = await this.$confirm("是否导出当前数据到文件", "提示！", {
-        confirmButtonText: "确定",
-        cancalButtonText: "取消",
-        type: "warning"
-      }).catch();
-      if (!bool) return;
-      let fix = this.$refs.table.$el.querySelector(".el-table__fixed");
-      let wb;
-      if (fix) {
-        wb = XLSX.utils.table_to_book(this.$refs.table.$el.removeChild(fix));
-        this.$refs.table.$el.appendChild(fix);
-      } else {
-        wb = XLSX.utils.table_to_book(this.$refs.table.$el);
-      }
+      let fileName = this.$route.meta.title + Date.now();
+      let xlsxParam = { raw: true }; // 导出的内容只做解析，不进行格式转换
+      let wb = XLSX.utils.table_to_book(
+        document.querySelector("#exportTab"),
+        xlsxParam
+      );
+
       /* get binary string as output */
-      let wbout = XLSX.write(wb, {
+      var wbout = XLSX.write(wb, {
         bookType: "xlsx",
         bookSST: true,
         type: "array"
       });
-
       try {
-        let fileName =
-          this.fnFormatDate(new Date(), "YYYY_MM_DD") +
-          Math.floor(Math.random() * 100);
         FileSaver.saveAs(
-          new Blob([wbout], {
-            type: "application/octet-stream"
-          }),
-          `${fileName}.xlsx`
+          new Blob([wbout], { type: "application/octet-stream" }),
+          fileName + ".xlsx"
         );
       } catch (e) {
-        if (typeof console !== "undefined") console.log(e, wbout);
+        if (typeof console !== "undefined") {
+          console.log(e, wbout);
+        }
       }
       return wbout;
     },
@@ -439,7 +427,7 @@ export default {
       let timer = setTimeout(() => {
         clearTimeout(timer);
         this.fieldsData.filter(e => {
-          if (e.checked) this.$refs.table.toggleRowSelection(e);
+          if (e.checked) this.refs.toggleRowSelection(e);
         });
       }, 50);
     },

@@ -27,6 +27,9 @@ Create Time  : 2020-07-22
         <div class="item" @click="$router.push('/user/info')">
           <el-avatar :size="40" :src="$store.state.userinfo.pic">{{$store.state.userinfo.name}}</el-avatar>
         </div>
+        <div class="item">
+          {{$store.state.userinfo.mobile}}
+        </div>
         <div class="itema">
           <el-dropdown trigger="click">
             <i class="el-icon-s-tools" style="font-size:18px;cursor: pointer;"></i>
@@ -141,7 +144,7 @@ export default {
         this.loading = false;
       }, 2000);
       let { data } = await this.axios("/adminapi/User/information", {
-        data: { uid: this.userinfo.uid }
+        data: { uid: this.userinfo.id }
       });
 
       if (!data.code) {

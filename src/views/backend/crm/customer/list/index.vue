@@ -105,54 +105,7 @@ export default {
       selectList: [],
       selectionData: { channel: null, source: null, status: null },
       search: {},
-      searchFields: [
-        {
-          label: "咨询",
-          type: "datetimerange",
-          prop: "date",
-          span: 5.5
-        },
-        {
-          label: "模糊匹配",
-          prop: "search",
-          type: "text",
-          span: 3
-        },
-        {
-          label: "跟踪状态",
-          type: "select",
-          prop: "trace_status",
-          span: 3,
-          options: []
-        },
-        {
-          label: "客户类型",
-          type: "select",
-          prop: "label",
-          span: 3,
-          options: []
-        },
-        {
-          type: "button",
-          span: 10,
-          options: [
-            { label: "搜索", style: "success", click: this.onSearch },
-            { label: "重置", style: "wraning", click: this.onReset },
-            {
-              label: "添加咨询信息",
-              style: "primary",
-              click: this.onAdd,
-              icon: "el-icon-plus"
-            },
-            {
-              label: "导出表格",
-              style: "danger",
-              icon: "el-icon-download",
-              click: this.onExport
-            }
-          ]
-        }
-      ],
+      searchFields: [],
       salesSearchData: {},
       salesSearch: [
         { label: "昵称", type: "text", prop: "search", span: 6 },
@@ -294,6 +247,63 @@ export default {
       // 表格内容数据
       await this.getData(false);
       await this.stopMaxOrder();
+      await this.getSelectList();
+    },
+    async getSelectList() {
+      let { data } = await this.axios("/adminapi/customer/p_tool", {
+        data: { id: 4 }
+      });
+      let { data: res } = await this.axios("/adminapi/customer/p_tool", {
+        data: { id: 5 }
+      });
+      this.searchFields = [
+        {
+          label: "咨询",
+          type: "datetimerange",
+          prop: "date",
+          span: 5.5
+        },
+        {
+          label: "模糊匹配",
+          prop: "search",
+          type: "text",
+          span: 3
+        },
+        {
+          label: "跟踪状态",
+          type: "select",
+          prop: "trace_status",
+          span: 3,
+          options: data.data
+        },
+        {
+          label: "客户类型",
+          type: "select",
+          prop: "label",
+          span: 3,
+          options: res.data
+        },
+        {
+          type: "button",
+          span: 10,
+          options: [
+            { label: "搜索", style: "success", click: this.getData },
+            { label: "重置", style: "wraning", click: this.onReset },
+            {
+              label: "添加咨询信息",
+              style: "primary",
+              click: this.onAdd,
+              icon: "el-icon-plus"
+            },
+            {
+              label: "导出表格",
+              style: "danger",
+              icon: "el-icon-download",
+              click: this.onExport
+            }
+          ]
+        }
+      ];
     },
     changeImage(item) {
       this.qrcode = true;
@@ -382,6 +392,7 @@ export default {
       }
     },
     async getData(bool = true) {
+      this.tableData = [];
       let obj = bool ? Object.assign({}, this.page, this.search) : this.page;
       let { data } = await this.axios("/adminapi/Customer/list", {
         data: obj
@@ -634,10 +645,7 @@ export default {
         this.qrcode = true;
       }
     },
-    onSearch() {
-      console.log("搜索");
-      this.getData();
-    },
+
     onReset() {
       console.log("重置");
       this.search = {};

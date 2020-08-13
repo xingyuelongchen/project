@@ -90,6 +90,22 @@ export default {
             { label: "所属部门及下属部门", value: "4" }
           ]
         },
+        {
+          label: "字段",
+          labelWidth: 60,
+          type: "select",
+          prop: "field",
+          multiple: false,
+          options: [
+            { label: "--", value: "" },
+            { label: "creator_userid", value: "creator_userid" },
+            { label: "saler_userid", value: "saler_userid" },
+            { label: "creator_group_zid", value: "creator_group_zid" },
+            { label: "saler_group_zid", value: "saler_group_zid" },
+            { label: "servicer_userid", value: "servicer_userid" },
+            { label: "servicer_group_zid", value: "servicer_group_zid" }
+          ]
+        },
         { type: "textarea", labelWidth: 60, prop: "reamk", label: "描述" },
         { type: "button", label: "修改", labelWidth: 60, click: this.change }
       ],

@@ -36,7 +36,9 @@ export default new Vuex.Store({
     },
     // 用户数据表
     setUserinfo(state, data) {
-      state.userinfo = data
+      state.userinfo = data;
+      data = JSON.stringify(data);
+      window.localStorage.setItem('userinfo', data)
     },
     // 添加tab选项卡
     setTabmenu(state, data) {

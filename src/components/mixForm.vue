@@ -10,7 +10,7 @@ Create Time  : 2020-03-31
         <template v-for="(item,index) in v">
           <template v-if="item.type == 'hidden'"></template>
           <el-col :key="index" :span="item.span||24" :xs="item.xs||24" v-else>
-            <el-form-item :label-width="item.labelWidth?item.labelWidth+'px' :'120px'" :label="item.type == 'button' ?'': item.label" :prop="item.prop" :rules="item.rule" :required="!!item.required">
+            <el-form-item :label-width="item.labelWidth?item.labelWidth+'px' :'120px'" :label="item.type == 'button' ?'': item.label" :prop="item.prop" :rules="item.rule" :required="!!item.required" :error="item.error">
               <template v-if="['text','textarea','number','email','password'].indexOf(item.type)!==-1">
                 <el-input class="input" v-model="fieldsData[item.prop]" inline-message :placeholder="item.placeholder" :readonly="!!item.readonly" :disabled="!!item.disabled" :type="item.type" @change="change(item,index,'change')" @input="change(item,index,'input')">
                   <span v-if="item.prepend" slot="prepend" @click.stop="click(item,index)">
@@ -332,6 +332,7 @@ export default {
   //   border: 1px solid #ccc;
   margin-bottom: 20px;
   padding-top: 20px;
+  padding-right: 20px;
 }
 .el-cascader-panel {
   color: #f00;
