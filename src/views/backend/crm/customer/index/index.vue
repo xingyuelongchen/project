@@ -60,7 +60,7 @@ export default {
           span: 3,
           options: [
             { label: "搜索", click: this.getData },
-            { label: "导出", style: "danger", click: this.export }
+            { label: "导出", style: "danger", click: this.export, role: 145 }
           ]
         }
       );
@@ -69,9 +69,9 @@ export default {
       this.searchFields = arr;
       this.getData();
     },
-    export() {
-      this.axios("/adminapi/Customerstatistics/export");
-      this.$refs.table.outTab();
+    async export() {
+      let { data } = await this.axios("/adminapi/Customerstatistics/export");
+      if (data.code) this.$refs.table.outTab();
     },
     async getData() {
       let { data } = await this.axios("/adminapi/Customerstatistics/list", {

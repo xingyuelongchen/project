@@ -9,10 +9,10 @@ Create Time  : 2020-03-27
       <mixSearch v-model="search" :fields="searchFields" />
       <div class="info">
         <span>
-          <el-button @click="handDistribution(null,true)" type="primary" size="mini">手动分配</el-button>
+          <el-button @click="handDistribution(null,true)" type="primary" size="mini" v-role="126">手动分配</el-button>
         </span>
         <span>
-          <el-button @click="autoDistribution(null,true)" type="warning" size="mini">自动分配</el-button>
+          <el-button @click="autoDistribution(null,true)" type="warning" size="mini" v-role="123">自动分配</el-button>
         </span>
         <template v-if="maxOrder">
           <span>
@@ -30,7 +30,7 @@ Create Time  : 2020-03-27
         </template>
       </div>
       <div style="height:calc(100% - 160px)">
-        <mixTable v-model="tableData" :fields="tableFields" @select="selection" />
+        <mixTable v-model="tableData" :fields="tableFields" @select="selection" :key="key" />
       </div>
       <mixPage v-model="page" />
     </div>
@@ -205,15 +205,17 @@ export default {
               size: "mini",
               label: "编辑信息",
               style: "success",
-              click: this.tableEdit
+              role: 37
             },
             {
               size: "mini",
               label: "共享客户",
               style: "success",
+              role: 131,
               click: this.share
             },
             {
+              role: 73,
               size: "mini",
               label: "添加业绩",
               style: "primary",
@@ -224,12 +226,14 @@ export default {
               label: "手动分配",
               style: "warning",
               click: this.handDistribution,
+              role: 39,
               isShow: { type: "==", prop: "saler", val: "" }
             },
             {
               size: "mini",
               label: "自动分配",
               style: "warning",
+              role: 38,
               click: this.autoDistributiona,
               isShow: { type: "==", prop: "saler", val: "" }
             },
@@ -237,6 +241,7 @@ export default {
               size: "mini",
               label: "删除",
               style: "danger",
+              role: 130,
               click: this.tableDel
             }
           ]
@@ -293,13 +298,15 @@ export default {
               label: "添加咨询信息",
               style: "primary",
               click: this.onAdd,
-              icon: "el-icon-plus"
+              icon: "el-icon-plus",
+              role: 36
             },
             {
               label: "导出表格",
               style: "danger",
               icon: "el-icon-download",
-              click: this.onExport
+              click: this.onExport,
+              role: 132
             }
           ]
         }
@@ -400,6 +407,7 @@ export default {
       if (data.code) {
         this.tableData = data.data;
         this.page.total = data.count;
+        this.key = Math.random();
       }
     },
     async onAdd() {
@@ -667,11 +675,12 @@ export default {
       if (data.code) {
         const link = document.createElement("a");
         link.href = data.data.url;
-        link.setAttribute("target", "_blank");
-        link.setAttribute("download", data.data.title);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        let a = window.open(data.data.url, "_blank");
+        a.close();
+        // link.setAttribute("download", data.data.title);
+        // document.body.appendChild(link);
+        // link.click();
+        // document.body.removeChild(link);
       }
     },
     async onSave() {

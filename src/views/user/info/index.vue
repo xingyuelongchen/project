@@ -33,7 +33,7 @@ Create Time  : 2020-08-12
                 <div style="text-align:center;padding-top:40px">
                   <el-button @click="$refs.cover.sacle(true)" type="warning">顺时针</el-button>
                   <el-button @click="$refs.cover.sacle(false)" type="warning">逆时针</el-button>
-                  <el-button @click="saveImage" type="danger">完成提交</el-button>
+                  <el-button @click="saveImage" type="danger">保存头像</el-button>
                 </div>
               </el-dialog>
             </div>
@@ -159,10 +159,17 @@ export default {
         data: obj
       });
       if (data.code) {
-        this.formData.pic = data.data;
-        this.$store.state.userinfo.pic = data.data;
-        this.$store.commit("setUserinfo", this.$store.state.userinfo);
-        this.show = false;
+        let { data: res } = await this.axios(
+          "/adminapi/user/information_edit",
+          {
+            data: { pic: data.data }
+          }
+        );
+        if (res.code) {
+          this.$store.state.userinfo.pic = data.data;
+          this.$store.commit("setUserinfo", this.$store.state.userinfo);
+          this.show = false;
+        }
       }
     },
 
@@ -171,7 +178,6 @@ export default {
       for (let k of this.formFields) {
         data[k.prop] = this.formData[k.prop];
       }
-      data.pic = this.formData.pic;
       await this.axios("/adminapi/user/information_edit", {
         data
       });

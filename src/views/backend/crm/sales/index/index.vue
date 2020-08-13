@@ -94,20 +94,27 @@ export default {
             align: "center",
             fixed: "right",
             options: [
-              { label: "编辑", style: "primary", click: this.dialog },
-              { label: "更正", style: "danger", click: this.dialoga },
+              { label: "编辑", style: "primary", click: this.dialog, role: 71 },
+              {
+                label: "更正",
+                style: "danger",
+                click: this.dialoga,
+                role: 135
+              },
               {
                 label: "手动分配",
                 style: "danger",
                 click: this.fenpei,
+                role: 139,
                 isShow: { type: "==", prop: "servicer", value: "" }
               },
               {
                 label: "自动分配",
                 style: "danger",
+                role: 136,
                 click: this.autoFenpei,
                 isShow: { type: "==", prop: "servicer", value: "" }
-              }
+              },
             ]
           }
         ]);
@@ -146,7 +153,8 @@ export default {
               {
                 label: "导出",
                 style: "danger",
-                click: this.export
+                click: this.export,
+                role: 140
               }
             ]
           }

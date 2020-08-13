@@ -14,8 +14,23 @@ Vue.config.productionTip = false;
 Vue.use(VXETable)
 Vue.prototype.$modal = VXETable.modal
 Vue.directive('role', {
+  bind(el, binding) {
+    if (binding.value == undefined) return;
+    if (store.state.userinfo.role.includes(0)) return;
+    if (!store.state.userinfo.role.includes(binding.value)) {
+      el.style.display = 'none'
+    }
+  },
   // 校验权限
   inserted(el, binding) {
+    if (binding.value == undefined) return;
+    if (store.state.userinfo.role.includes(0)) return;
+    if (!store.state.userinfo.role.includes(binding.value)) {
+      el.style.display = 'none'
+    }
+  },
+  update(el, binding) {
+    if (binding.value == undefined) return;
     if (store.state.userinfo.role.includes(0)) return;
     if (!store.state.userinfo.role.includes(binding.value)) {
       el.style.display = 'none'

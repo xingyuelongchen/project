@@ -16,8 +16,8 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     minWidth: 1200,
     minHeight: 675,
-    width: 1200,
-    height: 675,
+    width: 1250,
+    height: 700,
     webPreferences: {
       nodeIntegration: false, // 使用了预加载之后,即使nodeIntegration为false,也可以使用Node API访问到ipcRenderer
       preload: path.join(__dirname, 'preload.js')

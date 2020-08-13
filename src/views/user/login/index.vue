@@ -71,6 +71,7 @@ export default {
   created() {
     localStorage.removeItem("userinfo");
     localStorage.removeItem("Store");
+    sessionStorage.removeItem("Store");
     this.$store.commit("setClear");
     this.getCode();
   },

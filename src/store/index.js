@@ -36,6 +36,7 @@ export default new Vuex.Store({
     },
     // 用户数据表
     setUserinfo(state, data) {
+      data.dateTime = Date.now() + 1 * 24 * 60 * 60 * 1000;
       state.userinfo = data;
       data = JSON.stringify(data);
       window.localStorage.setItem('userinfo', data)

@@ -97,7 +97,6 @@ export default {
           prop: "field",
           multiple: false,
           options: [
-            { label: "--", value: "" },
             { label: "creator_userid", value: "creator_userid" },
             { label: "saler_userid", value: "saler_userid" },
             { label: "creator_group_zid", value: "creator_group_zid" },
