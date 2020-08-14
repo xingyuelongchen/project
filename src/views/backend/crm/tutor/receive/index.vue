@@ -7,7 +7,9 @@ Create Time  : 2020-04-02
   <div class="content-wrap">
     <div class="box">
       <mixSearch v-model="search" :fields="searchFields" />
-      <mixSearch v-model="selectionData" :fields="selectionField" />
+      <div>
+        <mixSearch v-model="selectionData" :fields="selectionField" v-role="68" />
+      </div>
       <div style="height:calc(100% - 150px)">
         <mixTable v-model="tableData" :fields="tableFields" @select="select" />
       </div>
@@ -61,7 +63,8 @@ export default {
               label: "添加",
               style: "primary",
               icon: "el-icon-plus",
-              click: this.onAdd
+              click: this.onAdd,
+              role: 67
             }
           ]
         }
@@ -204,9 +207,14 @@ export default {
           type: "manage",
           minWidth: 250,
           options: [
-            { label: "删除", style: "danger", click: this.tableDel },
-            { label: "自行控制", style: "warning", click: this.control },
-            { label: "权重", style: "success", click: this.weight }
+            { label: "删除", style: "danger", click: this.tableDel, role: 69 },
+            {
+              label: "自行控制",
+              style: "warning",
+              click: this.control,
+              role: 162
+            },
+            { label: "权重", style: "success", click: this.weight, role: 161 }
           ]
         }
       ],

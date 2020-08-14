@@ -36,9 +36,10 @@ export default {
           options: [
             { label: "搜索", click: this.getData },
             {
-              label: "批量设置",
-              style: "success",
-              click: this.piliang
+              label: "批量设置", 
+              click: this.piliang,
+              style: "danger",
+              role: 152
             }
           ]
         }

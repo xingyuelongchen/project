@@ -91,31 +91,36 @@ export default {
               {
                 label: "编辑",
                 style: "primary",
-                click: this.tableEdit
+                click: this.tableEdit,
+                role: 96
               },
               {
                 label: "重置密码",
                 style: "danger",
                 isShow: { type: "==", val: "正常", prop: "status" },
-                click: this.reset
+                click: this.reset,
+                role: 100
               },
               {
                 label: "审核",
                 style: "warning",
                 isShow: { type: "==", val: "未审核", prop: "status" },
-                click: this.adopt
+                click: this.adopt,
+                role: 97
               },
               {
                 label: "离职",
                 style: "info",
                 isShow: { type: "==", val: "正常", prop: "status" },
-                click: this.quit
+                click: this.quit,
+                role: 98
               },
               {
                 label: "恢复",
                 style: "success",
                 isShow: { type: "==", val: "离职", prop: "status" },
-                click: this.recovery
+                click: this.recovery,
+                role: 99
               }
             ]
           }

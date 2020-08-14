@@ -629,9 +629,10 @@ export default {
     async saveOrder() {
       // 添加业绩保存
       let form = {};
-      for (let k in this.qrocdeFields) {
+      for (let k of this.qrocdeFields) {
         form[k.prop] = this.qrocdeData[k.prop];
       }
+      form.id = this.qrocdeData.id;
       let { data } = await this.axios("/adminapi/Sale/add", {
         data: form
       });

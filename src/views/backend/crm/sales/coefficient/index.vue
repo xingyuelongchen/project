@@ -12,8 +12,8 @@ Create Time  : 2020-08-06
         <template v-for="(item,index) in list">
           <el-card :key="index">
             <div slot="header">{{item.grade}}
-              <el-button style="padding:5px;margin:0 3px;float:right" type="danger" @click="del(item)">删除</el-button>
-              <el-button style="padding:5px;margin:0 3px;float:right" type="primary" @click="edit(item)">编辑</el-button>
+              <el-button style="padding:5px;margin:0 3px;float:right" type="danger" v-role="158" @click="del(item)">删除</el-button>
+              <el-button style="padding:5px;margin:0 3px;float:right" type="primary" v-role="157" @click="edit(item)">编辑</el-button>
             </div>
             <div class=" item">
               <span>销售金额</span>
@@ -88,7 +88,8 @@ export default {
               label: "添加",
               click: this.add,
               icon: "el-icon-puls",
-              style: "danger"
+              style: "danger",
+              role: 156
             }
           ]
         }
@@ -129,7 +130,7 @@ export default {
     },
     async addGrade() {
       await this.axios("adminapi/Salerate/add", {
-        data: { grade: this.grade,...this.searchData }
+        data: { grade: this.grade, ...this.searchData }
       });
       this.getData();
       this.addShow = false;

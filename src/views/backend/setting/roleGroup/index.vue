@@ -94,7 +94,7 @@ export default {
           label: "字段",
           labelWidth: 60,
           type: "select",
-          prop: "field",
+          prop: "fields",
           multiple: false,
           options: [
             { label: "creator_userid", value: "creator_userid" },

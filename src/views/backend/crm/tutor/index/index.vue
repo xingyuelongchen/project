@@ -19,6 +19,7 @@ export default {
   data() {
     return {
       show: false,
+      plenShow: false,
       page: { page: 1, limit: 15, total: 0 },
       searchData: {},
       searchFields: [
@@ -59,14 +60,9 @@ export default {
             type: "manage",
             width: 100,
             options: [
-              {
-                label: "编辑",
-                click: this.edit
-              },
-              {
-                label: "删除",
-                click: this.del
-              }
+              { label: "编辑", click: this.edit },
+              { label: "学习进度", click: this.speed },
+              { label: "删除", click: this.del }
             ]
           }
         ]);
@@ -107,6 +103,10 @@ export default {
         data: item
       });
       this.getData();
+    },
+    async speed(item) {
+      this.plenShow = true;
+      console.log(item);
     }
   }
 };

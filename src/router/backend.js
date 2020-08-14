@@ -28,8 +28,9 @@ export default
     { path: 'tutor', name: 'Tutor', meta: { keepAlive: true, role: 8, title: '导师中心', }, component: () => import('@/views/layou'), },
     { path: 'index', name: 'Tutorindex', meta: { keepAlive: true, role: 18, title: '导师记录', }, component: () => import('@/views/backend/crm/tutor/index/') },
     { path: 'receive', name: 'Tutorreceive', meta: { keepAlive: true, role: 40, title: '导师接待', }, component: () => import('@/views/backend/crm/tutor/receive') },
-    { path: 'data', name: 'Tutordata', meta: { keepAlive: true, role: 81, title: '导师数据', }, component: () => import('@/views/backend/crm/tutor/data') },
+    { path: 'personal', name: 'Tutordata', meta: { keepAlive: true, role: 81, title: '个人数据', }, component: () => import('@/views/backend/crm/tutor/personal') },
     { path: 'total', name: 'Tutortotal', meta: { keepAlive: true, role: 82, title: '数据总览', }, component: () => import('@/views/backend/crm/tutor/total') },
+    { path: 'renovation', name: 'Tutorrenovation', meta: { keepAlive: true, role: 169, title: '装修账号', }, component: () => import('@/views/backend/crm/tutor/renovation') },
 
     { path: 'quality', name: 'Quality', meta: { keepAlive: true, role: 9, title: '质检中心', }, component: () => import('@/views/layou'), },
     { path: 'index', name: 'Qualityindex', meta: { keepAlive: true, role: 19, title: '数据管理', }, component: () => import('@/views/backend/crm/quality') },

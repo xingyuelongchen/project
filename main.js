@@ -2,15 +2,13 @@ const { app, BrowserWindow, ipcMain } = require('electron') // ipcMain 主线程
 const { autoUpdater } = require('electron-updater')
 const path = require('path');
 const config = require('./src/config')
-var uploadUrl, feedUrl;
+var uploadUrl;
 if (app.isPackaged) {
   // 线上地址
-  uploadUrl = config.uploadUrl // 更新地址
-  feedUrl = config.feedUrl // 页面地址
+  uploadUrl = config.uploadUrl // 更新地址 
 } else {
   // 线下地址
-  uploadUrl = config.uploadUrlDev // 更新地址
-  feedUrl = config.feedUrlDev // 页面地址
+  uploadUrl = config.uploadUrlDev // 更新地址 
 }
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -24,7 +22,11 @@ function createWindow() {
     }
   });
   updateHandle()
-  mainWindow.loadURL(feedUrl);
+  if (app.isPackaged) {
+    mainWindow.loadURL(config.feedUrl);
+  } else {
+    mainWindow.loadFile('./dist/index.html');
+  }
   mainWindow.setMenu(null);
   // 判断当前运行环境
   if (!app.isPackaged) {

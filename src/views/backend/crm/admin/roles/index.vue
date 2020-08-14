@@ -53,13 +53,14 @@ export default {
         { label: "部门", prop: "dept" },
         {
           label: "操作",
-          type: "manage",
+          type: "button",
           width: 125,
           options: [
             {
               style: "success",
               label: "加入当前组",
-              click: this.move
+              click: this.move,
+              role: 106
             }
           ]
         }
@@ -69,13 +70,14 @@ export default {
         { label: "部门", prop: "dept" },
         {
           label: "操作",
-          type: "manage",
+          type: "button",
           width: 125,
           options: [
             {
               style: "danger",
               label: "移除组",
-              click: this.remove
+              click: this.remove,
+              role: 107
             }
           ]
         }

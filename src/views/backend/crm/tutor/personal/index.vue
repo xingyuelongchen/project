@@ -56,7 +56,14 @@ export default {
       }
       arr.push(
         { label: "昵称", type: "text", prop: "nickname", span: 3 },
-        { label: "搜索", type: "button", click: this.getData, span: 3 }
+        {
+          type: "button",
+          span: 3,
+          options: [
+            { label: "搜索", click: this.getData },
+            { label: "导出", role: 164, style: "danger", click: this.export }
+          ]
+        }
       );
       let { type } = this.searchData;
       this.searchData = { type };
@@ -80,6 +87,10 @@ export default {
         this.key = Math.random();
         this.tableFields = data.data;
       }
+    },
+    async export() {
+      let { data } = await this.axios("/adminapi/Servicepersonal/export");
+      if (data.code) this.$refs.table.outTab();
     }
   }
 };

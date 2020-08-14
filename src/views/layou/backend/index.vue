@@ -22,10 +22,16 @@ Create Time  : 2020-07-22
       <div class="center"></div>
       <div class="right">
         <div class="itema" @click="refresh">
-          <i class="el-icon-refresh"></i>刷新
+          <el-tooltip content="刷新缓存">
+            <span>
+              <i class="el-icon-refresh"></i>刷新
+            </span>
+          </el-tooltip>
         </div>
-        <div class="item" @click="$router.push('/user/info')">
-          <el-avatar :size="40" :src="$store.state.userinfo.pic">{{$store.state.userinfo.name}}</el-avatar>
+        <div class="itema" @click="$router.push('/user/info')">
+          <el-tooltip content="修改个人信息">
+            <el-avatar :size="40" :src="$store.state.userinfo.pic">{{$store.state.userinfo.name}}</el-avatar>
+          </el-tooltip>
         </div>
         <div class="item">
           {{$store.state.userinfo.mobile}}
@@ -34,6 +40,7 @@ Create Time  : 2020-07-22
           <el-dropdown trigger="click">
             <i class="el-icon-s-tools" style="font-size:18px;cursor: pointer;"></i>
             <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click="$router.push('/user/info')">修改资料</el-dropdown-item>
               <el-dropdown-item @click.stop.native="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -142,7 +149,7 @@ export default {
       this.loading = true;
       setTimeout(() => {
         this.loading = false;
-      }, 2000);
+      }, 1500);
       let { data } = await this.axios("/adminapi/User/information", {
         data: { uid: this.userinfo.id }
       });
@@ -151,25 +158,26 @@ export default {
         this.$router.replace("/login");
         return;
       }
-      localStorage.setItem("userinfo", JSON.stringify(data.data));
-      this.$router.setRoles();
-      this.refreshKey = Math.random();
-      let to = this.$route;
-      let title = to.meta.title;
-      if (
-        to.matched[to.matched.length - 2] &&
-        to.matched[to.matched.length - 2].meta.title
-      ) {
-        title =
-          to.matched[to.matched.length - 2].meta.title + "/" + to.meta.title;
-      }
-      let option = {
-        name: to.name,
-        fullPath: to.fullPath,
-        path: to.path,
-        title
-      };
-      this.$store.commit("setTabmenu", option);
+      this.$store.commit("setUserinfo", data.data);
+      window.location.reload();
+      // this.$router.setRoles();
+      // this.refreshKey = Math.random();
+      // let to = this.$route;
+      // let title = to.meta.title;
+      // if (
+      //   to.matched[to.matched.length - 2] &&
+      //   to.matched[to.matched.length - 2].meta.title
+      // ) {
+      //   title =
+      //     to.matched[to.matched.length - 2].meta.title + "/" + to.meta.title;
+      // }
+      // let option = {
+      //   name: to.name,
+      //   fullPath: to.fullPath,
+      //   path: to.path,
+      //   title
+      // };
+      // this.$store.commit("setTabmenu", option);
     },
     updateTheme(val, oldVal = "#409EFF") {
       if (typeof val !== "string") return;

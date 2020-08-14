@@ -74,12 +74,12 @@ Create Time  : 2020-03-28
                   <el-button class="hover" :size="item.size || 'mini'" type="primary">{{ item.label || '操作'}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
                   <el-dropdown-menu slot="dropdown">
                     <template v-for="(k,i) in item.options">
-                      <el-dropdown-item v-show="isShow(k,item,scope)" :key="i" @click.native="click(k.click,scope.row,scope.column)">{{k.label}}</el-dropdown-item>
+                      <el-dropdown-item v-show="isShow(k,item,scope)" v-role="k.role" :key="i" @click.native="click(k.click,scope.row,scope.column)">{{k.label}}</el-dropdown-item>
                     </template>
                   </el-dropdown-menu>
                 </el-dropdown>
                 <template v-else>
-                  <el-button v-for="(k,i) in item.options" v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'" size="mini" @click="click(k.click,scope.row,scope.column)">{{k.label}}</el-button>
+                  <el-button v-for="(k,i) in item.options" v-role="k.role" v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'" size="mini" @click="click(k.click,scope.row,scope.column)">{{k.label}}</el-button>
                 </template>
               </div>
             </template>

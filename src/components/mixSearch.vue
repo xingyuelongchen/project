@@ -31,9 +31,12 @@ Create Time  : 2020-04-02
             <el-time-select v-model="form[item.prop]" :size="item.size||'mini'" :picker-options="{ start:item.start|| '08:30', step:item.step|| '00:01', end:item.end|| '18:30' }" :placeholder="item.label||'选择时间'"></el-time-select>
           </template>
           <template v-if="item.type == 'button'">
-            <el-button v-if="!item.options" :key="index" :type="item.style || 'primary'" v-role="k.role" :size="item.size||'mini'" :icon="item.icon" @click.stop="click(item)">{{item.label}}</el-button>
+            <el-button v-if="!item.options" :key="index" :type="item.style || 'primary'" v-role="item.role" :size="item.size||'mini'" :icon="item.icon" @click.stop="click(item)">{{item.label}}</el-button>
             <template v-else>
-              <el-button v-for="(k,i) in item.options" :key="i" v-role="k.role" :icon="k.icon" :type="k.style||item.style || 'primary'" :size="k.size || item.size || 'mini'" @click.stop="click(k)">{{k.label}}</el-button>
+              <template v-for="(k,i) in item.options">
+                <el-button v-if="k.type=='info'" :key="i" v-role="k.role" type="info" size="mini" plain> {{k.label}} : {{form[k.prop]}} </el-button>
+                <el-button v-else :key="i" v-role="k.role" :icon="k.icon" :type="k.style||item.style || 'primary'" :size="k.size || item.size || 'mini'" @click.stop="click(k)">{{k.label}}</el-button>
+              </template>
             </template>
           </template>
           <template v-if="item.type == 'cascader'">

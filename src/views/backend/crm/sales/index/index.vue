@@ -95,6 +95,7 @@ export default {
             fixed: "right",
             options: [
               { label: "编辑", style: "primary", click: this.dialog, role: 71 },
+              { label: "删除", style: "danger", click: this.del, role: 72 },
               {
                 label: "更正",
                 style: "danger",
@@ -114,7 +115,7 @@ export default {
                 role: 136,
                 click: this.autoFenpei,
                 isShow: { type: "==", prop: "servicer", value: "" }
-              },
+              }
             ]
           }
         ]);
@@ -299,6 +300,12 @@ export default {
         link.click();
         document.body.removeChild(link);
       }
+    },
+    async del(item) {
+      await this.axios("/adminapi/sale/del", {
+        data: { id: item.id }
+      });
+      this.getData();
     }
   }
 };

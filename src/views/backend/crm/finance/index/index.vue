@@ -43,7 +43,8 @@ export default {
               label: "导出",
               type: "button",
               style: "danger",
-              click: this.onExport
+              click: this.onExport,
+              role: 168
             }
           ]
         }
@@ -75,6 +76,7 @@ export default {
                 label: "审核",
                 style: "primary",
                 click: this.shenhe,
+                role: 167,
                 isShow: { type: "==", prop: "finance_audit_status", val: "0" }
               }
             ]

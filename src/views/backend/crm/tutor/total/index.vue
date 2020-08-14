@@ -49,10 +49,14 @@ export default {
       if (this.searchData.type == "3") {
         arr[0] = { label: "选择", type: "month", prop: "date", span: 3 };
       }
-      arr.push(
-        // { label: "昵称", type: "text", prop: "nickname", span: 3 },
-        { label: "搜索", type: "button", click: this.getData, span: 3 }
-      );
+      arr.push({
+        type: "button",
+        span: 3,
+        options: [
+          { label: "搜索", click: this.getData },
+          { label: "导出", role: 166, style: "danger", click: this.export }
+        ]
+      });
       let { type } = this.searchData;
       this.searchData = { type };
       this.searchFields = arr;
@@ -75,6 +79,10 @@ export default {
         this.key = Math.random();
         this.tableFields = data.data;
       }
+    },
+    async export() {
+      let { data } = await this.axios("/adminapi/Servicetotal/export");
+      if (data.code) this.$refs.table.outTab();
     }
   }
 };
