@@ -76,7 +76,7 @@ export default {
       ]
     };
   },
-  activated() {
+  created() {
     this.getData();
     this.getHeadeData();
     this.getDept();

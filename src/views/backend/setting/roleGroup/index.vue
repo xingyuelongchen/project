@@ -97,12 +97,15 @@ export default {
           prop: "fields",
           multiple: false,
           options: [
-            { label: "creator_userid", value: "creator_userid" },
-            { label: "saler_userid", value: "saler_userid" },
             { label: "creator_group_zid", value: "creator_group_zid" },
             { label: "saler_group_zid", value: "saler_group_zid" },
+            { label: "servicer_group_zid", value: "servicer_group_zid" },
+            { label: "creator_userid", value: "creator_userid" },
+            { label: "saler_userid", value: "saler_userid" },
             { label: "servicer_userid", value: "servicer_userid" },
-            { label: "servicer_group_zid", value: "servicer_group_zid" }
+            { label: "creator_group_id", value: "creator_group_id" },
+            { label: "saler_group_id", value: "saler_group_id" },
+            { label: "servicer_group_id", value: "servicer_group_id" }
           ]
         },
         { type: "textarea", labelWidth: 60, prop: "reamk", label: "描述" },
@@ -169,8 +172,18 @@ export default {
           };
         });
         this.role.table_id = data.data.table_id;
-        let id = data.data.lay.laytables[data.data.table_id] || [];
-        let status = data.data.lay.laytables_editable[data.data.table_id] || [];
+        let status = [],
+          id = [];
+        if (
+          data.data.lay.laytables &&
+          data.data.lay.laytables[data.data.table_id]
+        )
+          id = data.data.lay.laytables[data.data.table_id];
+        if (
+          data.data.lay.laytables_editable &&
+          data.data.lay.laytables_editable[data.data.table_id]
+        )
+          status = data.data.lay.laytables_editable[data.data.table_id];
         this.rolesList = data.data.column.map(e => {
           return {
             ...e,

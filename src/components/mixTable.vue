@@ -427,7 +427,7 @@ export default {
       let timer = setTimeout(() => {
         clearTimeout(timer);
         this.fieldsData.filter(e => {
-          if (e.checked) this.refs.toggleRowSelection(e);
+          if (e.checked) this.$refs.table.toggleRowSelection(e);
         });
       }, 50);
     },

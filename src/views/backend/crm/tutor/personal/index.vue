@@ -31,7 +31,7 @@ export default {
       page: { page: 1, limit: 15, total: 0 }
     };
   },
-  activated() {
+  created() {
     this.getData();
     this.getTable();
     this.handleClick();

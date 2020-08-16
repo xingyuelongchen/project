@@ -172,7 +172,7 @@ export default {
     }
   },
 
-  activated() {
+  created() {
     this.init();
   },
   computed: {
@@ -205,7 +205,8 @@ export default {
               size: "mini",
               label: "编辑信息",
               style: "success",
-              role: 37
+              role: 37,
+              click:this.tableEdit
             },
             {
               size: "mini",

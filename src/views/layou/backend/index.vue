@@ -80,9 +80,9 @@ Create Time  : 2020-07-22
             </template>
           </el-tabs>
         </div>
-        <keep-alive>
+        <!-- <keep-alive> -->
           <router-view class="bottom"></router-view>
-        </keep-alive>
+        <!-- </keep-alive> -->
       </div>
     </div>
   </div>

@@ -19,8 +19,11 @@ Create Time  : 2020-04-02
       <mixForm v-model="editForm" :fields="editFields" />
     </mixDrawer> -->
     <el-dialog :title="drawerName" :visible="drawer" width="30%" :before-close="drawerClose">
-
-      <mixTable v-model="salesList" :fields="dialogTable" @select="select($event,'user')" />
+      <div style="height:50vh;max-height:500px;overflow:hidden">
+        <div style="height:100%">
+          <mixTable v-model="salesList" :fields="dialogTable" @select="select($event,'user')" />
+        </div>
+      </div>
       <span slot="footer">
         <el-button type="primary" @click="onSave">提交</el-button>
       </span>
@@ -206,9 +209,14 @@ export default {
           type: "manage",
           minWidth: 250,
           options: [
-            { label: "删除", style: "danger", click: this.tableDel,role:44 },
-            { label: "自行控制", style: "warning", click: this.control ,role:144},
-            { label: "权重", style: "success", click: this.weight,role:143 }
+            { label: "删除", style: "danger", click: this.tableDel, role: 44 },
+            {
+              label: "自行控制",
+              style: "warning",
+              click: this.control,
+              role: 144
+            },
+            { label: "权重", style: "success", click: this.weight, role: 143 }
           ]
         }
       ],

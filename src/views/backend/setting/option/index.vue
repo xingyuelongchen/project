@@ -115,7 +115,7 @@ export default {
       }
     };
   },
-  activated() {
+  created() {
     this.getData();
   },
 

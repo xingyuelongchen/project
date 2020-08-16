@@ -43,7 +43,7 @@ export default {
       editData: {}
     };
   },
-  activated() {
+  created() {
     this.getData();
     this.getTable();
   },

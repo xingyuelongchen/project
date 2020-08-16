@@ -27,11 +27,17 @@ Create Time  : 2020-07-28
         <div class="right-content">
           <div>
             <mixTable v-model="roleLeft" :fields="roleLeftFields" />
-            <el-pagination background layout="prev, pager, next" :page-size="page.left.limit" :total="page.left.total" :current-page.sync="page.left.page" />
+            <el-pagination background layout="prev, pager, next, total" :page-size="page.left.limit" :total="page.left.total" :current-page.sync="page.left.page" @current-change="left" />
+            <!-- <div style=" position: absolute;">
+              <mixPage v-model="page.left" />
+            </div> -->
           </div>
           <div>
             <mixTable v-model="roleRight" :fields="roleRightFields" />
-            <el-pagination background layout="prev, pager, next" :page-size="page.left.limit" :total="page.left.total" :current-page.sync="page.left.page" />
+            <el-pagination background layout="prev, pager, next, total" :page-size="page.right.limit" :total="page.right.total" :current-page.sync="page.right.page" @current-change="right" />
+            <!-- <div style=" position: absolute;">
+              <mixPage v-model="page.right" />
+            </div> -->
           </div>
         </div>
       </el-card>
@@ -98,9 +104,11 @@ export default {
         // },
         {
           type: "button",
-          label: "搜索",
           span: 5,
-          click: this.search
+          options: [
+            { label: "搜索", click: this.onSearch },
+            { label: "重置", click: this.nodeClick, style: "danger" }
+          ]
         }
       ],
       page: {
@@ -114,26 +122,27 @@ export default {
   },
   methods: {
     async nodeClick(val) {
-      this.left(val);
-      this.right(val);
-      this.group = val;
+      this.group = val.id ? val : this.group;
+      this.search = {};
+      this.left();
+      this.right();
     },
-    async left(val) {
+    async left() {
       //  获取未分配用户
       let { data } = await this.axios("/adminapi/Authgroupaccess/not", {
         params: this.page.left,
-        data: { id: val.id }
+        data: { id: this.group.id, ...this.search }
       });
       if (data.code) {
         this.roleLeft = data.data;
-        this.page.right.total = data.count;
+        this.page.left.total = data.count;
       }
     },
-    async right(val) {
+    async right() {
       // 点击角色组，获取当前组用户
       let { data } = await this.axios("/adminapi/Authgroupaccess/already", {
         params: this.page.right,
-        data: { id: val.id }
+        data: { id: this.group.id, ...this.search }
       });
       if (data.code) {
         this.roleRight = data.data;
@@ -151,6 +160,10 @@ export default {
         data: { uid: item.id, group_id: this.group.id }
       });
       this.nodeClick(this.group);
+    },
+    async onSearch() {
+      this.left();
+      this.right();
     },
     async getData() {
       // 获取权限组

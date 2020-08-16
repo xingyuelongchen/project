@@ -5,7 +5,7 @@ Create Time  : 2020-03-31
 -->
 <template>
   <el-form ref="form" :model="fieldsData" clearable :size="options.size" :inline="options.inline||false" @validate="validated">
-    <template v-for="(v,i) in mapFields"> 
+    <template v-for="(v,i) in mapFields">
       <el-row :key="i">
         <template v-for="(item,index) in v">
           <template v-if="item.type == 'hidden'"></template>
@@ -74,8 +74,8 @@ Create Time  : 2020-03-31
               </template>
               <template v-if="item.type == 'image'">
                 <div :key="key" class="image">
-                  <el-input v-model="files[item.prop]" type="text" @paste.native.capture.prevent="onPaste($event,item,index)" placeholder="粘贴截图上传">
-                    <el-button slot="append" @click.native.stop="$refs.upload[0].click()">本地上传</el-button>
+                  <el-input v-model="files[item.prop]" :readonly="!!item.readonly" type="text" @paste.native.capture.prevent="onPaste($event,item,index)" placeholder="粘贴截图上传">
+                    <el-button slot="append" :disabled="!item.readonly" @click.native.stop="$refs.upload[0].click()">本地上传</el-button>
                   </el-input>
                   <input ref="upload" type="file" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg" @input="upload($event,item)" v-show="false" />
                   <div v-if="fieldsData[item.prop] && fieldsData[item.prop].length" class="image-box">
@@ -201,7 +201,6 @@ export default {
   },
 
   created() {
-  
     this.onMapFields();
   },
   methods: {
@@ -272,7 +271,6 @@ export default {
       }
     },
     onMapFields() {
-    
       this.mapFields = [];
       let arr = [];
       this.fields.forEach(e => {
@@ -282,7 +280,7 @@ export default {
         }
         arr.push(e);
       });
-      this.mapFields.push(arr); 
+      this.mapFields.push(arr);
     },
     change(item, index, type) {
       let click = item[type];
