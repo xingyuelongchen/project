@@ -81,7 +81,7 @@ Create Time  : 2020-07-22
           </el-tabs>
         </div>
         <!-- <keep-alive> -->
-          <router-view class="bottom"></router-view>
+        <router-view class="bottom"></router-view>
         <!-- </keep-alive> -->
       </div>
     </div>
@@ -89,9 +89,9 @@ Create Time  : 2020-07-22
 </template>
 <script>
 const version = require("element-ui/package.json").version;
+import WS from "@/api/websocket";
 export default {
   name: "Backend",
-
   data() {
     return {
       key: 0,
@@ -315,6 +315,9 @@ export default {
       clusters.push(shadeColor(theme, 0.1));
       return clusters;
     }
+  },
+  created() {
+    new WS();
   }
 };
 </script>

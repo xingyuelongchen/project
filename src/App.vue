@@ -1,10 +1,11 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 <script>
 import isElectron from "is-electron";
+
 export default {
   mounted() {
     let vm = this;
@@ -50,6 +51,7 @@ export default {
       this.ipcRenderer.removeAllListeners();
     }
   },
+
   methods: {
     autoUpdate() {
       // 用来触发更新函数
@@ -117,7 +119,7 @@ export default {
 body,
 html {
   margin: 0;
-  padding: 0; 
+  padding: 0;
 }
 * {
   outline: none;

@@ -1,7 +1,39 @@
-const { app, BrowserWindow, ipcMain } = require('electron') // ipcMain 主线程
+const { app, BrowserWindow, ipcMain, Notification } = require('electron') // ipcMain 主线程
 const { autoUpdater } = require('electron-updater')
 const path = require('path');
-const config = require('./src/config')
+const config = require('./src/config');
+var mainWindow = null;
+const ipcMainList = [
+  {
+    event: 'notification', hander: () => {
+      mainWindow.once('focus', () => mainWindow.flashFrame(false))
+      mainWindow.flashFrame(true)
+      if (Notification.isSupported()) {
+        let notification = new Notification({
+          //标题
+          title: 'title',
+          //副标题
+          subtitle: 'subtitle',
+          //主题内容
+          body: 'body',
+          //系统音
+          sulent: true,
+          // icon: '',
+          // 展示时间
+          timeoutType: 'never',
+        });
+        notification.show()
+      }
+    }
+  }
+]
+
+function setIpcMainList() {
+  ipcMainList.forEach(e => {
+    ipcMain.on(e.event, e.hander)
+  })
+}
+
 var uploadUrl;
 if (app.isPackaged) {
   // 线上地址
@@ -10,8 +42,10 @@ if (app.isPackaged) {
   // 线下地址
   uploadUrl = config.uploadUrlDev // 更新地址 
 }
+setIpcMainList()
+
 function createWindow() {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     minWidth: 1200,
     minHeight: 675,
     width: 1250,
@@ -21,20 +55,23 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js')
     }
   });
-  updateHandle()
-  if (app.isPackaged) {
+  updateHandle();
+  // 判断当前运行环境
+  if (!app.isPackaged) {
+    // 控制台
+    mainWindow.webContents.openDevTools();
+    // 菜单
+    mainWindow.setMenu(null);
+    // 在线地址
     mainWindow.loadURL(config.feedUrl);
   } else {
     mainWindow.loadFile('./dist/index.html');
   }
-  mainWindow.setMenu(null);
-  // 判断当前运行环境
-  if (!app.isPackaged) {
-    // 打开控制台
-    mainWindow.webContents.openDevTools();
-    // 菜单
-    mainWindow.setMenu(null);
+  // 通过main进程发送事件给renderer进程，提示更新信息
+  function sendUpdateMessage(text) {
+    mainWindow.webContents.send('message', text)
   }
+  // 更新处理器
   function updateHandle() {
     let message = {
       error: { status: -1, msg: '检测更新查询异常' },
@@ -68,29 +105,19 @@ function createWindow() {
     autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
       // 收到renderer进程确认更新
       ipcMain.on('updateNow', (e, arg) => {
-        console.log('开始更新')
-        autoUpdater.quitAndInstall() // 包下载完成后，重启当前的应用并且安装更新
+        // 包下载完成后，重启当前的应用并且安装更新
+        autoUpdater.quitAndInstall()
       })
       // 主进程向renderer进程发送是否确认更新
       mainWindow.webContents.send('isUpdateNow', versionInfo)
     })
-
     ipcMain.on('checkForUpdate', () => {
-      // 收到renderer进程的检查通知后，执行自动更新检查
-      // autoUpdater.checkForUpdates()
+      // 收到renderer进程的检查通知后，执行自动更新检查 
       let checkInfo = autoUpdater.checkForUpdates()
       checkInfo.then(function (data) {
         versionInfo = data.versionInfo // 获取更新包版本等信息
       })
     })
-    ipcMain.on('message', (data) => {
-      console.log(...data);
-    })
-  }
-
-  // 通过main进程发送事件给renderer进程，提示更新信息
-  function sendUpdateMessage(text) {
-    mainWindow.webContents.send('message', text)
   }
 }
 
@@ -100,10 +127,6 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   })
 })
-
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })

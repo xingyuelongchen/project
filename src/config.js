@@ -8,7 +8,7 @@ module.exports = {
     // 本地缓存前缀
     storeKey: 'myaa',
     // websocket
-    websocket: 'ws://192.168.101.30:5656',
+    websocket: 'ws://192.168.101.30:2346',
     // 接口URL
     baseUrl: 'http://192.168.101.30',
     // 更新地址

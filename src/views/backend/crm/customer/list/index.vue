@@ -38,9 +38,11 @@ Create Time  : 2020-03-27
       <mixForm :key="key" v-model="editForm" :fields="editFields" />
     </mixDrawer>
     <el-dialog :title="dialogName" :visible.sync="dialogVisible" width="50%">
-      <mixSearch v-model="salesSearchData" :fields="salesSearch" v-if="!show" />
-      <mixTable v-model="tableSalesData" :fields="tableSales" v-if="!show" />
-      <mixForm v-model="addOrderData" :fields="addOrderFields" v-if="show" style="border:none" />
+      <div style="max-height:500px;height:500px;overflow:hidden">
+        <mixSearch v-model="salesSearchData" :fields="salesSearch" v-if="!show" />
+        <mixTable v-model="tableSalesData" :fields="tableSales" v-if="!show" />
+        <mixForm v-model="addOrderData" :fields="addOrderFields" v-if="show" style="border:none" />
+      </div>
       <span slot="footer" class="dialog-footer">
         <!-- <el-button @click="dialogVisible = false">关闭窗口</el-button> -->
       </span>
@@ -206,7 +208,7 @@ export default {
               label: "编辑信息",
               style: "success",
               role: 37,
-              click:this.tableEdit
+              click: this.tableEdit
             },
             {
               size: "mini",
