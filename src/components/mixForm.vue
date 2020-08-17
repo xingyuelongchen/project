@@ -12,7 +12,7 @@ Create Time  : 2020-03-31
           <el-col :key="index" :span="item.span||24" :xs="item.xs||24" v-else>
             <el-form-item clearable :label-width="item.labelWidth?item.labelWidth+'px' :'120px'" :label="item.type == 'button' ?'': item.label" :prop="item.prop" :rules="item.rule" :required="!!item.required" :error="item.error">
               <template v-if="['text','textarea','number','email','password'].indexOf(item.type)!==-1">
-                <el-input clearable class="input" v-model="fieldsData[item.prop]" inline-message :placeholder="item.placeholder" :readonly="!!item.readonly" :disabled="!!item.disabled" :type="item.type" @change="change(item,index,'change')" @input="change(item,index,'input')">
+                <el-input clearable class="input" :size="item.size" v-model="fieldsData[item.prop]" inline-message :placeholder="item.placeholder" :readonly="!!item.readonly" :disabled="!!item.disabled" :type="item.type" @change="change(item,index,'change')" @input="change(item,index,'input')">
                   <span v-if="item.prepend" slot="prepend" @click.stop="click(item,index)">
                     <template v-if="/^(el-icon|my-icon).*/.test(item.prepend)">
                       <i :class="item.prepend"></i>
@@ -28,7 +28,7 @@ Create Time  : 2020-03-31
                 </el-input>
               </template>
               <template v-if="item.type == 'select'">
-                <el-select clearable v-if="!item.readonly" v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :multiple="item.multiple" :collapse-tags="item.multiple" @change="change(item,index,'change')">
+                <el-select clearable v-if="!item.readonly" :size="item.size"  v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :multiple="item.multiple" :collapse-tags="item.multiple" @change="change(item,index,'change')">
                   <el-option v-for="(k,i) in item.options" :key="i" :disabled="k.disabled" :value-id="k.id" :label="k.label || k[item.config.label]" :value="k.value || k[item.config.value] || k" />
                 </el-select>
                 <el-input v-else v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :readonly="!!item.readonly"></el-input>
@@ -358,7 +358,7 @@ export default {
   }
 }
 .el-col {
-  min-width: 280px;
+  min-width: 200px;
 }
 .input /deep/ input[readonly="readonly"] {
   border: none;

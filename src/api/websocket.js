@@ -1,7 +1,13 @@
 import config from '@/config.js';
 import isElectron from "is-electron";
+// import diaolog from '../components/diaolog';
 class WS {
-    constructor() {
+    constructor(options) {
+        this.options = {
+            hander() {
+                console.log('websocket');
+            }, ...options
+        };
         this.ipcRenderer = window.ipcRenderer;
         this.ws = new WebSocket(config.websocket);
         this.send = (obj = '初始化链接') => {
@@ -15,29 +21,31 @@ class WS {
             if (typeof obj == 'string') msg.data = obj;
             msg.type = typeof obj;
             msg = JSON.stringify(msg)
-            this.ws.send(msg)
+            this.ws.send(msg);
         };
-        this.onMessage = (title = "新消息", body = "您有新消息，请及时处理！") => {
-
+        this.onMessage = (data) => {
+            data = JSON.parse(data.data);
             if (isElectron()) {
-                this.ipcRenderer.send('notification', { title, body });
-            } else {
-                // 弹系统信息
-                if (!window.Notification) return;
-                let options = { dir: "ltr", icon: '', body };
-                let notification = new window.Notification(title, options);
-                notification.onclick = function () {
-                    //可直接打开通知notification相关联的tab窗口
-                    window.focus();
-                };
+                this.ipcRenderer.send('notification', data);
+                // this.ipcRenderer.send('dialog', data);
             }
+            this.options.hander(data)
+            // 弹系统信息
+            if (!window.Notification) return;
+            let options = { dir: "ltr", icon: '/favicon.ico', data:data.msg };
+            let notification = new window.Notification(data.title, options);
+            notification.onclick = function () {
+                //可直接打开通知notification相关联的tab窗口
+                window.focus();
+            };
+
         };
         this.ws.onopen = () => {
             this.send('初始化链接')
             setInterval(this.send, 180000)
         };
-        this.ws.onmessage = () => {
-            this.onMessage()
+        this.ws.onmessage = (data) => {
+            this.onMessage(data)
         };
         this.ws.onerror = () => {
             console.error("连接错误");

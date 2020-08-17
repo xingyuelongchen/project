@@ -272,8 +272,15 @@ export default {
           span: 5.5
         },
         {
-          label: "模糊匹配",
+          label: "微信/QQ/电话/旺旺",
           prop: "search",
+          type: "text",
+          span: 3
+        },
+
+        {
+          label: "咨询信息",
+          prop: "info",
           type: "text",
           span: 3
         },
@@ -546,7 +553,8 @@ export default {
       }
     },
     async autoDistributiona(item, type) {
-      if (!type) {
+      console.log(item);
+      if (type !== true) {
         this.id = item.id;
       }
       let { data } = await this.axios("/adminapi/Customer/automatic ", {
@@ -557,7 +565,7 @@ export default {
       }
     },
     async handDistribution(item, type) {
-      if (!type) {
+      if (type !== true) {
         this.id = item.id;
       }
       // 批量手动分配

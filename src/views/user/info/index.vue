@@ -16,10 +16,15 @@ Create Time  : 2020-08-12
               <div style="text-align:center">
                 <input type="file" :key="formData.pic" v-show="false" ref="file" @change="upload">
               </div>
-              <div>
-                <div class="item">所属部门：</div>
-                <div class="item"></div>
-                <div class="item">所属部门：</div>
+              <div style="border-top:1px solid #ccc;margin-top:20px;padding-top:20px">
+                <div class="item">
+                  <span style="display:inline-block;width:60px">花名： </span>
+                  {{$store.state.userinfo.nickname}}
+                </div>
+                <div class="item">
+                  <span style="display:inline-block;width:60px">部门：</span>
+                  {{$store.state.userinfo.dept}} - {{$store.state.userinfo.dept_id}}
+                </div>
               </div>
               <el-dialog :visible.sync="show">
                 <div style="display:flex;justify-content:space-between">
@@ -159,14 +164,12 @@ export default {
         data: obj
       });
       if (data.code) {
-        let { data: res } = await this.axios(
-          "/adminapi/user/information_edit",
-          {
-            data: { pic: data.data }
-          }
-        );
+        let { data: res } = await this.axios("/adminapi/User/portrait", {
+          data: { pic: data.data, id: this.$store.state.userinfo.id }
+        });
         if (res.code) {
           this.$store.state.userinfo.pic = data.data;
+          this.formData.pic = data.data;
           this.$store.commit("setUserinfo", this.$store.state.userinfo);
           this.show = false;
         }

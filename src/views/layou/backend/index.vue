@@ -37,13 +37,16 @@ Create Time  : 2020-07-22
           {{$store.state.userinfo.mobile}}
         </div>
         <div class="itema">
-          <el-dropdown trigger="click">
-            <i class="el-icon-s-tools" style="font-size:18px;cursor: pointer;"></i>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click="$router.push('/user/info')">修改资料</el-dropdown-item>
-              <el-dropdown-item @click.stop.native="logout">退出登录</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <el-tooltip content="设置">
+            <el-dropdown trigger="click">
+              <i class="el-icon-s-tools" style="font-size:18px;cursor: pointer;"></i>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item @click.native="$refs.audio.play()">播放音乐</el-dropdown-item>
+                <el-dropdown-item @click.native="$router.push('/user/info')">修改资料</el-dropdown-item>
+                <el-dropdown-item @click.stop.native="logout">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </el-tooltip>
         </div>
       </div>
     </div>
@@ -85,6 +88,10 @@ Create Time  : 2020-07-22
         <!-- </keep-alive> -->
       </div>
     </div>
+    <audio src="~@/assets/audio/goodNews.mp3" preload ref="audio" />
+    <template v-for="item in message">
+      <mixMessage :value="item" :key="item.id" v-if="item.show" @input="item.show=false" />
+    </template>
   </div>
 </template>
 <script>
@@ -96,6 +103,7 @@ export default {
     return {
       key: 0,
       loading: false,
+      message: [],
       refreshKey: 0,
       // 菜单折叠
       isCollapse: false,
@@ -115,6 +123,15 @@ export default {
     }
   },
   methods: {
+    onMessage(data) {
+      if (data.type == "message") {
+        this.$refs.audio.play();
+        this.message.push({ ...data.data, show: true });
+      }
+      if (data.type == "dialog") {
+        this.message.push({ ...data.data, show: true });
+      }
+    },
     delTab(name) {
       this.$store.commit("delTabmenu", name);
     },
@@ -317,7 +334,7 @@ export default {
     }
   },
   created() {
-    new WS();
+    new WS({ hander: this.onMessage });
   }
 };
 </script>
@@ -385,8 +402,8 @@ export default {
     }
     .item,
     .itema {
-      margin: 0 15px;
-      padding: 0 10px;
+      margin: 0 5px;
+      padding: 0 5px;
       display: flex;
       align-items: center;
       justify-content: center;

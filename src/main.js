@@ -37,6 +37,19 @@ Vue.directive('role', {
     }
   }
 });
+Vue.directive('move', {
+  bind(el, binding) {
+
+    console.log(el, binding);
+  },
+  inserted(el, binding) {
+    console.log(el, binding);
+  },
+  update(el, binding) {
+    console.log(el, binding);
+
+  }
+});
 Vue.prototype.axios = axios;
 Vue.use(Element);
 Vue.use(template);

@@ -9,10 +9,10 @@ Create Time  : 2020-04-02
       <template v-for="(item,index) in fields">
         <el-col :span="item.span" :key="index">
           <template v-if="['text','textarea','number'].indexOf(item.type)>=0">
-            <el-input v-model="form[item.prop]" :type="item.type" :size="item.size||'mini'" :placeholder="item.label" clearable :default-value="new Date()"></el-input>
+            <el-input v-model="form[item.prop]" :readonly="item.readonly" :type="item.type" :size="item.size||'mini'" :placeholder="item.label" clearable :default-value="new Date()"></el-input>
           </template>
           <template v-if="item.type == 'select'">
-            <el-select v-model="form[item.prop]" :placeholder="item.label" :size="item.size||'mini'" :multiple="item.multiple" clearable>
+            <el-select v-model="form[item.prop]" :readonly="item.readonly" :placeholder="item.label" :size="item.size||'mini'" :multiple="item.multiple" clearable>
               <template v-if="item.options">
                 <el-option v-for="(k,i) in item.options" :key="i" :label="k.label|| k[item.config.label]" :value="k.value || item.config && item.config.value && k[item.config.value] || item.config&& item.config.label&& k[item.config.label]"></el-option>
               </template>
