@@ -34,7 +34,7 @@ Create Time  : 2020-07-22
           </el-tooltip>
         </div>
         <div class="item">
-          {{$store.state.userinfo.mobile}}
+          {{$store.state.userinfo.nickname}} {{$store.state.userinfo.mobile}}
         </div>
         <div class="itema">
           <el-tooltip content="设置">
@@ -42,6 +42,7 @@ Create Time  : 2020-07-22
               <i class="el-icon-s-tools" style="font-size:18px;cursor: pointer;"></i>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item @click.native="$refs.audio.play()">播放音乐</el-dropdown-item>
+                <el-dropdown-item @click.native="onMessage({type:'dialog'})">打开喜报</el-dropdown-item>
                 <el-dropdown-item @click.native="$router.push('/user/info')">修改资料</el-dropdown-item>
                 <el-dropdown-item @click.stop.native="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
@@ -88,10 +89,12 @@ Create Time  : 2020-07-22
         <!-- </keep-alive> -->
       </div>
     </div>
-    <audio src="~@/assets/audio/goodNews.mp3" preload ref="audio" />
+    <audio src="~@/assets/audio/msg.mp3" preload ref="audio" />
+    <audio src="~@/assets/audio/xibao.mp3" preload ref="dialogAudio"></audio>
     <template v-for="item in message">
       <mixMessage :value="item" :key="item.id" v-if="item.show" @input="item.show=false" />
     </template>
+    <mixXibao v-model="xibao" />
   </div>
 </template>
 <script>
@@ -104,6 +107,7 @@ export default {
       key: 0,
       loading: false,
       message: [],
+      xibao: { show: false },
       refreshKey: 0,
       // 菜单折叠
       isCollapse: false,
@@ -129,7 +133,12 @@ export default {
         this.message.push({ ...data.data, show: true });
       }
       if (data.type == "dialog") {
-        this.message.push({ ...data.data, show: true });
+        this.$refs.dialogAudio.play();
+        this.$refs.dialogAudio.onended = () => {
+          this.xibao.show = false;
+        };
+        this.xibao.show = true;
+        this.xibao.data = data.data;
       }
     },
     delTab(name) {

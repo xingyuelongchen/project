@@ -15,7 +15,8 @@ class WS {
                 type: null,
                 data: null,
                 create_time: Date.now(),
-                id: JSON.parse(window.localStorage.getItem('userinfo')).id
+                id: JSON.parse(window.localStorage.getItem('userinfo')).id,
+                department: JSON.parse(window.localStorage.getItem('userinfo')).department || 0,
             }
             if (typeof obj == 'object') msg.data = { msg, data: obj };
             if (typeof obj == 'string') msg.data = obj;
@@ -25,19 +26,21 @@ class WS {
         };
         this.onMessage = (data) => {
             data = JSON.parse(data.data);
-            if (isElectron()) {
-                this.ipcRenderer.send('notification', data);
-                // this.ipcRenderer.send('dialog', data);
-            }
             this.options.hander(data)
-            // 弹系统信息
-            if (!window.Notification) return;
-            let options = { dir: "ltr", icon: '/favicon.ico', data:data.msg };
-            let notification = new window.Notification(data.title, options);
-            notification.onclick = function () {
-                //可直接打开通知notification相关联的tab窗口
-                window.focus();
-            };
+            if (data.type == 'message') {
+                // 桌面应用端
+                if (isElectron()) this.ipcRenderer.send('notification', data);
+                // 浏览器端 系统信息
+                if (!window.Notification) return;
+                let options = { dir: "ltr", icon: '/favicon.ico', data: data.msg };
+                let notification = new window.Notification(data.title, options);
+                notification.onclick = window.focus;
+
+            }
+            if (data.type == 'dialog' && isElectron()) {
+                // 桌面应用端 dialog通知
+                this.ipcRenderer.send('dialog', data);
+            }
 
         };
         this.ws.onopen = () => {

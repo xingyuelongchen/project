@@ -1,7 +1,9 @@
 const { app, BrowserWindow, ipcMain, Notification, dialog, Menu, Tray } = require('electron') // ipcMain 主线程
 const { autoUpdater } = require('electron-updater')
+const package = require('./package.json')
 const path = require('path');
 const config = require('./src/config');
+const gotTheLock = app.requestSingleInstanceLock();
 var mainWindow = null, tray = null, uploadUrl, isQuill = true;
 
 if (app.isPackaged) {
@@ -11,11 +13,34 @@ if (app.isPackaged) {
   // 线下地址
   uploadUrl = config.uploadUrlDev // 更新地址 
 }
+init();
 // 初始化主进程
-function init() { 
+function init() {
+  // 是否已经在运行
+  if (!gotTheLock) {
+    isQuill = false;
+    app.quit();
+  } else {
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+      // 当运行第二个实例时,将会聚焦到mainWindow这个窗口
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore()
+        mainWindow.focus()
+        mainWindow.show()
+      }
+    })
+  }
+  // 初始化主进程
+  app.setAppUserModelId(package.build.appId)
   app.whenReady().then(() => {
     // 创建桌面窗口
-    createWindow();
+    createWindow()
+    app.on('activate', function () {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    });
+    app.on('ready', function () {
+
+    })
     // 点击关闭按钮最小化到系统托盘
     mainWindow.on('close', function (event) {
       if (isQuill) {
@@ -28,7 +53,7 @@ function init() {
       }
     })
     setIpcMainList();
-  });
+  })
 }
 // 初始化渲染进程
 function createWindow() {
@@ -48,17 +73,20 @@ function createWindow() {
   // 初始化系统托盘图标
   closed();
   // 判断当前运行环境
-  if (!app.isPackaged) {
+  if (app.isPackaged) {
+    mainWindow.setMenu(null);
+    // mainWindow.webContents.openDevTools();
+    mainWindow.loadFile('./dist/index.html');
+    // mainWindow.loadURL(config.feedUrl);
+  } else {
     // 控制台
     mainWindow.webContents.openDevTools();
     // 菜单
     mainWindow.setMenu(null);
     // 在线地址
+    // mainWindow.loadFile('./dist/index.html');
     mainWindow.loadURL(config.feedUrl);
-  } else {
-    mainWindow.loadFile('./dist/index.html');
   }
-
 }
 // 通过main进程发送事件给renderer进程，提示更新信息
 function sendUpdateMessage(text) {
@@ -114,15 +142,14 @@ function updateHandle() {
 }
 // 初始化系统图标
 function closed(event) {
-  tray = new Tray('./favicon.ico');
+  tray = new Tray(path.join(__dirname, 'favicon.ico'));
   const contextMenu = Menu.buildFromTemplate([
-    {
-      label: '打开主窗口', click() {
-        mainWindow.show();
-      }
-    },
-    { label: '关闭', click() { isQuill = false; app.quit() } }
+    { label: '打开主窗口', click: mainWindow.show },
+    { label: '退出', click() { isQuill = false; app.quit() } }
   ]);
+  tray.on('click', () => {
+    mainWindow.show();
+  })
   tray.setToolTip('广艺舟');
   tray.setContextMenu(contextMenu);
 }
@@ -131,8 +158,8 @@ function setIpcMainList() {
   let ipcMainList = [
     {
       event: 'notification', hander(event, data) {
-        mainWindow.once('focus', () => mainWindow.flashFrame(false))
-        mainWindow.flashFrame(true)
+        // mainWindow.once('focus', () => mainWindow.flashFrame(false))
+        mainWindow.flashFrame(true);
         if (Notification.isSupported()) {
           let notification = new Notification({
             //标题
@@ -143,11 +170,15 @@ function setIpcMainList() {
             // body: data.data.message,
             //系统音
             sulent: true,
-            icon: './favicon.ico',
+            icon: path.join(__dirname, 'favicon.ico'),
             // 展示时间
             timeoutType: 'never',
           });
-          notification.show()
+          notification.show();
+          notification.on('click', function () {
+            mainWindow.show();
+            mainWindow.flashFrame(false)
+          })
         }
       }
     },
@@ -173,4 +204,3 @@ function setIpcMainList() {
     ipcMain.on(e.event, e.hander)
   })
 }
-init();

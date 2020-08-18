@@ -1,5 +1,11 @@
 
 const config = require('./src/config');
+const json = require('./package.json');
+const fs = require('fs');
+let version = json.version.split('.');
+version[version.length - 1] = version[version.length - 1] * 1 + 1;
+json.version = version.join('.');
+fs.writeFileSync('./package.json', JSON.stringify(json, null, 4))
 module.exports = {
     productionSourceMap: false, // 不生成.map映射文件
     chainWebpack: config => {

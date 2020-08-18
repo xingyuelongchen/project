@@ -194,6 +194,7 @@ function setRoles() {
   Store.commit('setMenu', frist);
   // 设置路由缓存
   Store.commit('setRoutes', route);
+
   if (frist[0].children && frist[0].children.length) {
     // 清空缓存后，添加首页到第一个tabs标签
     Store.commit('setTabmenu', {
@@ -206,7 +207,7 @@ function setRoles() {
   }
   if (target) {
     // 动态添加一次即可
-    target = false;
+    // target = false;
     // 添加当前管理系统
     sessionStorage.setItem('xitong', targetIndex);
     router.addRoutes(route.concat(client));
