@@ -1,9 +1,9 @@
 {
     "name": "guangyizhou",
-    "version": "1.0.15",
+    "version": "1.0.22",
     "main": "main.js",
     "scripts": {
-        "serve": "vue-cli-service serve && node app",
+        "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
         "dev": "electron .",
@@ -106,11 +106,12 @@
             }
         ],
         "files": [
-            "src/config.js",
             "main.js",
-            "preload.js",
             "dist/",
-            "favicon.ico"
+            "src/config.js",
+            "preload.js",
+            "favicon.ico",
+            "store.json"
         ],
         "win": {
             "icon": "./favicon.ico",

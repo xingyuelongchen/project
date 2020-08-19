@@ -11,7 +11,12 @@ Create Time  : 2020-03-31
           <template v-if="item.type == 'hidden'"></template>
           <el-col :key="index" :span="item.span||24" :xs="item.xs||24" v-else>
             <el-form-item clearable :label-width="item.labelWidth?item.labelWidth+'px' :'120px'" :label="item.type == 'button' ?'': item.label" :prop="item.prop" :rules="item.rule" :required="!!item.required" :error="item.error">
-              <template v-if="['text','textarea','number','email','password'].indexOf(item.type)!==-1">
+              <template v-if=" item.type =='compute'">
+                <el-input clearable class="input" :size="item.size" :value="fieldsData[item.prop]" inline-message :placeholder="item.placeholder" type="text" @focus="compute(item)">
+
+                </el-input>
+              </template>
+              <template v-if="['text','textarea' ,'email','password'].indexOf(item.type)!==-1">
                 <el-input clearable class="input" :size="item.size" v-model="fieldsData[item.prop]" inline-message :placeholder="item.placeholder" :readonly="!!item.readonly" :disabled="!!item.disabled" :type="item.type" @change="change(item,index,'change')" @input="change(item,index,'input')">
                   <span v-if="item.prepend" slot="prepend" @click.stop="click(item,index)">
                     <template v-if="/^(el-icon|my-icon).*/.test(item.prepend)">
@@ -27,8 +32,24 @@ Create Time  : 2020-03-31
                   </span>
                 </el-input>
               </template>
+              <template v-if=" item.type=='number'">
+                <el-input clearable class="input" :size="item.size" v-model.number="fieldsData[item.prop]" inline-message :placeholder="item.placeholder" :readonly="!!item.readonly" :disabled="!!item.disabled" :type="item.type" @change="change(item,index,'change')" @input="change(item,index,'input')">
+                  <span v-if="item.prepend" slot="prepend" @click.stop="click(item,index)">
+                    <template v-if="/^(el-icon|my-icon).*/.test(item.prepend)">
+                      <i :class="item.prepend"></i>
+                    </template>
+                    <template v-else>{{item.prepend}}</template>
+                  </span>
+                  <span v-if="item.append" slot="append" @click.stop="click(item,index)">
+                    <template v-if="/^(el-icon|my-icon).*/.test(item.append)">
+                      <i :class="item.append"></i>
+                    </template>
+                    <template v-else>{{item.append}}</template>
+                  </span>
+                </el-input>
+              </template>
               <template v-if="item.type == 'select'">
-                <el-select clearable v-if="!item.readonly" :size="item.size"  v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :multiple="item.multiple" :collapse-tags="item.multiple" @change="change(item,index,'change')">
+                <el-select clearable v-if="!item.readonly" :size="item.size" v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :multiple="item.multiple" :collapse-tags="item.multiple" @change="change(item,index,'change')">
                   <el-option v-for="(k,i) in item.options" :key="i" :disabled="k.disabled" :value-id="k.id" :label="k.label || k[item.config.label]" :value="k.value || k[item.config.value] || k" />
                 </el-select>
                 <el-input v-else v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :readonly="!!item.readonly"></el-input>
@@ -75,9 +96,9 @@ Create Time  : 2020-03-31
               <template v-if="item.type == 'image'">
                 <div :key="key" class="image">
                   <el-input v-model="files[item.prop]" :readonly="!!item.readonly" type="text" @paste.native.capture.prevent="onPaste($event,item,index)" placeholder="粘贴截图上传">
-                    <el-button slot="append" :disabled="!item.readonly" @click.native.stop="$refs.upload[0].click()">本地上传</el-button>
+                    <el-button slot="append" :disabled="item.readonly" @click.native.stop="$refs.upload[0].click()">本地上传</el-button>
                   </el-input>
-                  <input ref="upload" type="file" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg" @input="upload($event,item)" v-show="false" />
+                  <input ref="upload" type="file" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg" multiple @input="upload($event,item)" v-show="false" />
                   <div v-if="fieldsData[item.prop] && fieldsData[item.prop].length" class="image-box">
                     <template v-for="(v,i) in fieldsData[item.prop]">
                       <div class="image-item" :key="i">
@@ -204,6 +225,44 @@ export default {
     this.onMapFields();
   },
   methods: {
+    compute(item) {
+      let a = 0;
+      let b = 0;
+      let c = 0;
+      this.fields.forEach(e => {
+        if (e.prop == item.compute.val) {
+          if (e.options && e.options.length) {
+            e.options.forEach(e => {
+              if (e.value == this.fieldsData[e.prop]) b = e.sub;
+            });
+          } else {
+            b = this.fieldsData[e.prop];
+          }
+        }
+        if (e.prop == item.compute.sub) {
+          if (e.options && e.options.length) {
+            e.options.forEach(e => {
+              if (e.value == this.fieldsData[e.prop]) c = e.sub;
+            });
+          } else {
+            c = this.fieldsData[e.prop];
+          }
+        }
+        if (e.prop == item.compute.prop) {
+          if (e.options && e.options.length) {
+            e.options.forEach(k => {
+              if (k.value == this.fieldsData[e.prop]) a = k.sub;
+            });
+          } else {
+            a = this.fieldsData[e.prop];
+          }
+        }
+      });
+      a = `${a}${item.compute.type[0]}${b}${item.compute.type[1]}${c}`;
+      let result = eval(a);
+      this.fieldsData[item.prop] = result;
+      this.$emit("input", { ...this.fieldsData });
+    },
     async onUpload(event, item) {
       this.fileList = event.target.files || [];
       let formData = new FormData();
@@ -239,7 +298,9 @@ export default {
     },
     // 点击按钮上传
     upload(event, item) {
-      this.update(event.target.files[0], event.target.files[0].type, item);
+      event.target.files.forEach(e => {
+        this.update(e, e.type, item);
+      });
     },
     // 粘贴剪切板截图
     onPaste(event, item) {

@@ -661,11 +661,24 @@ export default {
         let obj = JSON.parse(JSON.stringify(item));
         delete obj.remark;
         this.qrocdeData = obj;
-        this.qrocdeFields = data.data;
+        this.qrocdeFields = data.data.map(e => {
+          if (e.prop == "type" && item.xin) {
+            e.options.shift();
+          }
+          if (e.prop == "debt") {
+            e.type = "compute";
+            e.compute = {
+              type: ["-", "-"],
+              prop: "package_version",
+              val: "payment",
+              sub: "discount"
+            };
+          }
+          return e;
+        });
         this.qrcode = true;
       }
     },
-
     onReset() {
       console.log("重置");
       this.search = {};

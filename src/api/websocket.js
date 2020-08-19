@@ -26,21 +26,25 @@ class WS {
         };
         this.onMessage = (data) => {
             data = JSON.parse(data.data);
-            this.options.hander(data)
+
             if (data.type == 'message') {
                 // 桌面应用端
-                if (isElectron()) this.ipcRenderer.send('notification', data);
-                // 浏览器端 系统信息
-                if (!window.Notification) return;
-                let options = { dir: "ltr", icon: '/favicon.ico', data: data.msg };
-                let notification = new window.Notification(data.title, options);
-                notification.onclick = window.focus;
+                if (isElectron()) {
+                    this.ipcRenderer.send('msg', data);
+                } else {
+                    // 浏览器端 系统信息
+                    if (!window.Notification) return;
+                    let options = { dir: "ltr", icon: 'favicon.ico', data: data.data.msg, timeoutType: 'never', };
+                    let notification = new window.Notification(data.data.title, options);
+                    notification.onclick = window.focus;
+                }
 
             }
             if (data.type == 'dialog' && isElectron()) {
                 // 桌面应用端 dialog通知
                 this.ipcRenderer.send('dialog', data);
             }
+            this.options.hander(data)
 
         };
         this.ws.onopen = () => {

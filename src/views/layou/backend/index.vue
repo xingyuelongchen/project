@@ -44,7 +44,7 @@ Create Time  : 2020-07-22
                 <el-dropdown-item @click.native="$refs.audio.play()">播放音乐</el-dropdown-item>
                 <el-dropdown-item @click.native="onMessage({type:'dialog'})">打开喜报</el-dropdown-item>
                 <el-dropdown-item @click.native="$router.push('/user/info')">修改资料</el-dropdown-item>
-                <el-dropdown-item @click.stop.native="logout">退出登录</el-dropdown-item>
+                <el-dropdown-item @click.stop.native="logout">退出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-tooltip>
@@ -100,6 +100,7 @@ Create Time  : 2020-07-22
 <script>
 const version = require("element-ui/package.json").version;
 import WS from "@/api/websocket";
+import isElectron from "is-electron";
 export default {
   name: "Backend",
   data() {
@@ -129,6 +130,7 @@ export default {
   methods: {
     onMessage(data) {
       if (data.type == "message") {
+        console.log(data);
         this.$refs.audio.play();
         this.message.push({ ...data.data, show: true });
       }
@@ -169,6 +171,7 @@ export default {
       this.$router.replace(path);
     },
     logout() {
+      if (isElectron()) window.ipcRenderer.send("close");
       this.$router.replace("/login");
     },
     async refresh() {

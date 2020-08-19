@@ -1,9 +1,10 @@
 const { app, BrowserWindow, ipcMain, Notification, dialog, Menu, Tray } = require('electron') // ipcMain 主线程
 const { autoUpdater } = require('electron-updater')
-const package = require('./package.json')
 const path = require('path');
+const fs = require('fs');
 const config = require('./src/config');
 const gotTheLock = app.requestSingleInstanceLock();
+const filePath = './store.json';
 var mainWindow = null, tray = null, uploadUrl, isQuill = true;
 
 if (app.isPackaged) {
@@ -30,13 +31,19 @@ function init() {
       }
     })
   }
+
   // 初始化主进程
-  app.setAppUserModelId(package.build.appId)
+  app.setAppUserModelId('com.guangyizhou.pc');
+  // 监听事件
+  setIpcMainList();
   app.whenReady().then(() => {
+    // 检查更新
+    autoUpdater.checkForUpdates()
     // 创建桌面窗口
     createWindow()
     app.on('activate', function () {
-      if (BrowserWindow.getAllWindows().length === 0) createWindow()
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+
     });
     app.on('ready', function () {
 
@@ -52,7 +59,6 @@ function init() {
         app.quit()
       }
     })
-    setIpcMainList();
   })
 }
 // 初始化渲染进程
@@ -64,12 +70,15 @@ function createWindow() {
     height: 700,
     frame: true,
     webPreferences: {
-      nodeIntegration: false, // 使用了预加载之后,即使nodeIntegration为false,也可以使用Node API访问到ipcRenderer
+      nodeIntegration: true, // 使用了预加载之后,即使nodeIntegration为false,也可以使用Node API访问到ipcRenderer
       preload: path.join(__dirname, 'preload.js')
     }
   });
   // 更新程序
   updateHandle();
+  // 设置用户登录状态
+  let userinfo = getStore('userinfo')
+  mainWindow.webContents.send('userinfo', userinfo)
   // 初始化系统托盘图标
   closed();
   // 判断当前运行环境
@@ -141,7 +150,7 @@ function updateHandle() {
   })
 }
 // 初始化系统图标
-function closed(event) {
+function closed() {
   tray = new Tray(path.join(__dirname, 'favicon.ico'));
   const contextMenu = Menu.buildFromTemplate([
     { label: '打开主窗口', click: mainWindow.show },
@@ -153,54 +162,77 @@ function closed(event) {
   tray.setToolTip('广艺舟');
   tray.setContextMenu(contextMenu);
 }
-// 注册监听渲染进程事件
+// 监听渲染事件
 function setIpcMainList() {
-  let ipcMainList = [
-    {
-      event: 'notification', hander(event, data) {
-        // mainWindow.once('focus', () => mainWindow.flashFrame(false))
-        mainWindow.flashFrame(true);
-        if (Notification.isSupported()) {
-          let notification = new Notification({
-            //标题
-            title: data.data.title,
-            //副标题
-            subtitle: data.data.subtitle || '',
-            //主题内容
-            // body: data.data.message,
-            //系统音
-            sulent: true,
-            icon: path.join(__dirname, 'favicon.ico'),
-            // 展示时间
-            timeoutType: 'never',
-          });
-          notification.show();
-          notification.on('click', function () {
-            mainWindow.show();
-            mainWindow.flashFrame(false)
-          })
-        }
-      }
-    },
-    {
-      event: 'dialog', hander(data) {
+  ipcMain.on('msg', (event, data) => {
+    mainWindow.flashFrame(true);
+    trayFlashing();
+    if (Notification.isSupported()) {
+      let notification = new Notification({
+        title: data.data.title,
+        sulent: true,
+        icon: path.join(__dirname, 'favicon.ico'),
+        // timeoutType: 'never',
+      });
+      notification.show();
+      notification.on('click', function () {
+        mainWindow.show();
 
-        dialog.showMessageBox({
-          type: 'warning', //弹出框类型
-          title: '弹出框标题',
-          message: '弹出框内容',
-          detail: '弹出框附加内容,字体大小小一号',
-          buttons: ['按钮名字1', '按钮名字2', '按钮名字3'],
-        }).then(res => {
-          console.log(
-            res.response
-          );
-          // 选择按钮的索引 
-        });
-      }
+      })
+
     }
-  ];
-  ipcMainList.forEach(e => {
-    ipcMain.on(e.event, e.hander)
   })
+  ipcMain.on('dialog', function (event, data) {
+    data = data.data;
+    // dialog.showMessageBox({
+    //   type: 'success', //弹出框类型
+    //   title: data.title,
+    //   message: data.message,
+    //   detail: data.detail
+    // }).then().catch()
+  })
+  ipcMain.on('close', function () {
+    isQuill = false;
+    app.quit()
+  })
+  ipcMain.on('userinfo', function (event, data) {
+    setStore('userinfo', data)
+  })
+}
+// 托盘图标闪动
+function trayFlashing() {
+  let msgFlag = true;
+  timer = setInterval(() => {
+    msgFlag = !msgFlag
+    if (msgFlag) tray.setImage(path.join(__dirname, './favicon.png'));
+    else tray.setImage(path.join(__dirname, './favicon.ico'));
+    tray.setToolTip('您有一条新消息!');
+  }, 400)
+  mainWindow.once('focus', () => {
+    tray.setImage(path.join(__dirname, './favicon.ico'))
+    clearInterval(timer);
+    mainWindow.flashFrame(false);
+    timer = null;
+  })
+}
+// 保存信息
+function setStore(type, data) {
+  try {
+    let store = fs.readFileSync(filePath, 'utf-8');
+    store = JSON.parse(store);
+    store[type] = data;
+    fs.writeFileSync(filePath, JSON.stringify(store, null, 4))
+  } catch (error) {
+    console.log(error);
+  }
+}
+// 获取信息
+function getStore(type) {
+  try {
+    let store = fs.readFileSync(filePath, 'utf-8');
+    store = JSON.parse(store);
+    return store[type]
+  } catch (error) {
+    console.log(error);
+  }
 }

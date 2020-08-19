@@ -41,11 +41,12 @@ export default {
         right: [
           { label: "选项名称", prop: "label", span: 5, type: "text" },
           { label: "选项值", prop: "value", span: 5, type: "text" },
+          { label: "附加值", prop: "sub", span: 5, type: "text" },
           {
             type: "button",
             span: 6,
             options: [
-              { label: "添加", click: this.saveRight, style: "primary" },
+              { label: "添加", click: this.saveRight, style: "primary" }
               // { label: "保存", click: this.save, style: "success" }
             ]
           }
@@ -63,7 +64,7 @@ export default {
           },
           {
             label: "操作",
-            type: "manage",
+            type: "button",
             width: 200,
             options: [
               { label: "编辑选项", style: "primary", click: this.tableEdit },
@@ -82,6 +83,12 @@ export default {
           {
             label: "选项值",
             prop: "value",
+            type: "input",
+            change: this.tableChange
+          },
+          {
+            label: "附加值",
+            prop: "sub",
             type: "input",
             change: this.tableChange
           },
@@ -106,7 +113,7 @@ export default {
           // },
           {
             label: "操作",
-            type: "manage",
+            type: "button",
             options: [
               { label: "删除", style: "danger", click: this.tableOnDel }
             ]

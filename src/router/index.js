@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Vue from "vue";
 import VueRouter from "vue-router";
+import isElectron from "is-electron";
 import Store from '../store';
 import config from '../config';
 import backend from './backend';
@@ -190,6 +191,9 @@ function setRoles() {
   let frist = route.filter(e => e.name == targetIndex);
   // 存入Vuex
   Store.commit('setUserinfo', userinfo);
+  // 通知 exe 存入用户信息
+  if (isElectron())
+    window.ipcRenderer.send('userinfo', userinfo)
   // 设置菜单缓存
   Store.commit('setMenu', frist);
   // 设置路由缓存
