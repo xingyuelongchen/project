@@ -151,6 +151,10 @@ export default {
                 label: "搜索",
                 click: this.getData
               },
+              // {
+              //   label: "共享",
+              //   click: this.gongxiang
+              // },
               {
                 label: "导出",
                 style: "danger",
@@ -173,6 +177,18 @@ export default {
         this.page.total = data.count;
       }
     },
+    // async gongxiang() {
+    //   this.loading = true;
+    //   let { data } = await this.axios("/adminapi/sale/share", {
+    //     // data: { ...this.page, ...this.searchData }
+    //   });
+    //   if (data.code) {
+    //     this.loading = false;
+    //     this.tableData = data.data;
+    //     this.page.total = data.count;
+    //   }
+    // },
+
     async change() {
       let form = {};
       for (let k of this.editFields) {

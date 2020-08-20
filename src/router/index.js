@@ -59,7 +59,6 @@ VueRouter.prototype.replace = function replace(location) {
   return originalReplace.call(this, location).catch(err => err)
 }
 // 获取用户登录信息
-
 if (isElectron()) {
   let userinfo = window.ipcRenderer.sendSync("getUserinfo");
   if (userinfo)
@@ -121,7 +120,6 @@ function beforeRouter(to, from, next) {
     };
     Store.commit("setTabmenu", option);
   }
-
   next()
 }
 
@@ -217,9 +215,6 @@ function setRoles() {
     })
   }
   if (target) {
-    // 动态添加一次即可
-    // target = false;
-    // 添加当前管理系统  
     router.addRoutes(route.concat(client));
     let path = Store.state.menu[0].path;
     if (Store.state.menu[0].children[0]) {
@@ -230,6 +225,7 @@ function setRoles() {
     }
     sessionStorage.setItem('xitong', targetIndex);
     // 如果在登录页，就会跳转到第一路由。如果不在登录页，只是页面刷新，就会保持原有URL地址
+
     if (window.location.hash.indexOf('/login') >= 0) {
       setTimeout(() => {
         router.replace({ path });

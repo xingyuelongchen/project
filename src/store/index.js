@@ -7,9 +7,13 @@ export default new Vuex.Store({
     menu: [],
     userinfo: {},
     tabmenu: [],
-    routes: []
+    routes: [],
+    update: false,
   },
   mutations: {
+    updateMessage(state, data) {
+      state.update = data
+    },
     // 清空数据
     setClear(state) {
       for (let k in state) {
@@ -36,10 +40,12 @@ export default new Vuex.Store({
     },
     // 用户数据表
     setUserinfo(state, data) {
-      data.dateTime = Date.now() + 1 * 24 * 60 * 60 * 1000;
-      state.userinfo = data;
-      data = JSON.stringify(data);
-      window.localStorage.setItem('userinfo', data)
+      if (data.id) {
+        data.dateTime = Date.now() + 1 * 24 * 60 * 60 * 1000;
+        state.userinfo = data;
+        data = JSON.stringify(data);
+        window.localStorage.setItem('userinfo', data)
+      }
     },
     // 添加tab选项卡
     setTabmenu(state, data) {

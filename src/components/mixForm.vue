@@ -10,7 +10,8 @@ Create Time  : 2020-03-31
         <template v-for="(item,index) in v">
           <template v-if="item.type == 'hidden'"></template>
           <el-col :key="index" :span="item.span||24" :xs="item.xs||24" v-else>
-            <el-form-item clearable :label-width="item.labelWidth?item.labelWidth+'px' :'120px'" :label="item.type == 'button' ?'': item.label" :prop="item.prop" :rules="item.rule" :required="!!item.required" :error="item.error">
+            
+            <el-form-item   clearable :label-width="item.labelWidth?item.labelWidth+'px' :'120px'" :label="item.type == 'button' ?'': item.label" :prop="item.prop" :rules="item.rule" :required="!!item.required" :error="item.error">
               <template v-if=" item.type =='compute'">
                 <el-input clearable class="input" :size="item.size" :value="fieldsData[item.prop]" inline-message :placeholder="item.placeholder" type="text" @focus="compute(item)">
 
@@ -50,7 +51,7 @@ Create Time  : 2020-03-31
               </template>
               <template v-if="item.type == 'select'">
                 <el-select clearable v-if="!item.readonly" :size="item.size" v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :multiple="item.multiple" :collapse-tags="item.multiple" @change="change(item,index,'change')">
-                  <el-option v-for="(k,i) in item.options" :key="i" :disabled="k.disabled" :value-id="k.id" :label="k.label || k[item.config.label]" :value="k.value || k[item.config.value] || k" />
+                  <el-option v-for="(k,i) in item.options" :key="i" :disabled="!!k.disabled" :value-id="k.id" :label="k.label || k[item.config.label]" :value="k.value || k[item.config.value] || k" />
                 </el-select>
                 <el-input v-else v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :readonly="!!item.readonly"></el-input>
               </template>
@@ -62,7 +63,7 @@ Create Time  : 2020-03-31
               </template>
               <template v-if="item.type == 'checkbox'">
                 <template v-if="item.options && item.options.length">
-                  <el-checkbox v-model="fieldsData[item.prop]" v-for="(k,i) in item.options" :key="i" :label="k.value ||k[item.config.value] || k.id || k.label" :disabled="k.disabled" :checked="k.checked">{{k.label || k[item.config.label] }}</el-checkbox>
+                  <el-checkbox v-model="fieldsData[item.prop]" v-for="(k,i) in item.options" :key="i" :label="k.value ||k[item.config.value] || k.id || k.label" :disabled="!!k.disabled" :checked="k.checked">{{k.label || k[item.config.label] }}</el-checkbox>
                 </template>
                 <el-checkbox v-else v-model="fieldsData[item.prop]" :label="item.options.value" :disabled="!!item.disabled" :checked="item.checked">{{item.options.label}}</el-checkbox>
               </template>
@@ -72,18 +73,18 @@ Create Time  : 2020-03-31
               </template>
               <template v-if="item.type == 'checkboxgroup'">
                 <el-checkbox-group v-model="fieldsData[item.prop]" :disabled="!!item.disabled">
-                  <el-checkbox v-for="(k,i) in item.options" :label="k.value||k.id||k.label" :key="i" :disabled="k.disabled" :checked="k.checked">{{k.label || k[item.config.label] }}</el-checkbox>
+                  <el-checkbox v-for="(k,i) in item.options" :label="k.value||k.id||k.label" :key="i" :disabled="!!k.disabled" :checked="k.checked">{{k.label || k[item.config.label] }}</el-checkbox>
                 </el-checkbox-group>
               </template>
               <template v-if="item.type == 'radio'">
                 <template v-if="item.options && item.options.length">
-                  <el-radio v-model="fieldsData[item.prop]" v-for="(k,i) in item.options" :key="i" :label="k.value" :disabled="k.disabled">{{k.label}}</el-radio>
+                  <el-radio v-model="fieldsData[item.prop]" v-for="(k,i) in item.options" :key="i" :label="k.value" :disabled="!!k.disabled">{{k.label}}</el-radio>
                 </template>
                 <el-radio v-else v-model="fieldsData[item.prop]" :label="item.options.value" :disabled="!!item.disabled">{{item.options.label}}</el-radio>
               </template>
               <template v-if="item.type == 'radiogroup'">
                 <el-radio-group v-model="fieldsData[item.prop]" :disabled="!!item.disabled">
-                  <el-radio v-for="(k,i) in item.options" :label="k.value" :key="i" :disabled="k.disabled">{{k.label}}</el-radio>
+                  <el-radio v-for="(k,i) in item.options" :label="k.value" :key="i" :disabled="!!k.disabled">{{k.label}}</el-radio>
                 </el-radio-group>
               </template>
               <template v-if="item.type == 'button'">
@@ -96,7 +97,7 @@ Create Time  : 2020-03-31
               <template v-if="item.type == 'image'">
                 <div :key="key" class="image">
                   <el-input v-model="files[item.prop]" :readonly="!!item.readonly" type="text" @paste.native.capture.prevent="onPaste($event,item,index)" placeholder="粘贴截图上传">
-                    <el-button slot="append" :disabled="item.readonly" @click.native.stop="$refs.upload[0].click()">本地上传</el-button>
+                    <el-button slot="append" :disabled="!!item.readonly" @click.native.stop="$refs.upload[0].click()">本地上传</el-button>
                   </el-input>
                   <input ref="upload" type="file" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg" multiple @input="upload($event,item)" v-show="false" />
                   <div v-if="fieldsData[item.prop] && fieldsData[item.prop].length" class="image-box">
@@ -225,6 +226,33 @@ export default {
     this.onMapFields();
   },
   methods: {
+    isShow(k, item, scope) {
+      // 按钮是否显示
+      if (k.isShow) {
+        let bool = false;
+        if (k.isShow.type == "==") {
+          bool = scope.row[k.isShow.prop] == k.isShow.val;
+        }
+        if (k.isShow.type == ">=") {
+          bool = scope.row[k.isShow.prop] >= k.isShow.val;
+        }
+        if (k.isShow.type == "<=") {
+          bool = scope.row[k.isShow.prop] <= k.isShow.val;
+        }
+        if (k.isShow.type == "===") {
+          bool = scope.row[k.isShow.prop] === k.isShow.val;
+        }
+        if (k.isShow.type == "!==") {
+          bool = scope.row[k.isShow.prop] !== k.isShow.val;
+        }
+        if (k.isShow.type == "!=") {
+          bool = scope.row[k.isShow.prop] != k.isShow.val;
+        }
+        return bool;
+      } else {
+        return true;
+      }
+    },
     compute(item) {
       let a = 0;
       let b = 0;

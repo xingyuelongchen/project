@@ -60,6 +60,7 @@ Create Time  : 2020-03-27
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   name: "customerManage",
   data() {
@@ -160,6 +161,9 @@ export default {
     };
   },
   watch: {
+    update() { 
+      this.getData();
+    },
     refresh(a) {
       if (a) {
         this.getData();
@@ -178,6 +182,7 @@ export default {
     this.init();
   },
   computed: {
+    ...mapState(["update"]),
     refresh() {
       return this.$store.state.refresh;
     }
@@ -305,6 +310,12 @@ export default {
             { label: "搜索", style: "success", click: this.getData },
             { label: "重置", style: "wraning", click: this.onReset },
             {
+              label: "共享",
+              style: "success",
+              click: this.gongxiang,
+              role: 188
+            },
+            {
               label: "添加咨询信息",
               style: "primary",
               click: this.onAdd,
@@ -406,6 +417,17 @@ export default {
         let arr = data.data.concat(this.tableFields);
         arr.unshift({ type: "selection", fixed: "left" });
         this.tableFields = arr;
+      }
+    },
+    async gongxiang() {
+      this.tableData = [];
+      let { data } = await this.axios("/adminapi/Customer/shares", {
+        data: { ...this.search }
+      });
+      if (data.code) {
+        this.tableData = data.data;
+        this.page.total = data.count;
+        this.key = Math.random();
       }
     },
     async getData(bool = true) {
@@ -660,7 +682,7 @@ export default {
       if (data.code) {
         let obj = JSON.parse(JSON.stringify(item));
         delete obj.remark;
-        this.qrocdeData = obj;
+        this.qrocdeData = { ...obj, discount: 0 };
         this.qrocdeFields = data.data.map(e => {
           if (e.prop == "type" && item.xin) {
             e.options.shift();
@@ -673,6 +695,12 @@ export default {
               val: "payment",
               sub: "discount"
             };
+          }
+          if (e.prop == "is_timely" && item.xin) {
+            e.type = "hidden";
+          }
+          if (e.prop == "is_goods" && item.xin) {
+            e.type = "hidden";
           }
           return e;
         });
@@ -724,6 +752,7 @@ export default {
         this.editForm = obj;
         url == "edit" && (this.drawer = false);
         this.getData();
+        this.qrcode = false;
       }
     }
   }

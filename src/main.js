@@ -10,6 +10,7 @@ import '@/assets/iconfont/iconfont.css';
 import 'xe-utils';
 import VXETable from 'vxe-table';
 import 'vxe-table/lib/index.css';
+import version from '../package.json';
 Vue.config.productionTip = false;
 Vue.use(VXETable)
 Vue.prototype.$modal = VXETable.modal
@@ -52,6 +53,7 @@ Vue.directive('move', {
 });
 
 Vue.prototype.axios = axios;
+Vue.prototype.EXEVERSION = version.version;
 Vue.use(Element);
 Vue.use(template);
 new Vue({

@@ -28,7 +28,7 @@ Create Time  : 2020-07-22
             </span>
           </el-tooltip>
         </div>
-        <div class="itema" @click="$router.push('/user/info')">
+        <div class="itema" @click.stop="$router.push('/user/info')">
           <el-tooltip content="修改个人信息">
             <el-avatar :size="40" :src="$store.state.userinfo.pic">{{$store.state.userinfo.name}}</el-avatar>
           </el-tooltip>
@@ -37,14 +37,18 @@ Create Time  : 2020-07-22
           {{$store.state.userinfo.nickname}} {{$store.state.userinfo.mobile}}
         </div>
         <div class="itema">
+          <div class="EXEVERSION">当前版本：{{EXEVERSION}}</div>
           <el-tooltip content="设置">
             <el-dropdown trigger="click">
               <i class="el-icon-s-tools" style="font-size:18px;cursor: pointer;"></i>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="$refs.audio.play()">播放音乐</el-dropdown-item>
-                <el-dropdown-item @click.native="onMessage({type:'dialog'})">打开喜报</el-dropdown-item>
+                <template v-for="(item,index) in settingList">
+                  <el-dropdown-item :key="index" v-if="item.show" @click.native="item.event()">{{item.label}}</el-dropdown-item>
+                </template>
+                <!-- <el-dropdown-item @click.native="onMessage({type:'dialog'})">打开喜报</el-dropdown-item>
                 <el-dropdown-item @click.native="$router.push('/user/info')">修改资料</el-dropdown-item>
-                <el-dropdown-item @click.stop.native="logout">退出</el-dropdown-item>
+                <el-dropdown-item @click.stop.native="update">检查更新</el-dropdown-item>
+                <el-dropdown-item @click.stop.native="logout">退出</el-dropdown-item> -->
               </el-dropdown-menu>
             </el-dropdown>
           </el-tooltip>
@@ -98,7 +102,6 @@ Create Time  : 2020-07-22
   </div>
 </template>
 <script>
-const version = require("element-ui/package.json").version;
 import WS from "@/api/websocket";
 import isElectron from "is-electron";
 export default {
@@ -108,6 +111,25 @@ export default {
       key: 0,
       loading: false,
       message: [],
+      settingList: [
+        {
+          label: "修改资料",
+          event: () => this.$router.push("/user/info"),
+          show: true
+        },
+        { label: "检查更新", event: this.update, show: isElectron() },
+        {
+          label: "退出登录",
+          event: () => this.$router.push("/login"),
+          show: true
+        },
+        {
+          label: "切换账号",
+          event: () => this.$router.push("/login"),
+          show: isElectron()
+        },
+        { label: "退出系统", event: this.logout, show: isElectron() }
+      ],
       xibao: { show: false },
       refreshKey: 0,
       // 菜单折叠
@@ -211,142 +233,148 @@ export default {
       // };
       // this.$store.commit("setTabmenu", option);
     },
-    updateTheme(val, oldVal = "#409EFF") {
-      if (typeof val !== "string") return;
-      const head = document.getElementsByTagName("head")[0];
-      const themeCluster = this.getThemeCluster(val.replace("#", ""));
-      const originalCluster = this.getThemeCluster(oldVal.replace("#", ""));
-      const getHandler = (variable, id) => {
-        return () => {
-          const newStyle = this.updateStyle(
-            this[variable],
-            originalCluster,
-            themeCluster
-          );
-
-          let styleTag = document.getElementById(id);
-          if (!styleTag) {
-            styleTag = document.createElement("style");
-            styleTag.setAttribute("id", id);
-            head.appendChild(styleTag);
-          }
-          styleTag.innerText = newStyle;
-        };
-      };
-
-      // const chalkHandler = getHandler("chalk", "chalk-style");
-
-      const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`;
-      this.getCSSString(url, getHandler("chalk", "chalk-style"), "chalk");
-      // chalkHandler();
-
-      const link = [].slice.call(
-        document.getElementsByTagName("head")[0].getElementsByTagName("link")
-      );
-      for (let i = link.length - 3; i < link.length; i++) {
-        const style = link[i];
-        this.getCSSString(style.href, innerText => {
-          const originalCluster = this.getThemeCluster(
-            this.theme.replace("#", "")
-          );
-          const newStyle = this.updateStyle(
-            innerText,
-            originalCluster,
-            themeCluster
-          );
-          let styleTag = document.getElementById(i);
-          if (!styleTag) {
-            styleTag = document.createElement("style");
-            styleTag.id = i;
-            styleTag.innerText = newStyle;
-            head.appendChild(styleTag);
-          }
-        });
-      }
-
-      const styles = [].slice
-        .call(document.querySelectorAll("style"))
-        .filter(style => {
-          const text = style.innerText;
-          return (
-            new RegExp(oldVal, "i").test(text) && !/Chalk Variables/.test(text)
-          );
-        });
-      styles.forEach(style => {
-        const { innerText } = style;
-        if (typeof innerText !== "string") return;
-        style.innerText = this.updateStyle(
-          innerText,
-          originalCluster,
-          themeCluster
-        );
-      });
+    update() {
+      window.ipcRenderer.send("checkForUpdate");
     },
-    updateStyle(style, oldCluster, newCluster) {
-      let newStyle = style;
-      oldCluster.forEach((color, index) => {
-        newStyle = newStyle.replace(new RegExp(color, "ig"), newCluster[index]);
-      });
-      return newStyle;
-    },
-    getCSSString(url, callback, variable) {
-      const xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          if (variable) {
-            this[variable] = xhr.responseText.replace(/@font-face{[^}]+}/, "");
-          }
-          callback(xhr.responseText);
-        }
-      };
-      xhr.open("GET", url);
-      xhr.send();
-    },
-    getThemeCluster(theme) {
-      const tintColor = (color, tint) => {
-        let red = parseInt(color.slice(0, 2), 16);
-        let green = parseInt(color.slice(2, 4), 16);
-        let blue = parseInt(color.slice(4, 6), 16);
-
-        if (tint === 0) {
-          // when primary color is in its rgb space
-          return [red, green, blue].join(",");
-        } else {
-          red += Math.round(tint * (255 - red));
-          green += Math.round(tint * (255 - green));
-          blue += Math.round(tint * (255 - blue));
-
-          red = red.toString(16);
-          green = green.toString(16);
-          blue = blue.toString(16);
-
-          return `#${red}${green}${blue}`;
-        }
-      };
-
-      const shadeColor = (color, shade) => {
-        let red = parseInt(color.slice(0, 2), 16);
-        let green = parseInt(color.slice(2, 4), 16);
-        let blue = parseInt(color.slice(4, 6), 16);
-
-        red = Math.round((1 - shade) * red);
-        green = Math.round((1 - shade) * green);
-        blue = Math.round((1 - shade) * blue);
-
-        red = red.toString(16);
-        green = green.toString(16);
-        blue = blue.toString(16);
-
-        return `#${red}${green}${blue}`;
-      };
-
-      const clusters = [theme];
-      for (let i = 0; i <= 9; i++) {
-        clusters.push(tintColor(theme, Number((i / 10).toFixed(2))));
-      }
-      clusters.push(shadeColor(theme, 0.1));
-      return clusters;
+    handerSetting(item) {
+      item.event();
     }
+    // updateTheme(val, oldVal = "#409EFF") {
+    //   if (typeof val !== "string") return;
+    //   const head = document.getElementsByTagName("head")[0];
+    //   const themeCluster = this.getThemeCluster(val.replace("#", ""));
+    //   const originalCluster = this.getThemeCluster(oldVal.replace("#", ""));
+    //   const getHandler = (variable, id) => {
+    //     return () => {
+    //       const newStyle = this.updateStyle(
+    //         this[variable],
+    //         originalCluster,
+    //         themeCluster
+    //       );
+
+    //       let styleTag = document.getElementById(id);
+    //       if (!styleTag) {
+    //         styleTag = document.createElement("style");
+    //         styleTag.setAttribute("id", id);
+    //         head.appendChild(styleTag);
+    //       }
+    //       styleTag.innerText = newStyle;
+    //     };
+    //   };
+
+    //   // const chalkHandler = getHandler("chalk", "chalk-style");
+
+    //   const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`;
+    //   this.getCSSString(url, getHandler("chalk", "chalk-style"), "chalk");
+    //   // chalkHandler();
+
+    //   const link = [].slice.call(
+    //     document.getElementsByTagName("head")[0].getElementsByTagName("link")
+    //   );
+    //   for (let i = link.length - 3; i < link.length; i++) {
+    //     const style = link[i];
+    //     this.getCSSString(style.href, innerText => {
+    //       const originalCluster = this.getThemeCluster(
+    //         this.theme.replace("#", "")
+    //       );
+    //       const newStyle = this.updateStyle(
+    //         innerText,
+    //         originalCluster,
+    //         themeCluster
+    //       );
+    //       let styleTag = document.getElementById(i);
+    //       if (!styleTag) {
+    //         styleTag = document.createElement("style");
+    //         styleTag.id = i;
+    //         styleTag.innerText = newStyle;
+    //         head.appendChild(styleTag);
+    //       }
+    //     });
+    //   }
+
+    //   const styles = [].slice
+    //     .call(document.querySelectorAll("style"))
+    //     .filter(style => {
+    //       const text = style.innerText;
+    //       return (
+    //         new RegExp(oldVal, "i").test(text) && !/Chalk Variables/.test(text)
+    //       );
+    //     });
+    //   styles.forEach(style => {
+    //     const { innerText } = style;
+    //     if (typeof innerText !== "string") return;
+    //     style.innerText = this.updateStyle(
+    //       innerText,
+    //       originalCluster,
+    //       themeCluster
+    //     );
+    //   });
+    // },
+    // updateStyle(style, oldCluster, newCluster) {
+    //   let newStyle = style;
+    //   oldCluster.forEach((color, index) => {
+    //     newStyle = newStyle.replace(new RegExp(color, "ig"), newCluster[index]);
+    //   });
+    //   return newStyle;
+    // },
+    // getCSSString(url, callback, variable) {
+    //   const xhr = new XMLHttpRequest();
+    //   xhr.onreadystatechange = () => {
+    //     if (xhr.readyState === 4 && xhr.status === 200) {
+    //       if (variable) {
+    //         this[variable] = xhr.responseText.replace(/@font-face{[^}]+}/, "");
+    //       }
+    //       callback(xhr.responseText);
+    //     }
+    //   };
+    //   xhr.open("GET", url);
+    //   xhr.send();
+    // },
+    // getThemeCluster(theme) {
+    //   const tintColor = (color, tint) => {
+    //     let red = parseInt(color.slice(0, 2), 16);
+    //     let green = parseInt(color.slice(2, 4), 16);
+    //     let blue = parseInt(color.slice(4, 6), 16);
+
+    //     if (tint === 0) {
+    //       // when primary color is in its rgb space
+    //       return [red, green, blue].join(",");
+    //     } else {
+    //       red += Math.round(tint * (255 - red));
+    //       green += Math.round(tint * (255 - green));
+    //       blue += Math.round(tint * (255 - blue));
+
+    //       red = red.toString(16);
+    //       green = green.toString(16);
+    //       blue = blue.toString(16);
+
+    //       return `#${red}${green}${blue}`;
+    //     }
+    //   };
+
+    //   const shadeColor = (color, shade) => {
+    //     let red = parseInt(color.slice(0, 2), 16);
+    //     let green = parseInt(color.slice(2, 4), 16);
+    //     let blue = parseInt(color.slice(4, 6), 16);
+
+    //     red = Math.round((1 - shade) * red);
+    //     green = Math.round((1 - shade) * green);
+    //     blue = Math.round((1 - shade) * blue);
+
+    //     red = red.toString(16);
+    //     green = green.toString(16);
+    //     blue = blue.toString(16);
+
+    //     return `#${red}${green}${blue}`;
+    //   };
+
+    //   const clusters = [theme];
+    //   for (let i = 0; i <= 9; i++) {
+    //     clusters.push(tintColor(theme, Number((i / 10).toFixed(2))));
+    //   }
+    //   clusters.push(shadeColor(theme, 0.1));
+    //   return clusters;
+    // }
   },
   created() {
     new WS({ hander: this.onMessage });
@@ -424,6 +452,7 @@ export default {
       justify-content: center;
       vertical-align: middle;
       // transition: all 0.6s;
+      position: relative;
       &.active {
         background: rgba(1, 1, 1, 0.2);
       }
@@ -473,5 +502,18 @@ export default {
 .iconfont {
   font-size: 22px;
   margin-right: 8px;
+}
+.EXEVERSION {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  top: -17px;
+  right: 0px;
+  white-space: nowrap;
+  padding: 0 1px;
+  transform: scale(0.8);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  padding: 0 2px;
+  border-radius: 5px;
 }
 </style>

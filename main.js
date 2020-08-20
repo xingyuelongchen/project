@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const config = require('./src/config');
 const gotTheLock = app.requestSingleInstanceLock();
-const filePath = './store.json';
+const filePath = path.join(__dirname, 'store.json');
 var mainWindow = null, tray = null, uploadUrl, isQuill = true;
 
 if (app.isPackaged) {
@@ -147,7 +147,6 @@ function updateHandle() {
     })
   })
 }
-
 // 监听渲染事件
 function setIpcMainList() {
   ipcMain.on('msg', (event, data) => {
@@ -168,8 +167,23 @@ function setIpcMainList() {
 
     }
   })
-  ipcMain.on('dialog', function (event, data) {
-    data = data.data;
+  ipcMain.on('dialog', function (event, data) { 
+    mainWindow.flashFrame(true);
+    trayFlashing();
+    if (Notification.isSupported()) {
+      let notification = new Notification({
+        title: data.data.title,
+        sulent: true,
+        icon: path.join(__dirname, 'favicon.ico'),
+        // timeoutType: 'never',
+      });
+      notification.show();
+      notification.on('click', function () {
+        mainWindow.show();
+
+      })
+
+    }
     // dialog.showMessageBox({
     //   type: 'success', //弹出框类型
     //   title: data.title,
@@ -197,7 +211,7 @@ function setIpcMainList() {
 function closed() {
   tray = new Tray(path.join(__dirname, 'favicon.ico'));
   const contextMenu = Menu.buildFromTemplate([
-    { label: '打开主窗口', click: mainWindow.show },
+    { label: '打开窗口', click: mainWindow.show },
     { label: '退出系统', click() { isQuill = false; app.quit() } }
   ]);
   tray.on('click', () => {
@@ -222,7 +236,6 @@ function trayFlashing() {
     timer = null;
   })
 }
-
 // 删除信息
 function removeStore(type) {
   try {

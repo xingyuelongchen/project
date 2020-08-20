@@ -33,15 +33,17 @@ Create Time  : 2020-07-22
               <el-input clearable v-model="ruleForm.code" autocomplete="on"></el-input>
             </div>
           </el-form-item>
-          <el-form-item>
-            <div style="text-align:right" @click="register" v-if="!isLogin">
-              <el-link :underline="false" type="primary">立即注册</el-link>
-            </div>
-            <div style="text-align:right" @click="login" v-else>
-              <el-link :underline="false" type="primary">立即登录</el-link>
-            </div>
-          </el-form-item>
         </el-form>
+        <div style="height:40px;">
+          <div style="display:flex;justify-content:space-between" @click="register" v-if="!isLogin">
+            <el-link :underline="false" type="danger">下载客户端</el-link>
+            <el-link :underline="false" type="primary">立即注册</el-link>
+          </div>
+          <div style="display:flex;justify-content:space-between" @click="login" v-else>
+            <el-link :underline="false" type="danger">下载客户端</el-link>
+            <el-link :underline="false" type="primary">立即登录</el-link>
+          </div>
+        </div>
         <el-button type="primary" @click="setRoutes" style="width:100%">确认{{title}}</el-button>
       </div>
     </div>
@@ -125,19 +127,9 @@ export default {
           return;
         }
         let userinfo = data.data;
-        localStorage.setItem("userinfo", JSON.stringify(userinfo));
+        window.localStorage.setItem("userinfo", JSON.stringify(userinfo));
         this.$store.commit("setUserinfo", userinfo);
-        if (userinfo) {
-          this.$router.setRoles();
-          // let path = this.$store.state.menu[0].path;
-          // if (this.$store.state.menu[0].children[0]) {
-          //   path =
-          //     this.$store.state.menu[0].path +
-          //     "/" +
-          //     this.$store.state.menu[0].children[0].path;
-          // }
-          // this.$router.replace(path);
-        }
+        if (userinfo) this.$router.setRoles();
       }
       this.getCode();
     }

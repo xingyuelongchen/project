@@ -13,7 +13,7 @@ Create Time  : 2020-08-17
 
     </div>
     <div class="footer">
-      <mixForm v-model="value" :fields="formFields" style="z-index:2000" />
+      <mixForm v-model="value" :fields="formFields" style="z-index:1000" />
     </div>
 
   </div>
@@ -131,6 +131,7 @@ export default {
     overflow: hidden;
     /deep/ .el-form {
       padding-top: 0;
+      overflow: hidden;
     }
   }
 }
