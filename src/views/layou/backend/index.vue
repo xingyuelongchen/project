@@ -171,7 +171,10 @@ export default {
       this.$router.replace(path);
     },
     logout() {
-      if (isElectron()) window.ipcRenderer.send("close");
+      if (isElectron()) {
+        window.localStorage.removeItem("userinfo");
+        window.ipcRenderer.send("close");
+      }
       this.$router.replace("/login");
     },
     async refresh() {

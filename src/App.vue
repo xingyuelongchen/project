@@ -8,15 +8,12 @@ import isElectron from "is-electron";
 
 export default {
   created() {
-    this.ipcRenderer = window.ipcRenderer;
+   
   },
   mounted() {
     let vm = this;
     if (isElectron()) {
       vm.ipcRenderer = window.ipcRenderer;
-      vm.ipcRenderer.on("userinfo", (event, data) => {
-        console.log(data);
-      });
       vm.ipcRenderer.on("message", (event, data) => {
         console.log(event, data.msg);
       });

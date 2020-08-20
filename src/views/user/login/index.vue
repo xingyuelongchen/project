@@ -48,6 +48,7 @@ Create Time  : 2020-07-22
   </div>
 </template>
 <script>
+import isElectron from "is-electron";
 // import request from "request";
 export default {
   name: "Login",
@@ -69,10 +70,12 @@ export default {
     };
   },
   created() {
-    localStorage.removeItem("userinfo");
-    localStorage.removeItem("Store");
-    sessionStorage.removeItem("Store");
-    this.$store.commit("setClear");
+    if (!isElectron()) {
+      localStorage.removeItem("userinfo");
+      localStorage.removeItem("Store");
+      sessionStorage.removeItem("Store");
+      this.$store.commit("setClear");
+    }
     this.getCode();
   },
   methods: {
@@ -126,14 +129,14 @@ export default {
         this.$store.commit("setUserinfo", userinfo);
         if (userinfo) {
           this.$router.setRoles();
-          let path = this.$store.state.menu[0].path;
-          if (this.$store.state.menu[0].children[0]) {
-            path =
-              this.$store.state.menu[0].path +
-              "/" +
-              this.$store.state.menu[0].children[0].path;
-          }
-          this.$router.replace(path);
+          // let path = this.$store.state.menu[0].path;
+          // if (this.$store.state.menu[0].children[0]) {
+          //   path =
+          //     this.$store.state.menu[0].path +
+          //     "/" +
+          //     this.$store.state.menu[0].children[0].path;
+          // }
+          // this.$router.replace(path);
         }
       }
       this.getCode();

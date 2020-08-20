@@ -50,6 +50,7 @@ Vue.directive('move', {
 
   }
 });
+
 Vue.prototype.axios = axios;
 Vue.use(Element);
 Vue.use(template);

@@ -10,6 +10,7 @@ import minApp from './minApp';
 import app from './app';
 import web from './web';
 import setting from './setting';
+
 Vue.use(VueRouter);
 // 基础路由表
 const routes = [
@@ -58,6 +59,12 @@ VueRouter.prototype.replace = function replace(location) {
   return originalReplace.call(this, location).catch(err => err)
 }
 // 获取用户登录信息
+
+if (isElectron()) {
+  let userinfo = window.ipcRenderer.sendSync("getUserinfo");
+  if (userinfo)
+    window.localStorage.setItem('userinfo', JSON.stringify(userinfo));
+}
 let userinfo = localStorage.getItem('userinfo');
 VueRouter.prototype.setRoles = setRoles;
 const router = new VueRouter(routeOption);
@@ -65,7 +72,7 @@ let target = true;
 
 if (userinfo) {
   userinfo = JSON.parse(userinfo);
-  // 刷新页面时，重新加载路由表
+  // 刷新页面时，重新加载路由表 
   setRoles();
   // 页面刷新保持选项卡
   cache()
@@ -193,7 +200,7 @@ function setRoles() {
   Store.commit('setUserinfo', userinfo);
   // 通知 exe 存入用户信息
   if (isElectron())
-    window.ipcRenderer.send('userinfo', userinfo)
+    window.ipcRenderer.send('setUserinfo', userinfo);
   // 设置菜单缓存
   Store.commit('setMenu', frist);
   // 设置路由缓存
@@ -212,9 +219,22 @@ function setRoles() {
   if (target) {
     // 动态添加一次即可
     // target = false;
-    // 添加当前管理系统
-    sessionStorage.setItem('xitong', targetIndex);
+    // 添加当前管理系统  
     router.addRoutes(route.concat(client));
+    let path = Store.state.menu[0].path;
+    if (Store.state.menu[0].children[0]) {
+      path =
+        Store.state.menu[0].path +
+        "/" +
+        Store.state.menu[0].children[0].path;
+    }
+    sessionStorage.setItem('xitong', targetIndex);
+    // 如果在登录页，就会跳转到第一路由。如果不在登录页，只是页面刷新，就会保持原有URL地址
+    if (window.location.hash.indexOf('/login') >= 0) {
+      setTimeout(() => {
+        router.replace({ path });
+      }, 100);
+    }
   }
 }
 /**

@@ -76,9 +76,7 @@ function createWindow() {
   });
   // 更新程序
   updateHandle();
-  // 设置用户登录状态
-  let userinfo = getStore('userinfo')
-  mainWindow.webContents.send('userinfo', userinfo)
+
   // 初始化系统托盘图标
   closed();
   // 判断当前运行环境
@@ -149,19 +147,7 @@ function updateHandle() {
     })
   })
 }
-// 初始化系统图标
-function closed() {
-  tray = new Tray(path.join(__dirname, 'favicon.ico'));
-  const contextMenu = Menu.buildFromTemplate([
-    { label: '打开主窗口', click: mainWindow.show },
-    { label: '退出', click() { isQuill = false; app.quit() } }
-  ]);
-  tray.on('click', () => {
-    mainWindow.show();
-  })
-  tray.setToolTip('广艺舟');
-  tray.setContextMenu(contextMenu);
-}
+
 // 监听渲染事件
 function setIpcMainList() {
   ipcMain.on('msg', (event, data) => {
@@ -192,12 +178,33 @@ function setIpcMainList() {
     // }).then().catch()
   })
   ipcMain.on('close', function () {
+    removeStore('userinfo')
     isQuill = false;
-    app.quit()
+    app.quit();
   })
-  ipcMain.on('userinfo', function (event, data) {
+  ipcMain.on('setUserinfo', function (event, data) {
+    // 保存当前登录用户
     setStore('userinfo', data)
   })
+  ipcMain.on('getUserinfo', function (event, data) {
+    // 获取用户登录信息
+    let userinfo = getStore('userinfo');
+    event.returnValue = userinfo;
+
+  })
+}
+// 初始化系统图标
+function closed() {
+  tray = new Tray(path.join(__dirname, 'favicon.ico'));
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '打开主窗口', click: mainWindow.show },
+    { label: '退出系统', click() { isQuill = false; app.quit() } }
+  ]);
+  tray.on('click', () => {
+    mainWindow.show();
+  })
+  tray.setToolTip('广艺舟');
+  tray.setContextMenu(contextMenu);
 }
 // 托盘图标闪动
 function trayFlashing() {
@@ -215,15 +222,31 @@ function trayFlashing() {
     timer = null;
   })
 }
-// 保存信息
-function setStore(type, data) {
+
+// 删除信息
+function removeStore(type) {
+  try {
+    let store = fs.readFileSync(filePath, 'utf-8');
+    store = JSON.parse(store);
+    delete store[type];
+    fs.writeFileSync(filePath, JSON.stringify(store, null, 4))
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+// 保存和修改信息
+function setStore(type, data = {}) {
   try {
     let store = fs.readFileSync(filePath, 'utf-8');
     store = JSON.parse(store);
     store[type] = data;
-    fs.writeFileSync(filePath, JSON.stringify(store, null, 4))
+    fs.writeFileSync(filePath, JSON.stringify(store, null, 4));
+    return true;
   } catch (error) {
     console.log(error);
+    return false
   }
 }
 // 获取信息
@@ -234,5 +257,6 @@ function getStore(type) {
     return store[type]
   } catch (error) {
     console.log(error);
+    return {}
   }
 }
