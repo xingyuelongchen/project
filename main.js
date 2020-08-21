@@ -5,7 +5,7 @@ const fs = require('fs');
 const config = require('./src/config');
 const gotTheLock = app.requestSingleInstanceLock();
 const filePath = path.join(__dirname, 'store.json');
-var mainWindow = null, tray = null, uploadUrl, isQuill = true;
+var mainWindow = null, tray = null, uploadUrl, isQuill = true, timer = null, zhudong = false;
 
 if (app.isPackaged) {
   // 线上地址
@@ -92,12 +92,13 @@ function createWindow() {
     mainWindow.setMenu(null);
     // 在线地址
     // mainWindow.loadFile('./dist/index.html');
-    mainWindow.loadURL(config.feedUrl);
+    mainWindow.loadFile('./build/pay.html');
+    // mainWindow.loadURL(config.feedUrl);
   }
 }
 // 通过main进程发送事件给renderer进程，提示更新信息
-function sendUpdateMessage(text) {
-  mainWindow.webContents.send('message', text)
+function sendUpdateMessage(message) {
+  mainWindow.webContents.send('message', message)
 }
 // 更新处理器
 function updateHandle() {
@@ -123,7 +124,8 @@ function updateHandle() {
   })
   // 当发现版本为最新版本触发
   autoUpdater.on('update-not-available', function (info) {
-    sendUpdateMessage(message.updateNotAva)
+    if (zhudong) sendUpdateMessage(message.updateNotAva)
+
   })
   // 更新下载进度事件
   autoUpdater.on('download-progress', function (progressObj) {
@@ -139,8 +141,11 @@ function updateHandle() {
     // 主进程向renderer进程发送是否确认更新
     mainWindow.webContents.send('isUpdateNow', versionInfo)
   })
-  ipcMain.on('checkForUpdate', () => {
-    // 收到renderer进程的检查通知后，执行自动更新检查 
+  ipcMain.on('checkForUpdate', (event, data) => {
+    // 收到renderer进程的检查通知后，执行自动更新检查
+    if (data && data.type == 'zhudong') {
+      zhudong = true;
+    }
     let checkInfo = autoUpdater.checkForUpdates()
     checkInfo.then(function (data) {
       versionInfo = data.versionInfo // 获取更新包版本等信息
@@ -167,7 +172,7 @@ function setIpcMainList() {
 
     }
   })
-  ipcMain.on('dialog', function (event, data) { 
+  ipcMain.on('dialog', function (event, data) {
     mainWindow.flashFrame(true);
     trayFlashing();
     if (Notification.isSupported()) {
@@ -223,16 +228,17 @@ function closed() {
 // 托盘图标闪动
 function trayFlashing() {
   let msgFlag = true;
+  clearInterval(timer);
   timer = setInterval(() => {
     msgFlag = !msgFlag
     if (msgFlag) tray.setImage(path.join(__dirname, './favicon.png'));
     else tray.setImage(path.join(__dirname, './favicon.ico'));
     tray.setToolTip('您有一条新消息!');
-  }, 400)
+  }, 500)
   mainWindow.once('focus', () => {
+    mainWindow.flashFrame(false);
     tray.setImage(path.join(__dirname, './favicon.ico'))
     clearInterval(timer);
-    mainWindow.flashFrame(false);
     timer = null;
   })
 }

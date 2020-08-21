@@ -5,64 +5,29 @@ Create Time  : 2020-07-30
 -->
 <template>
   <div style="height:100%">
-    <div class="content-item">
-      <el-card class="box-card">
+    <div class="content-wrap">
+      <el-card>
         <div slot="header">
           组织构架
-          <el-button
-            v-if="!orgList.length"
-            type="primary"
-            style="float:right;padding:5px;"
-            @click="openList"
-          >添加组织</el-button>
+          <el-button v-if="!orgList.length" type="primary" style="float:right;padding:5px;" @click="openList">添加组织</el-button>
         </div>
         <el-scrollbar>
-          <el-tree
-            :data="orgList"
-            :expand-on-click-node="true"
-            :default-expanded-keys="treeKey"
-            highlight-current
-            node-key="id"
-            check-strictly
-            @node-click="nodeClick"
-          >
+          <el-tree :data="orgList" :expand-on-click-node="true" :default-expanded-keys="treeKey" highlight-current node-key="id" check-strictly @node-click="nodeClick">
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ node.label }}</span>
               <span>
-                <i
-                  class="el-icon-plus"
-                  @click.self.stop="() => treeAdd(data)"
-                  style="color:#00BABD;padding:0 5px"
-                ></i>
-                <i
-                  class="el-icon-edit"
-                  @click.stop.self="() => treeChange(data)"
-                  style="color:#ff6600;padding:0 5px"
-                ></i>
+                <i class="el-icon-plus" @click.self.stop="() => treeAdd(data)" style="color:#00BABD;padding:0 5px"></i>
+                <i class="el-icon-edit" @click.stop.self="() => treeChange(data)" style="color:#ff6600;padding:0 5px"></i>
 
-                <i
-                  v-if="data.pid >=0"
-                  class="el-icon-delete"
-                  @click.stop.self="() => treeDel(data)"
-                  style="color:#ee3333;padding:0 5px"
-                ></i>
+                <i v-if="data.pid >=0" class="el-icon-delete" @click.stop.self="() => treeDel(data)" style="color:#ee3333;padding:0 5px"></i>
               </span>
             </span>
           </el-tree>
         </el-scrollbar>
       </el-card>
-      <el-card class="box-card">
-        <div slot="header">组织构架</div>
-      </el-card>
+      <el-card header="组织"></el-card>
     </div>
-    <el-dialog
-      :title="title"
-      :visible.sync="dialogFormVisible"
-      width="400px"
-      :modal="true"
-      top="15vh"
-      @close="close"
-    >
+    <el-dialog :title="title" :visible.sync="dialogFormVisible" width="400px" :modal="true" top="15vh" @close="close">
       <mixForm v-model="orgForm" :fields="rolesFields" />
     </el-dialog>
   </div>
@@ -180,11 +145,11 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-.content-item {
+.content-wrap {
   display: grid;
   grid-gap: 0 1%;
   grid-template-rows: 100%;
-  grid-template-columns: 300px auto;
+  grid-template-columns: 400px 1fr 1fr 1fr;
   .custom-tree-node {
     display: flex;
     justify-content: space-between;

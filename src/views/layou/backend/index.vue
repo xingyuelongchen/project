@@ -37,7 +37,6 @@ Create Time  : 2020-07-22
           {{$store.state.userinfo.nickname}} {{$store.state.userinfo.mobile}}
         </div>
         <div class="itema">
-          <div class="EXEVERSION">当前版本：{{EXEVERSION}}</div>
           <el-tooltip content="设置">
             <el-dropdown trigger="click">
               <i class="el-icon-s-tools" style="font-size:18px;cursor: pointer;"></i>
@@ -45,10 +44,6 @@ Create Time  : 2020-07-22
                 <template v-for="(item,index) in settingList">
                   <el-dropdown-item :key="index" v-if="item.show" @click.native="item.event()">{{item.label}}</el-dropdown-item>
                 </template>
-                <!-- <el-dropdown-item @click.native="onMessage({type:'dialog'})">打开喜报</el-dropdown-item>
-                <el-dropdown-item @click.native="$router.push('/user/info')">修改资料</el-dropdown-item>
-                <el-dropdown-item @click.stop.native="update">检查更新</el-dropdown-item>
-                <el-dropdown-item @click.stop.native="logout">退出</el-dropdown-item> -->
               </el-dropdown-menu>
             </el-dropdown>
           </el-tooltip>
@@ -99,6 +94,7 @@ Create Time  : 2020-07-22
       <mixMessage :value="item" :key="item.id" v-if="item.show" @input="item.show=false" />
     </template>
     <mixXibao v-model="xibao" />
+    <div class="EXEVERSION">版本：V{{EXEVERSION}}</div>
   </div>
 </template>
 <script>
@@ -121,7 +117,7 @@ export default {
         {
           label: "退出登录",
           event: () => this.$router.push("/login"),
-          show: true
+         show: !isElectron()
         },
         {
           label: "切换账号",
@@ -507,13 +503,15 @@ export default {
   font-size: 12px;
   color: rgba(0, 0, 0, 0.4);
   position: absolute;
-  top: -17px;
+  // top: -17px;
+  bottom: 0;
   right: 0px;
   white-space: nowrap;
-  padding: 0 1px;
-  transform: scale(0.8);
+  // transform: scale(0.8);
   border: 1px solid rgba(0, 0, 0, 0.4);
-  padding: 0 2px;
+  padding: 0 5px;
+  margin: 5px;
   border-radius: 5px;
+  background: #fff;
 }
 </style>

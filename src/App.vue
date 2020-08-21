@@ -7,15 +7,17 @@
 import isElectron from "is-electron";
 
 export default {
-  created() {
-   
-  },
+  created() {},
   mounted() {
     let vm = this;
     if (isElectron()) {
+      let msg = "";
       vm.ipcRenderer = window.ipcRenderer;
       vm.ipcRenderer.on("message", (event, data) => {
-        console.log(event, data.msg);
+        msg && msg.close();
+        if (data.status >= 0) {
+          msg = this.$message.success(data.msg);
+        }
       });
       vm.ipcRenderer.on("downloadProgress", (event, progressObj) => {
         console.log("downloadProgress", progressObj);

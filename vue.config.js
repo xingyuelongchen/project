@@ -43,6 +43,11 @@ module.exports = {
                 target: config.baseUrl,
                 ws: true,
                 changeOrigin: true
+            },
+            "/studyapi": {
+                target: 'http://www.guangyizhou.cn',
+                ws: true,
+                changeOrigin: true
             }
         }
     }

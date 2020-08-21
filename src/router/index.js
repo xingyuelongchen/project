@@ -60,6 +60,7 @@ VueRouter.prototype.replace = function replace(location) {
 }
 // 获取用户登录信息
 if (isElectron()) {
+  console.log(isElectron());
   let userinfo = window.ipcRenderer.sendSync("getUserinfo");
   if (userinfo)
     window.localStorage.setItem('userinfo', JSON.stringify(userinfo));
@@ -107,7 +108,7 @@ function beforeRouter(to, from, next) {
       return
     }
   }
-  if (/(crm|app|minapp|web|user)/.test(to.fullPath)) {
+  if (/(crm|app|minapp|web|user|setting)/.test(to.fullPath)) {
     let title = to.meta.title;
     if (to.matched[to.matched.length - 2] && to.matched[to.matched.length - 2].meta.title) {
       title = to.matched[to.matched.length - 2].meta.title + '/' + to.meta.title;
@@ -225,11 +226,11 @@ function setRoles() {
     }
     sessionStorage.setItem('xitong', targetIndex);
     // 如果在登录页，就会跳转到第一路由。如果不在登录页，只是页面刷新，就会保持原有URL地址
-
+    if (isElectron()) {
+      setTimeout(() => router.replace({ path }), 100);
+    }
     if (window.location.hash.indexOf('/login') >= 0) {
-      setTimeout(() => {
-        router.replace({ path });
-      }, 100);
+      setTimeout(() => router.replace({ path }), 100);
     }
   }
 }

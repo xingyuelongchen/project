@@ -10,8 +10,8 @@ Create Time  : 2020-03-31
         <template v-for="(item,index) in v">
           <template v-if="item.type == 'hidden'"></template>
           <el-col :key="index" :span="item.span||24" :xs="item.xs||24" v-else>
-            
-            <el-form-item   clearable :label-width="item.labelWidth?item.labelWidth+'px' :'120px'" :label="item.type == 'button' ?'': item.label" :prop="item.prop" :rules="item.rule" :required="!!item.required" :error="item.error">
+
+            <el-form-item clearable :label-width="item.labelWidth?item.labelWidth+'px' :'120px'" :label="item.type == 'button' ?'': item.label" :prop="item.prop" :rules="item.rule" :required="!!item.required" :error="item.error">
               <template v-if=" item.type =='compute'">
                 <el-input clearable class="input" :size="item.size" :value="fieldsData[item.prop]" inline-message :placeholder="item.placeholder" type="text" @focus="compute(item)">
 
@@ -51,7 +51,7 @@ Create Time  : 2020-03-31
               </template>
               <template v-if="item.type == 'select'">
                 <el-select clearable v-if="!item.readonly" :size="item.size" v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :multiple="item.multiple" :collapse-tags="item.multiple" @change="change(item,index,'change')">
-                  <el-option v-for="(k,i) in item.options" :key="i" :disabled="!!k.disabled" :value-id="k.id" :label="k.label || k[item.config.label]" :value="k.value || k[item.config.value] || k" />
+                  <el-option v-for="(k,i) in item.options" :key="i" :disabled="!!k.disabled" :value-id="k.id" :label="k.label || k[item.config.label]" :value="k.value || k[item.config.value] ||k.label|| k" />
                 </el-select>
                 <el-input v-else v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :readonly="!!item.readonly"></el-input>
               </template>
