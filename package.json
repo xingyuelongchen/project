@@ -1,7 +1,7 @@
 {
     "name": "guangyizhou",
     "version": "1.0.39",
-    "main": "main.js",
+    "main": "electron/main.js",
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
@@ -89,10 +89,10 @@
             "perMachine": true,
             "allowElevation": true,
             "allowToChangeInstallationDirectory": true,
-            "installerIcon": "./favicon.ico",
-            "uninstallerIcon": "./favicon.ico",
+            "installerIcon": "./electron/favicon.ico",
+            "uninstallerIcon": "./electron/favicon.ico",
             "uninstallDisplayName": "广艺舟",
-            "installerHeaderIcon": "./favicon.ico",
+            "installerHeaderIcon": "./electron/favicon.ico",
             "createDesktopShortcut": "always",
             "createStartMenuShortcut": true,
             "warningsAsErrors": false,
@@ -106,7 +106,7 @@
             }
         ],
         "files": [
-            "main.js",
+            "electron/main.js",
             "dist/",
             "src/config.js",
             "preload.js",
@@ -114,7 +114,7 @@
             "store.json"
         ],
         "win": {
-            "icon": "./favicon.ico",
+            "icon": "./electron/favicon.ico",
             "target": [
                 {
                     "target": "nsis",

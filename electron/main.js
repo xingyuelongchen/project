@@ -1,10 +1,11 @@
-const { app, BrowserWindow, ipcMain, Notification, dialog, Menu, Tray } = require('electron') // ipcMain 主线程
-const { autoUpdater } = require('electron-updater')
+const { app, BrowserWindow, ipcMain, Notification, dialog, Menu, MenuItem, Tray } = require('electron') // ipcMain 主线程
+const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs');
-const config = require('./src/config');
+const config = require('../src/config');
 const gotTheLock = app.requestSingleInstanceLock();
 const filePath = path.join(__dirname, 'store.json');
+const menu = new Menu();
 var mainWindow = null, tray = null, uploadUrl, isQuill = true, timer = null, zhudong = false;
 
 if (app.isPackaged) {
@@ -74,27 +75,27 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js')
     }
   });
+
   // 更新程序
   updateHandle();
 
   // 初始化系统托盘图标
   closed();
+  menu.append(new MenuItem({
+    // label: 'tools',
+    accelerator: 'CmdOrCtrl+shift+i',
+    click: () => { mainWindow.webContents.openDevTools(); }
+  }))
+  mainWindow.setMenu(menu);
   // 判断当前运行环境
   if (app.isPackaged) {
-    mainWindow.setMenu(null);
-    // mainWindow.webContents.openDevTools();
-    mainWindow.loadFile('./dist/index.html');
+    mainWindow.loadFile('../dist/index.html');
     // mainWindow.loadURL(config.feedUrl);
   } else {
-    // 控制台
-    mainWindow.webContents.openDevTools();
-    // 菜单
-    mainWindow.setMenu(null);
-    // 在线地址
-    // mainWindow.loadFile('./dist/index.html');
-    mainWindow.loadFile('./build/pay.html');
-    // mainWindow.loadURL(config.feedUrl);
+    // mainWindow.loadFile('../dist/index.html'); 
+    mainWindow.loadURL(config.feedUrl);
   }
+
 }
 // 通过main进程发送事件给renderer进程，提示更新信息
 function sendUpdateMessage(message) {
