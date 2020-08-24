@@ -60,8 +60,7 @@ VueRouter.prototype.replace = function replace(location) {
 }
 // 获取用户登录信息
 if (isElectron()) {
-  console.log(isElectron());
-  let userinfo = window.ipcRenderer.sendSync("getUserinfo");
+  let userinfo = window.ipcRenderer.sendSync("getStore", 'userinfo');
   if (userinfo)
     window.localStorage.setItem('userinfo', JSON.stringify(userinfo));
 }
@@ -125,26 +124,11 @@ function beforeRouter(to, from, next) {
 }
 
 /**
- * 根据用户权限生成路由表
- * @param {Object} obj 路由对象
- * @param {Array} userinfo 用户权限
+ * 
+ * @param {Object} routes 路由信息
+ * @param {Array} menu 后台菜单表
+ * @param {Array} roles 权限id组
  */
-function mapRouter(obj, userinfo) {
-  let arr = [];
-  obj.forEach(e => {
-    if (userinfo.role.includes(e.meta.role)) {
-      if (e.children && e.children.length) {
-        arr.push({
-          ...e,
-          children: mapRouter(e.children, userinfo)
-        });
-      } else {
-        arr.push(e);
-      }
-    }
-  });
-  return arr;
-}
 function mapRole(routes, menu, roles) {
   let arr = [];
   menu.forEach(e => {
@@ -199,7 +183,7 @@ function setRoles() {
   Store.commit('setUserinfo', userinfo);
   // 通知 exe 存入用户信息
   if (isElectron())
-    window.ipcRenderer.send('setUserinfo', userinfo);
+    window.ipcRenderer.send('setStore', { title: 'userinfo', data: userinfo });
   // 设置菜单缓存
   Store.commit('setMenu', frist);
   // 设置路由缓存

@@ -1,59 +1,51 @@
 {
+    "history": {
+        "13169906653": {
+            "mobile": "15883720435",
+            "password": "476799",
+            "code": "1192"
+        },
+        "18866668888": {
+            "mobile": "18866668888",
+            "password": "123456"
+        }
+    },
     "userinfo": {
-        "id": 2,
-        "mobile": "13169906653",
-        "dept": "顾问中心",
-        "dept_id": "战斗一营",
-        "card": "513021199406052894",
-        "nickname": "青龙",
-        "real": "文青龙",
-        "weixin": "1014315485",
-        "qq": "1014315485",
-        "birthday": "1994-06-05",
+        "id": 20473,
+        "mobile": "15883720435",
+        "dept": "导师中心",
+        "dept_id": "竞价部",
+        "card": null,
+        "nickname": "江老师",
+        "real": "",
+        "weixin": null,
+        "qq": null,
+        "birthday": null,
         "address": null,
-        "pic": "/uploads/img/20200819/4e6dd9184999b4a5eb995049f8ea5020.png",
+        "pic": null,
         "feeling": null,
-        "password": "f840a801d1fd9db3f5b3202202574fc3",
-        "iden": "YqjH",
+        "password": "4cd42f42b780114402b94d395d04e59c",
+        "iden": "v3GH",
         "status": 1,
-        "role_id": 4,
+        "role_id": 16,
         "role": [
             1,
-            7,
-            10,
-            16,
-            32,
-            35,
-            36,
-            37,
-            38,
-            70,
-            73,
-            76,
-            79,
+            8,
+            18,
+            81,
             87,
             91,
             92,
             93,
             101,
             120,
-            122,
-            124,
-            125,
-            127,
-            128,
-            129,
-            133,
-            134,
-            136,
-            137,
-            138,
-            146,
-            153,
-            185,
+            163,
+            169,
+            170,
+            172,
             186,
             187,
-            188
+            189
         ],
         "menu": [
             {
@@ -178,10 +170,19 @@
                         "icon": "icon-yingyongchengxu",
                         "children": [
                             {
+                                "id": 192,
+                                "path": "seek",
+                                "pid": 7,
+                                "title": "咨询记录",
+                                "status": 1,
+                                "sort": 0,
+                                "icon": ""
+                            },
+                            {
                                 "id": 16,
                                 "path": "index",
                                 "pid": 7,
-                                "title": "顾问记录",
+                                "title": "成交记录",
                                 "status": 1,
                                 "sort": 1,
                                 "icon": ""
@@ -664,7 +665,17 @@
                         "id": 121,
                         "path": "contract",
                         "pid": 118,
-                        "title": "合同管理",
+                        "title": "套餐管理",
+                        "status": 1,
+                        "sort": null,
+                        "icon": "",
+                        "children": []
+                    },
+                    {
+                        "id": 191,
+                        "path": "pay",
+                        "pid": 118,
+                        "title": "三方接口",
                         "status": 1,
                         "sort": null,
                         "icon": "",
@@ -673,7 +684,7 @@
                 ]
             }
         ],
-        "department": 64,
-        "dateTime": 1598066491064
+        "department": 62,
+        "dateTime": 1598349292153
     }
 }

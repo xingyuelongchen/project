@@ -117,11 +117,14 @@ export default {
         {
           label: "退出登录",
           event: () => this.$router.push("/login"),
-         show: !isElectron()
+          show: !isElectron()
         },
         {
           label: "切换账号",
-          event: () => this.$router.push("/login"),
+          event: () => {
+            window.ipcRenderer.send("removeStore", "userinfo");
+            this.$router.push("/login");
+          },
           show: isElectron()
         },
         { label: "退出系统", event: this.logout, show: isElectron() }
@@ -199,7 +202,7 @@ export default {
       this.loading = true;
       setTimeout(() => {
         this.loading = false;
-      }, 1500);
+      }, 1000);
       let { data } = await this.axios("/adminapi/User/information", {
         data: { uid: this.userinfo.id }
       });
@@ -209,8 +212,8 @@ export default {
         return;
       }
       this.$store.commit("setUserinfo", data.data);
-      window.location.reload();
-      // this.$router.setRoles();
+      // window.location.reload();
+      this.$router.setRoles();
       // this.refreshKey = Math.random();
       // let to = this.$route;
       // let title = to.meta.title;
@@ -230,7 +233,7 @@ export default {
       // this.$store.commit("setTabmenu", option);
     },
     update() {
-      window.ipcRenderer.send("checkForUpdate");
+      window.ipcRenderer.send("queryUpdate");
     },
     handerSetting(item) {
       item.event();

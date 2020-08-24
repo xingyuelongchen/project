@@ -14,6 +14,7 @@ export default
     { path: 'index', name: 'Customerindex', meta: { keepAlive: true, role: 20, title: '咨询统计', }, component: () => import('@/views/backend/crm/customer/index/') },
     // 销售中心
     { path: 'sales', name: 'Sales', meta: { keepAlive: true, role: 7, title: '销售中心', }, component: () => import('@/views/layou'), },
+    { path: 'seek', name: 'Saleseek', meta: { keepAlive: true, role: 192, title: '咨询记录', }, component: () => import('@/views/backend/crm/sales/seek') },
     { path: 'total', name: 'Salestotal', meta: { keepAlive: true, role: 77, title: '数据总览', }, component: () => import('@/views/backend/crm/sales/total') },
     { path: 'index', name: 'Salesindex', meta: { keepAlive: true, role: 16, title: '顾问记录', }, component: () => import('@/views/backend/crm/sales/index/') },
     { path: 'forming', name: 'Salesforming', meta: { keepAlive: true, role: 79, title: '个人目标', }, component: () => import('@/views/backend/crm/sales/forming') },

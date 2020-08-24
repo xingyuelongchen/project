@@ -4,22 +4,29 @@ Create author: qinglong
 Create Time  : 2020-03-27
 -->
 <template>
-  <div>
-    <div class="content-wrap">
-      <mixSearch v-model="search" :fields="searchFields" />
-      <div class="info">
+  <div style="margin:20px auto">
+    <mixSearch v-model="search" :fields="searchFields" />
+    <div class="info" v-if="maxOrder">
+      <template>
         <span>
-          <el-button @click="handDistribution(null,true)" type="primary" size="mini" v-role="126">手动分配</el-button>
+          接待上限：
+          <el-tag>{{maxOrder.limit || '--'}}</el-tag>
         </span>
         <span>
-          <el-button @click="autoDistribution(null,true)" type="warning" size="mini" v-role="123">自动分配</el-button>
+          累计接单：
+          <el-tag>{{maxOrder.count || '--'}}</el-tag>
         </span>
-      </div>
-      <div style="height:calc(100% - 160px)">
-        <mixTable v-model="tableData" :fields="tableFields" @select="selection" :key="key" />
-      </div>
-      <mixPage v-model="page" />
+        <span>
+          <el-tag effect="dark" :type="maxOrder.status?'':'danger'">{{maxOrder.status ?'接单中':'暂停接单'}}</el-tag>
+        </span>
+        <span v-if="maxOrder.control">
+          接单开关：
+          <el-switch v-model="maxOrder.status" @change="stopOrder" inactive-color="#ccc" :active-value="1" :inactive-value="0" />
+        </span>
+      </template>
     </div>
+    <mixTable v-model="tableData" :fields="tableFields" @select="selection" :key="key" />
+    <mixPage v-model="page" />
     <mixDrawer style="top:61px" v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose" :isShow="true">
       <mixForm :key="key" v-model="editForm" :fields="editFields" />
     </mixDrawer>
@@ -33,7 +40,7 @@ Create Time  : 2020-03-27
         <!-- <el-button @click="dialogVisible = false">关闭窗口</el-button> -->
       </span>
     </el-dialog>
-    <!-- <el-dialog title="添加业绩" :visible.sync="qrcode" width="50%">
+    <el-dialog title="添加业绩" :visible.sync="qrcode" width="50%">
       <div style="max-height:500px;height:500px;overflow:hidden">
         <el-scrollbar>
           <mixForm v-model="qrocdeData" :fields="qrocdeFields" style="border:none;padding-right:20px" />
@@ -42,13 +49,25 @@ Create Time  : 2020-03-27
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="saveOrder">保存</el-button>
       </span>
-    </el-dialog> -->
+    </el-dialog>
+    <el-dialog title="客户状态" :visible.sync="statusShow" width="500px">
+      <div style="max-height:500px;height:250px;overflow:hidden">
+        <el-scrollbar>
+          <mixForm v-model="statusData" :fields="statusFields" style="border:none;padding-right:20px" />
+        </el-scrollbar>
+      </div>
+    </el-dialog>
+    <el-dialog title="历史状态" :visible.sync="historyShow" width="900px">
+      <div style="height:350px">
+        <mixTable v-model="historyData" :fields="historyFields" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
 export default {
-  name: "Customerlist",
+  name: "Saleseek",
   data() {
     return {
       key: "a",
@@ -59,6 +78,19 @@ export default {
         page: 1,
         total: 0
       },
+      historyShow: false,
+      historyData: [],
+      historyFields: [
+        { width: 100, label: "id", prop: "id" },
+        { width: 120, label: "编辑部门", prop: "label_1" },
+        { width: 120, label: "客户状态", prop: "label_2" },
+        { width: 120, label: "服务状态", prop: "label_3" },
+        { width: 120, label: "操作账号", prop: "uid" },
+        { label: "操作时间", prop: "create_time" }
+      ],
+      statusShow: false,
+      statusData: {},
+      statusFields: [],
       shareTableData: [],
       shareTableFields: [
         { label: "花名", prop: "nickname" },
@@ -94,7 +126,41 @@ export default {
       selectList: [],
       selectionData: { channel: null, source: null, status: null },
       search: {},
-      searchFields: [],
+      searchFields: [
+        {
+          label: "咨询",
+          type: "datetimerange",
+          prop: "date",
+          span: 5.5
+        },
+        {
+          label: "微信/QQ/电话/旺旺",
+          prop: "search",
+          type: "text",
+          span: 3
+        },
+        {
+          type: "button",
+          span: 10,
+          options: [
+            { label: "搜索", style: "success", click: this.getData },
+            { label: "重置", style: "wraning", click: this.onReset },
+            {
+              label: "共享",
+              style: "success",
+              click: this.gongxiang,
+              role: 188
+            },
+            {
+              label: "添加咨询信息",
+              style: "primary",
+              click: this.onAdd,
+              icon: "el-icon-plus",
+              role: 194
+            }
+          ]
+        }
+      ],
       salesSearchData: {},
       salesSearch: [
         { label: "昵称", type: "text", prop: "search", span: 6 },
@@ -174,15 +240,15 @@ export default {
     }
   },
   methods: {
-    // async stopMaxOrder() {
-    //   // 暂停接单
-    //   let { data } = await this.axios("/adminapi/Customer/control");
-    //   if (data.code) {
-    //     this.maxOrder = data.data;
-    //   }
-    // },
+    async stopMaxOrder() {
+      // 暂停接单
+      let { data } = await this.axios("/adminapi/Salecustomer/control");
+      if (data.code) {
+        this.maxOrder = data.data;
+      }
+    },
     async stopOrder() {
-      await this.axios("/adminapi/Customer/control_update", {
+      await this.axios("/adminapi/Salecustomer/control_update", {
         data: this.maxOrder
       });
     },
@@ -198,38 +264,27 @@ export default {
               size: "mini",
               label: "编辑信息",
               style: "success",
-              role: 37,
+              role: 195,
               click: this.tableEdit
             },
             {
+              role: 73,
               size: "mini",
-              label: "共享客户",
-              style: "success",
-              role: 131,
-              click: this.share
+              label: "添加业绩",
+              style: "primary",
+              click: this.addOrder
             },
             {
               size: "mini",
-              label: "手动分配",
-              style: "warning",
-              click: this.handDistribution,
-              role: 39,
-              isShow: { type: "==", prop: "saler", val: "" }
+              label: "客户状态",
+              style: "primary",
+              click: this.addStatus
             },
             {
               size: "mini",
-              label: "自动分配",
-              style: "warning",
-              role: 38,
-              click: this.autoDistributiona,
-              isShow: { type: "==", prop: "saler", val: "" }
-            },
-            {
-              size: "mini",
-              label: "删除",
-              style: "danger",
-              role: 130,
-              click: this.tableDel
+              label: "客户历史状态",
+              style: "primary",
+              click: this.addHistory
             }
           ]
         }
@@ -238,73 +293,40 @@ export default {
       await this.getTable();
       // 表格内容数据
       await this.getData(false);
-      // await this.stopMaxOrder();
-      await this.getSelectList();
+      await this.stopMaxOrder();
     },
-    async getSelectList() {
-      let { data } = await this.axios("/adminapi/customer/p_tool", {
-        data: { id: 4 }
+    async addHistory(item) {
+      let { data } = await this.axios("/adminapi/Salecustomer/label_log", {
+        data: { customer_id: item.id }
       });
-      let { data: res } = await this.axios("/adminapi/customer/p_tool", {
-        data: { id: 5 }
+      if (data.code) {
+        this.historyShow = true;
+        this.historyData = data.data;
+      }
+    },
+    async addStatus(item) {
+      this.statusShow = true;
+      this.statusData = { customer_id: item.id };
+      let { data } = await this.axios("/adminapi/Salecustomer/customer_label");
+      if (data.code) {
+        this.statusFields = [
+          {
+            label: "客户状态",
+            type: "cascader",
+            prop: "label",
+            options: data.data
+          },
+          { label: "标签备注", type: "textarea", wrap: true, prop: "remak" },
+          { label: "确定", type: "button", wrap: true, click: this.statusSave }
+        ];
+      }
+    },
+    async statusSave() {
+      await this.axios("/adminapi/Salecustomer/label_add", {
+        data: this.statusData
       });
-      this.searchFields = [
-        {
-          label: "咨询",
-          type: "datetimerange",
-          prop: "date",
-          span: 5.5
-        },
-        {
-          label: "微信/QQ/电话/旺旺",
-          prop: "search",
-          type: "text",
-          span: 3
-        },
-
-        {
-          label: "咨询信息",
-          prop: "info",
-          type: "text",
-          span: 3
-        },
-        {
-          label: "跟踪状态",
-          type: "select",
-          prop: "trace_status",
-          span: 3,
-          options: data.data
-        },
-        {
-          label: "客户类型",
-          type: "select",
-          prop: "label",
-          span: 3,
-          options: res.data
-        },
-        {
-          type: "button",
-          span: 10,
-          options: [
-            { label: "搜索", style: "success", click: this.getData },
-            { label: "重置", style: "wraning", click: this.onReset },
-            {
-              label: "添加咨询信息",
-              style: "primary",
-              click: this.onAdd,
-              icon: "el-icon-plus",
-              role: 36
-            },
-            {
-              label: "导出表格",
-              style: "danger",
-              icon: "el-icon-download",
-              click: this.onExport,
-              role: 132
-            }
-          ]
-        }
-      ];
+      this.getData();
+      // this.statusShow = false;
     },
     changeImage(item) {
       this.qrcode = true;
@@ -333,7 +355,7 @@ export default {
       }
     },
     async getDepartment() {
-      let { data } = await this.axios("/adminapi/Customer/dept");
+      let { data } = await this.axios("/adminapi/Salecustomer/dept");
       if (data.code) {
         this.salesSearch = this.salesSearch.map(e => {
           if (e.prop == "saler_group_zid") {
@@ -349,7 +371,7 @@ export default {
         nickname: item.nickname,
         customer_id: this.id
       };
-      await this.axios("adminapi/Customer/share", {
+      await this.axios("adminapi/Salecustomer/share", {
         data: item
       });
       this.dialogVisible = false;
@@ -374,7 +396,7 @@ export default {
           options: [{ label: "共享", click: this.setShare, style: "primary" }]
         }
       ];
-      let { data } = await this.axios("/adminapi/Customer/refunder");
+      let { data } = await this.axios("/adminapi/Salecustomer/refunder");
       if (data.code) {
         this.dialogVisible = true;
         this.dialogName = "选择共享人员";
@@ -384,7 +406,7 @@ export default {
     },
     async getTable() {
       let { data } = await this.axios("/adminapi/Publics/table_th", {
-        data: { table_id: 1 }
+        data: { table_id: 10 }
       });
       if (data.code) {
         let arr = data.data.concat(this.tableFields);
@@ -392,21 +414,21 @@ export default {
         this.tableFields = arr;
       }
     },
-    // async gongxiang() {
-    //   this.tableData = [];
-    //   let { data } = await this.axios("/adminapi/Customer/shares", {
-    //     data: { ...this.search }
-    //   });
-    //   if (data.code) {
-    //     this.tableData = data.data;
-    //     this.page.total = data.count;
-    //     this.key = Math.random();
-    //   }
-    // },
+    async gongxiang() {
+      this.tableData = [];
+      let { data } = await this.axios("/adminapi/Salecustomer/shares", {
+        data: { ...this.search }
+      });
+      if (data.code) {
+        this.tableData = data.data;
+        this.page.total = data.count;
+        this.key = Math.random();
+      }
+    },
     async getData(bool = true) {
       this.tableData = [];
       let obj = bool ? Object.assign({}, this.page, this.search) : this.page;
-      let { data } = await this.axios("/adminapi/Customer/list", {
+      let { data } = await this.axios("/adminapi/Salecustomer/list", {
         data: obj
       });
       if (data.code) {
@@ -423,24 +445,9 @@ export default {
           type: "textarea",
           input: this.quick
         }
-        // {
-        //   label: "粘贴图片",
-        //   prop: "screenshot",
-        //   type: "image"
-        // }
-        // {
-        //   label: "接待渠道",
-        //   prop: "channel",
-        //   type: "radio",
-        //   options: [
-        //     { label: "信息流", value: 1 },
-        //     { label: "搜索引擎", value: 2 }
-        //     // { label: "信息流、搜索引擎", value: 3 }
-        //   ]
-        // }
       ];
       let { data } = await this.axios("/adminapi/Publics/TableFormEdit", {
-        data: { table_id: 1, type: "add" }
+        data: { table_id: 10, type: "add" }
       });
       if (data.code) {
         let obj = {};
@@ -498,7 +505,7 @@ export default {
     },
     async tableEdit(item) {
       let { data } = await this.axios("/adminapi/Publics/TableFormEdit", {
-        data: { table_id: 1, type: "edit" }
+        data: { table_id: 10, type: "edit" }
       });
       if (data.code) {
         this.editFields = data.data;
@@ -510,7 +517,7 @@ export default {
     async change(item, scope) {
       let obj = { id: item.id };
       obj[scope.property] = item[scope.property];
-      let url = "/adminapi/Customer/CustomersEdit";
+      let url = "/adminapi/Salecustomer/CustomersEdit";
       if (
         [
           "trace_status",
@@ -519,7 +526,7 @@ export default {
           "trademark_status"
         ].includes(scope.property)
       ) {
-        url = "/adminapi/Customer/traceStatus";
+        url = "/adminapi/Salecustomer/traceStatus";
       }
       let { data } = await this.axios(url, {
         data: obj
@@ -538,9 +545,12 @@ export default {
         return;
       }
       if (type) {
-        let { data } = await this.axios("/adminapi/Customer/many_automatic ", {
-          data: { id: this.id }
-        });
+        let { data } = await this.axios(
+          "/adminapi/Salecustomer/many_automatic ",
+          {
+            data: { id: this.id }
+          }
+        );
         if (data.code) {
           this.getData();
         }
@@ -552,7 +562,7 @@ export default {
       if (type !== true) {
         this.id = item.id;
       }
-      let { data } = await this.axios("/adminapi/Customer/automatic ", {
+      let { data } = await this.axios("/adminapi/Salecustomer/automatic ", {
         data: { id: this.id }
       });
       if (data.code) {
@@ -569,7 +579,7 @@ export default {
         return;
       }
       this.getDepartment();
-      let { data } = await this.axios("/adminapi/Customer/refunder");
+      let { data } = await this.axios("/adminapi/Salecustomer/refunder");
       if (data.code) {
         this.dialogVisible = true;
         this.dialogName = "选择接待人员";
@@ -578,9 +588,9 @@ export default {
       }
     },
     async onDistribution(item) {
-      let url = "/adminapi/Customer/manual";
+      let url = "/adminapi/Salecustomer/manual";
       if (this.id && this.id.constructor == Array) {
-        url = "/adminapi/Customer/many_manual";
+        url = "/adminapi/Salecustomer/many_manual";
       }
       let { data } = await this.axios(url, {
         data: { uid: item.id, id: this.id }
@@ -608,7 +618,7 @@ export default {
         });
     },
     async onSalesSearch() {
-      let { data } = await this.axios("/adminapi/Customer/refunder", {
+      let { data } = await this.axios("/adminapi/Salecustomer/refunder", {
         data: this.salesSearchData
       });
       if (data.code) {
@@ -625,11 +635,59 @@ export default {
       }).catch(() => {});
       if (!bool) return;
 
-      let { data } = await this.axios("/adminapi/Customer/del", {
+      let { data } = await this.axios("/adminapi/Salecustomer/del", {
         data: { id: item.id }
       });
       if (data.code) {
         this.getData();
+      }
+    },
+    async saveOrder() {
+      // 添加业绩保存
+      let form = {};
+      for (let k of this.qrocdeFields) {
+        form[k.prop] = this.qrocdeData[k.prop];
+      }
+      form.id = this.qrocdeData.id;
+      let { data } = await this.axios("/adminapi/Sale/add", {
+        data: form
+      });
+      if (data.code) {
+        this.getData();
+        this.qrcode = false;
+      }
+    },
+    async addOrder(item) {
+      // 添加业绩
+      let { data } = await this.axios("/adminapi/Publics/TableFormEdit", {
+        data: { type: "add", table_id: 3 }
+      });
+      if (data.code) {
+        let obj = JSON.parse(JSON.stringify(item));
+        delete obj.remark;
+        this.qrocdeData = { ...obj, discount: 0 };
+        this.qrocdeFields = data.data.map(e => {
+          if (e.prop == "type" && item.xin) {
+            e.options.shift();
+          }
+          if (e.prop == "debt") {
+            e.type = "compute";
+            e.compute = {
+              type: ["-", "-"],
+              prop: "package_version",
+              val: "payment",
+              sub: "discount"
+            };
+          }
+          if (e.prop == "is_timely" && item.xin) {
+            e.type = "hidden";
+          }
+          if (e.prop == "is_goods" && item.xin) {
+            e.type = "hidden";
+          }
+          return e;
+        });
+        this.qrcode = true;
       }
     },
     onReset() {
@@ -647,7 +705,7 @@ export default {
     },
     async onExport() {
       // 导出表格
-      let { data } = await this.axios("/adminapi/Customer/export", {
+      let { data } = await this.axios("/adminapi/Salecustomer/export", {
         data: this.search
       });
       if (data.code) {
@@ -666,7 +724,7 @@ export default {
       let body = this.editForm;
       delete body.quick;
       let url = this.drawerName == "编辑" ? "edit" : "add";
-      let { data } = await this.axios("/adminapi/Customer/" + url, {
+      let { data } = await this.axios("/adminapi/Salecustomer/" + url, {
         data: body
       });
       if (data.code) {

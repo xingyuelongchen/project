@@ -24,7 +24,7 @@ module.exports = {
         // host: 'localhost',
         // port: '8080',
         // https: true,   //是否使用https协议
-        hotOnly: true, //是否开启热更新
+        // hotOnly: true, //是否开启热更新
         proxy: {
             "/adminapi": {
                 target: config.baseUrl,

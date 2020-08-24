@@ -59,7 +59,12 @@ export default {
           props: { label: "label", value: "id" }
         },
         { label: "标签名称", type: "text", labelWidth: "80", prop: "label" },
-        { label: "排序", type: "number", labelWidth: "80", prop: "sort" },
+        {
+          label: "进度数值",
+          type: "number",
+          labelWidth: "80",
+          prop: "progress"
+        },
         {
           type: "button",
           labelWidth: "40",

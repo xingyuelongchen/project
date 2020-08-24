@@ -6,7 +6,6 @@ Create Time  : 2020-07-29
 <template>
   <div class="content-wrap">
     <mixSearch v-model="searchData" :fields="searchFields" />
-    <!-- <mixNewTable v-model="tableData" :fields="tableFields" :page="page" :search="tableSearch" :loading="loading" /> -->
     <div style="height:calc(100% - 70px)">
       <mixTable v-model="tableData" :fields="tableFields" />
     </div>
@@ -23,7 +22,9 @@ Create Time  : 2020-07-29
     </el-dialog>
     <el-dialog title="分配" :visible.sync="fenShow" width="50%">
       <mixSearch v-model="salesSearchData" :fields="salesSearch" />
-      <mixTable v-model="tableSalesData" :fields="tableSales" />
+      <div style="height:500px;overflow:hidden">
+        <mixTable v-model="tableSalesData" :fields="tableSales" />
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -107,14 +108,14 @@ export default {
                 style: "danger",
                 click: this.fenpei,
                 role: 139,
-                isShow: { type: "==", prop: "servicer", value: "" }
+                isShow: { type: "==", prop: "servicer", value: null }
               },
               {
                 label: "自动分配",
                 style: "danger",
                 role: 136,
                 click: this.autoFenpei,
-                isShow: { type: "==", prop: "servicer", value: "" }
+                isShow: { type: "==", prop: "servicer", value: null }
               }
             ]
           }

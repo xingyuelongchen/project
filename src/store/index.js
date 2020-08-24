@@ -9,10 +9,15 @@ export default new Vuex.Store({
     tabmenu: [],
     routes: [],
     update: false,
+    status: {}
   },
   mutations: {
     updateMessage(state, data) {
       state.update = data
+    },
+    // 客户流程状态
+    setStatus(state, data) {
+      state.status = data
     },
     // 清空数据
     setClear(state) {

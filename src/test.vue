@@ -5,7 +5,7 @@ Create Time  : 2020-08-16
 -->
 <template>
   <div>
-    <mixForm v-model="formData" :fields="formFields" />
+    <mixTable />
   </div>
 </template>
 <script>

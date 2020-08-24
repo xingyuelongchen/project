@@ -63,9 +63,9 @@ Create Time  : 2020-03-28
               <el-cascader :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" :options="item.config || {}" @change="onInput(item,scope,'change',$event)" />
             </template>
             <template v-if="item.type == 'input'">
-              <div class="input" :key="showKey+index">
-                <el-input readonly :size="item.size||options.size||'mini'" v-if="!item['readonly'+scope.$index]" :value="scope.row[item.prop]" @focus="onInput(item,scope)"></el-input>
-                <el-input v-else :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="onInput(item,scope,'blur')"></el-input>
+              <div class="input" :key="showKey" @click="getFocus(item,scope,true)">
+                <span v-if="!item['readonly'+scope.$index]">{{scope.row[item.prop]}}</span>
+                <el-input v-else :size="item.size||options.size||'mini'" :ref="item.prop" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="getBlur(item,scope,false)"></el-input>
               </div>
             </template>
             <template v-if="['manage','button'].includes(item.type)">
@@ -204,7 +204,7 @@ export default {
       // required: true,
       default: () => [
         {
-          id: 20,
+          id: 1,
           title: "首页",
           path: "/",
           select: "a",
@@ -214,7 +214,7 @@ export default {
           tagdown: "tagdown"
         },
         {
-          id: 20,
+          id: 2,
           title: "首页",
           path: "/",
           select: "a",
@@ -224,7 +224,7 @@ export default {
           tagdown: "tagdown"
         },
         {
-          id: 20,
+          id: 3,
           title: "首页",
           path: "/",
           select: "a",
@@ -234,7 +234,7 @@ export default {
           tagdown: "tagdown"
         },
         {
-          id: 20,
+          id: 4,
           title: "首页",
           path: "/",
           select: "a",
@@ -244,7 +244,7 @@ export default {
           tagdown: "tagdown"
         },
         {
-          id: 20,
+          id: 5,
           title: "首页",
           path: "/",
           select: "a",
@@ -254,7 +254,7 @@ export default {
           tagdown: "tagdown"
         },
         {
-          id: 20,
+          id: 6,
           title: "首页",
           path: "/",
           select: "a",
@@ -264,7 +264,7 @@ export default {
           tagdown: "tagdown"
         },
         {
-          id: 20,
+          id: 7,
           title: "首页",
           path: "/",
           select: "a",
@@ -274,7 +274,7 @@ export default {
           tagdown: "tagdown"
         },
         {
-          id: 20,
+          id: 8,
           title: "首页",
           path: "/",
           select: "a",
@@ -284,7 +284,7 @@ export default {
           tagdown: "tagdown"
         },
         {
-          id: 20,
+          id: 9,
           title: "首页",
           path: "/",
           select: "a",
@@ -294,7 +294,7 @@ export default {
           tagdown: "tagdown"
         },
         {
-          id: 20,
+          id: 10,
           title: "首页",
           path: "/",
           select: "a",
@@ -304,7 +304,7 @@ export default {
           tagdown: "tagdown"
         },
         {
-          id: 21,
+          id: 11,
           title: "页",
           path: "/a",
           select: "b",
@@ -431,17 +431,33 @@ export default {
         });
       }, 50);
     },
+    getFocus(item, scope, type) {
+      this.field = this.field.map(e => {
+        if (e.prop == item.prop) {
+          e["readonly" + scope.$index] = type;
+          this.showKey = Math.random();
+          if (type) {
+            setTimeout(() => {
+              if (this.$refs[e.prop][0]) this.$refs[e.prop][0].focus();
+              else if (this.$refs[e.prop]) this.$refs[e.prop].focus();
+            }, 50);
+          }
+        }
+        return e;
+      });
+    },
+    getBlur(item, scope, type) {
+      this.field = this.field.map(e => {
+        if (e.prop == item.prop) {
+          e["readonly" + scope.$index] = type;
+        }
+        return e;
+      });
+    },
     onInput(item, scope, type, event) {
       if (type == "change" && item["change"]) {
         this.click(item[type], scope.row, scope, event);
       }
-      this.field = this.field.map(e => {
-        if (e.prop == item.prop) {
-          e["readonly" + scope.$index] = !type;
-          this.showKey = Math.random();
-        }
-        return e;
-      });
     },
     toogle(item, value) {
       if (item.options) {
@@ -463,6 +479,8 @@ export default {
 
     // 点击单元格
     cellClick(row, column, cell, event) {
+      // if(column.type == 'input')
+      // this.getFocus({prop:column.property}, scope, type, event)
       let data = this.field.filter(e => e.prop == column.property);
       data = data.length && data[0];
       if (!data.click || data.dblClick) return;
@@ -560,6 +578,8 @@ export default {
   }
 }
 .input {
+  // width: 100%;
+  min-height: 23px;
   /deep/ input[readonly="readonly"] {
     border: none;
     background: none;

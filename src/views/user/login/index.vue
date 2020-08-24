@@ -4,16 +4,16 @@ Create author: qinglong
 Create Time  : 2020-07-22
 -->
 <template>
-  <div class="wrap">
+  <div class="wrap" @click.self="isHistory=false">
     <div class="login">
-      <div @keypress.enter="setRoutes">
+      <div @keypress.enter="setRoutes" class="login-box">
         <div class="title">用户{{title}}</div>
         <div class="logo">
           <img src="http://www.guangyizhou.cn/public/home/assets/logo.png" alt />
         </div>
         <el-form :model="ruleForm" status-icon ref="login" label-width="80px" class="demo-ruleForm">
           <el-form-item label="手机号码" prop="mobile" :rules="{required:true,message:'请输入账号'}">
-            <el-input clearable v-model="ruleForm.mobile" autocomplete="on"></el-input>
+            <el-input clearable v-model="ruleForm.mobile" autocomplete="on" @focus="isHistory=true" @input="isHistory=false"></el-input>
           </el-form-item>
           <el-form-item label="花名" prop="nickname" :rules="{required:true,message:'请输入账号'}" v-if="isLogin">
             <el-input clearable v-model="ruleForm.nickname" autocomplete="on"></el-input>
@@ -28,23 +28,29 @@ Create Time  : 2020-07-22
             <div class="yzm">
               <div class="code" @click="getCode">
                 <img :src="code" alt='验证码' />
-                <!-- <img src="http://192.168.33.10/adminapi/Login/verify" alt /> -->
               </div>
               <el-input clearable v-model="ruleForm.code" autocomplete="on"></el-input>
             </div>
           </el-form-item>
+          <el-form-item>
+            <div style="height:40px;display: flex;justify-content:space-between">
+              <span>
+                <el-checkbox v-model="checkPassword" v-if="!isLogin">记住账号</el-checkbox>
+              </span>
+              <div>
+                <el-link :underline="false" type="primary" @click="register" v-if="!isLogin">立即注册</el-link>
+                <el-link :underline="false" type="primary" @click="login" v-else>立即登录</el-link>
+              </div>
+            </div>
+          </el-form-item>
         </el-form>
-        <div style="height:40px;">
-          <div style="display:flex;justify-content:space-between" @click="register" v-if="!isLogin">
-            <el-link :underline="false" type="danger">下载客户端</el-link>
-            <el-link :underline="false" type="primary">立即注册</el-link>
-          </div>
-          <div style="display:flex;justify-content:space-between" @click="login" v-else>
-            <el-link :underline="false" type="danger">下载客户端</el-link>
-            <el-link :underline="false" type="primary">立即登录</el-link>
-          </div>
-        </div>
         <el-button type="primary" @click="setRoutes" style="width:100%">确认{{title}}</el-button>
+        <div class="history" v-if="history && isHistory && !isLogin ">
+          <template v-for="(item,key,index) in history">
+            <div class="item" :key="index" @click="check(item)">{{key}} </div>
+          </template>
+          <div class="item" @click="removerHistory"> 清除历史记录 </div>
+        </div>
       </div>
     </div>
   </div>
@@ -61,22 +67,21 @@ export default {
       ruleForm: {},
       isLogin: false,
       code: "",
-      userinfo: {
-        id: 1,
-        name: "测试",
-        pic:
-          "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        role: [...Array(320)].map((e, i) => i + 1),
-        dateTime: Date.now() + 1000 * 60 * 60 * 24
-      }
+      userinfo: {},
+      history: { 13169906653: { mobile: 13169906653, password: 123456 } },
+      isHistory: false,
+      isElectron: isElectron(),
+      checkPassword: false
     };
   },
   created() {
-    if (!isElectron()) {
-      localStorage.removeItem("userinfo");
-      localStorage.removeItem("Store");
-      sessionStorage.removeItem("Store");
-      this.$store.commit("setClear");
+    localStorage.removeItem("userinfo");
+    localStorage.removeItem("Store");
+    sessionStorage.removeItem("Store");
+    this.$store.commit("setClear");
+    if (isElectron()) {
+      this.history =
+        window.ipcRenderer.sendSync("getStore", "history") || false;
     }
     this.getCode();
   },
@@ -121,17 +126,40 @@ export default {
         data: this.ruleForm
       });
       if (data.code) {
+        let userinfo = data.data;
+        window.localStorage.setItem("userinfo", JSON.stringify(userinfo));
+        this.$store.commit("setUserinfo", userinfo);
+        if (!this.history) this.history = {};
+        if (this.checkPassword) {
+          this.history[this.ruleForm.mobile] = {
+            mobile: this.ruleForm.mobile,
+            password: this.ruleForm.password
+          };
+        } else {
+          delete this.history[this.ruleForm.mobile];
+        }
+
+        window.ipcRenderer.send("setStore", {
+          title: "history",
+          data: this.history
+        });
+        if (userinfo) this.$router.setRoles();
         if (this.isLogin) {
           this.login();
           this.ruleForm = {};
           return;
         }
-        let userinfo = data.data;
-        window.localStorage.setItem("userinfo", JSON.stringify(userinfo));
-        this.$store.commit("setUserinfo", userinfo);
-        if (userinfo) this.$router.setRoles();
       }
       this.getCode();
+    },
+    removerHistory() {
+      this.isHistory = false;
+      window.ipcRenderer.send("removeStore", "history");
+      this.history = false;
+    },
+    check(item) {
+      this.ruleForm = item;
+      this.isHistory = false;
     }
   }
 };
@@ -152,12 +180,36 @@ export default {
   width: 400px;
   display: flex;
   align-items: center;
-  > div {
+  .login-box {
     border-radius: 5px;
     padding: 20px 20px;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
     background: rgba(255, 255, 255, 1);
     overflow: hidden;
+    position: relative;
+    .history {
+      position: absolute;
+      width: 250px;
+      top: 200px;
+      left: 80px;
+      right: 0;
+      margin: auto;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      max-height: 240px;
+      background: #fff;
+
+      .item {
+        border-bottom: 1px solid #f3f3f3;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 10px;
+        &:hover {
+          background: #f1f1f1;
+          cursor: pointer;
+        }
+      }
+    }
   }
 
   .title {

@@ -1,71 +1,12 @@
 <template>
   <div id="app">
     <router-view />
+    <mixDown />
   </div>
 </template>
 <script>
-import isElectron from "is-electron";
-
-export default {
-  created() {},
-  mounted() {
-    let vm = this;
-    if (isElectron()) {
-      let msg = "";
-      vm.ipcRenderer = window.ipcRenderer;
-      vm.ipcRenderer.on("message", (event, data) => {
-        msg && msg.close();
-        if (data.status >= 0) {
-          msg = this.$message.success(data.msg);
-        }
-      });
-      vm.ipcRenderer.on("downloadProgress", (event, progressObj) => {
-        console.log("downloadProgress", progressObj);
-        // 可自定义下载渲染效果
-        let loading = vm.$loading({
-          lock: true,
-          text: "已下载" + progressObj.percent + "%",
-          spinner: "el-icon-loading",
-          background: "rgba(0, 0, 0, 0.7)"
-        });
-        if (progressObj.percent == 100) {
-          loading.close();
-        }
-      });
-      vm.ipcRenderer.on("isUpdateNow", (event, versionInfo) => {
-        // 自定义选择效果，效果自行编写
-        vm.$confirm(
-          "检测到新版本" + versionInfo.version + ",是否立即升级？",
-          "提示",
-          {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            showCancelButton: false,
-            type: "warning"
-          }
-        ).then(() => {
-          vm.ipcRenderer.send("updateNow");
-        });
-      });
-      vm.autoUpdate(); // electron应用启动后主动触发检查更新函数
-    }
-  },
-  beforeDestroy() {
-    // 移除ipcRenderer所有事件
-    if (isElectron()) {
-      this.ipcRenderer.removeAllListeners();
-    }
-  },
-
-  methods: {
-    autoUpdate() {
-      // 用来触发更新函数
-      this.ipcRenderer.send("checkForUpdate");
-    }
-  }
-};
+export default {};
 </script>
-
 <style lang="less">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -130,6 +71,25 @@ html {
   outline: none;
   font-size: 14px;
   box-sizing: border-box;
+}
+.update {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 5000;
+}
+.mix-dialog {
+  height: 330px;
+}
+.speed {
+  width: 90%;
+  margin: 50px auto;
+  overflow: hidden;
+  text-align: center;
 }
 </style>
 

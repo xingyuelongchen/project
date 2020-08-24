@@ -1,10 +1,11 @@
-const { app, BrowserWindow, ipcMain, Notification, dialog, Menu, Tray } = require('electron') // ipcMain 主线程
-const { autoUpdater } = require('electron-updater')
+const { app, BrowserWindow, ipcMain, Notification, dialog, Menu, MenuItem, Tray } = require('electron') // ipcMain 主线程
+const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs');
 const config = require('./src/config');
 const gotTheLock = app.requestSingleInstanceLock();
-const filePath = path.join(__dirname, 'store.json');
+const filePath = path.join(__dirname, './electron/store.json');
+const menu = new Menu();
 var mainWindow = null, tray = null, uploadUrl, isQuill = true, timer = null, zhudong = false;
 
 if (app.isPackaged) {
@@ -71,30 +72,35 @@ function createWindow() {
     frame: true,
     webPreferences: {
       nodeIntegration: true, // 使用了预加载之后,即使nodeIntegration为false,也可以使用Node API访问到ipcRenderer
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, './electron/preload.js')
     }
   });
+
   // 更新程序
   updateHandle();
 
   // 初始化系统托盘图标
   closed();
+  menu.append(new MenuItem({
+    // label: 'tools',
+    accelerator: 'CmdOrCtrl+shift+i',
+    click: () => { mainWindow.webContents.openDevTools(); }
+  }))
+  menu.append(new MenuItem({
+    // label: 'tools',
+    accelerator: 'CmdOrCtrl+r',
+    click: () => { mainWindow.webContents.reload(); }
+  }))
+  mainWindow.setMenu(menu);
   // 判断当前运行环境
   if (app.isPackaged) {
-    mainWindow.setMenu(null);
-    // mainWindow.webContents.openDevTools();
+    // 线上
     mainWindow.loadFile('./dist/index.html');
-    // mainWindow.loadURL(config.feedUrl);
   } else {
-    // 控制台
-    mainWindow.webContents.openDevTools();
-    // 菜单
-    mainWindow.setMenu(null);
-    // 在线地址
-    // mainWindow.loadFile('./dist/index.html');
-    mainWindow.loadFile('./build/pay.html');
-    // mainWindow.loadURL(config.feedUrl);
+    // 调试 
+    mainWindow.loadURL(config.feedUrl);
   }
+
 }
 // 通过main进程发送事件给renderer进程，提示更新信息
 function sendUpdateMessage(message) {
@@ -161,7 +167,7 @@ function setIpcMainList() {
       let notification = new Notification({
         title: data.data.title,
         sulent: true,
-        icon: path.join(__dirname, 'favicon.ico'),
+        icon: path.join(__dirname, './electron/favicon.ico'),
         // timeoutType: 'never',
       });
       notification.show();
@@ -179,7 +185,7 @@ function setIpcMainList() {
       let notification = new Notification({
         title: data.data.title,
         sulent: true,
-        icon: path.join(__dirname, 'favicon.ico'),
+        icon: path.join(__dirname, './electron/favicon.ico'),
         // timeoutType: 'never',
       });
       notification.show();
@@ -189,32 +195,33 @@ function setIpcMainList() {
       })
 
     }
-    // dialog.showMessageBox({
-    //   type: 'success', //弹出框类型
-    //   title: data.title,
-    //   message: data.message,
-    //   detail: data.detail
-    // }).then().catch()
   })
   ipcMain.on('close', function () {
     removeStore('userinfo')
     isQuill = false;
     app.quit();
   })
-  ipcMain.on('setUserinfo', function (event, data) {
-    // 保存当前登录用户
-    setStore('userinfo', data)
+  ipcMain.on('setStore', function (event, { title, data }) {
+    // 保存数据
+    setStore(title, data)
   })
-  ipcMain.on('getUserinfo', function (event, data) {
-    // 获取用户登录信息
-    let userinfo = getStore('userinfo');
-    event.returnValue = userinfo;
+  ipcMain.on('getStore', function (event, data) {
+    // 获取数据 
+    event.returnValue = getStore(data);
 
+  })
+  ipcMain.on('removeStore', function (event, data) {
+    // 删除信息 
+    event.returnValue = removeStore(data);
+
+  })
+  ipcMain.on('queryUpdate', function () {
+    autoUpdater.checkForUpdates()
   })
 }
 // 初始化系统图标
 function closed() {
-  tray = new Tray(path.join(__dirname, 'favicon.ico'));
+  tray = new Tray(path.join(__dirname, './electron/favicon.ico'));
   const contextMenu = Menu.buildFromTemplate([
     { label: '打开窗口', click: mainWindow.show },
     { label: '退出系统', click() { isQuill = false; app.quit() } }
@@ -231,13 +238,13 @@ function trayFlashing() {
   clearInterval(timer);
   timer = setInterval(() => {
     msgFlag = !msgFlag
-    if (msgFlag) tray.setImage(path.join(__dirname, './favicon.png'));
-    else tray.setImage(path.join(__dirname, './favicon.ico'));
+    if (msgFlag) tray.setImage(path.join(__dirname, './electron/favicon.png'));
+    else tray.setImage(path.join(__dirname, './electron/favicon.ico'));
     tray.setToolTip('您有一条新消息!');
   }, 500)
   mainWindow.once('focus', () => {
     mainWindow.flashFrame(false);
-    tray.setImage(path.join(__dirname, './favicon.ico'))
+    tray.setImage(path.join(__dirname, './electron/favicon.ico'))
     clearInterval(timer);
     timer = null;
   })
@@ -275,7 +282,6 @@ function getStore(type) {
     store = JSON.parse(store);
     return store[type]
   } catch (error) {
-    console.log(error);
-    return {}
+    return false
   }
 }

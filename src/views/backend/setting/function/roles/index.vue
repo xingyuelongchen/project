@@ -78,7 +78,9 @@ export default {
         {
           label: "pid",
           prop: "pid",
-          width: 60
+          width: 100,
+          type: "input",
+          change: this.tableChange
         },
         {
           label: "status",
