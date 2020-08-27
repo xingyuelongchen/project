@@ -1,12 +1,7 @@
 {
     "name": "guangyizhou",
-<<<<<<< HEAD
     "version": "1.0.51",
     "main": "main.js",
-=======
-    "version": "1.0.39",
-    "main": "electron/main.js",
->>>>>>> 4dd8443b7ecc3704eb178a33e53e051d1dc8249d
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
@@ -111,7 +106,7 @@
             }
         ],
         "files": [
-            "electron/main.js",
+            "main.js",
             "dist/",
             "src/config.js",
             "electron/"
