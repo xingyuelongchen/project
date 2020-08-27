@@ -4,7 +4,8 @@ Create author: qinglong
 Create Time  : 2020-03-27
 -->
 <template>
-  <div style="margin:20px auto">
+  <step v-model="stepShow" v-if="stepShow" :item="statusData" />
+  <div v-else class="content-wrap">
     <mixSearch v-model="search" :fields="searchFields" />
     <div class="info" v-if="maxOrder">
       <template>
@@ -50,29 +51,31 @@ Create Time  : 2020-03-27
         <el-button type="primary" @click="saveOrder">保存</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="客户状态" :visible.sync="statusShow" width="500px">
+    <!-- <el-dialog title="客户状态" :visible.sync="statusShow" width="500px">
       <div style="max-height:500px;height:250px;overflow:hidden">
         <el-scrollbar>
           <mixForm v-model="statusData" :fields="statusFields" style="border:none;padding-right:20px" />
         </el-scrollbar>
       </div>
-    </el-dialog>
-    <el-dialog title="历史状态" :visible.sync="historyShow" width="900px">
+    </el-dialog> -->
+    <!-- <el-dialog title="历史状态" :visible.sync="historyShow" width="900px">
       <div style="height:350px">
         <mixTable v-model="historyData" :fields="historyFields" />
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
 export default {
   name: "Saleseek",
+  components: { step: () => import("./step") },
   data() {
     return {
       key: "a",
       show: false,
       maxOrder: null,
+      stepShow: false,
       page: {
         limit: 15,
         page: 1,
@@ -222,6 +225,9 @@ export default {
         this.$store.commit("setRefresh", false);
       }
     },
+    stepShow(a) {
+      !a && this.getData();
+    },
     addOrderData: {
       handler(a, b) {
         this.toggleForm(a, b);
@@ -276,16 +282,16 @@ export default {
             },
             {
               size: "mini",
-              label: "客户状态",
+              label: "服务状态",
               style: "primary",
               click: this.addStatus
-            },
-            {
-              size: "mini",
-              label: "客户历史状态",
-              style: "primary",
-              click: this.addHistory
             }
+            // {
+            //   size: "mini",
+            //   label: "客户历史状态",
+            //   style: "primary",
+            //   click: this.addHistory
+            // }
           ]
         }
       ];
@@ -305,21 +311,23 @@ export default {
       }
     },
     async addStatus(item) {
-      this.statusShow = true;
+      this.stepShow = true;
+
+      // this.statusShow = true;
       this.statusData = { customer_id: item.id };
-      let { data } = await this.axios("/adminapi/Salecustomer/customer_label");
-      if (data.code) {
-        this.statusFields = [
-          {
-            label: "客户状态",
-            type: "cascader",
-            prop: "label",
-            options: data.data
-          },
-          { label: "标签备注", type: "textarea", wrap: true, prop: "remak" },
-          { label: "确定", type: "button", wrap: true, click: this.statusSave }
-        ];
-      }
+      // let { data } = await this.axios("/adminapi/Salecustomer/customer_label");
+      // if (data.code) {
+      //   this.statusFields = [
+      //     {
+      //       label: "客户状态",
+      //       type: "cascader",
+      //       prop: "label",
+      //       options: data.data
+      //     },
+      //     { label: "标签备注", type: "textarea", wrap: true, prop: "remak" },
+      //     { label: "确定", type: "button", wrap: true, click: this.statusSave }
+      //   ];
+      // }
     },
     async statusSave() {
       await this.axios("/adminapi/Salecustomer/label_add", {

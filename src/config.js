@@ -8,11 +8,11 @@ module.exports = {
     // 本地缓存前缀
     storeKey: 'myaa',
     // websocket
-    websocket: 'ws://192.168.101.30:2346',
+    websocket: 'ws://192.168.32.194:2346',
     // 接口URL
-    baseUrl: 'http://192.168.101.30',
+    baseUrl: 'http://192.168.32.194',
     // 更新地址
-    uploadUrl: 'http://192.168.101.3/',
-    uploadUrlDev: 'http://192.168.101.3/',
-    feedUrl: 'http://192.168.101.3:8080'
+    uploadUrl: 'http://192.168.32.240/',
+    uploadUrlDev: 'http://192.168.32.240/',
+    feedUrl: 'http://192.168.32.240:8080'
 }

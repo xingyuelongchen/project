@@ -6,7 +6,7 @@ Create Time  : 2020-07-29
 <template>
   <div class="content-wrap">
     <mixSearch v-model="searchData" :fields="searchFields" />
-    <div style="height:calc(100% - 70px)">
+    <div style="height:calc(100% - 80px)">
       <mixTable v-model="tableData" :fields="tableFields" />
     </div>
     <mixPage v-model="page" />

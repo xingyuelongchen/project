@@ -6,8 +6,40 @@
 }
 .user *[user=success] {
   color: #fff;
-  background: #DD4B39;
+  background: #00BA00;
+  border-color: #00BA00;
+}
+.user .top .item[user=active].active {
+  border-bottom-color: #DD4B39 !important;
+  color: #DD4B39;
+}
+.user .top .item[user=active].active .el-tabs .el-tabs__header.is-top {
   border-color: #DD4B39;
+}
+.user .el-menu-item.is-active {
+  background: #DD4B39;
+  color: #fff;
+}
+.user .el-card .item[user=card-active]:hover,
+.user .el-card .item[user=card-active].active {
+  background: #DD4B39;
+  color: #fff;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.user .el-list .el-item {
+  padding: 0 20px;
+  transition: all 0.2s;
+}
+.user .el-list .el-item:hover {
+  transition: all 0.2s;
+  cursor: pointer;
+  background: #e6f8f8;
+  padding: 0 20px;
+}
+.user .el-list .el-item.active {
+  color: #fff;
+  background: #DD4B39;
 }
 .el-pagination--small .arrow.disabled,
 .el-table .hidden-columns,

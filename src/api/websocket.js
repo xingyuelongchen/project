@@ -47,7 +47,6 @@ class WS {
                     this.ipcRenderer.send('dialog', data);
                 }
                 this.options.hander(data)
-
             };
             this.ws.onopen = () => {
                 this.send('初始化链接', 'init');
@@ -58,7 +57,6 @@ class WS {
             };
             this.ws.onerror = () => {
                 console.error("连接错误");
-                this.onMessage('错误信息', '连接错误，请刷新重试！');
                 this.init()
             };
             this.ws.onclose = () => {

@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-03-28
 -->
 <template>
-  <el-table ref="table" id="exportTab" row-key="id" v-loading="!fieldsData.length && loading" :height="options.height || '100%'" :max-height="options.height || '100%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
+  <el-table :key="key" ref="table" id="exportTab" row-key="id" v-loading="!fieldsData.length && loading" :height="options.height || '100%'" :max-height="options.height || '640px'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
     <template v-for="(item,index ) in field">
       <template v-if="'expand'==item.type">
         <el-table-column :key="index+'key'" :type="item.type" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable">
@@ -74,12 +74,12 @@ Create Time  : 2020-03-28
                   <el-button class="hover" :size="item.size || 'mini'" type="primary">{{ item.label || '操作'}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
                   <el-dropdown-menu slot="dropdown">
                     <template v-for="(k,i) in item.options">
-                      <el-dropdown-item v-show="isShow(k,item,scope)" v-role="k.role" :key="i" @click.native="click(k.click,scope.row,scope.column)">{{k.label}}</el-dropdown-item>
+                      <el-dropdown-item v-show="isShow(k,item,scope)" v-role="k.role" :key="i" @click.native="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-dropdown-item>
                     </template>
                   </el-dropdown-menu>
                 </el-dropdown>
                 <template v-else>
-                  <el-button v-for="(k,i) in item.options" v-role="k.role" v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'" size="mini" @click="click(k.click,scope.row,scope.column)">{{k.label}}</el-button>
+                  <el-button v-for="(k,i) in item.options" v-role="k.role" v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'" size="mini" @click="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-button>
                 </template>
               </div>
             </template>
@@ -328,6 +328,7 @@ export default {
     return {
       loading: true,
       showKey: "key",
+      key: 0,
       field: [],
       refs: null
     };
@@ -338,6 +339,7 @@ export default {
     },
     fieldsData() {
       this.toggleRowSelection();
+      this.key = Math.random();
     }
   },
   created() {
@@ -352,6 +354,9 @@ export default {
     }, 5000);
   },
   methods: {
+    doLayout() {
+      this.$refs.table.doLayout();
+    },
     async outTab() {
       let fileName = this.$route.meta.title + Date.now();
       let xlsxParam = { raw: true }; // 导出的内容只做解析，不进行格式转换

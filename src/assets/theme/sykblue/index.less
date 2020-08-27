@@ -1,4 +1,7 @@
 @charset "UTF-8";
+
+ 
+
 .user {
     *[user=primary] {
         color: #fff;
@@ -8,10 +11,60 @@
 
     *[user=success] {
         color: #fff;
-        background: #409EFF;
-        border-color: #409EFF;
+        background: #00BA00;
+        border-color: #00BA00;
     }
+
+    .top {
+        .item[user=active].active {
+            border-bottom-color: #409EFF !important;
+            color: #409EFF;
+
+            .el-tabs {
+                .el-tabs__header.is-top {
+                    border-color: #409EFF;
+                }
+            }
+        }
+    }
+
+    .el-menu-item.is-active {
+        background: #409EFF;
+        color: #fff
+    }
+
+
+    .el-card .item[user=card-active] {
+
+        &:hover,
+        &.active {
+            background: #409EFF;
+            color: #fff;
+            transition: all .2s;
+            cursor: pointer;
+        }
+    }
+
+    .el-list .el-item {
+        padding: 0 20px;
+        transition: all .2s;
+
+        &:hover {
+            transition: all .2s;
+            cursor: pointer;
+            background: #e6f8f8;
+            padding: 0 20px;
+        }
+
+        &.active {
+            color: #fff;
+            background: #409EFF;
+        }
+    }
+
+
 }
+
 .el-pagination--small .arrow.disabled,
 .el-table .hidden-columns,
 .el-table td.is-hidden>*,

@@ -13,7 +13,7 @@ Create Time  : 2020-08-17
 
     </div>
     <div class="footer">
-      <mixForm v-model="value" :fields="formFields" style="z-index:1000" />
+      <!-- <mixForm v-model="value" :fields="formFields" style="z-index:1000" /> -->
     </div>
 
   </div>
@@ -33,18 +33,18 @@ export default {
     };
   },
   mounted() {
-    this.formFields = [
-      {
-        labelWidth: 18,
-        span: 5,
-        label: " ",
-        size: "mini",
-        type: "select",
-        prop: "status",
-        options: [...this.value.trace_status],
-        change: this.save
-      }
-    ];
+    // this.formFields = [
+    //   {
+    //     labelWidth: 18,
+    //     span: 5,
+    //     label: " ",
+    //     size: "mini",
+    //     type: "select",
+    //     prop: "status",
+    //     options: [...this.value.trace_status],
+    //     change: this.save
+    //   }
+    // ];
   },
   methods: {
     close() {

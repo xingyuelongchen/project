@@ -29,14 +29,14 @@ export default {
       page: { page: 1, limit: 15, total: 0 }
     };
   },
-  created() {
-    this.getTable();
-    this.getData();
-  },
   watch: {
     stepShow(a) { 
       !a && this.getData();
     }
+  },
+  created() {
+    this.getTable();
+    this.getData();
   },
   methods: {
     async getTable() {
@@ -67,8 +67,8 @@ export default {
       this.stepShow = true;
     },
     async getData() {
-      let { data } = await this.axios("/adminapi/Refund/list", {
-        data: { ...this.searchData, ...this.page }
+      let { data } = await this.axios("/adminapi/Financerefund/list", {
+        data: { ...this.page, ...this.searchData }
       });
       if (data.code) {
         this.tableData = data.data;

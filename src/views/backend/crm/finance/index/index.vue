@@ -4,9 +4,9 @@ Create author: qinglong
 Create Time  : 2020-08-07
 -->
 <template>
-  <div class="content-box">
+  <div class="content-wrap" :key='key'>
     <mixSearch v-model="searchData" :fields="searchFields" />
-    <mixTable v-model="tableData" :fields="tableFields" />
+    <mixTable v-model="tableData" :fields="tableFields" ref='table' />
     <mixPage v-model="page" />
   </div>
 </template>
@@ -15,6 +15,7 @@ export default {
   name: "Financeindex",
   data() {
     return {
+      key: 0,
       page: {
         page: 1,
         limit: 15,
@@ -28,10 +29,21 @@ export default {
           label: "状态",
           type: "select",
           prop: "finance_audit_status",
-          span: 3,
+          span: 2,
           options: [
             { label: "未审核", value: "0" },
             { label: "已审核", value: "1" }
+          ]
+        },
+        {
+          label: "业绩类型",
+          type: "select",
+          prop: "type",
+          span: 2,
+          options: [
+            { label: "新业绩", value: "新业绩" },
+            { label: "补欠款", value: "补欠款" },
+            { label: "升级", value: "升级" }
           ]
         },
         {
@@ -58,6 +70,7 @@ export default {
     this.getData();
     this.getHeadeData();
   },
+
   methods: {
     async getHeadeData() {
       let { data } = await this.axios("/adminapi/Publics/table_th", {
@@ -68,9 +81,8 @@ export default {
           {
             label: "操作",
             type: "button",
-            align: "center",
             fixed: "right",
-            width: 90,
+            width: 110,
             options: [
               {
                 label: "审核",
@@ -78,10 +90,16 @@ export default {
                 click: this.shenhe,
                 role: 167,
                 isShow: { type: "==", prop: "finance_audit_status", val: "0" }
+              },
+              {
+                label: "审核完成",
+                style: "primary",
+                isShow: { type: "==", prop: "finance_audit_status", val: "1" }
               }
             ]
           }
         ]);
+       
       }
     },
     async getData() {
@@ -91,6 +109,7 @@ export default {
       if (data.code) {
         this.tableData = data.data;
         this.page.total = data.count;
+        this.key = Math.random();
       }
     },
     async shenhe(item) {

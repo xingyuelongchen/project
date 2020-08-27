@@ -8,6 +8,7 @@ export default
     // 财务管理
     { path: 'finance', name: 'Finance', meta: { keepAlive: true, role: 83, title: '财务管理', }, component: () => import('@/views/layou') },
     { path: 'index', name: 'Financeindex', meta: { keepAlive: true, role: 84, title: '顾问审核', }, component: () => import('@/views/backend/crm/finance/index/') },
+    { path: 'refund', name: 'Financerefund', meta: { keepAlive: true, role: 199, title: '售后退款', }, component: () => import('@/views/backend/crm/finance/refund') },
     // 咨询管理
     { path: 'customer', name: 'Customer', meta: { keepAlive: true, role: 10, title: '咨询管理', }, component: () => import('@/views/layou') },
     { path: 'list', name: 'Customerlist', meta: { keepAlive: true, role: 32, title: '咨询列表', }, component: () => import('@/views/backend/crm/customer/list') },

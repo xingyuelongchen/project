@@ -53,7 +53,7 @@ Create Time  : 2020-07-28
         <div slot="header">
           权限子列表
           <el-button style="float: right; padding: 6px; margin:0 5px" type="primary" size="mini" @click="saveList">保存权限</el-button>
-          <el-button style="float: right; padding: 6px; margin:0 5px" type="danger" size=" mini" @click="oneOpen">一键开启</el-button>
+          <!-- <el-button style="float: right; padding: 6px; margin:0 5px" type="danger" size=" mini" @click="oneOpen">一键开启</el-button> -->
         </div>
         <mixTable v-model="rolesList" :fields="rolesFields" @select="listCheck" ref="table" />
       </el-card>
@@ -113,7 +113,11 @@ export default {
       ],
       rolesList: [],
       rolesFields: [],
-      selectTableField: { laytables_editable: [], laytables: [] }
+      selectTableField: {
+        laytables_editable: [],
+        laytables: [],
+        laytables_export: []
+      }
     };
   },
   created() {
@@ -164,16 +168,31 @@ export default {
       });
       if (data.code) {
         let a = Object.keys(data.data.column[0]).map(e => {
-          return {
+          let obj = {
             label: e,
-            prop: e,
-            type: e == "edit" ? "switch" : "",
-            change: this.listChange
+            prop: e
           };
+          if (e == "edit") {
+            obj = {
+              label: e,
+              prop: e,
+              type: e == "edit" ? "switch" : "",
+              change: this.listChange
+            };
+          } else if (e == "export") {
+            obj = {
+              label: e,
+              prop: e,
+              type: e == "export" ? "switch" : "",
+              change: this.changeExport
+            };
+          }
+          return obj;
         });
         this.role.table_id = data.data.table_id;
         let status = [],
-          id = [];
+          id = [],
+          expor = [];
         if (
           data.data.lay.laytables &&
           data.data.lay.laytables[data.data.table_id]
@@ -184,18 +203,36 @@ export default {
           data.data.lay.laytables_editable[data.data.table_id]
         )
           status = data.data.lay.laytables_editable[data.data.table_id];
+        if (
+          data.data.lay.laytables_export &&
+          data.data.lay.laytables_export[data.data.table_id]
+        )
+          expor = data.data.lay.laytables_export[data.data.table_id];
         this.rolesList = data.data.column.map(e => {
           return {
             ...e,
             checked: id.includes(e.id),
-            edit: status.includes(e.id) ? 1 : 0
+            edit: status.includes(e.id) ? 1 : 0,
+            export: expor.includes(e.id) ? 1 : 0
           };
         });
         this.rolesFields = [{ type: "selection" }].concat(a);
         this.selectTableField.laytables = id;
         this.selectTableField.laytables_editable = status;
+        this.selectTableField.laytables_editable = status;
+        this.selectTableField.laytables_export = expor;
       } else {
         this.rolesList = [];
+      }
+    },
+    async changeExport(item) {
+      // 获取授权字段开启列表
+      let a = this.selectTableField.laytables_export;
+      let index = a && a.indexOf(item.id);
+      if (index >= 0) {
+        this.selectTableField.laytables_export.splice(index, 1);
+      } else {
+        this.selectTableField.laytables_export.push(item.id);
       }
     },
     async listChange(item) {

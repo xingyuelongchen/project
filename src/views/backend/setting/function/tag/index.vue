@@ -65,6 +65,7 @@ export default {
           labelWidth: "80",
           prop: "progress"
         },
+        { label: "排序", type: "number", labelWidth: "80", prop: "sort" },
         {
           type: "button",
           labelWidth: "40",
@@ -110,6 +111,7 @@ export default {
       this.dialogFormVisible = true;
     },
     async treeAdd(data) {
+      this.treeKey[0] = data.id;
       this.url = "";
       this.title = "添加子标签";
       this.roles = { dept: data.dept, pid: data.id };

@@ -4,7 +4,8 @@ Create author: qinglong
 Create Time  : 2020-07-24
 -->
 <template>
-  <div class="content-box">
+  <step v-if="stepShow" v-model="stepShow" :item="step" />
+  <div v-else class="content-box">
     <mixSearch v-model="searchData" :fields="searchFields" />
     <mixTable v-model="tableData" :fields="tableFields" />
     <mixPage v-model="page" />
@@ -16,10 +17,12 @@ Create Time  : 2020-07-24
 <script>
 export default {
   name: "Tutorindex",
+  components: { step: () => import("./step") },
   data() {
     return {
       show: false,
-      plenShow: false,
+      stepShow: false,
+      step: null,
       page: { page: 1, limit: 15, total: 0 },
       searchData: {},
       searchFields: [
@@ -43,6 +46,9 @@ export default {
       editData: {}
     };
   },
+  stepShow(a) {
+    !a && this.getData();
+  },
   created() {
     this.getData();
     this.getTable();
@@ -61,7 +67,11 @@ export default {
             width: 100,
             options: [
               { label: "编辑", click: this.edit },
-              { label: "学习进度", click: this.speed },
+              {
+                label: "服务状态",
+                click: this.speed,
+                isShow: { prop: "type", type: "==", val: "新业绩" }
+              },
               { label: "删除", click: this.del }
             ]
           }
@@ -104,9 +114,13 @@ export default {
       });
       this.getData();
     },
-    async speed(item) {
-      this.plenShow = true;
-      console.log(item);
+    speed(item) {
+      this.step = {
+        customer_id: item.customer_id,
+        service_id: item.id,
+        sale_id: item.sale_id
+      };
+      this.stepShow = true;
     }
   }
 };

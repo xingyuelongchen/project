@@ -43,6 +43,9 @@ Create Time  : 2020-04-02
             <el-cascader clearable v-if="!item.readonly" v-model="form[item.prop]" :placeholder="item.placeholder || item.label" :show-all-levels="false" :collapse-tags="true" :disabled="item.disabled" :readonly="item.readonly" :checkStrictly="true" :emitPath="false" :options="item.options" :size="item.size || 'mini'" :props="item.config || { value:'id', checkStrictly: true}"></el-cascader>
             <el-input v-else v-model="form[item.prop]" :disabled="item.disabled" :readonly="item.readonly"></el-input>
           </template>
+          <template v-if="item.type == 'radio'">
+            <el-radio v-for="(k,i) in item.options" :key="i" :name="item.prop" v-model="form[item.prop]" :disabled="item.disabled" :readonly="item.readonly" :label="k.id">{{k.label}}</el-radio>
+          </template>
         </el-col>
       </template>
     </el-row>

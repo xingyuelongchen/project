@@ -45,7 +45,7 @@ Create Time  : 2020-07-22
           </el-form-item>
         </el-form>
         <el-button type="primary" @click="setRoutes" style="width:100%">确认{{title}}</el-button>
-        <div class="history" v-if="history && isHistory && !isLogin ">
+        <div class="history" v-if="history && isHistory && !isLogin && isElectron ">
           <template v-for="(item,key,index) in history">
             <div class="item" :key="index" @click="check(item)">{{key}} </div>
           </template>
@@ -71,7 +71,7 @@ export default {
       history: { 13169906653: { mobile: 13169906653, password: 123456 } },
       isHistory: false,
       isElectron: isElectron(),
-      checkPassword: false
+      checkPassword: true
     };
   },
   created() {
@@ -138,11 +138,12 @@ export default {
         } else {
           delete this.history[this.ruleForm.mobile];
         }
-
-        window.ipcRenderer.send("setStore", {
-          title: "history",
-          data: this.history
-        });
+        if (isElectron()) {
+          window.ipcRenderer.send("setStore", {
+            title: "history",
+            data: this.history
+          });
+        }
         if (userinfo) this.$router.setRoles();
         if (this.isLogin) {
           this.login();
