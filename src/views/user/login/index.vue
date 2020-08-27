@@ -35,7 +35,7 @@ Create Time  : 2020-07-22
           <el-form-item>
             <div style="height:40px;display: flex;justify-content:space-between">
               <span>
-                <el-checkbox v-model="checkPassword" v-if="!isLogin">记住账号</el-checkbox>
+                <el-checkbox v-model="checkPassword" v-if="isElectron">记住账号</el-checkbox>
               </span>
               <div>
                 <el-link :underline="false" type="primary" @click="register" v-if="!isLogin">立即注册</el-link>
