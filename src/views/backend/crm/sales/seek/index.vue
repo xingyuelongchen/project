@@ -26,7 +26,9 @@ Create Time  : 2020-03-27
         </span>
       </template>
     </div>
-    <mixTable v-model="tableData" :fields="tableFields" @select="selection" :key="key" />
+    <div style="height:calc(100% - 120px)">
+      <mixTable v-model="tableData" :fields="tableFields" @select="selection" />
+    </div>
     <mixPage v-model="page" />
     <mixDrawer style="top:61px" v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose" :isShow="true">
       <mixForm :key="key" v-model="editForm" :fields="editFields" />
@@ -152,7 +154,7 @@ export default {
               label: "共享",
               style: "success",
               click: this.gongxiang,
-              role: 188
+              role: 131
             },
             {
               label: "添加咨询信息",
@@ -282,16 +284,17 @@ export default {
             },
             {
               size: "mini",
+              label: "共享客户",
+              style: "success",
+              role: 188,
+              click: this.share
+            },
+            {
+              size: "mini",
               label: "服务状态",
               style: "primary",
               click: this.addStatus
             }
-            // {
-            //   size: "mini",
-            //   label: "客户历史状态",
-            //   style: "primary",
-            //   click: this.addHistory
-            // }
           ]
         }
       ];
@@ -379,7 +382,7 @@ export default {
         nickname: item.nickname,
         customer_id: this.id
       };
-      await this.axios("adminapi/Salecustomer/share", {
+      await this.axios("/adminapi/Salecustomer/share", {
         data: item
       });
       this.dialogVisible = false;

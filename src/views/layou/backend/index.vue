@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-07-22
 -->
 <template>
-  <div class="app-body user" :key="refreshKey">
+  <div class="app-body user" :key="refreshKey" v-loading="loading" element-loading-text="正在释放缓存……" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
     <div class="app-header" user="primary">
       <div class="left">
         <div class="item logo" :class="{scale:isCollapse}">
@@ -21,6 +21,10 @@ Create Time  : 2020-07-22
       </div>
       <div class="center"></div>
       <div class="right">
+        <div class="itema">
+          <el-tooltip content="修改主题色">
+          </el-tooltip>
+        </div>
         <div class="itema" @click="refresh">
           <el-tooltip content="刷新缓存">
             <span>
@@ -75,9 +79,9 @@ Create Time  : 2020-07-22
           </el-menu>
         </el-scrollbar>
       </div>
-      <div class="app-content" v-loading="loading" element-loading-text="正在释放缓存……" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+      <div class="app-content">
         <div class="top">
-          <el-tabs :value="activeName" :key="key" type="card" @tab-remove="delTab" @tab-click="onTab" user="el-tabs">
+          <el-tabs :value="activeName" type="card" @tab-remove="delTab" @tab-click="onTab" user="el-tabs">
             <template v-for="(item,index) in $store.state.tabmenu">
               <el-tab-pane :key="item.fullPath" :label="item.title" :name="item.fullPath" :closable="index>0"></el-tab-pane>
             </template>
@@ -104,7 +108,7 @@ export default {
   name: "Backend",
   data() {
     return {
-      key: 0,
+      ws: null,
       loading: false,
       message: [],
       settingList: [
@@ -147,6 +151,16 @@ export default {
       name = name[0];
       return name && name.fullPath;
     }
+  },
+  created() {
+    this.ws = new WS({ hander: this.onMessage });
+    this.ws.init();
+  },
+  updated() {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      this.loading = false;
+    }, 1000);
   },
   methods: {
     onMessage(data) {
@@ -197,40 +211,20 @@ export default {
         window.ipcRenderer.send("close");
       }
       this.$router.replace("/login");
+      this.ws.close();
     },
     async refresh() {
       this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 1000);
+      this.refreshKey = Math.random();
       let { data } = await this.axios("/adminapi/User/information", {
         data: { uid: this.userinfo.id }
       });
-
       if (!data.code) {
         this.$router.replace("/login");
         return;
       }
       this.$store.commit("setUserinfo", data.data);
-      // window.location.reload();
       this.$router.setRoles();
-      // this.refreshKey = Math.random();
-      // let to = this.$route;
-      // let title = to.meta.title;
-      // if (
-      //   to.matched[to.matched.length - 2] &&
-      //   to.matched[to.matched.length - 2].meta.title
-      // ) {
-      //   title =
-      //     to.matched[to.matched.length - 2].meta.title + "/" + to.meta.title;
-      // }
-      // let option = {
-      //   name: to.name,
-      //   fullPath: to.fullPath,
-      //   path: to.path,
-      //   title
-      // };
-      // this.$store.commit("setTabmenu", option);
     },
     update() {
       window.ipcRenderer.send("queryUpdate");
@@ -238,145 +232,10 @@ export default {
     handerSetting(item) {
       item.event();
     }
-    // updateTheme(val, oldVal = "#409EFF") {
-    //   if (typeof val !== "string") return;
-    //   const head = document.getElementsByTagName("head")[0];
-    //   const themeCluster = this.getThemeCluster(val.replace("#", ""));
-    //   const originalCluster = this.getThemeCluster(oldVal.replace("#", ""));
-    //   const getHandler = (variable, id) => {
-    //     return () => {
-    //       const newStyle = this.updateStyle(
-    //         this[variable],
-    //         originalCluster,
-    //         themeCluster
-    //       );
-
-    //       let styleTag = document.getElementById(id);
-    //       if (!styleTag) {
-    //         styleTag = document.createElement("style");
-    //         styleTag.setAttribute("id", id);
-    //         head.appendChild(styleTag);
-    //       }
-    //       styleTag.innerText = newStyle;
-    //     };
-    //   };
-
-    //   // const chalkHandler = getHandler("chalk", "chalk-style");
-
-    //   const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`;
-    //   this.getCSSString(url, getHandler("chalk", "chalk-style"), "chalk");
-    //   // chalkHandler();
-
-    //   const link = [].slice.call(
-    //     document.getElementsByTagName("head")[0].getElementsByTagName("link")
-    //   );
-    //   for (let i = link.length - 3; i < link.length; i++) {
-    //     const style = link[i];
-    //     this.getCSSString(style.href, innerText => {
-    //       const originalCluster = this.getThemeCluster(
-    //         this.theme.replace("#", "")
-    //       );
-    //       const newStyle = this.updateStyle(
-    //         innerText,
-    //         originalCluster,
-    //         themeCluster
-    //       );
-    //       let styleTag = document.getElementById(i);
-    //       if (!styleTag) {
-    //         styleTag = document.createElement("style");
-    //         styleTag.id = i;
-    //         styleTag.innerText = newStyle;
-    //         head.appendChild(styleTag);
-    //       }
-    //     });
-    //   }
-
-    //   const styles = [].slice
-    //     .call(document.querySelectorAll("style"))
-    //     .filter(style => {
-    //       const text = style.innerText;
-    //       return (
-    //         new RegExp(oldVal, "i").test(text) && !/Chalk Variables/.test(text)
-    //       );
-    //     });
-    //   styles.forEach(style => {
-    //     const { innerText } = style;
-    //     if (typeof innerText !== "string") return;
-    //     style.innerText = this.updateStyle(
-    //       innerText,
-    //       originalCluster,
-    //       themeCluster
-    //     );
-    //   });
-    // },
-    // updateStyle(style, oldCluster, newCluster) {
-    //   let newStyle = style;
-    //   oldCluster.forEach((color, index) => {
-    //     newStyle = newStyle.replace(new RegExp(color, "ig"), newCluster[index]);
-    //   });
-    //   return newStyle;
-    // },
-    // getCSSString(url, callback, variable) {
-    //   const xhr = new XMLHttpRequest();
-    //   xhr.onreadystatechange = () => {
-    //     if (xhr.readyState === 4 && xhr.status === 200) {
-    //       if (variable) {
-    //         this[variable] = xhr.responseText.replace(/@font-face{[^}]+}/, "");
-    //       }
-    //       callback(xhr.responseText);
-    //     }
-    //   };
-    //   xhr.open("GET", url);
-    //   xhr.send();
-    // },
-    // getThemeCluster(theme) {
-    //   const tintColor = (color, tint) => {
-    //     let red = parseInt(color.slice(0, 2), 16);
-    //     let green = parseInt(color.slice(2, 4), 16);
-    //     let blue = parseInt(color.slice(4, 6), 16);
-
-    //     if (tint === 0) {
-    //       // when primary color is in its rgb space
-    //       return [red, green, blue].join(",");
-    //     } else {
-    //       red += Math.round(tint * (255 - red));
-    //       green += Math.round(tint * (255 - green));
-    //       blue += Math.round(tint * (255 - blue));
-
-    //       red = red.toString(16);
-    //       green = green.toString(16);
-    //       blue = blue.toString(16);
-
-    //       return `#${red}${green}${blue}`;
-    //     }
-    //   };
-
-    //   const shadeColor = (color, shade) => {
-    //     let red = parseInt(color.slice(0, 2), 16);
-    //     let green = parseInt(color.slice(2, 4), 16);
-    //     let blue = parseInt(color.slice(4, 6), 16);
-
-    //     red = Math.round((1 - shade) * red);
-    //     green = Math.round((1 - shade) * green);
-    //     blue = Math.round((1 - shade) * blue);
-
-    //     red = red.toString(16);
-    //     green = green.toString(16);
-    //     blue = blue.toString(16);
-
-    //     return `#${red}${green}${blue}`;
-    //   };
-
-    //   const clusters = [theme];
-    //   for (let i = 0; i <= 9; i++) {
-    //     clusters.push(tintColor(theme, Number((i / 10).toFixed(2))));
-    //   }
-    //   clusters.push(shadeColor(theme, 0.1));
-    //   return clusters;
-    // }
   },
-  created() {
-    new WS({ hander: this.onMessage });
+  beforeDestroy() {
+    clearTimeout(this.timer);
+    console.log(0);
   }
 };
 </script>

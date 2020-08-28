@@ -12,19 +12,20 @@ Create Time  : 2020-08-26
         </el-page-header>
       </div>
       <div class="step">
-        <el-scrollbar>
-          <div class="init">
-            <el-steps :space="200" :active="stepData.progress-1" finish-status="success" class="steps" align-center>
-              <template v-for="(item,index) in stepList">
-                <!-- <el-step :title="item.label" :key="index" @click.native="stepClick(item,index)"></el-step> -->
-                <el-step :title="item.label" :key="index"></el-step>
-              </template>
-            </el-steps>
-            <template v-if="stepFields.length">
-              <mixForm v-model="stepData" :fields="stepFields" style="padding-left:40px" />
+
+        <div class="init">
+          <el-steps :space="200" :active="stepData.progress-1" finish-status="success" class="steps" align-center>
+            <template v-for="(item,index) in stepList">
+              <!-- <el-step :title="item.label" :key="index" @click.native="stepClick(item,index)"></el-step> -->
+              <el-step :title="item.label" :key="index"></el-step>
             </template>
-          </div>
-          <el-timeline v-if="label_list.length">
+          </el-steps>
+          <template v-if="stepFields.length">
+            <mixForm v-model="stepData" :fields="stepFields" style="padding-left:40px" />
+          </template>
+        </div>
+        <el-timeline v-if="label_list.length">
+          <el-scrollbar>
             <template v-for="(item,index) in label_list">
               <el-timeline-item :key="index" :timestamp="item.create_time" placement="top">
                 <el-card>
@@ -44,8 +45,8 @@ Create Time  : 2020-08-26
                 </el-card>
               </el-timeline-item>
             </template>
-          </el-timeline>
-        </el-scrollbar>
+          </el-scrollbar>
+        </el-timeline>
       </div>
     </el-card>
     <el-dialog :visible.sync="refundShow" title="退款资料" width="500px" @close="refundData={}">
@@ -74,47 +75,42 @@ export default {
       label_list: [],
       progress: [],
       isRefund: true,
-      refundFields: [
-        { labelWidth: 70, label: "退款金额", type: "number", prop: "price" },
-        {
-          labelWidth: 70,
-          label: "退款描述",
-          type: "textarea",
-          prop: "remark",
-          placeholder: "请填写退款描述"
-        },
-        {
-          labelWidth: 70,
-          label: "凭证图片",
-          type: "image",
-          prop: "pic",
-          placeholder: "上传退款凭证图片"
-        },
-        {
-          labelWidth: 70,
-          label: "提交申请",
-          type: "button",
-          click: this.refund
-        }
-      ],
+      refundFields: [],
       refundData: {}
     };
   },
   async created() {
     this.stepData = this.item;
     this.init();
+    this.getForm();
   },
   methods: {
+    async getForm() {
+      let { data } = await this.axios("/adminapi/Publics/TableFormEdit", {
+        data: { type: "add", table_id: 11 }
+      });
+      if (data.code) {
+        this.refundFields = data.data.concat([
+          {
+            label: "提交申请",
+            type: "button",
+            click: this.refund
+          }
+        ]);
+      }
+    },
     async refund(bool) {
       if (!bool) {
         this.refundShow = true;
         return;
       }
-      await this.axios("/adminapi/Refund/add", {
+      let { data } = await this.axios("/adminapi/Refund/add", {
         data: { ...this.refundData, ...this.item, ...this.stepData }
       });
-
-      this.refundShow = false;
+      if (data.code) {
+        this.refundShow = false;
+        this.$emit("input", false);
+      }
     },
     async init() {
       let { data } = await this.axios("/adminapi/Service/label_list", {
@@ -150,13 +146,14 @@ export default {
     async changeStep() {
       delete this.stepData.id;
       await this.axios("/adminapi/Service/label_add", {
-        data: this.stepData
+        data: { ...this.stepData, ...this.item }
       });
       this.$emit("input", false);
     },
     stepClick(item) {
       this.stepData.progress = item.progress;
       this.stepData.label_1 = item.id;
+      if (item.children) this.stepData.label_2 = item.children[0].id;
       if (!this.isRefund) {
         this.stepFields = [
           {

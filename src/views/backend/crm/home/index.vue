@@ -1,27 +1,25 @@
 <!--
 Template Name: home
 Create author: qinglong
-Create Time  : 2020-07-22
+Create Time  : 2020-08-28
 -->
 <template>
-  <div>紧张筹备中……更新过了
-
-    <el-button @click="sendMsg"> 按钮</el-button>
+  <div class="content-wrap">
+    <el-card>
+      正在筹备中……
+    </el-card>
   </div>
 </template>
 <script>
 export default {
-  name: "Index",
+  name: "Home",
   data() {
-    return { value: null };
-  },
-  mounted() {},
-  methods: {
-    sendMsg() {
-      window.ipcRenderer.send("message", "******************");
-    }
+    return {};
   }
 };
 </script>
 <style lang='less' scoped>
+.content-wrap {
+  padding: 0 20px;
+}
 </style>

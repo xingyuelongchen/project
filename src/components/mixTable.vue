@@ -63,14 +63,14 @@ Create Time  : 2020-03-28
               <el-cascader :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" :options="item.config || {}" @change="onInput(item,scope,'change',$event)" />
             </template>
             <template v-if="item.type == 'input'">
-              <div class="input" :key="showKey" @click="getFocus(item,scope,true)">
+              <div class="input" :key="showKey" @click.self="getFocus(item,scope,true)">
                 <span v-if="!item['readonly'+scope.$index]">{{scope.row[item.prop]}}</span>
                 <el-input v-else :size="item.size||options.size||'mini'" :ref="item.prop" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="getBlur(item,scope,false)"></el-input>
               </div>
             </template>
             <template v-if="['manage','button'].includes(item.type)">
               <div class="box">
-                <el-dropdown v-if="item.type == 'manage'">
+                <el-dropdown v-if="item.type == 'manage'" trigger="click">
                   <el-button class="hover" :size="item.size || 'mini'" type="primary">{{ item.label || '操作'}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
                   <el-dropdown-menu slot="dropdown">
                     <template v-for="(k,i) in item.options">
@@ -330,7 +330,7 @@ export default {
       showKey: "key",
       key: 0,
       field: [],
-      refs: null
+      timer: null
     };
   },
   watch: {
@@ -345,11 +345,9 @@ export default {
   created() {
     this.init();
   },
-  updated() {
-    this.refs = this.$refs.tablea;
-  },
+
   mounted() {
-    setTimeout(() => {
+    this.timer = setTimeout(() => {
       this.loading = false;
     }, 5000);
   },
@@ -526,6 +524,9 @@ export default {
     getTagDownLabel(val, item) {
       console.log(val, item);
     }
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer);
   }
 };
 </script>

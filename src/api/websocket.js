@@ -63,8 +63,12 @@ class WS {
                 this.send('断开链接', 'close');
                 this.init()
             }
-        }
-        this.init();
+        },
+            this.close = () => {
+                this.ws.onclose()
+            }
     }
+
+
 }
 export default WS 

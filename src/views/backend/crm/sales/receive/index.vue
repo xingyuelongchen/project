@@ -207,7 +207,7 @@ export default {
         {
           label: "操作",
           type: "manage",
-          minWidth: 250,
+          minWidth: 110,
           options: [
             { label: "删除", style: "danger", click: this.tableDel, role: 44 },
             {

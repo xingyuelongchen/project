@@ -77,10 +77,10 @@ export default {
       ]
     };
   },
-  created() {
+  async created() {
+    await this.getDept();
     this.getData();
     this.getHeadeData();
-    this.getDept();
   },
   methods: {
     async getHeadeData() {
@@ -108,14 +108,14 @@ export default {
                 style: "danger",
                 click: this.fenpei,
                 role: 139,
-                isShow: { type: "==", prop: "servicer", value: null }
+                isShow: { type: "==", prop: "servicer_userid", value: "" }
               },
               {
                 label: "自动分配",
                 style: "danger",
                 role: 136,
                 click: this.autoFenpei,
-                isShow: { type: "==", prop: "servicer", value: null }
+                isShow: { type: "==", prop: "servicer_userid", value: "" }
               }
             ]
           }
@@ -134,9 +134,20 @@ export default {
           },
           {
             type: "select",
-            span: 3,
+            span: 2,
             prop: "saler_group_zid",
             options: data.data
+          },
+          {
+            label: "业绩类型",
+            type: "select",
+            span: 2,
+            prop: "type",
+            options: [
+              { label: "新业绩", value: "新业绩" },
+              { label: "补欠款", value: "补欠款" },
+              { label: "升级", value: "升级" }
+            ]
           },
           {
             label: "模糊搜索",
@@ -144,6 +155,7 @@ export default {
             span: 3,
             prop: "search"
           },
+
           {
             span: 6,
             type: "button",

@@ -125,7 +125,7 @@ export default {
       let { data } = await this.axios(this.url, {
         data: this.ruleForm
       });
-      if (data.code) {
+      if (data.code && !this.isLogin) {
         let userinfo = data.data;
         window.localStorage.setItem("userinfo", JSON.stringify(userinfo));
         this.$store.commit("setUserinfo", userinfo);

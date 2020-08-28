@@ -136,6 +136,7 @@ export default {
     stepClick(item) {
       this.stepData.progress = item.progress;
       this.stepData.label_1 = item.id;
+      if (item.children) this.stepData.label_2 = item.children[0].id;
       this.stepFields = [
         {
           label: "服务状态",

@@ -48,10 +48,6 @@ Create Time  : 2020-08-26
         </el-scrollbar>
       </div>
     </el-card>
-    <el-dialog :visible.sync="refundShow" title="退款资料" width="500px" @close="refundData={}">
-      <mixForm v-model="refundData" :fields="refundFields" />
-    </el-dialog>
-
   </div>
 </template>
 <script>
@@ -88,12 +84,9 @@ export default {
         this.refundShow = true;
         return;
       }
-      let { data } = await this.axios("/adminapi/Refund/add", {
+      await this.axios("/adminapi/Refund/add", {
         data: { ...this.item, ...this.stepData }
       });
-      if (data.code) {
-        console.log(0);
-      }
     },
     async init() {
       let { data } = await this.axios("/adminapi/Refund/label_list", {
@@ -112,7 +105,6 @@ export default {
         let item = this.stepList.filter(
           e => e.progress == this.stepData.progress
         );
-        console.log(item);
         if (item.length) {
           this.stepData = {
             label_1: item[0].id,
@@ -125,14 +117,15 @@ export default {
     },
     async changeStep() {
       delete this.stepData.id;
-      await this.axios("/adminapi/Refund/label_add", {
-        data: { ...this.stepData,...this.item}
+      let { data } = await this.axios("/adminapi/Refund/label_add", {
+        data: { ...this.stepData, ...this.item }
       });
-      this.$emit("input", false);
+      if (data.code) this.$emit("input", false);
     },
     stepClick(item) {
       this.stepData.progress = item.progress;
       this.stepData.label_1 = item.id;
+      if (item.children) this.stepData.label_2 = item.children[0].id;
       this.stepFields = [
         {
           label: "服务状态",
@@ -141,6 +134,12 @@ export default {
           type: "radio",
           options: item.children,
           change: this.changeServe
+        },
+        {
+          label: "责任人",
+          prop: "person",
+          span: 8,
+          type: "text"
         },
         {
           label: "备注",

@@ -1,7 +1,7 @@
 export default
   [
     { path: 'crm', name: 'crm', meta: { keepAlive: true, role: 1, title: '首页', }, component: () => import('@/views/layou/backend') },
-    { path: 'index', name: 'Index', meta: { keepAlive: true, role: 87, title: '首页', }, component: () => import('@/views/backend/crm/home') },
+    { path: 'home', name: 'Home', meta: { keepAlive: true, role: 87, title: '首页', }, component: () => import('@/views/backend/crm/home') },
     { path: 'admin', name: 'Admin', meta: { keepAlive: true, role: 33, title: '行政管理', }, component: () => import('@/views/layou') },
     { path: 'user', name: 'Adminmenber', meta: { keepAlive: true, role: 34, title: '员工列表', }, component: () => import('@/views/backend/crm/admin/user') },
     { path: 'roles', name: 'Adminroles', meta: { keepAlive: true, role: 85, title: '权限分配', }, component: () => import('@/views/backend/crm/admin/roles') },

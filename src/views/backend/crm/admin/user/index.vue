@@ -86,7 +86,7 @@ export default {
             label: "操作",
             type: "manage",
             fixed: "right",
-            width: 250,
+            width: 120,
             options: [
               {
                 label: "编辑",

@@ -119,10 +119,8 @@ export default {
     },
     async treeAdd(data) {
       this.title = "添加部门";
-      this.orgForm = {
-        com_id: data.com_id,
-        pid: typeof data.pid == "undefined" ? 0 : data.id
-      };
+      let { com_id, pid } = data;
+      this.orgForm = { com_id, pid };
       this.dialogFormVisible = true;
     },
     async treeChange(data) {

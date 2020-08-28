@@ -4,7 +4,10 @@ Create author: qinglong
 Create Time  : 2020-07-24
 -->
 <template>
-  <div>功能筹备中</div>
+  <div>
+    <!-- <mixEditorText /> -->
+    积极筹备中……
+  </div>
 </template>
 <script>
 export default {

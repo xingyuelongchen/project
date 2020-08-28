@@ -7,21 +7,24 @@ Create Time  : 2020-08-26
   <div class="content-wrap">
     <el-card>
       <div slot="header">
+        <el-button style="padding:6px ;float:right" type="success" @click="deal" v-if="!isDeal">已成交</el-button>
         <el-page-header @back="$emit('input',false)" content="服务进度">
         </el-page-header>
       </div>
       <div class="step">
-        <el-scrollbar>
-          <div class="init">
-            <el-steps :space="200" :active="stepData.progress-1" finish-status="success" class="steps" align-center>
-              <template v-for="(item,index) in stepList">
-                <el-step :title="item.label" :key="index" @click.native="stepClick(item,index)"></el-step>
-                <!-- <el-step :title="item.label" :key="index"></el-step> -->
-              </template>
-            </el-steps>
-            <mixForm v-model="stepData" :fields="stepFields" />
-          </div>
-          <el-timeline>
+        <div v-if="isDeal" class="deal"> 已完结 </div>
+        <div v-else class="init">
+          <el-steps :space="200" :active="stepData.progress-1" finish-status="success" class="steps" align-center>
+            <template v-for="(item,index) in stepList">
+              <el-step :title="item.label" :key="index" @click.native="stepClick(item,index)"></el-step>
+              <!-- <el-step :title="item.label" :key="index"></el-step> -->
+            </template>
+          </el-steps>
+          <mixForm v-model="stepData" :fields="stepFields" />
+        </div>
+
+        <el-timeline>
+          <el-scrollbar>
             <template v-for="(item,index) in label_list">
               <el-timeline-item :key="index" :timestamp="item.create_time" placement="top">
                 <el-card>
@@ -41,8 +44,8 @@ Create Time  : 2020-08-26
                 </el-card>
               </el-timeline-item>
             </template>
-          </el-timeline>
-        </el-scrollbar>
+          </el-scrollbar>
+        </el-timeline>
       </div>
     </el-card>
   </div>
@@ -64,18 +67,15 @@ export default {
       stepData: { label_1: 0 },
       stepFields: [],
       label_list: [],
-      progress: []
+      progress: [],
+      isDeal: false
     };
   },
   async created() {
     this.stepData = this.item;
     this.init();
   },
-  watch: {
-    stepShow(a) {
-      a && this.getData();
-    }
-  },
+
   methods: {
     async init() {
       let { data } = await this.axios("/adminapi/Salecustomer/customer_label", {
@@ -84,6 +84,7 @@ export default {
       if (data.code) {
         this.label_list = data.data.label_list;
         this.stepList = data.data.label[0].children;
+        this.isDeal = data.data.end;
         this.stepData = { ...this.stepData, ...data.data.label_log };
         if (data.data.label_log && data.data.label_log.progress) {
           this.stepData.progress = data.data.label_log.progress;
@@ -107,6 +108,7 @@ export default {
     stepClick(item) {
       this.stepData.progress = item.progress;
       this.stepData.label_1 = item.id;
+           if (item.children) this.stepData.label_2 = item.children[0].id;
       this.stepFields = [
         {
           label: "服务进度：",
@@ -135,6 +137,7 @@ export default {
     },
     changeServe(item) {
       let obj = item.options.filter(e => e.id == this.stepData["label_2"]);
+      if (obj && obj[0]) this.stepData.pro = obj[0].label;
       if (obj && obj[0] && obj[0].children && obj[0].children.length) {
         this.stepFields.splice(1, 0, {
           label: "当前状态",
@@ -147,6 +150,13 @@ export default {
       } else {
         this.stepFields = this.stepFields.filter(e => e.prop !== "label_3");
       }
+    },
+    async deal() {
+      let { data } = await this.axios("/adminapi/", {
+        data: { ...this.stepData, ...this.item }
+      });
+      if (data.code) this.isDeal = true;
+      this.getData();
     }
   }
 };
@@ -176,6 +186,15 @@ export default {
         justify-content: center;
         margin: 20px 0;
       }
+    }
+    .deal {
+      height: 60px;
+      border: 1px dashed #bbb;
+      margin-bottom: 20px;
+      line-height: 60px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
     }
     .el-timeline {
       border: 1px solid #eee;

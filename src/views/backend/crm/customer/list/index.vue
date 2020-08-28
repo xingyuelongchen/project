@@ -203,13 +203,6 @@ export default {
             },
             {
               size: "mini",
-              label: "共享客户",
-              style: "success",
-              role: 131,
-              click: this.share
-            },
-            {
-              size: "mini",
               label: "手动分配",
               style: "warning",
               click: this.handDistribution,
@@ -392,17 +385,6 @@ export default {
         this.tableFields = arr;
       }
     },
-    // async gongxiang() {
-    //   this.tableData = [];
-    //   let { data } = await this.axios("/adminapi/Customer/shares", {
-    //     data: { ...this.search }
-    //   });
-    //   if (data.code) {
-    //     this.tableData = data.data;
-    //     this.page.total = data.count;
-    //     this.key = Math.random();
-    //   }
-    // },
     async getData(bool = true) {
       this.tableData = [];
       let obj = bool ? Object.assign({}, this.page, this.search) : this.page;

@@ -68,6 +68,7 @@ export default {
   },
   data() {
     let form = [
+      { label: "空", value: "text" },
       { label: "text - 文本框", value: "text" },
       { label: "textarea - 文本域", value: "textarea" },
       { label: "select - 下拉框", value: "select" },
@@ -90,6 +91,7 @@ export default {
       { label: "角色选择", value: "角色选择" }
     ];
     let table = [
+      { label: "空", value: "text" },
       { label: "text - 文本", value: "text" },
       { label: "tag - 标签", value: "tag" },
       { label: "plan - 进度条", value: "plan" },
@@ -204,6 +206,7 @@ export default {
           type: "tagdown",
           change: this.tableEdit,
           options: [
+            { label: "", value: "" },
             { label: "danger", value: "danger" },
             { label: "warning", value: "warning" },
             { label: "success", value: "success" },
