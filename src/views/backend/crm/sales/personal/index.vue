@@ -28,16 +28,22 @@ export default {
       searchFields: [],
       tableData: [],
       tableFields: [],
+      dept: [],
       page: { page: 1, limit: 15, total: 0 }
     };
   },
-  created() {
-    this.getData();
-    this.getTable();
+  async created() {
+    await this.getData();
+    await this.getTable();
+    await this.getDept();
     this.handleClick();
   },
 
   methods: {
+    async getDept() {
+      let { data } = await this.axios("/adminapi/");
+      if (data.code) this.dept = data.data;
+    },
     handleClick() {
       let arr = [];
       if (this.searchData.type == "1") {
@@ -56,6 +62,13 @@ export default {
       }
       arr.push(
         { label: "昵称", type: "text", prop: "nickname", span: 3 },
+        {
+          label: "部门",
+          type: "select",
+          prop: "dept",
+          span: 3,
+          options: this.dept
+        },
         {
           type: "button",
           span: 3,

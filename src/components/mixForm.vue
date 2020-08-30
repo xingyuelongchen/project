@@ -10,7 +10,6 @@ Create Time  : 2020-03-31
         <template v-for="(item,index) in v">
           <template v-if="item.type == 'hidden'"></template>
           <el-col :key="index" :span="item.span||24" :xs="item.xs||24" v-else>
-
             <el-form-item clearable :label-width="item.labelWidth?item.labelWidth+'px' :'100px'" :label="item.type == 'button' ?'': item.label" :prop="item.prop" :rules="item.rule" :required="!!item.required" :error="item.error">
               <template v-if=" item.type =='compute'">
                 <el-input clearable class="input" :size="item.size" :value="fieldsData[item.prop]" inline-message :placeholder="item.placeholder" type="text" @focus="compute(item)">

@@ -78,6 +78,7 @@ export default {
     localStorage.removeItem("userinfo");
     localStorage.removeItem("Store");
     sessionStorage.removeItem("Store");
+    sessionStorage.removeItem("xitong");
     this.$store.commit("setClear");
     if (isElectron()) {
       this.history =

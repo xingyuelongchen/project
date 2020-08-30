@@ -58,7 +58,7 @@ Create Time  : 2020-08-12
       </el-card>
       <el-card>
         <div slot="header">
-          账号资料
+          修改密码
           <el-button style="padding:6px;float:right" type="primary" @click="changePassword">确认修改</el-button>
         </div>
         <div style="height:100%">

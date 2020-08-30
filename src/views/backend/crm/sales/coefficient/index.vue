@@ -136,8 +136,11 @@ export default {
       this.addShow = false;
     },
     edit(item) {
-      this.show = true;
+      if (item.options && item.options.length) {
+        this.formData = item.options;
+      }
       this.id = item.id;
+      this.show = true;
     },
     async save() {
       await this.axios("/adminapi/Salerate/edit", {

@@ -72,10 +72,11 @@ Create Time  : 2020-03-28
               <div class="box">
                 <el-dropdown v-if="item.type == 'manage'" trigger="click">
                   <el-button class="hover" :size="item.size || 'mini'" type="primary">{{ item.label || '操作'}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
-                  <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-menu slot="dropdown" res="dropdownMenu">
                     <template v-for="(k,i) in item.options">
                       <el-dropdown-item v-show="isShow(k,item,scope)" v-role="k.role" :key="i" @click.native="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-dropdown-item>
                     </template>
+                    <el-dropdown-item></el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
                 <template v-else>

@@ -70,7 +70,8 @@ export default {
               {
                 label: "服务状态",
                 click: this.speed,
-                isShow: { prop: "type", type: "==", val: "新业绩" }
+                isShow: { prop: "type", type: "==", val: "新业绩" },
+                role: 200
               },
               { label: "删除", click: this.del }
             ]

@@ -7,46 +7,50 @@ Create Time  : 2020-08-26
   <div class="content-wrap">
     <el-card>
       <div slot="header">
-        <el-button style="float:right;padding:6px 10px" type="danger" @click="refund(false)" v-if="!isRefund">申请退款</el-button>
+        <el-button style="float:right;padding:6px 10px" type="danger" @click="refund(false)" v-if="!isRefund" v-role="207">申请退款</el-button>
         <el-page-header @back="$emit('input',false)" content="服务状态">
         </el-page-header>
       </div>
-      <div class="step">
-
-        <div class="init">
+      <div class="step-box">
+        <div class="init step-top" :class="{deal:!stepFields.length}">
           <el-steps :space="200" :active="stepData.progress-1" finish-status="success" class="steps" align-center>
             <template v-for="(item,index) in stepList">
               <!-- <el-step :title="item.label" :key="index" @click.native="stepClick(item,index)"></el-step> -->
               <el-step :title="item.label" :key="index"></el-step>
             </template>
           </el-steps>
-          <template v-if="stepFields.length">
-            <mixForm v-model="stepData" :fields="stepFields" style="padding-left:40px" />
-          </template>
+          <mixForm v-model="stepData" :fields="stepFields" v-if="stepFields.length" />
         </div>
-        <el-timeline v-if="label_list.length">
+        <div class="step-bottom" v-if="label_list.length">
           <el-scrollbar>
-            <template v-for="(item,index) in label_list">
-              <el-timeline-item :key="index" :timestamp="item.create_time" placement="top">
-                <el-card>
-                  <h4>
-                    <span v-if="item.label_2">
-                      进度更新为
-                      <el-tag type="parmary"> {{ item.label_2}} </el-tag>
-                    </span>
-                    <span v-if="item.label_3">
-                      ，正在 <el-tag type="danger">{{item.label_3}}</el-tag> 状态
-                    </span>
-                  </h4>
-                  <p>
-                    <el-tag>{{item.uid}}</el-tag>
-                    提交于 {{item.create_time}}
-                  </p>
-                </el-card>
-              </el-timeline-item>
-            </template>
+            <el-timeline>
+              <template v-for="(item,index) in label_list">
+                <el-timeline-item :key="index" :timestamp="item.create_time" placement="top">
+                  <el-card>
+                    <h4>
+                      <span v-if="item.label_2">
+                        进度更新为
+                        <el-tag type="parmary"> {{ item.label_2}} </el-tag>
+                      </span>
+                      <span v-if="item.label_3">
+                        ，正在 <el-tag type="danger">{{item.label_3}}</el-tag> 状态
+                      </span>
+                    </h4>
+
+                    <div class="remak">
+                      <span>备注信息：</span>
+                      {{item.remak}}
+                    </div>
+                    <p>
+                      <el-tag>{{item.uid}}</el-tag>
+                      提交于 {{item.create_time}}
+                    </p>
+                  </el-card>
+                </el-timeline-item>
+              </template>
+            </el-timeline>
           </el-scrollbar>
-        </el-timeline>
+        </div>
       </div>
     </el-card>
     <el-dialog :visible.sync="refundShow" title="退款资料" width="500px" @close="refundData={}">
@@ -159,7 +163,7 @@ export default {
           {
             label: "服务状态",
             prop: "label_2",
-            span: 5,
+            span: 24,
             type: "radio",
             options: item.children,
             change: this.changeServe
@@ -202,33 +206,73 @@ export default {
 </script>
 <style lang='less' scoped>
 .content-wrap {
+  height: 100%;
   .el-card {
     height: 100%;
-    .step {
+    .step-box {
       height: 100%;
       overflow: hidden;
+      display: flex;
+      justify-content: flex-start;
+      flex-direction: column;
       /deep/ .el-step {
         cursor: pointer;
       }
-    }
-    .init {
-      border: 1px solid #e1e1e1;
-      overflow: hidden;
-      margin-bottom: 20px;
-      .mix-form {
-        background: rgba(0, 0, 0, 0.03);
-        margin-bottom: 0;
-        min-height: 82px;
+      .step-top {
+        border: 1px solid #e1e1e1;
+        overflow: hidden;
+        margin-bottom: 20px;
       }
-      .steps {
-        display: flex;
-        justify-content: center;
-        margin: 20px 0;
+      .init {
+        height: 320px;
+        min-height: 320px;
+        max-height: 320px;
+        .mix-form {
+          background: rgba(0, 0, 0, 0.03);
+          margin-bottom: 0;
+          min-height: 82px;
+        }
+        .steps {
+          display: flex;
+          justify-content: center;
+          margin: 20px 0;
+        }
       }
-    }
-    .el-timeline {
-      border: 1px solid #eee;
-      padding: 20px;
+      .deal {
+        height: 60px;
+        min-height: 60px;
+        max-height: 60px;
+        border: 1px dashed #bbb;
+        margin-bottom: 20px;
+        line-height: 60px;
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+      }
+      .step-bottom {
+        border: 1px solid #eee;
+        flex: auto;
+        overflow: hidden;
+        .el-timeline {
+          padding: 20px;
+          .remak {
+            padding: 20px 15px;
+            border: 1px dashed #ccc;
+            border-radius: 10px;
+            margin: 0 -15px;
+            transition: all 0.2s;
+            &:hover {
+              border-color: #999;
+              transition: all 0.2s;
+            }
+            span {
+              font-size: 14px;
+              font-weight: bold;
+              padding-bottom: 20px;
+            }
+          }
+        }
+      }
     }
   }
 }

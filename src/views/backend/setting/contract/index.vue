@@ -13,24 +13,26 @@ Create Time  : 2020-08-12
         </div>
         <div class="left">
           <el-scrollbar>
-            <template v-for="(item,index) in  list">
-              <div class="item" user=card-active :key="index" @click="tab(item)" :class="{active:version.id==item.id}">{{item.label}}</div>
+            <template v-if="list.length">
+              <div v-for="(item,index) in  list" class="item" user=card-active :key="index" @click="tab(item)" :class="{active:version.id==item.id}">{{item.label}}</div>
             </template>
           </el-scrollbar>
         </div>
       </el-card>
       <el-card>
         <div slot="header">
-          <el-button style="padding:6px;" type="info" @click="del"> 版本：{{version.label}} </el-button>
-          <el-button style="padding:6px;" type="info" @click="del"> 时长：{{version.duration}} 个月</el-button>
-          <el-button style="padding:6px;" type="info" @click="del"> 价格：{{version.price}}元</el-button>
-          <el-button style="padding:6px;" type="danger" @click="del">删除当前套餐</el-button>
-          <el-button style="padding:6px;" type="success" @click="edit">编辑套餐</el-button>
-          <el-button style="padding:6px;" type="warning" @click="changeSave">保存图片修改</el-button>
+          <template v-if="list.length">
+            <el-button style="padding:3px 6px;" size="mini" type="info"> 版本：{{version.label  }} </el-button>
+            <el-button style="padding:3px 6px;" size="mini" type="info"> 时长：{{version.duration  }} 个月</el-button>
+            <el-button style="padding:3px 6px;" size="mini" type="info"> 价格：{{version.price }}元</el-button>
+            <el-button style="padding:3px 6px;" size="mini" type="danger" @click="del">删除当前套餐</el-button>
+            <el-button style="padding:3px 6px;" size="mini" type="success" @click="edit">编辑套餐</el-button>
+            <el-button style="padding:3px 6px;" size="mini" type="warning" @click="changeSave">保存图片修改</el-button>
+          </template>
         </div>
         <div class="right">
           <el-scrollbar>
-            <div class="list">
+            <div class="list" v-if="imageList.length">
               <template v-for="(item,index) in imageList">
                 <div class="item" :key="index">
                   <div class="icon">
@@ -66,19 +68,27 @@ export default {
       imageList: [],
       addData: {},
       addFields: [
-        {labelWidth:80, label: "套餐名称", prop: "label", type: "text" },
-        {labelWidth:80, label: "套餐价格", prop: "price", type: "number" },
-        {labelWidth:80, label: "有效期", prop: "duration", type: "number" },
-        {labelWidth:80, label: "套餐合同", prop: "pic", type: "image" },
-        {labelWidth:80, type: "button", options: [{ label: "提交", click: this.save }] }
+        { labelWidth: 80, label: "套餐名称", prop: "label", type: "text" },
+        { labelWidth: 80, label: "套餐价格", prop: "price", type: "number" },
+        { labelWidth: 80, label: "有效期", prop: "duration", type: "number" },
+        { labelWidth: 80, label: "套餐合同", prop: "pic", type: "image" },
+        {
+          labelWidth: 80,
+          type: "button",
+          options: [{ label: "提交", click: this.save }]
+        }
       ],
       editData: {},
       editFields: [
-        { labelWidth:80, label: "套餐名称", prop: "label", type: "text" },
-        { labelWidth:80, label: "套餐价格", prop: "price", type: "number" },
-        { labelWidth:80, label: "有效期", prop: "duration", type: "number" },
-        { labelWidth:80, label: "套餐合同", prop: "pic", type: "image" },
-        { labelWidth:80, type: "button", options: [{ label: "提交", click: this.editSave }] }
+        { labelWidth: 80, label: "套餐名称", prop: "label", type: "text" },
+        { labelWidth: 80, label: "套餐价格", prop: "price", type: "number" },
+        { labelWidth: 80, label: "有效期", prop: "duration", type: "number" },
+        { labelWidth: 80, label: "套餐合同", prop: "pic", type: "image" },
+        {
+          labelWidth: 80,
+          type: "button",
+          options: [{ label: "提交", click: this.editSave }]
+        }
       ]
     };
   },
@@ -88,7 +98,6 @@ export default {
   methods: {
     add() {
       this.addShow = true;
-      console.log("add");
     },
     async del() {
       await this.axios("/adminapi/Meal/del", {
@@ -99,8 +108,10 @@ export default {
       this.getData();
     },
     tab(item) {
-      this.version = item;
-      this.imageList = item.pic.map((e, i) => ({ id: i, src: e }));
+      if (item) {
+        this.version = item;
+        this.imageList = item.pic.map((e, i) => ({ id: i, src: e }));
+      }
     },
     edit() {
       this.editShow = true;

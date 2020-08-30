@@ -1,20 +1,18 @@
 <!--
-Template Name: test
+Template Name: backup
 Create author: qinglong
 Create Time  : 2020-08-30
 -->
 <template>
-  <div style="height:100vh">
-    <mixCode v-model="code" />
+  <div class="content-wrap">
+    <el-button>数据备份</el-button>
   </div>
 </template>
 <script>
 export default {
-  name: "test",
+  name: "Settingbackup",
   data() {
-    return {
-      code: '{"a":"b"}'
-    };
+    return {};
   }
 };
 </script>

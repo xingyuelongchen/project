@@ -34,7 +34,7 @@ Create Time  : 2020-07-22
         </div>
         <div class="itema" @click.stop="$router.push('/user/info')">
           <el-tooltip content="修改个人信息">
-            <el-avatar :size="40" :src="$store.state.userinfo.pic">{{$store.state.userinfo.name}}</el-avatar>
+            <el-avatar :size="40" :src="$store.state.userinfo.pic" @error="()=>true"><img src="http://www.guangyizhou.cn/favicon.ico" /></el-avatar>
           </el-tooltip>
         </div>
         <div class="item">
@@ -98,7 +98,7 @@ Create Time  : 2020-07-22
       <mixMessage :value="item" :key="item.id" v-if="item.show" @input="item.show=false" />
     </template>
     <mixXibao v-model="xibao" />
-    <div class="EXEVERSION">版本：V{{EXEVERSION}}</div>
+    <div class="EXEVERSION">Beta：v{{EXEVERSION}}</div>
   </div>
 </template>
 <script>
@@ -225,6 +225,9 @@ export default {
       }
       this.$store.commit("setUserinfo", data.data);
       this.$router.setRoles();
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     },
     update() {
       window.ipcRenderer.send("queryUpdate");

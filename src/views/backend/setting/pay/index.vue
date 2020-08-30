@@ -102,6 +102,7 @@ export default {
     },
     add() {
       this.addShow = true;
+      this.addData.pid = 0;
     },
     async del(item) {
       let id = this.version.id;
@@ -155,14 +156,12 @@ export default {
       }
     },
     async save() {
-      let { data } = await this.axios("/adminapi/Pay/add", {
+      await this.axios("/adminapi/Pay/add", {
         data: this.addData
       });
-      if (data.code) {
-        this.addShow = false;
-        this.addData = { pid: 0 };
-        this.getData();
-      }
+      this.addShow = false;
+      this.addData = { pid: 0 };
+      this.getData();
     }
   }
 };
