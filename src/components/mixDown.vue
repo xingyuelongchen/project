@@ -12,14 +12,14 @@ Create Time  : 2020-08-22
       </div>
       <div class="body">
         <div class="progress">
-          <el-progress type="circle" :percentage="100" status="success"></el-progress>
+          <el-progress type="circle" :percentage="progress" :status="status"></el-progress>
         </div>
         <div class="info">{{info.msg}}</div>
       </div>
       <div class="foot">
-        <el-button type="success">立即更新</el-button>
-        <el-button type="primary">下次更新</el-button>
-        <el-button type="warning">手动下载</el-button>
+        <el-button size="mini" :loading="info.status !== 2" v-if="info.status == 2" type="success" @click="update">立即更新</el-button>
+        <el-button size="mini" type="primary" v-if="info.status == 2" @click="show=false">下次启动时更新</el-button>
+        <el-button size="mini" type="warning" v-if="info.status == -1" @click="handerDown">手动下载</el-button>
       </div>
     </div>
   </div>
@@ -30,7 +30,9 @@ export default {
     return {
       show: false,
       ipcRenderer: null,
-      info: {}
+      info: {},
+      status: "",
+      progress: 1
     };
   },
   mounted() {
@@ -38,11 +40,18 @@ export default {
       this.ipcRenderer = window.ipcRenderer;
       this.ipcRenderer.on("message", (event, data) => {
         this.info = data;
+        if (data.status == -1) this.status = "exception";
+        if (data.status == 2) this.status = "success";
+        if (data.status == 3) this.status = "success";
+        if (data.progress) this.progress = data.progress;
         this.show = true;
       });
     }
   },
   methods: {
+    handerDown() {
+      console.log("手动下载");
+    },
     update() {
       //  发送更新请求
       window.ipcRenderer.send("updateNow");

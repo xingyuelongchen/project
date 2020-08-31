@@ -111,16 +111,15 @@ function sendUpdateMessage(message) {
 function updateHandle() {
   var versionInfo = '';
   let message = {
-    error: { status: -1, title: '检测更新查询异常', msg: '检测更新查询异常' },
+    error: { status: -1, title: '检测更新异常', msg: '检测更新异常' },
     checking: { status: 0, title: '正在检查更新', msg: '正在检查更新...' },
     updateAva: { status: 1, title: '正在下载更新', msg: '检测到新版本,正在下载,请稍后……' },
-    updateNow: { status: 2, title: '是否立即更新', msg: '安装包准备就绪，是否立即更新？' },
-    progress: { status: 4, title: '正在下载更新', msg: 1 },
-    updateNotAva: { status: 3, title: '检查完成', msg: '您现在使用的版本为最新版本,无需更新!' },
+    updateNow: { status: 2, title: '下载完成', progress: 100, msg: '安装包准备就绪，是否立即更新？' },
+    updateNotAva: { status: 3, title: '检查完成', progress: 100, msg: '您现在使用的版本为最新版本，无需更新!' },
+    progress: { status: 4, title: '正在下载更新', msg: '急速下载中……', progress: 1 },
   }
   autoUpdater.setFeedURL(uploadUrl)
   autoUpdater.on('error', (info) => {
-    message.error.msg = info
     // 更新发生错误
     sendUpdateMessage(message.error)
   });
@@ -134,7 +133,7 @@ function updateHandle() {
   });
   autoUpdater.on('download-progress', function (progressObj) {
     // 更新下载进度
-    message.progress.msg = progressObj.percent;
+    message.progress.progress = progressObj.percent;
     sendUpdateMessage(message.progress)
   })
   autoUpdater.on('update-not-available', (info) => {
