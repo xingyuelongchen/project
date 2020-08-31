@@ -41,8 +41,10 @@ export default {
 
   methods: {
     async getDept() {
-      let { data } = await this.axios("/adminapi/");
-      if (data.code) this.dept = data.data;
+      if (this.$store.state.userinfo.role.includes(208)) {
+        let { data } = await this.axios("/adminapi/Salepersonal/dept");
+        if (data.code) this.dept = data.data;
+      }
     },
     handleClick() {
       let arr = [];
@@ -67,7 +69,8 @@ export default {
           type: "select",
           prop: "dept",
           span: 3,
-          options: this.dept
+          options: this.dept,
+          role: 208
         },
         {
           type: "button",

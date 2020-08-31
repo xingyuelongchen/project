@@ -1,8 +1,683 @@
 {
     "history": {
         "13169906653": {
-            "mobile": "15883720435",
-            "password": "476799"
+            "mobile": "18866668888",
+            "password": "123456",
+            "code": "6281"
+        },
+        "18866668888": {
+            "mobile": "18866668888",
+            "password": "123456"
         }
+    },
+    "userinfo": {
+        "id": 1,
+        "mobile": "18866668888",
+        "dept": "",
+        "dept_id": "",
+        "card": "513021199406052894",
+        "nickname": "冷枫",
+        "real": "蒋军",
+        "weixin": "1014315485",
+        "qq": "1014315485",
+        "birthday": "1994-06-05",
+        "address": null,
+        "pic": "/uploads/img/20200819/6f6eb807ffe4a921d346d80882437493.png",
+        "feeling": "单身",
+        "password": "4344b2301376f99df6c356903cc2e4da",
+        "iden": "DMme",
+        "status": 0,
+        "role_id": null,
+        "role": [
+            0
+        ],
+        "menu": [
+            {
+                "id": 1,
+                "path": "/crm",
+                "pid": 0,
+                "title": "管理系统",
+                "status": 1,
+                "sort": 10,
+                "icon": "",
+                "children": [
+                    {
+                        "id": 87,
+                        "path": "index",
+                        "pid": 1,
+                        "title": "首页",
+                        "status": 1,
+                        "sort": 0,
+                        "icon": "icon-Homehomepagemenu",
+                        "children": [
+                            {
+                                "id": 120,
+                                "path": "/user/info",
+                                "pid": 87,
+                                "title": "用户资料修改",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            },
+                            {
+                                "id": 101,
+                                "path": "adminapi/User/information",
+                                "pid": 87,
+                                "title": "刷新数据权限",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            },
+                            {
+                                "id": 91,
+                                "path": "adminapi/Publics/table_th",
+                                "pid": 87,
+                                "title": "公共表头权限",
+                                "status": 1,
+                                "sort": 1,
+                                "icon": ""
+                            },
+                            {
+                                "id": 92,
+                                "path": "adminapi/Publics/TableFormEdit",
+                                "pid": 87,
+                                "title": "公共表单权限",
+                                "status": 1,
+                                "sort": 2,
+                                "icon": ""
+                            },
+                            {
+                                "id": 93,
+                                "path": "adminapi/Publics/uploadsImage",
+                                "pid": 87,
+                                "title": "公共上传图片接口",
+                                "status": 1,
+                                "sort": 3,
+                                "icon": ""
+                            },
+                            {
+                                "id": 186,
+                                "path": "adminapi/User/password_edit",
+                                "pid": 87,
+                                "title": "修改密码",
+                                "status": 1,
+                                "sort": 6,
+                                "icon": ""
+                            },
+                            {
+                                "id": 187,
+                                "path": "adminapi/User/portrait",
+                                "pid": 87,
+                                "title": "修改头像",
+                                "status": 1,
+                                "sort": 7,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 33,
+                        "path": "admin",
+                        "pid": 1,
+                        "title": "行政管理",
+                        "status": 1,
+                        "sort": 1,
+                        "icon": "icon-shenpi",
+                        "children": [
+                            {
+                                "id": 34,
+                                "path": "user",
+                                "pid": 33,
+                                "title": "员工列表",
+                                "status": 1,
+                                "sort": 1,
+                                "icon": ""
+                            },
+                            {
+                                "id": 85,
+                                "path": "roles",
+                                "pid": 33,
+                                "title": "权限分配",
+                                "status": 1,
+                                "sort": 2,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 10,
+                        "path": "customer",
+                        "pid": 1,
+                        "title": "咨询管理",
+                        "status": 1,
+                        "sort": 2,
+                        "icon": "icon-kehu",
+                        "children": [
+                            {
+                                "id": 32,
+                                "path": "customer",
+                                "pid": 10,
+                                "title": "咨询列表",
+                                "status": 1,
+                                "sort": 1,
+                                "icon": ""
+                            },
+                            {
+                                "id": 20,
+                                "path": "index",
+                                "pid": 10,
+                                "title": "咨询统计",
+                                "status": 1,
+                                "sort": 2,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 7,
+                        "path": "sales",
+                        "pid": 1,
+                        "title": "销售中心",
+                        "status": 1,
+                        "sort": 3,
+                        "icon": "icon-yingyongchengxu",
+                        "children": [
+                            {
+                                "id": 192,
+                                "path": "seek",
+                                "pid": 7,
+                                "title": "咨询记录",
+                                "status": 1,
+                                "sort": 0,
+                                "icon": ""
+                            },
+                            {
+                                "id": 16,
+                                "path": "index",
+                                "pid": 7,
+                                "title": "成交记录",
+                                "status": 1,
+                                "sort": 1,
+                                "icon": ""
+                            },
+                            {
+                                "id": 17,
+                                "path": "receive",
+                                "pid": 7,
+                                "title": "顾问接待",
+                                "status": 1,
+                                "sort": 2,
+                                "icon": ""
+                            },
+                            {
+                                "id": 76,
+                                "path": "personal",
+                                "pid": 7,
+                                "title": "个人数据",
+                                "status": 1,
+                                "sort": 3,
+                                "icon": ""
+                            },
+                            {
+                                "id": 77,
+                                "path": "total",
+                                "pid": 7,
+                                "title": "总览数据",
+                                "status": 1,
+                                "sort": 4,
+                                "icon": ""
+                            },
+                            {
+                                "id": 78,
+                                "path": "commission",
+                                "pid": 7,
+                                "title": "提成设置",
+                                "status": 1,
+                                "sort": 5,
+                                "icon": ""
+                            },
+                            {
+                                "id": 79,
+                                "path": "forming",
+                                "pid": 7,
+                                "title": "个人目标",
+                                "status": 1,
+                                "sort": 6,
+                                "icon": ""
+                            },
+                            {
+                                "id": 80,
+                                "path": "coefficient",
+                                "pid": 7,
+                                "title": "提成系数",
+                                "status": 1,
+                                "sort": 7,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 8,
+                        "path": "tutor",
+                        "pid": 1,
+                        "title": "导师中心",
+                        "status": 1,
+                        "sort": 4,
+                        "icon": "icon-hangzhengbankecheng",
+                        "children": [
+                            {
+                                "id": 18,
+                                "path": "index",
+                                "pid": 8,
+                                "title": "导师记录",
+                                "status": 1,
+                                "sort": 1,
+                                "icon": ""
+                            },
+                            {
+                                "id": 40,
+                                "path": "receive",
+                                "pid": 8,
+                                "title": "导师接待",
+                                "status": 1,
+                                "sort": 2,
+                                "icon": ""
+                            },
+                            {
+                                "id": 81,
+                                "path": "servicepersonal",
+                                "pid": 8,
+                                "title": "个人数据",
+                                "status": 1,
+                                "sort": 3,
+                                "icon": ""
+                            },
+                            {
+                                "id": 82,
+                                "path": "servicetotal",
+                                "pid": 8,
+                                "title": "数据总览",
+                                "status": 1,
+                                "sort": 4,
+                                "icon": ""
+                            },
+                            {
+                                "id": 169,
+                                "path": "renovation",
+                                "pid": 8,
+                                "title": "装修账号",
+                                "status": 1,
+                                "sort": 5,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 9,
+                        "path": "quality",
+                        "pid": 1,
+                        "title": "质检中心",
+                        "status": 1,
+                        "sort": 5,
+                        "icon": "icon-quality",
+                        "children": [
+                            {
+                                "id": 19,
+                                "path": "index",
+                                "pid": 9,
+                                "title": "退款记录",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 83,
+                        "path": "finance",
+                        "pid": 1,
+                        "title": "财务管理",
+                        "status": 1,
+                        "sort": 6,
+                        "icon": "icon-caiwu",
+                        "children": [
+                            {
+                                "id": 84,
+                                "path": "index",
+                                "pid": 83,
+                                "title": "顾问审核",
+                                "status": 1,
+                                "sort": 1,
+                                "icon": ""
+                            },
+                            {
+                                "id": 199,
+                                "path": "refund",
+                                "pid": 83,
+                                "title": "退款记录",
+                                "status": 1,
+                                "sort": 2,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 179,
+                        "path": "marketing",
+                        "pid": 1,
+                        "title": "营销中心",
+                        "status": 1,
+                        "sort": 7,
+                        "icon": "icon-yingxiao",
+                        "children": [
+                            {
+                                "id": 180,
+                                "path": "activity",
+                                "pid": 179,
+                                "title": "活动管理",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            },
+                            {
+                                "id": 181,
+                                "path": "member",
+                                "pid": 179,
+                                "title": "会员数据",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 11,
+                        "path": "extend",
+                        "pid": 1,
+                        "title": "扩展管理",
+                        "status": 1,
+                        "sort": 8,
+                        "icon": "icon-zuzhijiagou",
+                        "children": []
+                    },
+                    {
+                        "id": 13,
+                        "path": "data",
+                        "pid": 1,
+                        "title": "数据管理",
+                        "status": 1,
+                        "sort": 9,
+                        "icon": "icon-xiaoshouyuce",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "path": "/web",
+                "pid": 0,
+                "title": "官网管理",
+                "status": 1,
+                "sort": 20,
+                "icon": "",
+                "children": [
+                    {
+                        "id": 89,
+                        "path": "index",
+                        "pid": 3,
+                        "title": "首页",
+                        "status": 1,
+                        "sort": null,
+                        "icon": "",
+                        "children": []
+                    },
+                    {
+                        "id": 173,
+                        "path": "video",
+                        "pid": 3,
+                        "title": "课程管理",
+                        "status": 1,
+                        "sort": 1,
+                        "icon": "",
+                        "children": [
+                            {
+                                "id": 177,
+                                "path": "uploadvideo",
+                                "pid": 173,
+                                "title": "上传课程",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            },
+                            {
+                                "id": 178,
+                                "path": "classvideo",
+                                "pid": 173,
+                                "title": "课程分类",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 174,
+                        "path": "article",
+                        "pid": 3,
+                        "title": "文章管理",
+                        "status": 1,
+                        "sort": 2,
+                        "icon": "",
+                        "children": [
+                            {
+                                "id": 182,
+                                "path": "publish",
+                                "pid": 174,
+                                "title": "发布文章",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            },
+                            {
+                                "id": 183,
+                                "path": "manage",
+                                "pid": 174,
+                                "title": "文章管理",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            },
+                            {
+                                "id": 184,
+                                "path": "classarticle",
+                                "pid": 174,
+                                "title": "文章分类",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 175,
+                        "path": "images",
+                        "pid": 3,
+                        "title": "网站图库",
+                        "status": 1,
+                        "sort": 3,
+                        "icon": "",
+                        "children": []
+                    },
+                    {
+                        "id": 176,
+                        "path": "pages",
+                        "pid": 3,
+                        "title": "页面管理",
+                        "status": 1,
+                        "sort": 4,
+                        "icon": "",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "id": 24,
+                "path": "/app",
+                "pid": 0,
+                "title": "应用程序",
+                "status": 1,
+                "sort": 30,
+                "icon": "",
+                "children": [
+                    {
+                        "id": 88,
+                        "path": "index",
+                        "pid": 24,
+                        "title": "首页",
+                        "status": 1,
+                        "sort": null,
+                        "icon": "",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "id": 22,
+                "path": "/minapp",
+                "pid": 0,
+                "title": "小程序",
+                "status": 1,
+                "sort": 40,
+                "icon": "",
+                "children": [
+                    {
+                        "id": 90,
+                        "path": "index",
+                        "pid": 22,
+                        "title": "首页",
+                        "status": 1,
+                        "sort": null,
+                        "icon": "",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "id": 118,
+                "path": "/setting",
+                "pid": 0,
+                "title": "系统设置",
+                "status": 1,
+                "sort": 50,
+                "icon": "",
+                "children": [
+                    {
+                        "id": 119,
+                        "path": "index",
+                        "pid": 118,
+                        "title": "功能设置",
+                        "status": 1,
+                        "sort": null,
+                        "icon": "",
+                        "children": [
+                            {
+                                "id": 21,
+                                "path": "roles",
+                                "pid": 119,
+                                "title": "权限菜单",
+                                "status": 1,
+                                "sort": 1,
+                                "icon": ""
+                            },
+                            {
+                                "id": 30,
+                                "path": "role-group",
+                                "pid": 119,
+                                "title": "角色权限",
+                                "status": 1,
+                                "sort": 2,
+                                "icon": ""
+                            },
+                            {
+                                "id": 45,
+                                "path": "role-field",
+                                "pid": 119,
+                                "title": "字段管理",
+                                "status": 1,
+                                "sort": 3,
+                                "icon": ""
+                            },
+                            {
+                                "id": 86,
+                                "path": "option",
+                                "pid": 119,
+                                "title": "选项管理",
+                                "status": 1,
+                                "sort": 4,
+                                "icon": ""
+                            },
+                            {
+                                "id": 75,
+                                "path": "organization",
+                                "pid": 119,
+                                "title": "组织架构",
+                                "status": 1,
+                                "sort": 5,
+                                "icon": ""
+                            },
+                            {
+                                "id": 117,
+                                "path": "icon",
+                                "pid": 119,
+                                "title": "icon图标",
+                                "status": 1,
+                                "sort": 6,
+                                "icon": ""
+                            },
+                            {
+                                "id": 46,
+                                "path": "system-setting",
+                                "pid": 119,
+                                "title": "系统配置",
+                                "status": 1,
+                                "sort": 7,
+                                "icon": ""
+                            },
+                            {
+                                "id": 190,
+                                "path": "tag",
+                                "pid": 119,
+                                "title": "流程标签",
+                                "status": 1,
+                                "sort": 8,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 121,
+                        "path": "contract",
+                        "pid": 118,
+                        "title": "套餐管理",
+                        "status": 1,
+                        "sort": null,
+                        "icon": "",
+                        "children": []
+                    },
+                    {
+                        "id": 191,
+                        "path": "pay",
+                        "pid": 118,
+                        "title": "三方接口",
+                        "status": 1,
+                        "sort": null,
+                        "icon": "",
+                        "children": []
+                    }
+                ]
+            }
+        ],
+        "department": null,
+        "dateTime": 1598954426210
     }
 }

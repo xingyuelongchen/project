@@ -95,7 +95,7 @@ Create Time  : 2020-03-31
               </template>
               <template v-if="item.type == 'image'">
                 <div :key="key" class="image">
-                  <el-input v-model="files[item.prop]" :readonly="!!item.readonly" type="text" @paste.native.capture.prevent="onPaste($event,item,index)" title="可粘贴截图上传" :placeholder="item.placeholder || '可粘贴截图上传'" >
+                  <el-input v-model="files[item.prop]" :readonly="!!item.readonly" type="text" @paste.native.capture.prevent="onPaste($event,item,index)" title="可粘贴截图上传" :placeholder="item.placeholder || '可粘贴截图上传'">
                     <el-button slot="append" :disabled="!!item.readonly" @click.native.stop="$refs.upload[0].click()">本地上传</el-button>
                   </el-input>
                   <input ref="upload" type="file" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg" multiple @input="upload($event,item)" v-show="false" />
@@ -130,6 +130,7 @@ Create Time  : 2020-03-31
   </el-form>
 </template>
 <script>
+// import CONFIG from "@/config";
 export default {
   name: "MixForm",
   components: { selectTree: () => import("@/components/mixSelectTree") },
@@ -253,6 +254,7 @@ export default {
       }
     },
     compute(item) {
+      // 计算
       let a = 0;
       let b = 0;
       let c = 0;
@@ -349,11 +351,15 @@ export default {
         data: obj
       });
       if (data.code) {
+        let imgUrl = data.data;
+        // process.env.NODE_ENV != "development"
+        //   ? CONFIG.baseUrl + "/" + data.data
+        //   : CONFIG.baseUrlDev + "/" + data.data;
         // let blob = window.URL.createObjectURL(file);
         if (this.fieldsData[item.prop] && this.fieldsData[item.prop].length) {
-          this.fieldsData[item.prop].push(data.data);
+          this.fieldsData[item.prop].push(imgUrl);
         } else {
-          this.fieldsData[item.prop] = [data.data];
+          this.fieldsData[item.prop] = [imgUrl];
         }
         this.key = Math.random();
       }

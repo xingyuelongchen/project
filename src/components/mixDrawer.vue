@@ -100,6 +100,7 @@ export default {
 
   .body {
     width: 25vw;
+    min-width: 400px;
     height: 100%;
     overflow-y: hidden;
     background: #fff;
@@ -127,6 +128,7 @@ export default {
     text-align: center;
     padding: 10px 0;
     z-index: 200;
+    min-width: 400px;
   }
 }
 </style>

@@ -55,7 +55,7 @@ Vue.directive('move', {
 
 Vue.prototype.axios = axios;
 Vue.prototype.EXEVERSION = version.version;
-Vue.prototype.isElectron = isElectron;
+Vue.prototype.isElectron = isElectron();
 Vue.use(Element);
 Vue.use(template);
 new Vue({

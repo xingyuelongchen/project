@@ -27,7 +27,7 @@ module.exports = {
         // hotOnly: true, //是否开启热更新
         proxy: {
             "/adminapi": {
-                target: config.baseUrl,
+                target: config.baseUrlDev,
                 ws: true,
                 changeOrigin: true
                 // pathRewrite: {
@@ -35,12 +35,12 @@ module.exports = {
                 // }
             },
             "/uploads": {
-                target: config.baseUrl,
+                target: config.baseUrlDev,
                 ws: true,
                 changeOrigin: true
             },
             "/admin": {
-                target: config.baseUrl,
+                target: config.baseUrlDev,
                 ws: true,
                 changeOrigin: true
             },

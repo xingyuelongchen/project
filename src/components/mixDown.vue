@@ -5,45 +5,39 @@ Create Time  : 2020-08-22
 -->
 <template>
   <div class="update" v-if="show">
-    <mixDialog v-model="show">
-      <div slot="head">下载进度</div>
-      <div class="speed">
-        <el-progress :text-inside="true" :stroke-width="36" :percentage="speed" :status="status"></el-progress>
-        <div>{{title}}</div>
+    <div class="update-box">
+      <div class="head">
+        <div class="left">{{info.title}}</div>
+        <div class="right"><i class="el-icon-close" @click="show=false"></i></div>
       </div>
-      <div style="margin:40px auto;text-align:center">
-        <el-button :loading="speed<=100" type="primary">确定安装</el-button>
+      <div class="body">
+        <div class="progress">
+          <el-progress type="circle" :percentage="100" status="success"></el-progress>
+        </div>
+        <div class="info">{{info.msg}}</div>
       </div>
-    </mixDialog>
+      <div class="foot">
+        <el-button type="success">立即更新</el-button>
+        <el-button type="primary">下次更新</el-button>
+        <el-button type="warning">手动下载</el-button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import isElectron from "is-electron";
 export default {
   data() {
     return {
       show: false,
-      speed: 1,
-      status: "primary",
-      version: "",
-      title: ""
+      ipcRenderer: null,
+      info: {}
     };
   },
   mounted() {
-    let vm = this;
-    if (isElectron()) {
-      let msg = null;
-      vm.ipcRenderer = window.ipcRenderer;
-      vm.ipcRenderer.on("message", (event, data) => {
-        msg && msg.close();
-        if (data.status == 1) this.show = true;
-        this.title = data.msg;
-      });
-      vm.ipcRenderer.on("downloadProgress", (event, progressObj) => {
-        this.speed = progressObj.percent;
-      });
-      vm.ipcRenderer.on("isUpdateNow", (event, versionInfo) => {
-        this.version = versionInfo.version;
+    if (this.isElectron) {
+      this.ipcRenderer = window.ipcRenderer;
+      this.ipcRenderer.on("message", (event, data) => {
+        this.info = data;
         this.show = true;
       });
     }
@@ -56,9 +50,7 @@ export default {
   },
   beforeDestroy() {
     // 移除ipcRenderer所有事件
-    if (isElectron()) {
-      this.ipcRenderer.removeAllListeners();
-    }
+    if (this.isElectron) this.ipcRenderer.removeAllListeners();
   }
 };
 </script>
@@ -72,14 +64,53 @@ export default {
   margin: auto;
   background: rgba(0, 0, 0, 0.8);
 }
-.mix-dialog {
-  height: 300px !important;
-  min-height: 300px !important;
-}
-.speed {
-  width: 90%;
-  margin: 50px auto;
-  overflow: hidden;
-  text-align: center;
+.update-box {
+  width: 500px;
+  height: 300px;
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border-radius: 20px;
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    border-bottom: 1px solid #eee;
+    > div {
+      padding: 0 20px;
+      i {
+        cursor: pointer;
+      }
+    }
+  }
+  .body {
+    // display: flex;
+
+    // justify-content: center;
+    // align-items: center;
+    margin: 15px auto;
+    .progress {
+      margin: auto;
+      text-align: center;
+    }
+    .info {
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+    }
+  }
+  .foot {
+    height: 58px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 20px;
+    border-top: 1px solid #eee;
+  }
 }
 </style>

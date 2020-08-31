@@ -12,6 +12,6 @@ app.listen(80, '0.0.0.0', () => {
 app.use('/favicon.ico', function () {
     return
 })
-app.use(express.static('dist'));
+app.use(express.static('./build'));
 // app.use(cors({ credentials: true, origin: true }));
 // app.use(router)

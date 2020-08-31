@@ -7,7 +7,7 @@ Create Time  : 2020-04-02
   <div class="mix-search">
     <el-row>
       <template v-for="(item,index) in fields">
-        <el-col :span="item.span" :key="index">
+        <el-col :span="item.span" :xs="item.xs || item.span" :sm="item.sm || item.span" :md="item.md || item.span" :lg="item.lg || item.span" :xl="item.xl || item.span" :key="index" v-role="item.role">
           <template v-if="['text','textarea','number'].indexOf(item.type)>=0">
             <el-input v-model="form[item.prop]" :readonly="item.readonly" :type="item.type" :size="item.size||'mini'" :placeholder="item.label" clearable :default-value="new Date()"></el-input>
           </template>
@@ -147,9 +147,12 @@ export default {
   padding: 5px;
   background: #f0f0f0;
 }
+.el-date-editor {
+  width: 100%;
+}
 .el-col {
   margin: 3px;
-  min-width: 150px;
+  min-width: 100px;
   .el-input,
   .el-select {
     width: 100%;

@@ -246,38 +246,48 @@ export default {
           label: "咨询",
           type: "datetimerange",
           prop: "date",
-          span: 5.5
+          span:6,
+          sm: 24,
+          xs: 24,
         },
         {
           label: "微信/QQ/电话/旺旺",
           prop: "search",
           type: "text",
-          span: 3
+          span: 3,
+          sm: 24,
+          xs: 24,
         },
 
         {
           label: "咨询信息",
           prop: "info",
           type: "text",
-          span: 3
+          span: 3,
+          sm: 24,
+          xs: 24,
         },
         {
           label: "跟踪状态",
           type: "select",
           prop: "trace_status",
           span: 3,
-          options: data.data
+          options: data.data,
+          sm: 24,
+          xs: 24,
         },
         {
           label: "客户类型",
           type: "select",
           prop: "label",
           span: 3,
-          options: res.data
+          options: res.data,
+          sm: 24,
+          xs: 24,
         },
         {
           type: "button",
-          span: 10,
+          span: 24,
           options: [
             { label: "搜索", style: "success", click: this.getData },
             { label: "重置", style: "wraning", click: this.onReset },
@@ -394,7 +404,7 @@ export default {
       if (data.code) {
         this.tableData = data.data;
         this.page.total = data.count;
-        this.key = Math.random();
+        // this.key = Math.random();
       }
     },
     async onAdd() {
@@ -473,7 +483,7 @@ export default {
               }
             });
           });
-        this.key = Math.random();
+        // this.key = Math.random();
       } catch (error) {
         this.$message.error("数据解析错误，请手动填写");
       }

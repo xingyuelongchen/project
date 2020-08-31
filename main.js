@@ -12,8 +12,8 @@ if (app.isPackaged) {
   // 线上地址
   uploadUrl = config.uploadUrl // 更新地址 
 } else {
-  // 线下地址
-  uploadUrl = config.uploadUrlDev // 更新地址 
+  // 线下地址 更新地址 
+  uploadUrl = config.uploadUrlDev
 }
 init();
 // 初始化主进程
@@ -38,8 +38,8 @@ function init() {
   // 监听事件
   setIpcMainList();
   app.whenReady().then(() => {
-    // 检查更新
-    autoUpdater.checkForUpdates()
+    // // 检查更新
+    // autoUpdater.checkForUpdates()
     // 创建桌面窗口
     createWindow()
     app.on('activate', function () {
@@ -65,9 +65,9 @@ function init() {
 // 初始化渲染进程
 function createWindow() {
   mainWindow = new BrowserWindow({
-    minWidth: 1200,
-    minHeight: 675,
-    width: 1250,
+    minWidth: 1300,
+    minHeight: 700,
+    width: 1300,
     height: 700,
     frame: true,
     webPreferences: {
@@ -87,7 +87,7 @@ function createWindow() {
     click: () => { mainWindow.webContents.openDevTools(); }
   }))
   menu.append(new MenuItem({
-    // label: 'tools',
+    // label: '刷新',
     accelerator: 'CmdOrCtrl+r',
     click: () => { mainWindow.webContents.reload(); }
   }))
@@ -98,7 +98,8 @@ function createWindow() {
     mainWindow.loadFile('./dist/index.html');
   } else {
     // 调试 
-    mainWindow.loadURL(config.feedUrl);
+    let url = config.port ? config.feedUrl + ':' + config.port : config.feedUrl
+    mainWindow.loadURL(url);
   }
 
 }
@@ -108,55 +109,46 @@ function sendUpdateMessage(message) {
 }
 // 更新处理器
 function updateHandle() {
+  var versionInfo = '';
   let message = {
-    error: { status: -1, msg: '检测更新查询异常' },
-    checking: { status: 0, msg: '正在检查更新...' },
-    updateAva: { status: 1, msg: '检测到新版本,正在下载,请稍后' },
-    updateNotAva: { status: 2, msg: '您现在使用的版本为最新版本,无需更新!' },
+    error: { status: -1, title: '检测更新查询异常', msg: '检测更新查询异常' },
+    checking: { status: 0, title: '正在检查更新', msg: '正在检查更新...' },
+    updateAva: { status: 1, title: '正在下载更新', msg: '检测到新版本,正在下载,请稍后……' },
+    updateNow: { status: 2, title: '是否立即更新', msg: '安装包准备就绪，是否立即更新？' },
+    progress: { status: 4, title: '正在下载更新', msg: 1 },
+    updateNotAva: { status: 3, title: '检查完成', msg: '您现在使用的版本为最新版本,无需更新!' },
   }
-  let versionInfo = ''
   autoUpdater.setFeedURL(uploadUrl)
-  // 检测更新查询异常
-  autoUpdater.on('error', function (error) {
+  autoUpdater.on('error', (info) => {
+    message.error.msg = info
+    // 更新发生错误
     sendUpdateMessage(message.error)
-  })
-  // 当开始检查更新的时候触发
-  autoUpdater.on('checking-for-update', function () {
+  });
+  autoUpdater.on('checking-for-update', (info) => {
+    // 开始检查更新
     sendUpdateMessage(message.checking)
-  })
-  // 当发现有可用更新的时候触发，更新包下载会自动开始
-  autoUpdater.on('update-available', function (info) {
+  });
+  autoUpdater.on('update-available', (info) => {
+    // 自动下载更新
     sendUpdateMessage(message.updateAva)
-  })
-  // 当发现版本为最新版本触发
-  autoUpdater.on('update-not-available', function (info) {
-    if (zhudong) sendUpdateMessage(message.updateNotAva)
-
-  })
-  // 更新下载进度事件
+  });
   autoUpdater.on('download-progress', function (progressObj) {
-    mainWindow.webContents.send('downloadProgress', progressObj)
+    // 更新下载进度
+    message.progress.msg = progressObj.percent;
+    sendUpdateMessage(message.progress)
   })
-  // 包下载成功时触发
-  autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
-    // 收到renderer进程确认更新
+  autoUpdater.on('update-not-available', (info) => {
+    // 当前为最新版本，无需更新
+    sendUpdateMessage(message.updateNotAva)
+  });
+  autoUpdater.on('update-downloaded', (info) => {
+    // 更新包下载完成 
     ipcMain.on('updateNow', (e, arg) => {
       // 包下载完成后，重启当前的应用并且安装更新
       autoUpdater.quitAndInstall()
     })
-    // 主进程向renderer进程发送是否确认更新
-    mainWindow.webContents.send('isUpdateNow', versionInfo)
-  })
-  ipcMain.on('checkForUpdate', (event, data) => {
-    // 收到renderer进程的检查通知后，执行自动更新检查
-    if (data && data.type == 'zhudong') {
-      zhudong = true;
-    }
-    let checkInfo = autoUpdater.checkForUpdates()
-    checkInfo.then(function (data) {
-      versionInfo = data.versionInfo // 获取更新包版本等信息
-    })
-  })
+    sendUpdateMessage(message.updateNow)
+  });
 }
 // 监听渲染事件
 function setIpcMainList() {
@@ -173,7 +165,6 @@ function setIpcMainList() {
       notification.show();
       notification.on('click', function () {
         mainWindow.show();
-
       })
 
     }
@@ -216,7 +207,7 @@ function setIpcMainList() {
 
   })
   ipcMain.on('queryUpdate', function () {
-    autoUpdater.checkForUpdates()
+    autoUpdater.checkForUpdates();
   })
 }
 // 初始化系统图标

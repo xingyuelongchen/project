@@ -47,13 +47,13 @@ export default {
           label: "模糊搜索",
           type: "text",
           prop: "search",
-          span: 3
+          span: 2
         },
         {
           label: "选择部门",
           type: "select",
           prop: "saler_group_zid",
-          span: 3
+          span: 2
         },
         {
           type: "button",
@@ -83,7 +83,7 @@ export default {
           label: "接待渠道",
           type: "select",
           prop: "source",
-          span: 3,
+          span: 2,
           options: [
             { label: "微信", value: 1 },
             { label: "QQ", value: 2 },
@@ -94,7 +94,7 @@ export default {
           label: "渠道",
           type: "select",
           prop: "channel",
-          span: 3,
+          span: 2,
           options: [
             { label: "信息流", value: 1 },
             { label: "搜索引擎", value: 2 },
@@ -106,13 +106,13 @@ export default {
           label: "接待上限",
           type: "number",
           prop: "limit",
-          span: 3
+          span: 2
         },
         {
           label: "接单状态",
           type: "select",
           prop: "status",
-          span: 3,
+          span: 2,
           options: [
             { label: "开启", value: 1 },
             { label: "暂停", value: "0" }
@@ -120,9 +120,15 @@ export default {
         },
         {
           type: "button",
-          span: 3,
+          span: 6,
           options: [
-            { label: "批量修改", click: this.selectEdit, style: "primary" }
+            { label: "批量修改", click: this.selectEdit, style: "primary" },
+            {
+              label: "批量删除",
+              click: this.selectDel,
+              style: "danger",
+              role: 209
+            }
           ]
         }
       ],
@@ -275,6 +281,23 @@ export default {
         this.editForm.user = select.map(e => e.id);
       } else {
         this.selectList = select;
+      }
+    },
+
+    async selectDel() {
+      // 批量删除
+      if (!(this.selectList && this.selectList.length)) {
+        this.$notify.error({
+          title: "错误",
+          message: "请选择需要修改的数据"
+        });
+        return;
+      }
+      let obj = { id: this.selectList.map(e => e.id), ...this.selectionData };
+      let url = "/adminapi/Customerrefunder/batch_del";
+      let { data } = await this.axios(url, { data: obj });
+      if (data.code) {
+        this.getData(false);
       }
     },
     async selectEdit() {

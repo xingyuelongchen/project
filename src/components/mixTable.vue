@@ -94,8 +94,12 @@ Create Time  : 2020-03-28
               <template v-if="scope.row[item.prop] && typeof scope.row[item.prop] == 'object'  && scope.row[item.prop].length">
                 <el-image class="image" v-for="(k,i) in scope.row[item.prop]" :key="i" :src="k" fit="cover" :preview-src-list="scope.row[item.prop]" />
               </template>
-              <template class="image" v-else-if="typeof scope.row[item.prop] == 'string' ">
-                <el-image :key="index" :src="scope.row[item.prop]" fit="cover" :preview-src-list="[scope.row[item.prop]]" />
+              <template v-else-if="typeof scope.row[item.prop] == 'string' ">
+                <div class="imageong">
+                  <el-image :key="index" :src="scope.row[item.prop]" fit="contain" :preview-src-list="[scope.row[item.prop]]">
+                    <img slot="error">
+                  </el-image>
+                </div>
               </template>
               <span v-else>无</span>
             </template>
@@ -592,12 +596,17 @@ export default {
     background: none;
   }
 }
-.el-image {
+.el-image.image {
   width: 30px;
-  height: 20px;
+  height: 30px;
   /deep/ .el-image-viewer__close .el-icon-circle-close {
     font-size: 30px;
     color: #fff;
   }
+}
+.imageong {
+  width: 30px;
+  height: 30px;
+  text-align: center;
 }
 </style>

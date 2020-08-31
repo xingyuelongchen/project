@@ -10,7 +10,8 @@ class WS {
         };
         this.ipcRenderer = window.ipcRenderer;
         this.init = () => {
-            this.ws = new WebSocket(config.websocket);
+            let url = process.env.NODE_ENV != 'development' ? config.websocket : config.websocketDev
+            this.ws = new WebSocket(url);
             this.send = (obj, type) => {
                 let msg = {
                     type,
