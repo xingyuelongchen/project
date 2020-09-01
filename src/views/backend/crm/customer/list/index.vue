@@ -15,13 +15,13 @@ Create Time  : 2020-03-27
           <el-button @click="autoDistribution(null,true)" type="warning" size="mini" v-role="123">自动分配</el-button>
         </span>
       </div>
-      <div style="height:calc(100% - 160px)">
-        <mixTable v-model="tableData" :fields="tableFields" @select="selection" :key="key" />
+      <div style="height:calc(100% - 160px)" :key="key">
+        <mixTable v-model="tableData" :fields="tableFields" @select="selection" />
       </div>
       <mixPage v-model="page" />
     </div>
     <mixDrawer style="top:61px" v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose" :isShow="true">
-      <mixForm :key="key" v-model="editForm" :fields="editFields" />
+      <mixForm v-model="editForm" :fields="editFields" />
     </mixDrawer>
     <el-dialog :title="dialogName" :visible.sync="dialogVisible" width="50%">
       <div style="max-height:500px;height:500px;overflow:hidden">
@@ -33,16 +33,7 @@ Create Time  : 2020-03-27
         <!-- <el-button @click="dialogVisible = false">关闭窗口</el-button> -->
       </span>
     </el-dialog>
-    <!-- <el-dialog title="添加业绩" :visible.sync="qrcode" width="50%">
-      <div style="max-height:500px;height:500px;overflow:hidden">
-        <el-scrollbar>
-          <mixForm v-model="qrocdeData" :fields="qrocdeFields" style="border:none;padding-right:20px" />
-        </el-scrollbar>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="saveOrder">保存</el-button>
-      </span>
-    </el-dialog> -->
+
   </div>
 </template>
 <script>
@@ -227,12 +218,14 @@ export default {
           ]
         }
       ];
+      // 搜索数据
+      await this.getSelectList();
       // 表头数据
       await this.getTable();
       // 表格内容数据
       await this.getData(false);
       // await this.stopMaxOrder();
-      await this.getSelectList();
+      this.key = Math.random();
     },
     async getSelectList() {
       let { data } = await this.axios("/adminapi/customer/p_tool", {
@@ -246,9 +239,9 @@ export default {
           label: "咨询",
           type: "datetimerange",
           prop: "date",
-          span:6,
+          span: 6,
           sm: 24,
-          xs: 24,
+          xs: 24
         },
         {
           label: "微信/QQ/电话/旺旺",
@@ -256,7 +249,7 @@ export default {
           type: "text",
           span: 3,
           sm: 24,
-          xs: 24,
+          xs: 24
         },
 
         {
@@ -265,7 +258,7 @@ export default {
           type: "text",
           span: 3,
           sm: 24,
-          xs: 24,
+          xs: 24
         },
         {
           label: "跟踪状态",
@@ -274,7 +267,7 @@ export default {
           span: 3,
           options: data.data,
           sm: 24,
-          xs: 24,
+          xs: 24
         },
         {
           label: "客户类型",
@@ -283,7 +276,7 @@ export default {
           span: 3,
           options: res.data,
           sm: 24,
-          xs: 24,
+          xs: 24
         },
         {
           type: "button",
@@ -314,8 +307,6 @@ export default {
       this.editForm = { id: item.id, screenshot: item.screenshot };
     },
     async changeImageSave() {
-      // this.change(this.editForm, { property: "screenshot" });
-
       await this.axios("/adminapi/Customers/CustomersScreenshot", {
         data: this.editForm
       });
@@ -395,11 +386,10 @@ export default {
         this.tableFields = arr;
       }
     },
-    async getData(bool = true) {
+    async getData() {
       this.tableData = [];
-      let obj = bool ? Object.assign({}, this.page, this.search) : this.page;
       let { data } = await this.axios("/adminapi/Customer/list", {
-        data: obj
+        data: { ...this.page, ...this.search }
       });
       if (data.code) {
         this.tableData = data.data;
@@ -415,21 +405,6 @@ export default {
           type: "textarea",
           input: this.quick
         }
-        // {
-        //   label: "粘贴图片",
-        //   prop: "screenshot",
-        //   type: "image"
-        // }
-        // {
-        //   label: "接待渠道",
-        //   prop: "channel",
-        //   type: "radio",
-        //   options: [
-        //     { label: "信息流", value: 1 },
-        //     { label: "搜索引擎", value: 2 }
-        //     // { label: "信息流、搜索引擎", value: 3 }
-        //   ]
-        // }
       ];
       let { data } = await this.axios("/adminapi/Publics/TableFormEdit", {
         data: { table_id: 1, type: "add" }
@@ -497,7 +472,6 @@ export default {
         this.editForm = item;
       }
       this.drawerOpen("编辑");
-      this.key = Math.random();
     },
     async change(item, scope) {
       let obj = { id: item.id };
@@ -621,7 +595,7 @@ export default {
         data: { id: item.id }
       });
       if (data.code) {
-        this.getData();
+        this.tableData = this.tableData.filter(e => e.id != item.id);
       }
     },
     onReset() {
@@ -662,13 +636,12 @@ export default {
         data: body
       });
       if (data.code) {
-        this.getData(false);
         let obj = {};
         this.editFields.forEach(e => (obj[e.prop] = null));
         obj["channel"] = this.editForm.channel;
         this.editForm = obj;
-        url == "edit" && (this.drawer = false);
-        this.getData();
+        if (url == "edit") this.drawer = false;
+        if (url == "add") this.getData();
         this.qrcode = false;
       }
     }

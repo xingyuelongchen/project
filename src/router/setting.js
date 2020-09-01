@@ -12,5 +12,6 @@ export default [
 
     { path: 'contract', name: 'Admincontract', meta: { keepAlive: true, role: 121, title: '合同管理', }, component: () => import('@/views/backend/setting/contract') },
     { path: 'pay', name: 'Settingpay', meta: { keepAlive: true, role: 191, title: '支付管理', }, component: () => import('@/views/backend/setting/pay') },
-    { path: 'backup', name: 'Settingbackup', meta: { keepAlive: true, role: 211, title: '数据备份', }, component: () => import('@/views/backend/setting/backup') },
+    { path: 'backup', name: 'Settingbackup', meta: { keepAlive: true, role: 210, title: '数据备份', }, component: () => import('@/views/backend/setting/backup') },
+    { path: 'updatelog', name: 'Settingupdatelog', meta: { keepAlive: true, role: 211, title: '数据备份', }, component: () => import('@/views/backend/setting/updatelog') },
 ] 

@@ -236,6 +236,14 @@ export default {
           change: this.tableEdit
         },
         {
+          prop: "tooltip",
+          label: "提示字段",
+          align: "center",
+          type: "input",
+          change: this.tableEdit,
+          width: 80
+        },
+        {
           prop: "export",
           label: "是否导出",
           type: "switch",
@@ -250,6 +258,7 @@ export default {
           change: this.tableEdit,
           width: 80
         },
+
         {
           prop: "search",
           label: "查询",

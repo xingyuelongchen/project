@@ -63,9 +63,9 @@ Create Time  : 2020-03-28
               <el-cascader :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" :options="item.config || {}" @change="onInput(item,scope,'change',$event)" />
             </template>
             <template v-if="item.type == 'input'">
-              <div class="input" :key="showKey">
-                <span v-if="focusData[scope.column.id+scope.row.id]!==true">{{scope.row[item.prop]}}</span>
-                <el-input v-else :size="item.size||options.size||'mini'" :autofocus="true" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="focusData={}"></el-input>
+              <div class="input" :key="showKey" @click.self="getFocus(item,scope,true)">
+                <span v-if="!item['readonly'+scope.$index]">{{scope.row[item.prop]}}</span>
+                <el-input v-else :size="item.size||options.size||'mini'" :ref="item.prop" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="getBlur(item,scope,false)"></el-input>
               </div>
             </template>
             <template v-if="['manage','button'].includes(item.type)">
@@ -335,8 +335,7 @@ export default {
       showKey: "key",
       key: 0,
       field: [],
-      timer: null,
-      focusData: {}
+      timer: null
     };
   },
   watch: {
@@ -439,7 +438,30 @@ export default {
         });
       }, 50);
     },
-
+    getFocus(item, scope, type) {
+      let length = this.fieldsData.length;
+      this.field = this.field.map(e => {
+        if (e.prop == item.prop) {
+          e["readonly" + scope.$index] = type;
+          if (type) {
+            setTimeout(() => {
+              if (this.$refs[e.prop][0]) this.$refs[e.prop][0].focus();
+              else if (this.$refs[e.prop]) this.$refs[e.prop].focus();
+            }, 50);
+          }
+        }
+        return e;
+      });
+      this.showKey = Math.random();
+    },
+    getBlur(item, scope, type) {
+      this.field = this.field.map(e => {
+        if (e.prop == item.prop) {
+          e["readonly" + scope.$index] = type;
+        }
+        return e;
+      });
+    },
     onInput(item, scope, type, event) {
       if (type == "change" && item["change"]) {
         this.click(item[type], scope.row, scope, event);
@@ -471,19 +493,8 @@ export default {
     cellClick(row, column, cell, event) {
       let data = this.field.filter(e => e.prop == column.property);
       data = data.length && data[0];
-      // 输入框获取焦点
-      if (data.type == "input") {
-        if (this.focusData[column.id + row.id]) return;
-        this.focusData = {};
-        this.focusData[column.id + row.id] = true;
-        this.showKey = Math.random();
-        clearTimeout(this.timer);
-        this.timer = setTimeout(() => {
-          cell.querySelector("input").focus();
-        }, 50);
-      }
-      console.log(row, column);
       // 提示信息
+      console.log(data);
       if (data.tooltip) this.tooltip(row[data.tooltip]);
       // click事件
       if (!data.click || data.dblClick) return;

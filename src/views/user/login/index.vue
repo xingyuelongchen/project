@@ -53,11 +53,12 @@ Create Time  : 2020-07-22
         </div>
       </div>
     </div>
+    <div class="down" v-if="!isElectron" @click="down">
+      下载客户端
+    </div>
   </div>
 </template>
 <script>
-import isElectron from "is-electron";
-// import request from "request";
 export default {
   name: "Login",
   data() {
@@ -68,9 +69,8 @@ export default {
       isLogin: false,
       code: "",
       userinfo: {},
-      history: { 13169906653: { mobile: 13169906653, password: 123456 } },
+      history: {},
       isHistory: false,
-      isElectron: isElectron(),
       checkPassword: true
     };
   },
@@ -80,13 +80,16 @@ export default {
     sessionStorage.removeItem("Store");
     sessionStorage.removeItem("xitong");
     this.$store.commit("setClear");
-    if (isElectron()) {
+    if (this.isElectron) {
       this.history =
         window.ipcRenderer.sendSync("getStore", "history") || false;
     }
     this.getCode();
   },
   methods: {
+    async down() {
+      alert("即将上线，敬请期待……");
+    },
     register() {
       this.url = "/adminapi/Login/register";
       this.title = "注册";
@@ -139,7 +142,7 @@ export default {
         } else {
           delete this.history[this.ruleForm.mobile];
         }
-        if (isElectron()) {
+        if (this.isElectron) {
           window.ipcRenderer.send("setStore", {
             title: "history",
             data: this.history
@@ -248,5 +251,10 @@ export default {
       }
     }
   }
+}
+.down {
+  position: fixed;
+  right: 20px;
+  top: 20px;
 }
 </style>

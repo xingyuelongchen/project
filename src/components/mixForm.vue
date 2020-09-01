@@ -122,6 +122,9 @@ Create Time  : 2020-03-31
               <template v-if="item.type=='selectTree'">
                 <select-tree v-model="fieldsData[item.prop]" :options="item.options" :props="item.props||{label:'label',value:'value',children:'children'}" />
               </template>
+              <template v-if="item.type=='file'">
+                 
+              </template>
             </el-form-item>
           </el-col>
         </template>
