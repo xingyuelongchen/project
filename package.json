@@ -1,6 +1,6 @@
 {
     "name": "guangyizhou",
-    "version": "1.0.62",
+    "version": "1.0.65",
     "main": "main.js",
     "scripts": {
         "serve": "vue-cli-service serve",
@@ -27,6 +27,8 @@
         "is-electron": "^2.2.0",
         "less-loader": "^6.2.0",
         "request": "^2.88.2",
+        "socket.io": "^2.3.0",
+        "socket.io-client": "^2.3.0",
         "vue": "^2.6.11",
         "vue-cropper": "^0.5.5",
         "vue-monaco-editor": "^0.0.19",

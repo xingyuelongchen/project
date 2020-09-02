@@ -9,12 +9,16 @@ Create Time  : 2020-08-30
   </div>
 </template>
 <script>
+
 export default {
   name: "test",
   data() {
     return {
       code: '{"a":"b"}'
     };
+  },
+  created() { 
+     
   }
 };
 </script>

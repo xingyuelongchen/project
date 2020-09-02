@@ -40,10 +40,10 @@ function res(res) {
     return res
 }
 function resError(error) {
-    // document.write(JSON.stringify(error))
     message && message.close();
-    message = Message.error('服务器响应错误，请联系管理员')
-    console.log('Server Error:', error);
+    message = Message.error('服务器响应错误，请联系管理员');
+    return error
+
 }
 
 export default axios;

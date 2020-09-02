@@ -111,7 +111,7 @@ Create Time  : 2020-03-31
               </template>
               <template v-if="item.type == 'upload'">
                 <el-button @click="$refs.upload[0].click()" :type="item.style || 'primary'" :icon="item.icon || 'el-icon-upload2'">点击上传</el-button>
-                <input type="file" ref="upload" @change="onUpload($event,item)" multiple v-show="false" accept="application/pdf, image/jpg, image/jpeg, image/png" />
+                <input type="file" ref="upload" @input="onUpload($event,item)" multiple v-show="false" accept="application/pdf, image/jpg, image/jpeg, image/png,application/zip" />
                 <div v-if="fileList && fileList.length" style="margin-top: 10px;">
                   <span class="file-list" v-for="(k,i) in fileList" :key="i">{{k.name}}</span>
                 </div>
@@ -123,7 +123,10 @@ Create Time  : 2020-03-31
                 <select-tree v-model="fieldsData[item.prop]" :options="item.options" :props="item.props||{label:'label',value:'value',children:'children'}" />
               </template>
               <template v-if="item.type=='file'">
-                 
+                <input ref="fileUpdate" type="file" v-show="false" @change="fileUpdate($event,item)" />
+                <el-input v-model="fileName" placeholder="选择上传文件">
+                  <el-button slot="append" @click.native.stop="$refs['fileUpdate'][0].click()">点击上传</el-button>
+                </el-input>
               </template>
             </el-form-item>
           </el-col>
@@ -214,7 +217,7 @@ export default {
     }
   },
   data() {
-    return { key: "key", mapFields: [], files: [], fileList: [] };
+    return { key: "key", mapFields: [], files: [], fileList: [], fileName: "" };
   },
   watch: {
     fields() {
@@ -229,6 +232,10 @@ export default {
     this.onMapFields();
   },
   methods: {
+    fileUpdate(event, item) {
+      this.fileName = event.target.files[0].name;
+      this.fieldsData[item.prop] = event.target.files[0];
+    },
     isShow(k, item, scope) {
       // 按钮是否显示
       if (k.isShow) {
@@ -301,12 +308,14 @@ export default {
       this.fileList.forEach(e => {
         formData.append("files", e);
       });
-      let { data } = await this.axios("/admin/Publics/UploadFiles", {
+      let { data } = await this.axios("/adminapi/Publics/UploadFiles", {
         data: formData
       });
       if (data.code) {
         this.fieldsData[item.prop] = data.data;
       }
+      this.fileList = [];
+      event.target.outerHTML = event.target.outerHTML;
     },
     previewFile(file, files) {
       console.log(file, files);
