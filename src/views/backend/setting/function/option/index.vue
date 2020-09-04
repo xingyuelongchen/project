@@ -14,7 +14,9 @@ Create Time  : 2020-03-27
       </div>
       <div class="right">
         <mixSearch v-model="formData.right" :fields="formFields.right" />
-        <mixTable v-model="tableData.right" :fields="tableFields.right" />
+        <div style="height:calc(100% - 40px)">
+          <mixTable v-model="tableData.right" :fields="tableFields.right" />
+        </div>
       </div>
     </div>
   </div>

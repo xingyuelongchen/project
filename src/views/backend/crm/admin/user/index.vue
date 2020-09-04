@@ -5,7 +5,7 @@ Create Time  : 2020-07-26
 -->
 <template>
 
-  <div class="content-box">
+  <div class="content-wrap">
     <mixSearch v-model="search" :fields="searchFields" />
     <mixTable v-model="tableData" :fields="tableFields" />
     <mixPage v-model="page" />
@@ -201,6 +201,4 @@ export default {
     }
   }
 };
-</script>
-<style lang='less' scoped>
-</style>
+</script> 

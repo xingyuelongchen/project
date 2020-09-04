@@ -29,7 +29,7 @@ export default {
       tableData: [],
       tableFields: [],
       dept: [],
-      page: { page: 1, limit: 15, total: 0 }
+      page: { page: 1, limit: 10, total: 0 }
     };
   },
   async created() {

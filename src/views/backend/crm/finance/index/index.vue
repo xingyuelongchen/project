@@ -18,7 +18,7 @@ export default {
       key: 0,
       page: {
         page: 1,
-        limit: 15,
+        limit: 10,
         total: 0
       },
       searchData: {},

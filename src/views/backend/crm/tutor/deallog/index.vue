@@ -26,11 +26,12 @@ Create Time  : 2020-07-29
         <mixTable v-model="tableSalesData" :fields="tableSales" />
       </div>
     </el-dialog>
+  
   </div>
 </template>
 <script>
 export default {
-  name: "Salesindex",
+  name: "Tutordeallog",
   data() {
     return {
       fen: {},
@@ -48,8 +49,7 @@ export default {
         page: 1,
         limit: 10,
         total: 0
-      },
-      salesSearchData: {},
+      }, 
       tableSalesData: [],
       salesSearch: [],
       tableSales: [
@@ -78,14 +78,14 @@ export default {
     };
   },
   async created() {
-    await this.getDept();
+    this.getDept();
     this.getData();
     this.getHeadeData();
   },
   methods: {
     async getHeadeData() {
       let { data } = await this.axios("/adminapi/Publics/table_th", {
-        data: { table_id: 3 }
+        data: { table_id: 13 }
       });
       if (data.code) {
         this.tableFields = data.data.concat([
@@ -123,7 +123,7 @@ export default {
       }
     },
     async getDept() {
-      let { data } = await this.axios("/adminapi/sale/sale_dept");
+      let { data } = await this.axios("/adminapi/Servicesale/sale_dept");
       if (data.code) {
         this.searchFields = [
           {
@@ -181,7 +181,7 @@ export default {
     },
     async getData() {
       this.loading = true;
-      let { data } = await this.axios("/adminapi/Sale/list", {
+      let { data } = await this.axios("/adminapi/Servicesale/list", {
         data: { ...this.page, ...this.searchData }
       });
       if (data.code) {
@@ -192,7 +192,7 @@ export default {
     },
     // async gongxiang() {
     //   this.loading = true;
-    //   let { data } = await this.axios("/adminapi/sale/share", {
+    //   let { data } = await this.axios("/adminapi/Servicesale/share", {
     //     // data: { ...this.page, ...this.searchData }
     //   });
     //   if (data.code) {
@@ -207,20 +207,20 @@ export default {
       for (let k of this.editFields) {
         form[k.prop] = this.editData[k.prop];
       }
-      await this.axios("/adminapi/Sale/edit", {
+      await this.axios("/adminapi/Servicesale/edit", {
         data: form
       });
       this.show = false;
     },
     async changea() {
-      await this.axios("/adminapi/Sale/corrections", {
+      await this.axios("/adminapi/Servicesale/corrections", {
         data: this.editData
       });
       this.getData();
       this.showa = false;
     },
     async dialoga(row) {
-      let { data } = await this.axios("/adminapi/Sale/p_tool");
+      let { data } = await this.axios("/adminapi/Servicesale/p_tool");
       if (data.code) {
         this.editFields = [
           {
@@ -266,7 +266,7 @@ export default {
       this.getData();
     },
     async dept() {
-      let { data } = await this.axios("/adminapi/sale/dept");
+      let { data } = await this.axios("/adminapi/Servicesale/dept");
       if (data.code) {
         this.salesSearch = [
           { label: "昵称", type: "text", prop: "search", span: 6 },
@@ -294,7 +294,7 @@ export default {
       // 手动分配
       await this.dept();
       // 获取导师列表
-      let { data } = await this.axios("/adminapi/sale/refunder", {
+      let { data } = await this.axios("/adminapi/Servicesale/refunder", {
         data: this.salesSearchData
       });
       if (data.code) {
@@ -303,7 +303,7 @@ export default {
       }
     },
     async handfenpei(item) {
-      await this.axios("/adminapi/sale/manual", {
+      await this.axios("/adminapi/Servicesale/manual", {
         data: { uid: item.id, ...this.fen }
       });
       this.getData();
@@ -311,13 +311,13 @@ export default {
     },
     async autoFenpei(item) {
       // 自动分配
-      await this.axios("/adminapi/sale/automatic", {
+      await this.axios("/adminapi/Servicesale/automatic", {
         data: item
       });
       this.getData();
     },
     async export() {
-      let { data } = await this.axios("/adminapi/sale/export", {
+      let { data } = await this.axios("/adminapi/Servicesale/export", {
         data: this.searchData
       });
       if (data.code) {
@@ -331,7 +331,7 @@ export default {
       }
     },
     async del(item) {
-      await this.axios("/adminapi/sale/del", {
+      await this.axios("/adminapi/Servicesale/del", {
         data: { id: item.id }
       });
       this.getData();

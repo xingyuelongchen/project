@@ -5,7 +5,7 @@ Create Time  : 2020-07-24
 -->
 <template>
   <step v-if="stepShow" v-model="stepShow" :item="step" />
-  <div v-else class="content-box">
+  <div v-else class="content-wrap">
     <mixSearch v-model="searchData" :fields="searchFields" />
     <mixTable v-model="tableData" :fields="tableFields" />
     <mixPage v-model="page" />
@@ -26,7 +26,7 @@ export default {
         { label: "旺旺/qq/手机号", type: "text", prop: "search", span: 3 },
         { label: "搜索", click: this.getData, type: "button", span: 3 }
       ],
-      page: { page: 1, limit: 15, total: 0 }
+      page: { page: 1, limit: 10, total: 0 }
     };
   },
   created() {

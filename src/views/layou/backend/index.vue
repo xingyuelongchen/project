@@ -88,7 +88,9 @@ Create Time  : 2020-07-22
           </el-tabs>
         </div>
         <!-- <keep-alive> -->
-        <router-view class="bottom"></router-view>
+        <div class="content-body">
+          <router-view></router-view>
+        </div>
         <!-- </keep-alive> -->
       </div>
     </div>
@@ -254,8 +256,8 @@ export default {
 }
 .app-body {
   overflow: hidden;
-  width: 100vw;
-  min-width: 1200px;
+  width: 100%;
+  min-width: 900px;
   height: 100vh;
   .app-header {
     height: 60px;

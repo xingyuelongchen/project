@@ -9,13 +9,10 @@ Create Time  : 2020-08-17
       <span>{{value.title || '您有新消息！'}}</span>
       <span><i class="el-icon-close" @click.stop="close"></i></span>
     </div>
-    <div class="body" v-html="value.message">
+    <div class="body" ref="msg" v-html="value.message">
 
     </div>
-    <div class="footer">
-      <!-- <mixForm v-model="value" :fields="formFields" style="z-index:1000" /> -->
-    </div>
-
+    <el-image-viewer v-if="url" :on-close=" url='' " :url-list="[url]" />
   </div>
 </template>
 <script>
@@ -24,27 +21,23 @@ export default {
   props: {
     value: {}
   },
+  components: {
+    "el-image-viewer": () =>
+      import("element-ui/packages/image/src/image-viewer")
+  },
   data() {
     return {
       style: {},
       formData: {},
       formFields: [],
-      ClassStyle: { left: "auto", top: "auto" }
+      ClassStyle: { left: "auto", top: "auto" },
+      url: ""
     };
   },
   mounted() {
-    // this.formFields = [
-    //   {
-    //     labelWidth: 18,
-    //     span: 5,
-    //     label: " ",
-    //     size: "mini",
-    //     type: "select",
-    //     prop: "status",
-    //     options: [...this.value.trace_status],
-    //     change: this.save
-    //   }
-    // ];
+    this.$refs.msg.querySelector("img").onclick = e => {
+      this.url = e.target.src;
+    };
   },
   methods: {
     close() {
@@ -106,7 +99,7 @@ export default {
   left: auto;
   top: auto;
   display: grid;
-  grid-template-rows: 40px auto 60px;
+  grid-template-rows: 40px auto;
   grid-row-gap: 10px;
   overflow: hidden;
   .title {
@@ -125,14 +118,6 @@ export default {
     overflow: hidden;
     padding: 15px;
     // font-size: 16px;
-  }
-  .footer {
-    width: 100%;
-    overflow: hidden;
-    /deep/ .el-form {
-      padding-top: 0;
-      overflow: hidden;
-    }
   }
 }
 </style>

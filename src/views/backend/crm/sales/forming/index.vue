@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-08-06
 -->
 <template>
-  <div class="content-box">
+  <div class="content-wrap">
     <mixSearch v-model="searchData" :fields="searchFields" />
     <mixTable v-model="tableData" :fields="tableFields" />
     <mixPage v-model="page" />
@@ -36,7 +36,7 @@ export default {
       ],
       page: {
         page: 1,
-        limit: 15,
+        limit: 10,
         total: 0
       }
     };

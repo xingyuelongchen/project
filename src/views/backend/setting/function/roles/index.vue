@@ -26,10 +26,8 @@ Create Time  : 2020-07-27
     </el-card>
     <el-card class="right" shadow="never">
       <div slot="header">权限列表</div>
-      <div class="content-item">
-        <mixTable v-model="tableData" :fields="tableFields" />
-        <mixPage v-model="page" />
-      </div>
+      <mixTable v-model="tableData" :fields="tableFields" />
+      <mixPage v-model="page" />
     </el-card>
     <el-dialog :title="title" :visible.sync="dialogFormVisible" width="400px" :modal="true" top="15vh">
       <mixForm v-model="roles" :fields="rolesFields" />

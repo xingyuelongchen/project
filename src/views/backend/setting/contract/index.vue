@@ -4,8 +4,8 @@ Create author: qinglong
 Create Time  : 2020-08-12
 -->
 <template>
-  <div>
-    <div class="content-wrap">
+  <div class="content-wrap">
+    <div class="box">
       <el-card>
         <div slot="header">
           版本
@@ -184,9 +184,12 @@ export default {
 </script>
 <style lang='less' scoped>
 .content-wrap {
-  display: grid;
-  grid-template-columns: 250px auto;
-  grid-gap: 20px;
+  .box {
+    display: grid;
+    grid-template-columns: 250px auto;
+    grid-gap: 20px;
+    height: 100%;
+  }
   .left {
     height: 100%;
     .item {

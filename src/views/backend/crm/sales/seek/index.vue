@@ -26,7 +26,7 @@ Create Time  : 2020-03-27
         </span>
       </template>
     </div>
-    <div style="height:calc(100% - 120px)">
+    <div style="height:calc(100% - 120px)" :key="key">
       <mixTable v-model="tableData" :fields="tableFields" @select="selection" />
     </div>
     <mixPage v-model="page" />
@@ -79,7 +79,7 @@ export default {
       maxOrder: null,
       stepShow: false,
       page: {
-        limit: 15,
+        limit: 10,
         page: 1,
         total: 0
       },
@@ -298,11 +298,12 @@ export default {
           ]
         }
       ];
+      await this.stopMaxOrder();
       // 表头数据
       await this.getTable();
       // 表格内容数据
-      await this.getData(false);
-      await this.stopMaxOrder();
+      await this.getData();
+      this.key = Math.random();
     },
     async addHistory(item) {
       let { data } = await this.axios("/adminapi/Salecustomer/label_log", {
@@ -436,16 +437,13 @@ export default {
         this.key = Math.random();
       }
     },
-    async getData(bool = true) {
-      this.tableData = [];
-      let obj = bool ? Object.assign({}, this.page, this.search) : this.page;
+    async getData() {
       let { data } = await this.axios("/adminapi/Salecustomer/list", {
-        data: obj
+        data: { ...this.page, ...this.search }
       });
       if (data.code) {
         this.tableData = data.data;
         this.page.total = data.count;
-        this.key = Math.random();
       }
     },
     async onAdd() {

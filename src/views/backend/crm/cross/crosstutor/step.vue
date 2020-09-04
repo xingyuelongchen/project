@@ -7,19 +7,19 @@ Create Time  : 2020-08-26
   <div class="content-wrap">
     <el-card>
       <div slot="header">
-        <el-button style="float:right;padding:6px 10px" type="danger" @click="refund(false)" v-if="!isRefund">申请退款</el-button>
+        <el-button style="float:right;padding:6px 10px" type="danger" @click="refund(false)" v-if="!isRefund" v-role="207">申请退款</el-button>
         <el-page-header @back="$emit('input',false)" content="服务状态">
         </el-page-header>
       </div>
       <div class="step-box">
-        <div class="init step-top">
+        <div class="init step-top" :class="{deal:!stepFields.length}">
           <el-steps :space="200" :active="stepData.progress-1" finish-status="success" class="steps" align-center>
             <template v-for="(item,index) in stepList">
               <!-- <el-step :title="item.label" :key="index" @click.native="stepClick(item,index)"></el-step> -->
               <el-step :title="item.label" :key="index"></el-step>
             </template>
           </el-steps>
-          <mixForm v-model="stepData" :fields="stepFields" />
+          <mixForm v-model="stepData" :fields="stepFields" v-if="stepFields.length" />
         </div>
         <div class="step-bottom" v-if="label_list.length">
           <el-scrollbar>
@@ -86,22 +86,38 @@ export default {
   async created() {
     this.stepData = this.item;
     this.init();
+    this.getForm();
   },
   methods: {
+    async getForm() {
+      let { data } = await this.axios("/adminapi/Publics/TableFormEdit", {
+        data: { type: "add", table_id: 11 }
+      });
+      if (data.code) {
+        this.refundFields = data.data.concat([
+          {
+            label: "提交申请",
+            type: "button",
+            click: this.refund
+          }
+        ]);
+      }
+    },
     async refund(bool) {
       if (!bool) {
         this.refundShow = true;
         return;
       }
-      let { data } = await this.axios("/adminapi/Financerefund/add", {
-        data: { ...this.item, ...this.stepData }
+      let { data } = await this.axios("/adminapi/Refund/add", {
+        data: { ...this.refundData, ...this.item, ...this.stepData }
       });
       if (data.code) {
-        console.log(0);
+        this.refundShow = false;
+        this.$emit("input", false);
       }
     },
     async init() {
-      let { data } = await this.axios("/adminapi/Financerefund/label_list", {
+      let { data } = await this.axios("/adminapi/Service/label_list", {
         data: this.stepData
       });
       if (data.code) {
@@ -110,30 +126,30 @@ export default {
         this.stepList = data.data.label[0].children;
         this.stepData = { ...this.stepData, ...data.data.label_log };
         if (data.data.label_log && data.data.label_log.progress) {
-          this.stepData = { progress: data.data.label_log.progress };
+          this.stepData = {
+            label_1: this.stepList[0].id,
+            label_2:
+              this.stepList[0].children && this.stepList[0].children[0]
+                ? this.stepList[0].children[0].id
+                : "",
+            progress: data.data.label_log.progress || 1
+          };
         } else {
-          this.stepData = { progress: 1 };
+          this.stepData = {
+            label_1: this.stepList[0].id,
+            label_2: this.stepList[0].children[0].id,
+            progress: 1
+          };
         }
         let item = this.stepList.filter(
           e => e.progress == this.stepData.progress
         );
-        try {
-          if (item.length) {
-            this.stepData = {
-              label_1: item[0].id,
-              label_2: item[0].children[0].id,
-              progress: this.stepData.progress
-            };
-          }
-          this.stepClick(item[0]);
-        } catch (error) {
-          console.log(error);
-        }
+        this.stepClick(item[0]);
       }
     },
     async changeStep() {
       delete this.stepData.id;
-      await this.axios("/adminapi/Financerefund/label_add", {
+      await this.axios("/adminapi/Service/label_add", {
         data: { ...this.stepData, ...this.item }
       });
       this.$emit("input", false);
@@ -142,31 +158,33 @@ export default {
       this.stepData.progress = item.progress;
       this.stepData.label_1 = item.id;
       if (item.children) this.stepData.label_2 = item.children[0].id;
-      this.stepFields = [
-        {
-          label: "服务状态",
-          prop: "label_2",
-          span: 24,
-          type: "radio",
-          options: item.children,
-          change: this.changeServe
-        },
-        {
-          label: "备注",
-          prop: "remak",
-          type: "textarea",
-          span: 8,
-          wrap: true
-        },
-        {
-          label: "确定",
-          type: "button",
-          style: "primary",
-          click: this.changeStep,
-          span: 8,
-          wrap: true
-        }
-      ];
+      if (!this.isRefund) {
+        this.stepFields = [
+          {
+            label: "服务状态",
+            prop: "label_2",
+            span: 24,
+            type: "radio",
+            options: item.children,
+            change: this.changeServe
+          },
+          {
+            label: "备注",
+            prop: "remak",
+            type: "textarea",
+            span: 8,
+            wrap: true
+          },
+          {
+            label: "确定",
+            type: "button",
+            style: "primary",
+            click: this.changeStep,
+            span: 8,
+            wrap: true
+          }
+        ];
+      }
     },
     changeServe(item) {
       let obj = item.options.filter(e => e.id == this.stepData["label_2"]);
@@ -187,7 +205,8 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-.content-wrap { 
+.content-wrap {
+  height: 100%;
   .el-card {
     height: 100%;
     .step-box {

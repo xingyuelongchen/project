@@ -1,5 +1,5 @@
 <!--
-Template Name: 合同管理
+Template Name: 上传更新
 Create author: qinglong
 Create Time  : 2020-08-12
 -->
@@ -79,7 +79,9 @@ export default {
 </script>
 <style lang='less' scoped>
 .content-wrap {
-  margin: 0 20px;
+  .el-card{
+    height: 100%;
+  }
   .left {
     height: 100%;
     .item {

@@ -4,8 +4,8 @@ Create author: qinglong
 Create Time  : 2020-07-28
 -->
 <template>
-  <div>
-    <div class="content-wrap">
+  <div class="content-wrap">
+    <div class="box">
       <el-card class="left">
         <div slot="header">
           权限组
@@ -331,18 +331,21 @@ export default {
 </script>
 <style lang='less' scoped>
 .content-wrap {
-  display: grid;
-  grid-template-columns: minmax(300px, 21%) 25% auto;
-  grid-gap: 1%;
-  .el-list {
-    .el-item {
-      line-height: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: space-between;
-      .icon {
-        margin: 0 10px;
-        cursor: pointer;
+  .box {
+    display: grid;
+    grid-template-columns: minmax(300px, 21%) 25% auto;
+    grid-gap: 1%;
+    height: 100%;
+    .el-list {
+      .el-item {
+        line-height: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: space-between;
+        .icon {
+          margin: 0 10px;
+          cursor: pointer;
+        }
       }
     }
   }

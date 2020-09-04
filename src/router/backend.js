@@ -33,6 +33,14 @@ export default
     { path: 'personal', name: 'Tutordata', meta: { keepAlive: true, role: 81, title: '个人数据', }, component: () => import('@/views/backend/crm/tutor/personal') },
     { path: 'total', name: 'Tutortotal', meta: { keepAlive: true, role: 82, title: '数据总览', }, component: () => import('@/views/backend/crm/tutor/total') },
     { path: 'renovation', name: 'Tutorrenovation', meta: { keepAlive: true, role: 169, title: '装修账号', }, component: () => import('@/views/backend/crm/tutor/renovation') },
+    { path: 'deallog', name: 'Tutordeallog', meta: { keepAlive: true, role: 214, title: '成交记录', }, component: () => import('@/views/backend/crm/tutor/deallog') },
+
+    // 跨境电商导师 
+    { path: 'cross', name: 'cross', meta: { keepAlive: true, role: 212, title: '跨境中心', }, component: () => import('@/views/layou'), },
+    { path: 'receive', name: 'Crossreceive', meta: { keepAlive: true, role: 220, title: '接待设置', }, component: () => import('@/views/backend/crm/cross/receive') },
+    { path: 'crosstutor', name: 'Crosstutor', meta: { keepAlive: true, role: 213, title: '导师记录', }, component: () => import('@/views/backend/crm/cross/crosstutor') },
+
+
     // 质检中心
     { path: 'quality', name: 'Quality', meta: { keepAlive: true, role: 9, title: '质检中心', }, component: () => import('@/views/layou'), },
     { path: 'index', name: 'Qualityindex', meta: { keepAlive: true, role: 19, title: '数据管理', }, component: () => import('@/views/backend/crm/quality') },

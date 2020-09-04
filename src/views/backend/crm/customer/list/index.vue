@@ -4,23 +4,21 @@ Create author: qinglong
 Create Time  : 2020-03-27
 -->
 <template>
-  <div>
-    <div class="content-wrap">
-      <mixSearch v-model="search" :fields="searchFields" />
-      <div class="info">
-        <span>
-          <el-button @click="handDistribution(null,true)" type="primary" size="mini" v-role="126">手动分配</el-button>
-        </span>
-        <span>
-          <el-button @click="autoDistribution(null,true)" type="warning" size="mini" v-role="123">自动分配</el-button>
-        </span>
-      </div>
-      <div style="height:calc(100% - 160px)" :key="key">
-        <mixTable v-model="tableData" :fields="tableFields" @select="selection" />
-      </div>
-      <mixPage v-model="page" />
+  <div class="content-wrap">
+    <mixSearch v-model="search" :fields="searchFields" />
+    <div class="info">
+      <span>
+        <el-button @click="handDistribution(null,true)" type="primary" size="mini" v-role="126">手动分配</el-button>
+      </span>
+      <span>
+        <el-button @click="autoDistribution(null,true)" type="warning" size="mini" v-role="123">自动分配</el-button>
+      </span>
     </div>
-    <mixDrawer style="top:61px" v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose" :isShow="true">
+    <div style="height:calc(100% - 160px)" :key="key">
+      <mixTable v-model="tableData" :fields="tableFields" @select="selection" />
+    </div>
+    <mixPage v-model="page" />
+    <mixDrawer style="top:180px" v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose" :isShow="true">
       <mixForm v-model="editForm" :fields="editFields" />
     </mixDrawer>
     <el-dialog :title="dialogName" :visible.sync="dialogVisible" width="50%">
@@ -33,7 +31,6 @@ Create Time  : 2020-03-27
         <!-- <el-button @click="dialogVisible = false">关闭窗口</el-button> -->
       </span>
     </el-dialog>
-
   </div>
 </template>
 <script>
@@ -46,7 +43,7 @@ export default {
       show: false,
       maxOrder: null,
       page: {
-        limit: 15,
+        limit: 10,
         page: 1,
         total: 0
       },
@@ -131,7 +128,7 @@ export default {
       qrcode: false,
       qrocdeData: {},
       qrocdeFields: [],
-      editForm: {},
+      editForm: { channel: 2 },
       editFields: [],
       close: null,
       selectData: null
@@ -239,44 +236,34 @@ export default {
           label: "咨询",
           type: "datetimerange",
           prop: "date",
-          span: 6,
-          sm: 24,
-          xs: 24
+          span: 6
         },
         {
           label: "微信/QQ/电话/旺旺",
           prop: "search",
           type: "text",
-          span: 3,
-          sm: 24,
-          xs: 24
+          span: 3
         },
 
         {
           label: "咨询信息",
           prop: "info",
           type: "text",
-          span: 3,
-          sm: 24,
-          xs: 24
+          span: 3
         },
         {
           label: "跟踪状态",
           type: "select",
           prop: "trace_status",
           span: 3,
-          options: data.data,
-          sm: 24,
-          xs: 24
+          options: data.data
         },
         {
           label: "客户类型",
           type: "select",
           prop: "label",
           span: 3,
-          options: res.data,
-          sm: 24,
-          xs: 24
+          options: res.data
         },
         {
           type: "button",
@@ -434,7 +421,7 @@ export default {
         });
       }
       this.drawerOpen("添加咨询信息");
-      this.key = Math.random();
+      // this.key = Math.random();
     },
     quick(item) {
       try {
@@ -620,7 +607,7 @@ export default {
         const link = document.createElement("a");
         link.href = data.data.url;
         let a = window.open(data.data.url, "_blank");
-        a.close();
+        setTimeout(a.close, 100);
         // link.setAttribute("download", data.data.title);
         // document.body.appendChild(link);
         // link.click();

@@ -5,7 +5,7 @@ Create Time  : 2020-08-06
 -->
 <template>
   <div style="height:100%">
-    <div class="content-box">
+    <div class="content-wrap">
       <mixSearch v-model="searchData" :fields="searchFields" />
       <mixTable v-model="tableData" :fields="tableFields" @select="select" />
       <mixPage v-model="page" />
@@ -23,7 +23,7 @@ export default {
       selectList: [],
       show: false,
       page: {
-        limit: 15,
+        limit: 10,
         page: 1,
         total: 0
       },

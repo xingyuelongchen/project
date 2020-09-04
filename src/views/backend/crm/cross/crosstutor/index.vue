@@ -26,7 +26,7 @@ Create Time  : 2020-07-24
 </template>
 <script>
 export default {
-  name: "Tutorindex",
+  name: "Crosstutor",
   components: { step: () => import("./step") },
   data() {
     return {
@@ -95,7 +95,7 @@ export default {
       }
     },
     async getData() {
-      let { data } = await this.axios("/adminapi/Service/list", {
+      let { data } = await this.axios("/adminapi/Cross/list", {
         data: Object.assign(this.page, this.searchData)
       });
       if (data.code) {
@@ -119,13 +119,13 @@ export default {
     },
 
     async save() {
-      await this.axios("/adminapi/Service/edit", {
+      await this.axios("/adminapi/Cross/edit", {
         data: this.editData
       });
       this.getData();
     },
     async del(item) {
-      this.axios("/adminapi/Service/del", {
+      this.axios("/adminapi/Cross/del", {
         data: item
       });
       this.getData();

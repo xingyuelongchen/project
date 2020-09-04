@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-08-28
 -->
 <template>
-  <div class="content-wrap">
+  <div>
     <el-card>
       正在筹备中……
     </el-card>
@@ -17,9 +17,4 @@ export default {
     return {};
   }
 };
-</script>
-<style lang='less' scoped>
-.content-wrap {
-  padding: 0 20px;
-}
-</style>
+</script> 
