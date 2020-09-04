@@ -6,7 +6,7 @@ Create Time  : 2020-07-29
 <template>
   <div class="content-wrap">
     <mixSearch v-model="searchData" :fields="searchFields" />
-    <div style="height:calc(100% - 80px)">
+    <div>
       <mixTable v-model="tableData" :fields="tableFields" />
     </div>
     <mixPage v-model="page" />
@@ -79,8 +79,8 @@ export default {
   },
   async created() {
     await this.getDept();
-    this.getData();
-    this.getHeadeData();
+    await this.getData();
+    await this.getHeadeData();
   },
   methods: {
     async getHeadeData() {

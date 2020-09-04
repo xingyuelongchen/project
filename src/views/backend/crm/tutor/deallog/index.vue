@@ -6,9 +6,7 @@ Create Time  : 2020-07-29
 <template>
   <div class="content-wrap">
     <mixSearch v-model="searchData" :fields="searchFields" />
-    <div style="height:calc(100% - 80px)">
-      <mixTable v-model="tableData" :fields="tableFields" />
-    </div>
+    <mixTable v-model="tableData" :fields="tableFields" />
     <mixPage v-model="page" />
     <el-dialog title="编辑" :visible.sync="show" width="30%">
       <div style="height:500px;overflow:hidden">
@@ -26,7 +24,6 @@ Create Time  : 2020-07-29
         <mixTable v-model="tableSalesData" :fields="tableSales" />
       </div>
     </el-dialog>
-  
   </div>
 </template>
 <script>
@@ -49,8 +46,9 @@ export default {
         page: 1,
         limit: 10,
         total: 0
-      }, 
+      },
       tableSalesData: [],
+      salesSearchData: {},
       salesSearch: [],
       tableSales: [
         { label: "昵称", prop: "nickname" },
@@ -78,9 +76,9 @@ export default {
     };
   },
   async created() {
-    this.getDept();
-    this.getData();
-    this.getHeadeData();
+    await this.getData();
+    await this.getHeadeData();
+    await this.getDept();
   },
   methods: {
     async getHeadeData() {
@@ -95,27 +93,27 @@ export default {
             align: "center",
             fixed: "right",
             options: [
-              { label: "编辑", style: "primary", click: this.dialog, role: 71 },
+              { label: "编辑", style: "primary", click: this.dialog, role: 216 },
               { label: "删除", style: "danger", click: this.del, role: 72 },
               {
                 label: "更正",
                 style: "danger",
                 click: this.dialoga,
-                role: 135
+                role: 224
               },
               {
                 label: "手动分配",
                 style: "danger",
                 click: this.fenpei,
-                role: 139,
-                isShow: { type: "==", prop: "servicer_userid", value: "" }
+                role: 222,
+                isShow: { type: "==", prop: "cross_userid", value: "" }
               },
               {
                 label: "自动分配",
                 style: "danger",
-                role: 136,
+                role: 217,
                 click: this.autoFenpei,
-                isShow: { type: "==", prop: "servicer_userid", value: "" }
+                isShow: { type: "==", prop: "cross_userid", value: "" }
               }
             ]
           }
@@ -190,18 +188,6 @@ export default {
         this.page.total = data.count;
       }
     },
-    // async gongxiang() {
-    //   this.loading = true;
-    //   let { data } = await this.axios("/adminapi/Servicesale/share", {
-    //     // data: { ...this.page, ...this.searchData }
-    //   });
-    //   if (data.code) {
-    //     this.loading = false;
-    //     this.tableData = data.data;
-    //     this.page.total = data.count;
-    //   }
-    // },
-
     async change() {
       let form = {};
       for (let k of this.editFields) {

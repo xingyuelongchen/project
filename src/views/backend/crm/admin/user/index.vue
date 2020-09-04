@@ -5,7 +5,7 @@ Create Time  : 2020-07-26
 -->
 <template>
 
-  <div class="content-wrap">
+  <div class="content-cols">
     <mixSearch v-model="search" :fields="searchFields" />
     <mixTable v-model="tableData" :fields="tableFields" />
     <mixPage v-model="page" />

@@ -70,7 +70,7 @@ export default {
   methods: {
     async getTable() {
       let { data } = await this.axios("/adminapi/Publics/table_th", {
-        data: { table_id: 4 }
+        data: { table_id: 12 }
       });
       if (data.code) {
         this.tableFields = data.data.concat([
@@ -81,7 +81,7 @@ export default {
             width: 100,
             options: [
               { label: "编辑", click: this.edit },
-              { label: "添加业绩", click: this.addOrder },
+              // { label: "添加业绩", click: this.addOrder },
               {
                 label: "服务状态",
                 click: this.speed,

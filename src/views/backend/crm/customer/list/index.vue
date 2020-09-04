@@ -14,9 +14,7 @@ Create Time  : 2020-03-27
         <el-button @click="autoDistribution(null,true)" type="warning" size="mini" v-role="123">自动分配</el-button>
       </span>
     </div>
-    <div style="height:calc(100% - 160px)" :key="key">
-      <mixTable v-model="tableData" :fields="tableFields" @select="selection" />
-    </div>
+    <mixTable v-model="tableData" :fields="tableFields" @select="selection" />
     <mixPage v-model="page" />
     <mixDrawer style="top:180px" v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose" :isShow="true">
       <mixForm v-model="editForm" :fields="editFields" />

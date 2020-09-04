@@ -5,16 +5,13 @@ Create Time  : 2020-04-02
 -->
 <template>
   <div class="content-wrap">
-    <div class="box">
-      <mixSearch v-model="search" :fields="searchFields" />
-      <div>
-        <mixSearch v-model="selectionData" :fields="selectionField" v-role="68" />
-      </div>
-      <div style="height:calc(100% - 150px)">
-        <mixTable v-model="tableData" :fields="tableFields" @select="select" />
-      </div>
-      <mixPage v-model="page" />
-    </div>
+
+    <mixSearch v-model="search" :fields="searchFields" />
+    <mixSearch v-model="selectionData" :fields="selectionField" v-role="68" />
+
+    <mixTable v-model="tableData" :fields="tableFields" @select="select" />
+    <mixPage v-model="page" />
+
     <!-- <mixDrawer v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose">
       <mixForm v-model="editForm" :fields="editFields" />
 
@@ -370,19 +367,14 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-.box {
-  height: 100%;
-  // margin: 20px;
-
-  .mix-search {
-    margin: 5px 0;
-    padding: 5px;
-    background: #f0f0f0;
-  }
-  .el-pagination {
-    text-align: right;
-    padding: 20px;
-    background: #fff;
-  }
+.mix-search {
+  margin: 5px 0;
+  padding: 5px;
+  background: #f0f0f0;
+}
+.el-pagination {
+  text-align: right;
+  padding: 20px;
+  background: #fff;
 }
 </style>

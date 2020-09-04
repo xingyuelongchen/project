@@ -13,19 +13,54 @@ export default {};
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  // 主体内容
+  .content {
+    height: 100%;
+  }
   .content-body {
     height: calc(100vh - 165px);
-    margin: 20px 20px 40px;
+    margin: 20px 20px 30px;
     box-sizing: border-box;
   }
-  .content-wrap {
+  // 主体内容排列布局
+  .content-cols {
     height: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
     > .mix-table {
+      flex: auto;
       height: calc(100% - 100px) !important;
     }
   }
-  .el-card__body {
-    height: calc(100% - 56px);
+  // 主体内容横向排列布局
+  .content-rows {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+  // 主体内容横向左右布局
+  .content-left-right {
+    display: grid;
+    grid-template-columns: 25% auto;
+    grid-gap: 2%;
+  }
+  // 主体内容横向左中右布局
+  .content-left-center-right {
+    display: grid;
+    grid-template-columns: 32% 32% 32%;
+    grid-gap: 2%;
+  }
+  .content-wrap {
+    height: 100%;
+  }
+  .el-card {
+    height: 100%;
+    .el-card__body {
+      height: calc(100% - 60px);
+    }
   }
   .el-tabs {
     width: 100%;
@@ -52,9 +87,6 @@ export default {};
   .el-image .el-image-viewer__close .el-icon-circle-close {
     font-size: 30px;
     color: #fff;
-  }
-  .el-card {
-    height: 100%;
   }
 }
 body,

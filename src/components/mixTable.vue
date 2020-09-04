@@ -29,7 +29,7 @@ Create Time  : 2020-03-28
             <template v-if="item.type == 'tag'">
               <div v-if="item.options" class="box">
                 <template v-for="(k,i) in item.options">
-                  <el-tag effect="plain" disable-transitions v-if="k.value==scope.row[item.prop]" :type="k.style" :key="i">{{k.label || k}}</el-tag>
+                  <el-tag effect="plain" :size="item.size||options.size||'mini'" disable-transitions v-if="k.value==scope.row[item.prop]" :type="k.style" :key="i">{{k.label || k}}</el-tag>
                 </template>
               </div>
               <el-tag v-else disable-transitions :type="item.style">{{ scope.row[item.prop] || '空'}}</el-tag>
@@ -41,7 +41,7 @@ Create Time  : 2020-03-28
               </el-select>
             </template>
             <template v-if="item.type == 'dropdown'">
-              <el-dropdown>
+              <el-dropdown :size="item.size||options.size||'mini'">
                 <span>{{scope.row[item.prop]}}</span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-for="(k,i) in item.options" :key="i" @click.stop.native="dropDown(item,k,scope)">{{k.label}}</el-dropdown-item>
@@ -50,7 +50,7 @@ Create Time  : 2020-03-28
             </template>
             <template v-if="item.type == 'tagdown'">
               <el-dropdown>
-                <el-tag class="hover" effect="plain" :type="toogle(item,scope.row[item.prop])">{{ getTagDownLabel(item,scope) }}</el-tag>
+                <el-tag class="hover" effect="plain" :size="item.size||options.size||'mini'" :type="toogle(item,scope.row[item.prop])">{{ getTagDownLabel(item,scope) }}</el-tag>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-for="(k,i) in item.options" :key="i" @click.self.stop.native="dropDown(item,k,scope)">{{k.label}}</el-dropdown-item>
                 </el-dropdown-menu>
@@ -71,7 +71,7 @@ Create Time  : 2020-03-28
             <template v-if="['manage','button'].includes(item.type)">
               <div class="box">
                 <el-dropdown v-if="item.type == 'manage'" trigger="click">
-                  <el-button class="hover" :size="item.size || 'mini'" type="primary">{{ item.label || '操作'}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+                  <el-button class="hover" :size="item.size||options.size||'mini'" type="primary">{{ item.label || '操作'}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
                   <el-dropdown-menu slot="dropdown" res="dropdownMenu">
                     <template v-for="(k,i) in item.options">
                       <el-dropdown-item v-show="isShow(k,item,scope)" v-role="k.role" :key="i" @click.native="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-dropdown-item>
@@ -80,7 +80,7 @@ Create Time  : 2020-03-28
                   </el-dropdown-menu>
                 </el-dropdown>
                 <template v-else>
-                  <el-button v-for="(k,i) in item.options" v-role="k.role" v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'" size="mini" @click="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-button>
+                  <el-button v-for="(k,i) in item.options" v-role="k.role"  v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'"  :size="item.size||options.size||'mini'"  @click="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-button>
                 </template>
               </div>
             </template>
@@ -482,7 +482,6 @@ export default {
           cell.querySelector("input").focus();
         }, 50);
       }
-      console.log(row, column);
       // 提示信息
       if (data.tooltip) this.tooltip(row[data.tooltip]);
       // click事件

@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-07-27
 -->
 <template>
-  <div class="page">
+  <div class="page" v-if="Math.floor(value.total/value.limit)">
     <el-pagination background :layout="value.layout||'prev, pager, next, total'" :page-size="value.limit" :page-sizes="value.sizes " :total="value.total || total" @current-change="currentChange" hide-on-single-page></el-pagination>
   </div>
 </template>
