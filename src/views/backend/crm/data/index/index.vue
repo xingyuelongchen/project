@@ -4,9 +4,7 @@ Create author: qinglong
 Create Time  : 2020-07-28
 -->
 <template>
-  <div class="box">
-    <mixNewTable :data="tableData" :fields="tableFields" :page="tablePage" />
-  </div>
+  <div class="content">筹备中</div>
 </template>
 <script>
 export default {
@@ -24,10 +22,4 @@ export default {
   }
 };
 </script>
-<style lang='less' scoped>
-.box {
-  height: calc(100% - 40px);
-  overflow: hidden;
-  margin: 20px 0;
-}
-</style>
+ 

@@ -4,12 +4,12 @@ Create author: qinglong
 Create Time  : 2020-07-29
 -->
 <template>
-  <div class="content-wrap">
-    <mixSearch v-model="searchData" :fields="searchFields" />
-    <div>
+  <div class="content">
+    <div class="content-cols">
+      <mixSearch v-model="searchData" :fields="searchFields" />
       <mixTable v-model="tableData" :fields="tableFields" />
+      <mixPage v-model="page" />
     </div>
-    <mixPage v-model="page" />
     <el-dialog title="编辑" :visible.sync="show" width="30%">
       <div style="height:500px;overflow:hidden">
         <el-scrollbar>
@@ -78,9 +78,9 @@ export default {
     };
   },
   async created() {
+    await this.getHeadeData();
     await this.getDept();
     await this.getData();
-    await this.getHeadeData();
   },
   methods: {
     async getHeadeData() {

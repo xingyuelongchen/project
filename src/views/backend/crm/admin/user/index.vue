@@ -4,11 +4,12 @@ Create author: qinglong
 Create Time  : 2020-07-26
 -->
 <template>
-
-  <div class="content-cols">
-    <mixSearch v-model="search" :fields="searchFields" />
-    <mixTable v-model="tableData" :fields="tableFields" />
-    <mixPage v-model="page" />
+  <div class="content">
+    <div class="content-cols">
+      <mixSearch v-model="search" :fields="searchFields" />
+      <mixTable v-model="tableData" :fields="tableFields" />
+      <mixPage v-model="page" />
+    </div>
     <el-dialog :visible.sync="dialogShow" title="编辑">
       <mixForm v-model="editForm" :fields="editFormField" />
       <div slot="footer">

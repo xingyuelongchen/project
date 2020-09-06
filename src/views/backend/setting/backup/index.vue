@@ -4,8 +4,8 @@ Create author: qinglong
 Create Time  : 2020-09-01
 -->
 <template>
-  <div class="content-wrap">
-    <div class="box">
+  <div class="content">
+    <div class=" content content-left-right">
       <el-card>
         <div slot="header">
           <el-checkbox v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
@@ -352,75 +352,67 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-.content-wrap {
-  .box {
-    display: grid;
-    grid-template-columns: 250px auto;
-    grid-gap: 20px;
-    height: 100%;
-    .left {
-      height: 100%;
-      .item {
-        height: 40px;
-        line-height: 40px;
-        padding-left: 10px;
-        flex: 1 1 auto;
+.left {
+  height: 100%;
+  .item {
+    height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
+    flex: 1 1 auto;
+  }
+}
+.right {
+  height: 100%;
+  .list {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    .item {
+      width: 250px;
+      height: 300px;
+      margin: 4px;
+      padding: 4px;
+      overflow: hidden;
+      border: 1px solid #eee;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      transition: all 0.2s;
+      .icon {
+        display: none;
+        transition: all 0.2s;
       }
-    }
-    .right {
-      height: 100%;
-      .list {
+      &:hover .icon {
         display: flex;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        .item {
-          width: 250px;
-          height: 300px;
-          margin: 4px;
-          padding: 4px;
-          overflow: hidden;
-          border: 1px solid #eee;
+        justify-content: space-between;
+        align-items: center;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        margin: auto;
+        font-size: 22px;
+        z-index: 999;
+        transition: all 0.2s;
+        padding: 5px;
+        background: rgba(0, 0, 0, 0.5);
+        i {
+          color: #fff;
+          font-size: 22px;
+          padding: 5px;
           border-radius: 5px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          position: relative;
-          transition: all 0.2s;
-          .icon {
-            display: none;
+          &:hover {
             transition: all 0.2s;
-          }
-          &:hover .icon {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            margin: auto;
-            font-size: 22px;
-            z-index: 999;
-            transition: all 0.2s;
-            padding: 5px;
-            background: rgba(0, 0, 0, 0.5);
-            i {
-              color: #fff;
-              font-size: 22px;
-              padding: 5px;
-              border-radius: 5px;
-              &:hover {
-                transition: all 0.2s;
-                color: rgba(0, 0, 0, 1);
-                cursor: pointer;
-                background: rgba(255, 255, 255, 0.5);
-              }
-            }
-          }
-          .el-image {
-            width: 100%;
-            height: 100%;
+            color: rgba(0, 0, 0, 1);
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.5);
           }
         }
+      }
+      .el-image {
+        width: 100%;
+        height: 100%;
       }
     }
   }

@@ -4,8 +4,8 @@ Create author: qinglong
 Create Time  : 2020-07-28
 -->
 <template>
-  <div class="content-wrap">
-    <div class="box">
+  <div class="content">
+    <div class="content content-left-center-right">
       <el-card class="left">
         <div slot="header">
           权限组
@@ -105,7 +105,10 @@ export default {
             { label: "servicer_userid", value: "servicer_userid" },
             { label: "creator_group_id", value: "creator_group_id" },
             { label: "saler_group_id", value: "saler_group_id" },
-            { label: "servicer_group_id", value: "servicer_group_id" }
+            { label: "servicer_group_id", value: "servicer_group_id" },
+            { label: "cross_userid", value: "cross_userid" },
+            { label: "cross_group_id", value: "cross_group_id" },
+            { label: "cross_group_zid", value: "cross_group_zid" }
           ]
         },
         { type: "textarea", labelWidth: 60, prop: "reamk", label: "描述" },
@@ -330,23 +333,18 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-.content-wrap {
-  .box {
-    display: grid;
-    grid-template-columns: minmax(300px, 21%) 25% auto;
-    grid-gap: 1%;
-    height: 100%;
-    .el-list {
-      .el-item {
-        line-height: 40px;
-        height: 40px;
-        display: flex;
-        justify-content: space-between;
-        .icon {
-          margin: 0 10px;
-          cursor: pointer;
-        }
-      }
+.content-left-center-right {
+  grid-template-columns: 25% 25% 46% !important;
+}
+.el-list {
+  .el-item {
+    line-height: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    .icon {
+      margin: 0 10px;
+      cursor: pointer;
     }
   }
 }

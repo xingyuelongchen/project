@@ -4,15 +4,11 @@ Create author: qinglong
 Create Time  : 2020-04-02
 -->
 <template>
-  <div class="content-wrap">
-    <div class="box">
+  <div class="content">
+    <div class="content-cols">
       <mixSearch v-model="search" :fields="searchFields" />
-      <div>
-        <mixSearch v-model="selectionData" :fields="selectionField" v-role="43" />
-      </div>
-      <div style="height:calc(100% - 150px)">
-        <mixTable v-model="tableData" :fields="tableFields" @select="select" />
-      </div>
+      <mixSearch v-model="selectionData" :fields="selectionField" v-role="43" />
+      <mixTable v-model="tableData" :fields="tableFields" @select="select" />
       <mixPage v-model="page" />
     </div>
     <!-- <mixDrawer v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose">
@@ -28,7 +24,6 @@ Create Time  : 2020-04-02
         <el-button type="primary" @click="onSave">提交</el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 <script>
@@ -394,20 +389,3 @@ export default {
   }
 };
 </script>
-<style lang='less' scoped>
-.box {
-  height: 100%;
-  // margin: 20px;
-
-  .mix-search {
-    margin: 5px 0;
-    padding: 5px;
-    background: #f0f0f0;
-  }
-  .el-pagination {
-    text-align: right;
-    padding: 20px;
-    background: #fff;
-  }
-}
-</style>

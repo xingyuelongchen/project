@@ -4,8 +4,8 @@ Create author: qinglong
 Create Time  : 2020-07-30
 -->
 <template>
-  <div style="height:100%">
-    <div class="content-wrap">
+  <div class="content">
+    <div class="content content-left-right">
       <el-card>
         <div slot="header">
           组织构架
@@ -142,16 +142,4 @@ export default {
   }
 };
 </script>
-<style lang='less' scoped>
-.content-wrap {
-  display: grid;
-  grid-gap: 0 1%;
-  grid-template-rows: 100%;
-  grid-template-columns: 400px 1fr 1fr 1fr;
-  .custom-tree-node {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-}
-</style>
+ 

@@ -4,8 +4,8 @@ Create author: qinglong
 Create Time  : 2020-08-06
 -->
 <template>
-  <div>
-    <div class="content-wrap">
+  <div class="content">
+    <div class="content-cols">
       <mixSearch v-model="searchData" :fields="searchFields" />
       <div class="list">
         <span v-if="!list.length">暂无</span>

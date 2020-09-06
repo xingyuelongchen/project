@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-03-28
 -->
 <template>
-  <el-table ref="table" id="exportTab" row-key="id" class="mix-table" v-loading="!fieldsData.length && loading" height='100%' :max-height="options.height || '95%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
+  <el-table :key="key" ref="table" id="exportTab" row-key="id" class="mix-table" v-loading="!fieldsData.length && loading" height='100%' :max-height="options.height || '95%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
     <template v-for="(item,index ) in field">
       <template v-if="'expand'==item.type">
         <el-table-column :key="index" :type="item.type" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable">
@@ -80,7 +80,7 @@ Create Time  : 2020-03-28
                   </el-dropdown-menu>
                 </el-dropdown>
                 <template v-else>
-                  <el-button v-for="(k,i) in item.options" v-role="k.role"  v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'"  :size="item.size||options.size||'mini'"  @click="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-button>
+                  <el-button v-for="(k,i) in item.options" v-role="k.role" v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'" :size="item.size||options.size||'mini'" @click="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-button>
                 </template>
               </div>
             </template>
@@ -342,6 +342,7 @@ export default {
   watch: {
     fields() {
       this.init();
+      this.key = Math.random();
     },
     fieldsData() {
       this.toggleRowSelection();

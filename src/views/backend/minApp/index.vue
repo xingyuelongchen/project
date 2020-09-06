@@ -5,12 +5,12 @@ Create author: qinglong
 Create Time  : 2020-07-24
 -->
 <template>
- <div>功能筹备中</div>
+  <div class="content">功能筹备中</div>
 </template>
 <script>
 export default {
-name:"MinApp",
- data() {
+  name: "MinApp",
+  data() {
     return {};
   }
 };

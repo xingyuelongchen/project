@@ -4,9 +4,11 @@ Create author: qinglong
 Create Time  : 2020-08-14
 -->
 <template>
-  <div class="content-wrap">
-    <mixSearch v-model="searchData" :fields="searchFields" :key="key" />
-    <mixTable v-model="tableData" :fields="tableFields" />
+  <div class="content">
+    <div class="content-cols">
+      <mixSearch v-model="searchData" :fields="searchFields" :key="key" />
+      <mixTable v-model="tableData" :fields="tableFields" />
+    </div>
     <el-dialog :visible.sync="show" title="请输入账号" width="500px">
       <mixForm v-model="formData" :fields="[{label:'旺旺账号',type:'text',prop:'wangwang',labelWidth:80} ]" />
       <div slot="footer">
@@ -38,7 +40,7 @@ export default {
           span: 6,
           options: [
             { label: "搜索", click: this.getData },
-            { label: "导入账号", style: "danger", click: this.add, role:171 },
+            { label: "导入账号", style: "danger", click: this.add, role: 171 },
             {
               label: "提取账号",
               style: "warning",

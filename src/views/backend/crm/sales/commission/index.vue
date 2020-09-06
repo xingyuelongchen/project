@@ -4,8 +4,8 @@ Create author: qinglong
 Create Time  : 2020-08-06
 -->
 <template>
-  <div style="height:100%">
-    <div class="content-wrap">
+  <div class="content">
+    <div class="content-cols">
       <mixSearch v-model="searchData" :fields="searchFields" />
       <mixTable v-model="tableData" :fields="tableFields" @select="select" />
       <mixPage v-model="page" />
@@ -36,7 +36,7 @@ export default {
           options: [
             { label: "搜索", click: this.getData },
             {
-              label: "批量设置", 
+              label: "批量设置",
               click: this.piliang,
               style: "danger",
               role: 152
@@ -145,5 +145,3 @@ export default {
   }
 };
 </script>
-<style lang='less' scoped>
-</style>

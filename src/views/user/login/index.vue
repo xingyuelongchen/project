@@ -131,6 +131,7 @@ export default {
       });
       if (data.code && !this.isLogin) {
         let userinfo = data.data;
+        userinfo.dateTime = Date.now() + 1 * 24 * 60 * 60 * 1000;
         window.localStorage.setItem("userinfo", JSON.stringify(userinfo));
         this.$store.commit("setUserinfo", userinfo);
         if (!this.history) this.history = {};

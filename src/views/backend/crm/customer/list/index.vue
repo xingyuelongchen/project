@@ -4,18 +4,20 @@ Create author: qinglong
 Create Time  : 2020-03-27
 -->
 <template>
-  <div class="content-wrap">
-    <mixSearch v-model="search" :fields="searchFields" />
-    <div class="info">
-      <span>
-        <el-button @click="handDistribution(null,true)" type="primary" size="mini" v-role="126">手动分配</el-button>
-      </span>
-      <span>
-        <el-button @click="autoDistribution(null,true)" type="warning" size="mini" v-role="123">自动分配</el-button>
-      </span>
+  <div class="content">
+    <div class="content-cols">
+      <mixSearch v-model="search" :fields="searchFields" />
+      <div class="info">
+        <span>
+          <el-button @click="handDistribution(null,true)" type="primary" size="mini" v-role="126">手动分配</el-button>
+        </span>
+        <span>
+          <el-button @click="autoDistribution(null,true)" type="warning" size="mini" v-role="123">自动分配</el-button>
+        </span>
+      </div>
+      <mixTable v-model="tableData" :fields="tableFields" @select="selection" />
+      <mixPage v-model="page" />
     </div>
-    <mixTable v-model="tableData" :fields="tableFields" @select="selection" />
-    <mixPage v-model="page" />
     <mixDrawer style="top:180px" v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose" :isShow="true">
       <mixForm v-model="editForm" :fields="editFields" />
     </mixDrawer>
@@ -642,16 +644,5 @@ export default {
   span {
     margin: 0 10px;
   }
-}
-.mix-search {
-  margin: 5px 0;
-  background: #f0f0f0;
-  padding: 5px;
-}
-
-.el-pagination {
-  text-align: right;
-  padding: 20px;
-  background: #fff;
 }
 </style>

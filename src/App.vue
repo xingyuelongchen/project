@@ -16,6 +16,7 @@ export default {};
   // 主体内容
   .content {
     height: 100%;
+    overflow: hidden;
   }
   .content-body {
     height: calc(100vh - 165px);
@@ -26,7 +27,7 @@ export default {};
   .content-cols {
     height: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-direction: column;
     align-items: stretch;
     width: 100%;
@@ -38,24 +39,26 @@ export default {};
   // 主体内容横向排列布局
   .content-rows {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: stretch;
+    box-sizing: border-box;
+    // overflow: hidden;
   }
   // 主体内容横向左右布局
   .content-left-right {
     display: grid;
     grid-template-columns: 25% auto;
     grid-gap: 2%;
+    box-sizing: border-box;
   }
   // 主体内容横向左中右布局
   .content-left-center-right {
     display: grid;
     grid-template-columns: 32% 32% 32%;
     grid-gap: 2%;
+    box-sizing: border-box;
   }
-  .content-wrap {
-    height: 100%;
-  }
+ 
   .el-card {
     height: 100%;
     .el-card__body {
@@ -87,6 +90,11 @@ export default {};
   .el-image .el-image-viewer__close .el-icon-circle-close {
     font-size: 30px;
     color: #fff;
+  }
+  .custom-tree-node {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
 }
 body,

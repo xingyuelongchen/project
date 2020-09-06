@@ -1,10 +1,5 @@
 {
     "history": {
-        "13169906653": {
-            "mobile": "18866668888",
-            "password": "123456",
-            "code": "6281"
-        },
         "18866668888": {
             "mobile": "18866668888",
             "password": "123456"
@@ -22,12 +17,12 @@
         "qq": "1014315485",
         "birthday": "1994-06-05",
         "address": null,
-        "pic": "/uploads/img/20200819/6f6eb807ffe4a921d346d80882437493.png",
+        "pic": "http://192.168.32.194/uploads/img/20200902/06775344bc5aa187125e5cd6fc5824ad.png",
         "feeling": "单身",
         "password": "4344b2301376f99df6c356903cc2e4da",
         "iden": "DMme",
-        "status": 0,
-        "role_id": null,
+        "status": 1,
+        "role_id": 0,
         "role": [
             0
         ],
@@ -275,30 +270,39 @@
                                 "icon": ""
                             },
                             {
-                                "id": 40,
-                                "path": "receive",
+                                "id": 214,
+                                "path": "deallog",
                                 "pid": 8,
-                                "title": "导师接待",
+                                "title": "成交记录",
                                 "status": 1,
                                 "sort": 2,
                                 "icon": ""
                             },
                             {
-                                "id": 81,
-                                "path": "servicepersonal",
+                                "id": 40,
+                                "path": "receive",
                                 "pid": 8,
-                                "title": "个人数据",
+                                "title": "导师接待",
                                 "status": 1,
                                 "sort": 3,
                                 "icon": ""
                             },
                             {
+                                "id": 81,
+                                "path": "personal",
+                                "pid": 8,
+                                "title": "个人数据",
+                                "status": 1,
+                                "sort": 4,
+                                "icon": ""
+                            },
+                            {
                                 "id": 82,
-                                "path": "servicetotal",
+                                "path": "total",
                                 "pid": 8,
                                 "title": "数据总览",
                                 "status": 1,
-                                "sort": 4,
+                                "sort": 5,
                                 "icon": ""
                             },
                             {
@@ -307,7 +311,36 @@
                                 "pid": 8,
                                 "title": "装修账号",
                                 "status": 1,
-                                "sort": 5,
+                                "sort": 6,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 212,
+                        "path": "cross",
+                        "pid": 1,
+                        "title": "跨境中心",
+                        "status": 1,
+                        "sort": 5,
+                        "icon": "icon-hangzhengbankecheng",
+                        "children": [
+                            {
+                                "id": 213,
+                                "path": "crosstutor",
+                                "pid": 212,
+                                "title": "跨境导师",
+                                "status": 1,
+                                "sort": 1,
+                                "icon": ""
+                            },
+                            {
+                                "id": 220,
+                                "path": "receive",
+                                "pid": 212,
+                                "title": "跨境接待",
+                                "status": 1,
+                                "sort": 2,
                                 "icon": ""
                             }
                         ]
@@ -318,7 +351,7 @@
                         "pid": 1,
                         "title": "质检中心",
                         "status": 1,
-                        "sort": 5,
+                        "sort": 6,
                         "icon": "icon-quality",
                         "children": [
                             {
@@ -338,7 +371,7 @@
                         "pid": 1,
                         "title": "财务管理",
                         "status": 1,
-                        "sort": 6,
+                        "sort": 7,
                         "icon": "icon-caiwu",
                         "children": [
                             {
@@ -362,12 +395,22 @@
                         ]
                     },
                     {
+                        "id": 11,
+                        "path": "extend",
+                        "pid": 1,
+                        "title": "扩展管理",
+                        "status": 1,
+                        "sort": 8,
+                        "icon": "icon-zuzhijiagou",
+                        "children": []
+                    },
+                    {
                         "id": 179,
                         "path": "marketing",
                         "pid": 1,
                         "title": "营销中心",
                         "status": 1,
-                        "sort": 7,
+                        "sort": 8,
                         "icon": "icon-yingxiao",
                         "children": [
                             {
@@ -389,16 +432,6 @@
                                 "icon": ""
                             }
                         ]
-                    },
-                    {
-                        "id": 11,
-                        "path": "extend",
-                        "pid": 1,
-                        "title": "扩展管理",
-                        "status": 1,
-                        "sort": 8,
-                        "icon": "icon-zuzhijiagou",
-                        "children": []
                     },
                     {
                         "id": 13,
@@ -578,7 +611,7 @@
                         "title": "功能设置",
                         "status": 1,
                         "sort": null,
-                        "icon": "",
+                        "icon": "el-icon-s-tools",
                         "children": [
                             {
                                 "id": 21,
@@ -661,7 +694,7 @@
                         "title": "套餐管理",
                         "status": 1,
                         "sort": null,
-                        "icon": "",
+                        "icon": "el-icon-s-management",
                         "children": []
                     },
                     {
@@ -671,13 +704,33 @@
                         "title": "三方接口",
                         "status": 1,
                         "sort": null,
-                        "icon": "",
+                        "icon": "el-icon-s-help",
+                        "children": []
+                    },
+                    {
+                        "id": 210,
+                        "path": "backup",
+                        "pid": 118,
+                        "title": "数据备份",
+                        "status": 1,
+                        "sort": null,
+                        "icon": "el-icon-s-marketing",
+                        "children": []
+                    },
+                    {
+                        "id": 211,
+                        "path": "updatelog",
+                        "pid": 118,
+                        "title": "上传更新",
+                        "status": 1,
+                        "sort": null,
+                        "icon": "el-icon-s-grid",
                         "children": []
                     }
                 ]
             }
         ],
         "department": null,
-        "dateTime": 1598954426210
+        "dateTime": 1599457811517
     }
 }

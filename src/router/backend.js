@@ -44,7 +44,7 @@ export default
     // 质检中心
     { path: 'quality', name: 'Quality', meta: { keepAlive: true, role: 9, title: '质检中心', }, component: () => import('@/views/layou'), },
     { path: 'index', name: 'Qualityindex', meta: { keepAlive: true, role: 19, title: '数据管理', }, component: () => import('@/views/backend/crm/quality') },
-    { path: 'extend', name: 'Ether', meta: { keepAlive: true, role: 11, title: '扩展管理', }, component: () => import('@/views/layou'), },
+    { path: 'extend', name: 'Ether', meta: { keepAlive: true, role: 11, title: '扩展管理', }, component: () => import('@/views/backend/crm/extend'), },
     // 营销中心
     { path: 'marketing', name: 'Marketing', meta: { keepAlive: true, role: 179, title: '营销', }, component: () => import('@/views/layou'), },
     { path: 'activity', name: 'Marketingactivity', meta: { keepAlive: true, role: 180, title: '活动管理', }, component: () => import('@/views/backend/crm/marketing/activity') },

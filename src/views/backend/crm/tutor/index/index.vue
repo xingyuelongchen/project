@@ -5,10 +5,12 @@ Create Time  : 2020-07-24
 -->
 <template>
   <step v-if="stepShow" v-model="stepShow" :item="step" />
-  <div v-else class="content-wrap">
-    <mixSearch v-model="searchData" :fields="searchFields" />
-    <mixTable v-model="tableData" :fields="tableFields" />
-    <mixPage v-model="page" />
+  <div v-else class="content">
+    <div class="content-cols">
+      <mixSearch v-model="searchData" :fields="searchFields" />
+      <mixTable v-model="tableData" :fields="tableFields" />
+      <mixPage v-model="page" />
+    </div>
     <el-dialog :visible.sync="show" title="编辑">
       <mixForm v-model="editData" :fields="editFields" />
     </el-dialog>
@@ -80,7 +82,7 @@ export default {
             type: "manage",
             width: 100,
             options: [
-              { label: "编辑", click: this.edit },
+              // { label: "编辑", click: this.edit },
               { label: "添加业绩", click: this.addOrder },
               {
                 label: "服务状态",
@@ -88,7 +90,7 @@ export default {
                 isShow: { prop: "type", type: "==", val: "新业绩" },
                 role: 200
               },
-              { label: "删除", click: this.del }
+              { label: "删除", click: this.del, role: 226 }
             ]
           }
         ]);

@@ -4,12 +4,12 @@ Create author: qinglong
 Create Time  : 2020-08-10
 -->
 <template>
-<div>icon</div>
+  <div class="content">积极筹备中…… </div>
 </template>
 <script>
 export default {
-name:"Settingicon",
- data() {
+  name: "Settingicon",
+  data() {
     return {};
   }
 };

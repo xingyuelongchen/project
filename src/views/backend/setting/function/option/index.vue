@@ -4,19 +4,17 @@ Create author: qinglong
 Create Time  : 2020-03-27
 -->
 <template>
-  <div class="content-wrap">
-    <div class="box" :key="key">
-      <div class="left">
-        <mixSearch v-model="formData.left" :fields="formFields.left" />
-        <div style="height:calc(100% - 40px)">
-          <mixTable v-model="tableData.left" :fields="tableFields.left" />
-        </div>
+  <div class="content content-rows">
+    <div class="left">
+      <mixSearch v-model="formData.left" :fields="formFields.left" />
+      <div style="height:calc(100% - 40px)">
+        <mixTable v-model="tableData.left" :fields="tableFields.left" />
       </div>
-      <div class="right">
-        <mixSearch v-model="formData.right" :fields="formFields.right" />
-        <div style="height:calc(100% - 40px)">
-          <mixTable v-model="tableData.right" :fields="tableFields.right" />
-        </div>
+    </div>
+    <div class="right">
+      <mixSearch v-model="formData.right" :fields="formFields.right" />
+      <div style="height:calc(100% - 40px)">
+        <mixTable v-model="tableData.right" :fields="tableFields.right" />
       </div>
     </div>
   </div>
@@ -222,17 +220,11 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-.box {
-  height: 100%;
-  display: flex;
-  justify-content: flex-start;
-  overflow: hidden;
-  .right {
-    flex: 2;
-  }
-  .left {
-    flex: 1;
-    margin-right: 20px;
-  }
+.right {
+  flex: 1 1 auto;
+}
+.left {
+  width: 500px;
+  margin-right: 20px;
 }
 </style>

@@ -5,24 +5,22 @@ Create Time  : 2020-03-27
 -->
 
 <template>
-  <div class="content-wrap">
-    <el-card header="系统菜单">
-      <el-scrollbar>
-        <el-tree default-expand-all :data="treeData" :props="treeOpstion" @node-click="treeClickNode"></el-tree>
-      </el-scrollbar>
-    </el-card>
-    <div style="display: flex; flex-direction: column;justify-content: space-between;  height:100%; overflow: hidden;">
-      <div style="min-height:220px;height:220px">
-        <el-card>
+  <div class="content">
+    <div class="content content-left-right">
+      <el-card header="系统菜单">
+        <el-scrollbar>
+          <el-tree default-expand-all :data="treeData" :props="treeOpstion" @node-click="treeClickNode"></el-tree>
+        </el-scrollbar>
+      </el-card>
+      <div class="content-cols">
+        <el-card type="border-card" style="height:200px">
           <div slot="header">
             关联数据表
             <el-button style="float: right; padding: 3px 0" type="text" @click="dialogVisible=true">新增关联表</el-button>
           </div>
           <mixTable :key="tableData && tableData.length || 'key'" :options="{height:'110px'}" v-model="tableData" :fields="tabelFields" />
         </el-card>
-      </div>
-      <div style="flex:1 1 auto;overflow:hidden;height:100%;min-height:220px;max-height:100%">
-        <el-tabs type="border-card" style="height:100%">
+        <el-tabs type="border-card" style="flex:1 1 auto">
           <el-tab-pane label="菜单关联表">
             <el-tabs v-model="activeTabName" class="tabs-top">
               <el-tab-pane label="数据表格" name="a" :key="key+1">
@@ -35,7 +33,7 @@ Create Time  : 2020-03-27
           </el-tab-pane>
           <el-tab-pane label="添加字段">
             <el-scrollbar>
-              <div style="display:flex">
+              <div class="content-rows ">
                 <div style="flex:1">
                   <div style="margin:10px">表格属性:</div>
                   <mixForm v-model="addFieldFormData" :fields="addFieldFormFields" />
@@ -45,9 +43,7 @@ Create Time  : 2020-03-27
                   <mixForm v-model="addFieldFormData.editable" :fields="addFieldFormField_a" />
                 </div>
               </div>
-              <!-- <div style="text-align:center;margin-top:-50px">
-                <el-button type="primary" style="width:30%" @click="addField">确定添加</el-button>
-              </div>-->
+
             </el-scrollbar>
           </el-tab-pane>
         </el-tabs>
@@ -637,17 +633,4 @@ export default {
   }
 };
 </script>
-<style lang='less' scoped>
-.content-wrap {
-  display: grid;
-  grid-template-columns: 200px minmax(750px, auto);
-  grid-gap: 1%;
-  width: 100%;
-  overflow: hidden;
-  .tabs-top {
-    /deep/ .el-tabs__content {
-      height: calc(100% - 60px) !important ;
-    }
-  }
-}
-</style>
+ 

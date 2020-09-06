@@ -4,10 +4,12 @@ Create author: qinglong
 Create Time  : 2020-07-29
 -->
 <template>
-  <div class="content-wrap">
-    <mixSearch v-model="searchData" :fields="searchFields" />
-    <mixTable v-model="tableData" :fields="tableFields" />
-    <mixPage v-model="page" />
+  <div class="content">
+    <div class="content-cols">
+      <mixSearch v-model="searchData" :fields="searchFields" />
+      <mixTable v-model="tableData" :fields="tableFields" />
+      <mixPage v-model="page" />
+    </div>
     <el-dialog title="编辑" :visible.sync="show" width="30%">
       <div style="height:500px;overflow:hidden">
         <el-scrollbar>
@@ -93,8 +95,13 @@ export default {
             align: "center",
             fixed: "right",
             options: [
-              { label: "编辑", style: "primary", click: this.dialog, role: 216 },
-              { label: "删除", style: "danger", click: this.del, role: 72 },
+              {
+                label: "编辑",
+                style: "primary",
+                click: this.dialog,
+                role: 216
+              },
+              { label: "删除", style: "danger", click: this.del, role: 225 },
               {
                 label: "更正",
                 style: "danger",
@@ -237,7 +244,7 @@ export default {
     },
     async dialog(row) {
       let { data } = await this.axios("/adminapi/Publics/TableFormEdit", {
-        data: { type: "edit", table_id: 3 }
+        data: { type: "edit", table_id: 13 }
       });
       if (data.code) {
         this.editFields = data.data.concat([

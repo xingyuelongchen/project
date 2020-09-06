@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-08-26
 -->
 <template>
-  <div class="content-wrap">
+  <div class="content-cols">
     <el-card>
       <div slot="header">
         <el-button style="float:right;padding:6px 10px" type="danger" @click="refund(false)" v-if="!isRefund">申请退款</el-button>

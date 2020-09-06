@@ -5,8 +5,8 @@ Create author: qinglong
 Create Time  : 2020-08-16
 -->
 <template>
-  <div>Marketingactivity
-    筹划中
+  <div class="content">
+    积极筹备中
   </div>
 </template>
 <script>

@@ -4,8 +4,8 @@ Create author: qinglong
 Create Time  : 2020-07-28
 -->
 <template>
-  <div class="content-wrap">
-    <div class="box">
+  <div class="content">
+    <div class="content content-left-right">
       <el-card class="left">
         <div slot="header"> 权限组 </div>
         <el-scrollbar style="height:100%">
@@ -176,39 +176,27 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-.content-wrap {
-  .box {
-    display: grid;
-    grid-template-columns: minmax(300px, 21%) auto;
-    grid-gap: 1%;
-    height: 100%;
-    .el-list {
-      .el-item {
-        line-height: 40px;
-        height: 40px;
-        display: flex;
-        justify-content: space-between;
+.el-list {
+  .el-item {
+    line-height: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
 
-        .icon {
-          margin: 0 10px;
-          cursor: pointer;
-        }
-      }
+    .icon {
+      margin: 0 10px;
+      cursor: pointer;
     }
-    .right-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: calc(100% - 80px);
-      > div {
-        flex: 1 1 50%;
-        height: 100%;
-        overflow: hidden;
-      }
-    }
-    .el-pagination {
-      position: absolute;
-    }
+  }
+}
+.right-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  > div {
+    flex: 1 1 50%;
+    height: 100%;
+    overflow: hidden;
   }
 }
 </style>

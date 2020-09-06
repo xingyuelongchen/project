@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-08-12
 -->
 <template>
-  <div class="content-wrap">
+  <div class="content">
     <el-card>
       <div slot="header">
         <el-button style="padding:6px;" type="primary" @click="addUpdate">添加更新</el-button>

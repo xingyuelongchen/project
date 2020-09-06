@@ -4,26 +4,22 @@ Create author: qinglong
 Create Time  : 2020-04-02
 -->
 <template>
-  <div class="content-wrap">
-
-    <mixSearch v-model="search" :fields="searchFields" />
-    <mixSearch v-model="selectionData" :fields="selectionField" v-role="68" />
-
-    <mixTable v-model="tableData" :fields="tableFields" @select="select" />
-    <mixPage v-model="page" />
-
+  <div class="content">
+    <div class="content-cols">
+      <mixSearch v-model="search" :fields="searchFields" />
+      <mixSearch v-model="selectionData" :fields="selectionField" v-role="68" />
+      <mixTable v-model="tableData" :fields="tableFields" @select="select" />
+      <mixPage v-model="page" />
+    </div>
     <!-- <mixDrawer v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose">
-      <mixForm v-model="editForm" :fields="editFields" />
-
+      <mixForm v-model="editForm" :fields="editFields" /> 
     </mixDrawer> -->
     <el-dialog :title="drawerName" :visible="drawer" width="30%" :before-close="drawerClose">
-
       <mixTable v-model="salesList" :fields="dialogTable" @select="select($event,'user')" />
       <span slot="footer">
         <el-button type="primary" @click="onSave">提交</el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 <script>
@@ -366,15 +362,4 @@ export default {
   }
 };
 </script>
-<style lang='less' scoped>
-.mix-search {
-  margin: 5px 0;
-  padding: 5px;
-  background: #f0f0f0;
-}
-.el-pagination {
-  text-align: right;
-  padding: 20px;
-  background: #fff;
-}
-</style>
+ 

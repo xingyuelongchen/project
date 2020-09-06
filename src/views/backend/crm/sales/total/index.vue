@@ -4,17 +4,14 @@ Create author: qinglong
 Create Time  : 2020-08-06
 -->
 <template>
-  <div class="content-wrap">
+  <div class="content-cols">
     <el-tabs v-model="searchData.type" @tab-click="handleClick">
       <el-tab-pane label="日数据" name="1" />
       <el-tab-pane label="指定时间" name="2" />
       <el-tab-pane label="月数据" name="3" />
     </el-tabs>
     <mixSearch v-model="searchData" :fields="searchFields" />
-    <div style="height:calc(100% - 160px)">
-      <mixTable ref="table" :key="key" v-model="tableData" :fields="tableFields" />
-    </div>
-
+    <mixTable ref="table" :key="key" v-model="tableData" :fields="tableFields" />
     <mixPage v-model="page" />
   </div>
 </template>

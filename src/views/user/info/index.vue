@@ -4,70 +4,68 @@ Create author: qinglong
 Create Time  : 2020-08-12
 -->
 <template>
-  <div class="content-wrap">
-    <div style="height:100%;display:grid;grid-gap:20px;grid-template-columns:auto 500px 500px">
-      <el-card header="头像修改">
-        <div style="height:100%">
-          <el-scrollbar>
-            <div style="text-align:center;cursor: pointer" @click="$refs.file.click()" title="点击修改">
-              <el-avatar :size="300" :src="formData.pic"></el-avatar>
+  <div class="content content-left-center-right">
+    <el-card header="头像修改">
+      <div style="height:100%">
+        <el-scrollbar>
+          <div style="text-align:center;cursor: pointer" @click="$refs.file.click()" title="点击修改">
+            <el-avatar :size="300" :src="formData.pic"></el-avatar>
+          </div>
+          <div>
+            <div style="text-align:center">
+              <input type="file" :key="formData.pic" v-show="false" ref="file" @change="upload">
             </div>
-            <div>
-              <div style="text-align:center">
-                <input type="file" :key="formData.pic" v-show="false" ref="file" @change="upload">
+            <div style="border-top:1px solid #ccc;margin-top:20px;padding-top:20px">
+              <div class="item">
+                <span style="display:inline-block;width:60px">花名： </span>
+                {{$store.state.userinfo.nickname}}
               </div>
-              <div style="border-top:1px solid #ccc;margin-top:20px;padding-top:20px">
-                <div class="item">
-                  <span style="display:inline-block;width:60px">花名： </span>
-                  {{$store.state.userinfo.nickname}}
-                </div>
-                <div class="item">
-                  <span style="display:inline-block;width:60px">部门：</span>
-                  {{$store.state.userinfo.dept}} - {{$store.state.userinfo.dept_id}}
-                </div>
+              <div class="item">
+                <span style="display:inline-block;width:60px">部门：</span>
+                {{$store.state.userinfo.dept}} - {{$store.state.userinfo.dept_id}}
               </div>
-              <el-dialog :visible.sync="show">
-                <div style="display:flex;justify-content:space-between">
-                  <div style="width:400px;height:400px;border:1px solid #eee">
-                    <mixCover v-model="coverImg" :img="img" ref="cover" />
-                  </div>
-                  <div style="width:400px;height:400px;border:1px solid #eee;display:flex;justify-content:center;align-items:center" v-html="coverImg.html">
+            </div>
+            <el-dialog :visible.sync="show">
+              <div style="display:flex;justify-content:space-between">
+                <div style="width:400px;height:400px;border:1px solid #eee">
+                  <mixCover v-model="coverImg" :img="img" ref="cover" />
+                </div>
+                <div style="width:400px;height:400px;border:1px solid #eee;display:flex;justify-content:center;align-items:center" v-html="coverImg.html">
 
-                  </div>
                 </div>
-                <div style="text-align:center;padding-top:40px">
-                  <el-button @click="$refs.cover.sacle(true)" type="warning">顺时针</el-button>
-                  <el-button @click="$refs.cover.sacle(false)" type="warning">逆时针</el-button>
-                  <el-button @click="saveImage" type="danger">保存头像</el-button>
-                </div>
-              </el-dialog>
-            </div>
-          </el-scrollbar>
-        </div>
-      </el-card>
-      <el-card>
-        <div slot="header">
-          账号资料
-          <el-button style="padding:6px;float:right" type="primary" @click="onSave">保存修改</el-button>
-        </div>
-        <div style="height:100%">
-          <el-scrollbar>
-            <mixForm v-model="formData" :fields="formFields" />
-          </el-scrollbar>
-        </div>
-      </el-card>
-      <el-card>
-        <div slot="header">
-          修改密码
-          <el-button style="padding:6px;float:right" type="primary" @click="changePassword">确认修改</el-button>
-        </div>
-        <div style="height:100%">
-          <el-scrollbar>
-            <mixForm v-model="passwordData" :fields="passwordFields" />
-          </el-scrollbar>
-        </div>
-      </el-card>
-    </div>
+              </div>
+              <div style="text-align:center;padding-top:40px">
+                <el-button @click="$refs.cover.sacle(true)" type="warning">顺时针</el-button>
+                <el-button @click="$refs.cover.sacle(false)" type="warning">逆时针</el-button>
+                <el-button @click="saveImage" type="danger">保存头像</el-button>
+              </div>
+            </el-dialog>
+          </div>
+        </el-scrollbar>
+      </div>
+    </el-card>
+    <el-card>
+      <div slot="header">
+        账号资料
+        <el-button style="padding:6px;float:right" type="primary" @click="onSave">保存修改</el-button>
+      </div>
+      <div style="height:100%">
+        <el-scrollbar>
+          <mixForm v-model="formData" :fields="formFields" />
+        </el-scrollbar>
+      </div>
+    </el-card>
+    <el-card>
+      <div slot="header">
+        修改密码
+        <el-button style="padding:6px;float:right" type="primary" @click="changePassword">确认修改</el-button>
+      </div>
+      <div style="height:100%">
+        <el-scrollbar>
+          <mixForm v-model="passwordData" :fields="passwordFields" />
+        </el-scrollbar>
+      </div>
+    </el-card>
   </div>
 </template>
 <script>

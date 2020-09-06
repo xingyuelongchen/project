@@ -4,10 +4,12 @@ Create author: qinglong
 Create Time  : 2020-08-07
 -->
 <template>
-  <div class="content-wrap" :key='key'>
-    <mixSearch v-model="searchData" :fields="searchFields" />
-    <mixTable v-model="tableData" :fields="tableFields" ref='table' />
-    <mixPage v-model="page" />
+  <div class="content">
+    <div class="content-cols">
+      <mixSearch v-model="searchData" :fields="searchFields" />
+      <mixTable v-model="tableData" :fields="tableFields" />
+      <mixPage v-model="page" />
+    </div>
   </div>
 </template>
 <script>
@@ -15,7 +17,6 @@ export default {
   name: "Financeindex",
   data() {
     return {
-      key: 0,
       page: {
         page: 1,
         limit: 10,
@@ -66,9 +67,9 @@ export default {
     };
   },
 
-  created() {
-    this.getData();
-    this.getHeadeData();
+  async created() {
+    await this.getData();
+    await this.getHeadeData();
   },
 
   methods: {
@@ -99,7 +100,6 @@ export default {
             ]
           }
         ]);
-       
       }
     },
     async getData() {
@@ -108,8 +108,7 @@ export default {
       });
       if (data.code) {
         this.tableData = data.data;
-        this.page.total = data.count;
-        this.key = Math.random();
+        // this.page.total = data.count;
       }
     },
     async shenhe(item) {
@@ -138,5 +137,3 @@ export default {
   }
 };
 </script>
-<style lang='less' scoped>
-</style>

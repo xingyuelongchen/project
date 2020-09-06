@@ -5,7 +5,7 @@ Create Time  : 2020-07-24
 -->
 <template>
   <step v-if="stepShow" v-model="stepShow" :item="step" />
-  <div v-else class="content-wrap">
+  <div v-else class="content-cols">
     <mixSearch v-model="searchData" :fields="searchFields" />
     <mixTable v-model="tableData" :fields="tableFields" />
     <mixPage v-model="page" />
@@ -30,7 +30,7 @@ export default {
     };
   },
   watch: {
-    stepShow(a) { 
+    stepShow(a) {
       !a && this.getData();
     }
   },
@@ -78,5 +78,4 @@ export default {
   }
 };
 </script>
-<style lang='less' scoped>
-</style>
+ 

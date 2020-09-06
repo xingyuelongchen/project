@@ -4,23 +4,17 @@ Create author: qinglong
 Create Time  : 2020-04-02
 -->
 <template>
-  <div class="content-wrap">
-    <div class="box">
+  <div class="content">
+    <div class="content-cols">
       <mixSearch v-model="search" :fields="searchFields" />
-      <div>
-        <mixSearch v-model="selectionData" :fields="selectionField" v-role="68" />
-      </div>
-      <div style="height:calc(100% - 150px)">
-        <mixTable v-model="tableData" :fields="tableFields" @select="select" />
-      </div>
+      <mixSearch v-model="selectionData" :fields="selectionField" v-role="232" />
+      <mixTable v-model="tableData" :fields="tableFields" @select="select" />
       <mixPage v-model="page" />
     </div>
     <!-- <mixDrawer v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose">
       <mixForm v-model="editForm" :fields="editFields" />
-
     </mixDrawer> -->
     <el-dialog :title="drawerName" :visible="drawer" width="30%" :before-close="drawerClose">
-
       <mixTable v-model="salesList" :fields="dialogTable" @select="select($event,'user')" />
       <span slot="footer">
         <el-button type="primary" @click="onSave">提交</el-button>
@@ -64,7 +58,7 @@ export default {
               style: "primary",
               icon: "el-icon-plus",
               click: this.onAdd,
-              role: 67
+              role: 229
             }
           ]
         }
@@ -77,29 +71,6 @@ export default {
       selectList: [],
       selectionData: { channel: null, source: null, status: null },
       selectionField: [
-        // {
-        //   label: "接待渠道",
-        //   type: "select",
-        //   prop: "source",
-        //   span: 3,
-        //   options: [
-        //     { label: "微信", value: 1 },
-        //     { label: "QQ", value: 2 },
-        //     { label: "微信、QQ", value: 3 }
-        //   ]
-        // },
-        // {
-        //   label: "渠道",
-        //   type: "select",
-        //   prop: "channel",
-        //   span: 3,
-        //   options: [
-        //     { label: "信息流", value: 1 },
-        //     { label: "搜索引擎", value: 2 },
-        //     { label: "信息流、搜索引擎", value: 3 }
-        //   ]
-        // },
-
         {
           label: "接待上限",
           type: "number",
@@ -137,39 +108,11 @@ export default {
           prop: "limit",
           type: "input",
           change: this.change
-        },
-        // {
-        //   sort: true,
-        //   label: "渠道",
-        //   prop: "channel",
-        //   type: "select",
-        //   change: this.change,
-        //   minWidth: 150,
-        //   options: [
-        //     { label: "信息流", value: 1 },
-        //     { label: "搜索引擎", value: 2 },
-        //     { label: "信息流、搜索引擎", value: 3 }
-        //   ]
-        // },
-        // {
-        //   sort: true,
-        //   label: "接待渠道",
-        //   prop: "source",
-        //   type: "select",
-        //   change: this.change,
-        //   minWidth: 150,
-        //   options: [
-        //     { label: "微信", value: 1 },
-        //     { label: "QQ", value: 2 },
-        //     { label: "微信、QQ", value: 3 }
-        //   ]
-        // },
+        }, 
         {
           sort: true,
           label: "权重",
-          prop: "weight",
-          type: "input",
-          change: this.change,
+          prop: "weight", 
           minWidth: 100
         },
         {
@@ -187,34 +130,21 @@ export default {
           label: "自行控制",
           prop: "control",
           align: "center",
-          change: this.change,
           type: "tag",
-          options: [
-            {
-              label: "是",
-              value: "是",
-              style: "success"
-            },
-            {
-              label: "否",
-              value: "否",
-              style: "danger"
-            }
-          ]
         },
         {
           label: "操作",
           type: "manage",
-          minWidth: 250,
+          width: 105,
           options: [
-            { label: "删除", style: "danger", click: this.tableDel, role: 69 },
+            { label: "删除", style: "danger", click: this.tableDel, role: 235 },
             {
               label: "自行控制",
               style: "warning",
               click: this.control,
-              role: 162
+              role: 134
             },
-            { label: "权重", style: "success", click: this.weight, role: 161 }
+            { label: "权重", style: "success", click: this.weight, role: 233 }
           ]
         }
       ],
@@ -369,20 +299,4 @@ export default {
   }
 };
 </script>
-<style lang='less' scoped>
-.box {
-  height: 100%;
-  // margin: 20px;
-
-  .mix-search {
-    margin: 5px 0;
-    padding: 5px;
-    background: #f0f0f0;
-  }
-  .el-pagination {
-    text-align: right;
-    padding: 20px;
-    background: #fff;
-  }
-}
-</style>
+ 

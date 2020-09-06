@@ -4,32 +4,32 @@ Create author: qinglong
 Create Time  : 2020-03-27
 -->
 <template>
-  <step v-model="stepShow" v-if="stepShow" :item="statusData" />
-  <div v-else class="content-wrap">
-    <mixSearch v-model="search" :fields="searchFields" />
-    <div class="info" v-if="maxOrder">
-      <template>
-        <span>
-          接待上限：
-          <el-tag>{{maxOrder.limit || '--'}}</el-tag>
-        </span>
-        <span>
-          累计接单：
-          <el-tag>{{maxOrder.count || '--'}}</el-tag>
-        </span>
-        <span>
-          <el-tag effect="dark" :type="maxOrder.status?'':'danger'">{{maxOrder.status ?'接单中':'暂停接单'}}</el-tag>
-        </span>
-        <span v-if="maxOrder.control">
-          接单开关：
-          <el-switch v-model="maxOrder.status" @change="stopOrder" inactive-color="#ccc" :active-value="1" :inactive-value="0" />
-        </span>
-      </template>
-    </div>
-    <div style="height:calc(100% - 120px)" :key="key">
+  <div class="content">
+    <step v-model="stepShow" v-if="stepShow" :item="statusData" />
+    <div v-else class="content-cols">
+      <mixSearch v-model="search" :fields="searchFields" />
+      <div class="info" v-if="maxOrder">
+        <template>
+          <span>
+            接待上限：
+            <el-tag>{{maxOrder.limit || '--'}}</el-tag>
+          </span>
+          <span>
+            累计接单：
+            <el-tag>{{maxOrder.count || '--'}}</el-tag>
+          </span>
+          <span>
+            <el-tag effect="dark" :type="maxOrder.status?'':'danger'">{{maxOrder.status ?'接单中':'暂停接单'}}</el-tag>
+          </span>
+          <span v-if="maxOrder.control">
+            接单开关：
+            <el-switch v-model="maxOrder.status" @change="stopOrder" inactive-color="#ccc" :active-value="1" :inactive-value="0" />
+          </span>
+        </template>
+      </div>
       <mixTable v-model="tableData" :fields="tableFields" @select="selection" />
+      <mixPage v-model="page" />
     </div>
-    <mixPage v-model="page" />
     <mixDrawer style="top:61px" v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose" :isShow="true">
       <mixForm :key="key" v-model="editForm" :fields="editFields" />
     </mixDrawer>
@@ -759,16 +759,5 @@ export default {
   span {
     margin: 0 10px;
   }
-}
-.mix-search {
-  margin: 5px 0;
-  background: #f0f0f0;
-  padding: 5px;
-}
-
-.el-pagination {
-  text-align: right;
-  padding: 20px;
-  background: #fff;
 }
 </style>

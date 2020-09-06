@@ -68,7 +68,6 @@ let userinfo = localStorage.getItem('userinfo');
 VueRouter.prototype.setRoles = setRoles;
 const router = new VueRouter(routeOption);
 let target = true;
-
 if (userinfo) {
   userinfo = JSON.parse(userinfo);
   // 刷新页面时，重新加载路由表 
@@ -76,7 +75,6 @@ if (userinfo) {
   // 页面刷新保持选项卡
   cache()
 }
-
 router.beforeEach(beforeRouter)
 export default router;
 
@@ -87,6 +85,7 @@ export default router;
  * @param {Object} next 
  */
 function beforeRouter(to, from, next) {
+
   // 获取用户信息
   let userinfo = localStorage.getItem('userinfo')
   if (userinfo) userinfo = JSON.parse(userinfo);

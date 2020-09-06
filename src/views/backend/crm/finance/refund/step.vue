@@ -4,59 +4,60 @@ Create author: qinglong
 Create Time  : 2020-08-26
 -->
 <template>
-  <div class="content-wrap">
-    <el-card>
-      <div slot="header">
-        <el-button style="float:right;padding:6px 10px" type="danger" @click="refund(false)" v-if="!isRefund">申请退款</el-button>
-        <el-page-header @back="$emit('input',false)" content="服务状态">
-        </el-page-header>
-      </div>
-      <div class="step-box">
-        <div class="init step-top">
-          <el-steps :space="200" :active="stepData.progress-1" finish-status="success" class="steps" align-center>
-            <template v-for="(item,index) in stepList">
-              <!-- <el-step :title="item.label" :key="index" @click.native="stepClick(item,index)"></el-step> -->
-              <el-step :title="item.label" :key="index"></el-step>
-            </template>
-          </el-steps>
-          <mixForm v-model="stepData" :fields="stepFields" />
+  <div class="content">
+    <div class="content-cols">
+      <el-card>
+        <div slot="header">
+          <el-button style="float:right;padding:6px 10px" type="danger" @click="refund(false)" v-if="!isRefund">申请退款</el-button>
+          <el-page-header @back="$emit('input',false)" content="服务状态">
+          </el-page-header>
         </div>
-        <div class="step-bottom" v-if="label_list.length">
-          <el-scrollbar>
-            <el-timeline>
-              <template v-for="(item,index) in label_list">
-                <el-timeline-item :key="index" :timestamp="item.create_time" placement="top">
-                  <el-card>
-                    <h4>
-                      <span v-if="item.label_2">
-                        进度更新为
-                        <el-tag type="parmary"> {{ item.label_2}} </el-tag>
-                      </span>
-                      <span v-if="item.label_3">
-                        ，正在 <el-tag type="danger">{{item.label_3}}</el-tag> 状态
-                      </span>
-                    </h4>
-
-                    <div class="remak">
-                      <span>备注信息：</span>
-                      {{item.remak}}
-                    </div>
-                    <p>
-                      <el-tag>{{item.uid}}</el-tag>
-                      提交于 {{item.create_time}}
-                    </p>
-                  </el-card>
-                </el-timeline-item>
+        <div class="step-box">
+          <div class="init step-top">
+            <el-steps :space="200" :active="stepData.progress-1" finish-status="success" class="steps" align-center>
+              <template v-for="(item,index) in stepList">
+                <!-- <el-step :title="item.label" :key="index" @click.native="stepClick(item,index)"></el-step> -->
+                <el-step :title="item.label" :key="index"></el-step>
               </template>
-            </el-timeline>
-          </el-scrollbar>
+            </el-steps>
+            <mixForm v-model="stepData" :fields="stepFields" />
+          </div>
+          <div class="step-bottom" v-if="label_list.length">
+            <el-scrollbar>
+              <el-timeline>
+                <template v-for="(item,index) in label_list">
+                  <el-timeline-item :key="index" :timestamp="item.create_time" placement="top">
+                    <el-card>
+                      <h4>
+                        <span v-if="item.label_2">
+                          进度更新为
+                          <el-tag type="parmary"> {{ item.label_2}} </el-tag>
+                        </span>
+                        <span v-if="item.label_3">
+                          ，正在 <el-tag type="danger">{{item.label_3}}</el-tag> 状态
+                        </span>
+                      </h4>
+
+                      <div class="remak">
+                        <span>备注信息：</span>
+                        {{item.remak}}
+                      </div>
+                      <p>
+                        <el-tag>{{item.uid}}</el-tag>
+                        提交于 {{item.create_time}}
+                      </p>
+                    </el-card>
+                  </el-timeline-item>
+                </template>
+              </el-timeline>
+            </el-scrollbar>
+          </div>
         </div>
-      </div>
-    </el-card>
+      </el-card>
+    </div>
     <el-dialog :visible.sync="refundShow" title="退款资料" width="500px" @close="refundData={}">
       <mixForm v-model="refundData" :fields="refundFields" />
     </el-dialog>
-
   </div>
 </template>
 <script>
@@ -187,7 +188,7 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-.content-wrap { 
+.content-wrap {
   .el-card {
     height: 100%;
     .step-box {

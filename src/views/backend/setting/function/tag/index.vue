@@ -4,14 +4,14 @@ Create author: qinglong
 Create Time  : 2020-08-21
 -->
 <template>
-  <div class="content-wrap">
-    <el-card class="box-card" style="height:100%">
-      <div slot="header">
-        客户标签
-        <el-button style="padding:3px 6px;float:right" type="primary " @click="treeAddTop">添加</el-button>
-      </div>
-      <div style="height:100%">
-        <el-scrollbar style="height:100%">
+  <div class="content">
+    <div class="content content-left-right">
+      <el-card>
+        <div slot="header">
+          客户标签
+          <el-button style="padding:3px 6px;float:right" type="primary " @click="treeAddTop">添加</el-button>
+        </div>
+        <el-scrollbar>
           <el-tree :data="treeData" :props="defaultProps" :expand-on-click-node="true" :default-expanded-keys="treeKey" highlight-current node-key="id" check-strictly @node-click="handleNodeClick">
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ node.label }}</span>
@@ -23,11 +23,11 @@ Create Time  : 2020-08-21
             </span>
           </el-tree>
         </el-scrollbar>
-      </div>
-      <el-dialog :title="title" :visible.sync="dialogFormVisible" width="400px" :modal="true" top="15vh">
-        <mixForm v-model="roles" :fields="rolesFields" />
-      </el-dialog>
-    </el-card>
+      </el-card>
+    </div>
+    <el-dialog :title="title" :visible.sync="dialogFormVisible" width="400px" :modal="true" top="15vh">
+      <mixForm v-model="roles" :fields="rolesFields" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -167,23 +167,4 @@ export default {
   }
 };
 </script>
-<style lang='less' scoped>
-.content-wrap {
-  display: grid;
-  grid-template-columns: 25% auto;
-  grid-gap: 2%;
-  .el-card {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    /deep/ .el-card__body {
-      flex: 1 1 auto;
-    }
-  }
-  .custom-tree-node {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-}
-</style>
+ 

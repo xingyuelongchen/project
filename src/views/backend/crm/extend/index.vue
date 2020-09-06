@@ -1,14 +1,14 @@
 <!--
-Template Name: web管理
+Template Name: 扩展管理
 Create author: qinglong
-Create Time  : 2020-07-24
+Create Time  : 2020-09-06
 -->
 <template>
-  <div class="content">功能筹备中</div>
+  <div class="content">积极筹备中……</div>
 </template>
 <script>
 export default {
-  name: "Extendweb",
+  name: "Extend",
   data() {
     return {};
   }
