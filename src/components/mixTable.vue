@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-03-28
 -->
 <template>
-  <el-table :key="key" ref="table" id="exportTab" row-key="id" class="mix-table" v-loading="!fieldsData.length && loading" height='100%' :max-height="options.height || '95%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
+  <el-table ref="table" id="exportTab" row-key="id" class="mix-table" v-loading="!fieldsData.length && loading" height='100%' :max-height="options.height || '95%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
     <template v-for="(item,index ) in field">
       <template v-if="'expand'==item.type">
         <el-table-column :key="index" :type="item.type" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable">

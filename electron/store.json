@@ -19,9 +19,7 @@
         "address": null,
         "pic": "http://192.168.32.194/uploads/img/20200902/06775344bc5aa187125e5cd6fc5824ad.png",
         "feeling": "单身",
-        "password": "4344b2301376f99df6c356903cc2e4da",
         "iden": "DMme",
-        "status": 1,
         "role_id": 0,
         "role": [
             0
@@ -40,7 +38,7 @@
                         "id": 87,
                         "path": "index",
                         "pid": 1,
-                        "title": "首页",
+                        "title": "仪表盘",
                         "status": 1,
                         "sort": 0,
                         "icon": "icon-Homehomepagemenu",
@@ -730,7 +728,6 @@
                 ]
             }
         ],
-        "department": null,
-        "dateTime": 1599457811517
+        "department": null
     }
 }

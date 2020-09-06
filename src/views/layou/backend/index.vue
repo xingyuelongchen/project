@@ -181,6 +181,9 @@ export default {
         this.xibao.show = true;
         this.xibao.data = data.data;
       }
+      if (data.type == "dashboard") {
+        console.log("dashboard");
+      }
     },
     delTab(name) {
       this.$store.commit("delTabmenu", name);
@@ -242,7 +245,6 @@ export default {
   },
   beforeDestroy() {
     clearTimeout(this.timer);
-    console.log(0);
   }
 };
 </script>

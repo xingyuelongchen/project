@@ -71,4 +71,4 @@ app.use('/dept', (req, res) => {
 });
 app.use('*', (req, res) => {
     res.status(404).send('非法请求！')
-})
+});
