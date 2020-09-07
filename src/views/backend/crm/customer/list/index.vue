@@ -175,46 +175,6 @@ export default {
       });
     },
     async init() {
-      this.tableFields = [
-        {
-          label: "操作",
-          type: "manage",
-          fixed: "right",
-          width: 110,
-          options: [
-            {
-              size: "mini",
-              label: "编辑信息",
-              style: "success",
-              role: 37,
-              click: this.tableEdit
-            },
-            {
-              size: "mini",
-              label: "手动分配",
-              style: "warning",
-              click: this.handDistribution,
-              role: 39,
-              isShow: { type: "==", prop: "saler", val: "" }
-            },
-            {
-              size: "mini",
-              label: "自动分配",
-              style: "warning",
-              role: 38,
-              click: this.autoDistributiona,
-              isShow: { type: "==", prop: "saler", val: "" }
-            },
-            {
-              size: "mini",
-              label: "删除",
-              style: "danger",
-              role: 130,
-              click: this.tableDel
-            }
-          ]
-        }
-      ];
       // 搜索数据
       await this.getSelectList();
       // 表头数据
@@ -368,9 +328,47 @@ export default {
         data: { table_id: 1 }
       });
       if (data.code) {
-        let arr = data.data.concat(this.tableFields);
-        arr.unshift({ type: "selection", fixed: "left" });
-        this.tableFields = arr;
+        let arr = data.data.concat([
+          {
+            label: "操作",
+            type: "manage",
+            fixed: "right",
+            width: 110,
+            options: [
+              {
+                size: "mini",
+                label: "编辑信息",
+                style: "success",
+                role: 37,
+                click: this.tableEdit
+              },
+              {
+                size: "mini",
+                label: "手动分配",
+                style: "warning",
+                click: this.handDistribution,
+                role: 39,
+                isShow: { type: "==", prop: "saler", val: "" }
+              },
+              {
+                size: "mini",
+                label: "自动分配",
+                style: "warning",
+                role: 38,
+                click: this.autoDistributiona,
+                isShow: { type: "==", prop: "saler", val: "" }
+              },
+              {
+                size: "mini",
+                label: "删除",
+                style: "danger",
+                role: 130,
+                click: this.tableDel
+              }
+            ]
+          }
+        ]);
+        this.tableFields = [{ type: "selection" }].concat(arr);
       }
     },
     async getData() {

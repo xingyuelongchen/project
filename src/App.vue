@@ -30,7 +30,8 @@ export default {};
     justify-content: flex-start;
     flex-direction: column;
     align-items: stretch;
-    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
     > .mix-table {
       flex: auto;
       height: calc(100% - 100px) !important;
@@ -58,7 +59,7 @@ export default {};
     grid-gap: 2%;
     box-sizing: border-box;
   }
- 
+
   .el-card {
     height: 100%;
     .el-card__body {

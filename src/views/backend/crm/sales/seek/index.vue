@@ -261,43 +261,6 @@ export default {
       });
     },
     async init() {
-      this.tableFields = [
-        {
-          label: "操作",
-          type: "manage",
-          fixed: "right",
-          width: 110,
-          options: [
-            {
-              size: "mini",
-              label: "编辑信息",
-              style: "success",
-              role: 195,
-              click: this.tableEdit
-            },
-            {
-              role: 73,
-              size: "mini",
-              label: "添加业绩",
-              style: "primary",
-              click: this.addOrder
-            },
-            {
-              size: "mini",
-              label: "共享客户",
-              style: "success",
-              role: 188,
-              click: this.share
-            },
-            {
-              size: "mini",
-              label: "服务状态",
-              style: "primary",
-              click: this.addStatus
-            }
-          ]
-        }
-      ];
       await this.stopMaxOrder();
       // 表头数据
       await this.getTable();
@@ -421,7 +384,43 @@ export default {
         data: { table_id: 10 }
       });
       if (data.code) {
-        let arr = data.data.concat(this.tableFields);
+        let arr = data.data.concat([
+          {
+            label: "操作",
+            type: "manage",
+            fixed: "right",
+            width: 110,
+            options: [
+              {
+                size: "mini",
+                label: "编辑信息",
+                style: "success",
+                role: 195,
+                click: this.tableEdit
+              },
+              {
+                role: 73,
+                size: "mini",
+                label: "添加业绩",
+                style: "primary",
+                click: this.addOrder
+              },
+              {
+                size: "mini",
+                label: "共享客户",
+                style: "success",
+                role: 188,
+                click: this.share
+              },
+              {
+                size: "mini",
+                label: "服务状态",
+                style: "primary",
+                click: this.addStatus
+              }
+            ]
+          }
+        ]);
         arr.unshift({ type: "selection", fixed: "left" });
         this.tableFields = arr;
       }

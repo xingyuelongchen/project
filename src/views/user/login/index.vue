@@ -7,49 +7,78 @@ Create Time  : 2020-07-22
   <div class="wrap" @click.self="isHistory=false">
     <div class="login">
       <div @keypress.enter="setRoutes" class="login-box">
-        <div class="title">用户{{title}}</div>
+        <div class="title">{{title}}</div>
         <div class="logo">
           <img src="http://www.guangyizhou.cn/public/home/assets/logo.png" alt />
         </div>
-        <el-form :model="ruleForm" status-icon ref="login" label-width="80px" class="demo-ruleForm">
-          <el-form-item label="手机号码" prop="mobile" :rules="{required:true,message:'请输入账号'}">
-            <el-input clearable v-model="ruleForm.mobile" autocomplete="on" @focus="isHistory=true" @input="isHistory=false"></el-input>
-          </el-form-item>
-          <el-form-item label="花名" prop="nickname" :rules="{required:true,message:'请输入账号'}" v-if="isLogin">
-            <el-input clearable v-model="ruleForm.nickname" autocomplete="on"></el-input>
-          </el-form-item>
-          <el-form-item label="密码" prop="password" :rules="{required:true,message:'请输入密码'}">
-            <el-input clearable type="password" v-model="ruleForm.password" autocomplete="on"></el-input>
-          </el-form-item>
-          <el-form-item label="确认密码" prop="password_confirm" :rules="{required:true,message:'请输入密码'}" v-if="isLogin">
-            <el-input clearable type="password" v-model="ruleForm.password_confirm" autocomplete="on"></el-input>
-          </el-form-item>
-          <el-form-item label="验证码" prop="code" :rules="{required:true,message:'请输入验证码'}">
-            <div class="yzm">
-              <div class="code" @click="getCode">
-                <img :src="code" alt='验证码' />
+        <div v-if="resetPasswordShow">
+          <el-form :model="resetPasswordData" status-icon ref="login" label-width="80px" class="demo-ruleForm">
+            <el-form-item label="手机号" prop="mobile" :rules="{required:true,message:'请输入手机号码'}">
+              <el-input clearable v-model="resetPasswordData.mobile" autocomplete="on"></el-input>
+            </el-form-item>
+            <el-form-item label="新密码" prop="password" :rules="{required:true,message:'请输入密码'}">
+              <el-input clearable type="password" v-model="resetPasswordData.password" autocomplete="on"></el-input>
+            </el-form-item>
+            <el-form-item label="验证码" prop="code" :rules="{required:true,message:'请输入短信验证码'}">
+              <div style="display:flex;justify-content:space-between">
+                <el-input clearable v-model="resetPasswordData.code" autocomplete="on"></el-input>
+                <div style="margin-left:5px">
+                  <el-button :loading="!!resetcodeloading" @click="getMobileCode">获取验证码{{resetcodeloading? '('+resetcodeloading+')' :'' }}</el-button>
+                </div>
               </div>
-              <el-input clearable v-model="ruleForm.code" autocomplete="on"></el-input>
-            </div>
-          </el-form-item>
-          <el-form-item>
-            <div style="height:40px;display: flex;justify-content:space-between">
-              <span>
-                <el-checkbox v-model="checkPassword" v-if="isElectron">记住账号</el-checkbox>
-              </span>
-              <div>
-                <el-link :underline="false" type="primary" @click="register" v-if="!isLogin">立即注册</el-link>
-                <el-link :underline="false" type="primary" @click="login" v-else>立即登录</el-link>
+            </el-form-item>
+            <el-form-item>
+              <div style="height:40px;display: flex;justify-content:space-between">
+
+                <el-link :underline="false" type="primary" @click="()=>{ this.login(),this.resetPasswordShow=false}">立即登录</el-link>
+
               </div>
-            </div>
-          </el-form-item>
-        </el-form>
-        <el-button type="primary" @click="setRoutes" style="width:100%">确认{{title}}</el-button>
-        <div class="history" v-if="history && isHistory && !isLogin && isElectron ">
-          <template v-for="(item,key,index) in history">
-            <div class="item" :key="index" @click="check(item)">{{key}} </div>
-          </template>
-          <div class="item" @click="removerHistory"> 清除历史记录 </div>
+            </el-form-item>
+          </el-form>
+          <el-button type="primary" style="width:100%" @click="resetPassword">重置密码</el-button>
+        </div>
+        <div v-else>
+          <el-form :model="ruleForm" status-icon ref="login" label-width="80px" class="demo-ruleForm">
+            <el-form-item label="手机号码" prop="mobile" :rules="{required:true,message:'请输入账号'}">
+              <el-input clearable v-model="ruleForm.mobile" autocomplete="on" @focus="isHistory=true" @input="isHistory=false"></el-input>
+            </el-form-item>
+            <el-form-item label="花名" prop="nickname" :rules="{required:true,message:'请输入账号'}" v-if="isLogin">
+              <el-input clearable v-model="ruleForm.nickname" autocomplete="on"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password" :rules="{required:true,message:'请输入密码'}">
+              <el-input clearable type="password" v-model="ruleForm.password" autocomplete="on"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="password_confirm" :rules="{required:true,message:'请输入密码'}" v-if="isLogin">
+              <el-input clearable type="password" v-model="ruleForm.password_confirm" autocomplete="on"></el-input>
+            </el-form-item>
+            <el-form-item label="验证码" prop="code" :rules="{required:true,message:'请输入验证码'}">
+              <div class="yzm">
+                <div class="code" @click="getCode">
+                  <img :src="code" alt='验证码' />
+                </div>
+                <el-input clearable v-model="ruleForm.code" autocomplete="on"></el-input>
+              </div>
+            </el-form-item>
+            <el-form-item>
+              <div style="height:40px;display: flex;justify-content:space-between">
+                <span>
+                  <el-checkbox v-model="checkPassword" v-if="isElectron">记住账号</el-checkbox>
+                  <el-link :underline="false" type="primary" @click="()=>{this.resetPasswordShow=true;this.title='找回密码'}">找回密码</el-link>
+                </span>
+                <div>
+                  <el-link :underline="false" type="primary" @click="register" v-if="!isLogin">立即注册</el-link>
+                  <el-link :underline="false" type="primary" @click="login" v-else>立即登录</el-link>
+                </div>
+              </div>
+            </el-form-item>
+          </el-form>
+          <el-button v-if="!resetPasswordShow" type="primary" @click="setRoutes" style="width:100%">确认{{title}}</el-button>
+          <div class="history" v-if="history && isHistory && !isLogin && isElectron ">
+            <template v-for="(item,key,index) in history">
+              <div class="item" :key="index" @click="check(item)">{{key}} </div>
+            </template>
+            <div class="item" @click="removerHistory"> 清除历史记录 </div>
+          </div>
         </div>
       </div>
     </div>
@@ -71,7 +100,11 @@ export default {
       userinfo: {},
       history: {},
       isHistory: false,
-      checkPassword: true
+      checkPassword: true,
+      resetPasswordShow: false,
+      resetPasswordData: {},
+      resetcodeloading: 0,
+      resetPasswordFields: []
     };
   },
   created() {
@@ -87,18 +120,48 @@ export default {
     this.getCode();
   },
   methods: {
+    async resetPassword() {
+      if (!this.resetPasswordData.code) {
+        this.$alert("请输入手机验证码");
+      }
+      let { data } = await this.axios("/adminapi/Login/editpass", {
+        data: this.resetPasswordData
+      });
+      if (data.code) {
+        this.resetPasswordShow = false;
+      }
+    },
+    async getMobileCode() {
+      if (!this.resetPasswordData.mobile) {
+        this.$alert("请输入手机号码");
+        return;
+      }
+      let i = 60;
+      let { data } = await this.axios("/adminapi/Login/forget", {
+        data: this.resetPasswordData
+      });
+      if (data.code) {
+        let timer = setInterval(() => {
+          i--;
+          this.resetcodeloading = i;
+          if (i == 0) {
+            clearInterval(timer);
+          }
+        }, 1000);
+      }
+    },
     async down() {
       alert("即将上线，敬请期待……");
     },
     register() {
       this.url = "/adminapi/Login/register";
-      this.title = "注册";
+      this.title = "用户注册";
       this.isLogin = true;
       this.ruleForm = {};
     },
     login() {
       this.url = "/adminapi/Login/login";
-      this.title = "登录";
+      this.title = "用户登录";
       this.isLogin = false;
       this.ruleForm = {};
     },

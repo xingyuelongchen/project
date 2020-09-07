@@ -6,7 +6,7 @@ Create Time  : 2020-03-28
 <template>
   <el-table ref="table" id="exportTab" row-key="id" class="mix-table" v-loading="!fieldsData.length && loading" height='100%' :max-height="options.height || '95%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
     <template v-for="(item,index ) in field">
-      <template v-if="'expand'==item.type">
+      <template v-if="item.type == 'expand'">
         <el-table-column :key="index" :type="item.type" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable">
           <template slot-scope="props">
             <div class="demo-table-expand">
@@ -21,7 +21,7 @@ Create Time  : 2020-03-28
         </el-table-column>
       </template>
       <template v-else-if="['selection','index','expand'].includes(item.type)">
-        <el-table-column :key="index" :type="item.type" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable" />
+        <el-table-column :key="index" :type="item.type || 'selection'" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable" />
       </template>
       <template v-else-if="item.type && !['selection','index','expand'].includes(item.type)">
         <el-table-column :key="index" :prop="item.prop" :label="item.label" :filters="item.filters" :sortable="!!item.sort" :fixed="item.fixed||false" :formatter="item.formatter" :class-name="item.className||''" :resizable="item.resizable || false" :header-align="item.headAlign||item.align||'left'" :align="item.align||item.headAlign||'left'" :width="item.width||item.minWidth ||''" :show-overflow-tooltip="item.tootip || true" :reserve-selection="item.reserveSelection||false" :min-width="item.minWidth || item.type=='manage'?'178':'0'">
@@ -49,7 +49,7 @@ Create Time  : 2020-03-28
               </el-dropdown>
             </template>
             <template v-if="item.type == 'tagdown'">
-              <el-dropdown>
+              <el-dropdown :size="item.size||options.size||'mini'">
                 <el-tag class="hover" effect="plain" :size="item.size||options.size||'mini'" :type="toogle(item,scope.row[item.prop])">{{ getTagDownLabel(item,scope) }}</el-tag>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-for="(k,i) in item.options" :key="i" @click.self.stop.native="dropDown(item,k,scope)">{{k.label}}</el-dropdown-item>
