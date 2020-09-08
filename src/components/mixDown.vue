@@ -43,7 +43,7 @@ export default {
         if (data.status == -1) this.status = "exception";
         if (data.status == 2) this.status = "success";
         if (data.status == 3) this.status = "success";
-        if (data.progress) this.progress = data.progress;
+        if (data.progress) this.progress = Math.floor(data.progress*1) ;
         this.show = true;
       });
     }

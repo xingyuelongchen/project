@@ -10,12 +10,13 @@ Create Time  : 2020-08-12
         <el-button style="padding:6px;" type="primary" @click="addUpdate">添加更新</el-button>
         <el-button style="padding:6px;" type="danger" @click="del(false)">删除当前更新</el-button>
       </div>
-      <div class="right">
-        <mixTable v-model="tableData" :fields="tableFields" />
-      </div>
+      <mixTable v-model="tableData" :fields="tableFields" />
     </el-card>
     <el-dialog :visible.sync="addUpdateShow" title="添加更新" width="500px">
-      <mixForm v-model="addUpdateData" :fields="addUpdateFields" />
+      <mixForm v-model="addUpdateData" :fields="addUpdateFields" @uploadStatus='uploadStatus' />
+      <div slot="footer">
+        <el-button type="primary" @click="submitUpdate" :loading="loading">提交更新</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -27,6 +28,7 @@ export default {
       version: {},
       addUpdateShow: false,
       addUpdateData: {},
+      loading: false,
       tableData: [],
       tableFields: [
         { label: "更新版本", prop: "version" },
@@ -37,13 +39,7 @@ export default {
         { labelWidth: 75, label: "日志标题", type: "text", prop: "title" },
         { labelWidth: 75, label: "更新版本", type: "text", prop: "version" },
         { labelWidth: 75, label: "更新描述", type: "text", prop: "remark" },
-        { labelWidth: 75, label: "更新内容", type: "upload", prop: "file" },
-        {
-          labelWidth: 75,
-          label: "提交更新",
-          click: this.submitUpdate,
-          type: "button"
-        }
+        { labelWidth: 75, label: "更新内容", type: "upload", prop: "file" }
       ],
       list: []
     };
@@ -55,18 +51,25 @@ export default {
     addUpdate() {
       this.addUpdateShow = true;
     },
+    uploadStatus(loading) {
+      this.loading = loading;
+    },
     async submitUpdate() {
-      let form = new FormData();
-      for (let k in this.addUpdateData) {
-        form.append(k, this.addUpdateData[k]);
-      }
-      let { data } = await this.axios("/adminapi/Edition/add", {
-        data: form
-      });
-      if (data.code) {
-        this.addUpdateShow = false;
-        this.addUpdateData = {};
-      }
+      this.$confirm("确定更新版本？", "提示", { type: "warning" }).then(
+        async () => {
+          let form = new FormData();
+          for (let k in this.addUpdateData) {
+            form.append(k, this.addUpdateData[k]);
+          }
+          let { data } = await this.axios("/adminapi/Edition/add", {
+            data: form
+          });
+          if (data.code) {
+            this.addUpdateShow = false;
+            this.addUpdateData = {};
+          }
+        }
+      );
     },
     async getData() {
       let { data } = await this.axios("/adminapi/Edition/list");
@@ -79,7 +82,7 @@ export default {
 </script>
 <style lang='less' scoped>
 .content-wrap {
-  .el-card{
+  .el-card {
     height: 100%;
   }
   .left {

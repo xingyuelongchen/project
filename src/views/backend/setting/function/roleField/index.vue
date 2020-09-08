@@ -13,14 +13,14 @@ Create Time  : 2020-03-27
         </el-scrollbar>
       </el-card>
       <div class="content-cols">
-        <el-card type="border-card" style="height:200px">
+        <el-card type="border-card" style="height:200px;max-height: 200px;min-height: 200px;">
           <div slot="header">
             关联数据表
             <el-button style="float: right; padding: 3px 0" type="text" @click="dialogVisible=true">新增关联表</el-button>
           </div>
           <mixTable :key="tableData && tableData.length || 'key'" :options="{height:'110px'}" v-model="tableData" :fields="tabelFields" />
         </el-card>
-        <el-tabs type="border-card" style="flex:1 1 auto">
+        <el-tabs type="border-card" style="height: calc(100% - 200px);">
           <el-tab-pane label="菜单关联表">
             <el-tabs v-model="activeTabName" class="tabs-top">
               <el-tab-pane label="数据表格" name="a" :key="key+1">

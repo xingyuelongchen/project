@@ -99,9 +99,16 @@ export default {
                 label: "编辑",
                 style: "primary",
                 click: this.dialog,
-                role: 216
+                role: 216,
+                isShow: { type: "==", prop: "finance_audit_status", val: "0" }
               },
-              { label: "删除", style: "danger", click: this.del, role: 225 },
+              {
+                label: "删除",
+                style: "danger",
+                click: this.del,
+                role: 225,
+                isShow: { type: "==", prop: "finance_audit_status", val: "0" }
+              },
               {
                 label: "更正",
                 style: "danger",

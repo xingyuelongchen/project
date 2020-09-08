@@ -7,17 +7,17 @@ Create Time  : 2020-08-06
   <div class="content-cols">
     <el-tabs v-model="searchData.type" @tab-click="handleClick">
       <el-tab-pane label="日数据" name="1" />
-      <el-tab-pane label="指定时间" name="2" />
+      <!-- <el-tab-pane label="指定时间" name="2" /> -->
       <el-tab-pane label="月数据" name="3" />
     </el-tabs>
     <mixSearch v-model="searchData" :fields="searchFields" />
-    <mixTable :key="key" v-model="tableData" :fields="tableFields" ref="table" />
+    <mixTable :key="key" v-model="tableData" :fields="tableFields" /> 
     <mixPage v-model="page" />
   </div>
 </template>
 <script>
 export default {
-  name: "Salespersonal",
+  name: "Crosstotal",
   data() {
     return {
       key: 0,
@@ -25,66 +25,42 @@ export default {
       searchFields: [],
       tableData: [],
       tableFields: [],
-      dept: [],
       page: { page: 1, limit: 10, total: 0 }
     };
   },
-  async created() {
-    await this.getData();
-    await this.getTable();
-    await this.getDept();
+  created() {
+    this.getData();
+    this.getTable();
     this.handleClick();
   },
 
   methods: {
-    async getDept() {
-      if (this.$store.state.userinfo.role.includes(208) || this.$store.state.userinfo.role.includes(0)) {
-        let { data } = await this.axios("/adminapi/Salepersonal/dept");
-        if (data.code) this.dept = data.data;
-      }
-    },
     handleClick() {
       let arr = [];
       if (this.searchData.type == "1") {
         arr[0] = { label: "选择", type: "date", prop: "date", span: 3 };
       }
       if (this.searchData.type == "2") {
-        arr[0] = {
-          label: "选择",
-          type: "daterange",
-          prop: "date",
-          span: 5.5
-        };
+        arr[0] = { label: "选择", type: "date", prop: "date", span: 5.5 };
       }
       if (this.searchData.type == "3") {
         arr[0] = { label: "选择", type: "month", prop: "date", span: 3 };
       }
-      arr.push(
-        { label: "昵称", type: "text", prop: "nickname", span: 3 },
-        {
-          label: "部门",
-          type: "select",
-          prop: "dept",
-          span: 3,
-          options: this.dept,
-          role: 208
-        },
-        {
-          type: "button",
-          span: 3,
-          options: [
-            { label: "搜索", click: this.getData },
-            { label: "导出", click: this.export, style: "danger", role: 147 }
-          ]
-        }
-      );
+      arr.push({
+        type: "button",
+        span: 3,
+        options: [
+          { label: "搜索", click: this.getData },
+          { label: "导出", role: 166, style: "danger", click: this.export }
+        ]
+      });
       let { type } = this.searchData;
       this.searchData = { type };
       this.searchFields = arr;
       this.getData();
     },
     async getData() {
-      let { data } = await this.axios("/adminapi/Salepersonal/list", {
+      let { data } = await this.axios("/adminapi/Corsstotal/list", {
         data: Object.assign({}, this.page, this.searchData)
       });
       if (data.code) {
@@ -94,7 +70,7 @@ export default {
     },
     async getTable() {
       let { data } = await this.axios("/adminapi/Publics/table_th", {
-        data: { table_id: 6 }
+        data: { table_id: 15 }
       });
       if (data.code) {
         this.key = Math.random();
@@ -102,9 +78,11 @@ export default {
       }
     },
     async export() {
-      let { data } = await this.axios("/adminapi/Salepersonal/export");
+      let { data } = await this.axios("/adminapi/Corsstotal/export");
       if (data.code) this.$refs.table.outTab();
     }
   }
 };
-</script> 
+</script>
+<style lang='less' scoped>
+</style>

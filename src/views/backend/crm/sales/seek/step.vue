@@ -12,16 +12,15 @@ Create Time  : 2020-08-26
         </el-page-header>
       </div>
       <div class="step-box">
-        <div v-if="isDeal" class="deal step-top"> 已完结 </div>
+        <!-- <div v-if="isDeal" class="deal step-top"> 已完结 </div>
         <div v-else class="init step-top">
           <el-steps :space="200" :active="stepData.progress-1" finish-status="success" class="steps" align-center>
-            <template v-for="(item,index) in stepList">
-              <!-- <el-step :title="item.label" :key="index" @click.native="stepClick(item,index)"></el-step> -->
+            <template v-for="(item,index) in stepList"> 
               <el-step :title="item.label" :key="index"></el-step>
             </template>
           </el-steps>
           <mixForm v-model="stepData" :fields="stepFields" />
-        </div>
+        </div> -->
         <div class="step-bottom" v-if="label_list.length">
           <el-scrollbar>
             <el-timeline>
@@ -213,7 +212,7 @@ export default {
         font-weight: bold;
       }
       .step-bottom {
-        border: 1px solid #eee;
+        // border: 1px solid #eee;
         flex: auto;
         overflow: hidden;
         .el-timeline {

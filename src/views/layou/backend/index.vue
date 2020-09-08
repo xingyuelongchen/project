@@ -121,6 +121,11 @@ export default {
           show: true
         },
         { label: "检查更新", event: this.update, show: isElectron() },
+        // {
+        //   label: "喜报",
+        //   event: () => this.onMessage({ type: "dialog", data: {} }),
+        //   show: true
+        // },
         {
           label: "退出登录",
           event: () => this.$router.push("/login"),

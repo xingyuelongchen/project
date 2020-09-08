@@ -51,6 +51,9 @@ export default {};
     grid-template-columns: 25% auto;
     grid-gap: 2%;
     box-sizing: border-box;
+    > div {
+      height: auto;
+    }
   }
   // 主体内容横向左中右布局
   .content-left-center-right {
@@ -58,6 +61,9 @@ export default {};
     grid-template-columns: 32% 32% 32%;
     grid-gap: 2%;
     box-sizing: border-box;
+    > div {
+      height: auto;
+    }
   }
 
   .el-card {
@@ -69,18 +75,21 @@ export default {};
   .el-tabs {
     width: 100%;
     // overflow: hidden;
-    .el-tabs {
-      height: 100%;
-    }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     .el-tabs__content {
-      height: calc(100% - 40px);
+      flex: 1 1 auto;
+      display: flex;
       .el-tab-pane {
-        height: 100%;
+        flex: auto;
+        display: flex;
       }
     }
   }
   .el-scrollbar {
     height: 100%;
+    width: 100%;
     .el-scrollbar__wrap {
       overflow-x: hidden;
     }

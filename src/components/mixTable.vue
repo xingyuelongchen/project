@@ -485,6 +485,7 @@ export default {
       }
       // 提示信息
       if (data.tooltip) this.tooltip(row[data.tooltip]);
+      if (data.dialog) data.dialog(row, data);
       // click事件
       if (!data.click || data.dblClick) return;
       this.click(data["click"], row, column, cell, event, data);

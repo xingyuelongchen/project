@@ -7,8 +7,9 @@ export default
     { path: 'roles', name: 'Adminroles', meta: { keepAlive: true, role: 85, title: '权限分配', }, component: () => import('@/views/backend/crm/admin/roles') },
     // 财务管理
     { path: 'finance', name: 'Finance', meta: { keepAlive: true, role: 83, title: '财务管理', }, component: () => import('@/views/layou') },
-    { path: 'index', name: 'Financeindex', meta: { keepAlive: true, role: 84, title: '顾问审核', }, component: () => import('@/views/backend/crm/finance/index/') },
+    { path: 'index', name: 'Financeindex', meta: { keepAlive: true, role: 84, title: '顾问销售审核', }, component: () => import('@/views/backend/crm/finance/index/') },
     { path: 'refund', name: 'Financerefund', meta: { keepAlive: true, role: 199, title: '售后退款', }, component: () => import('@/views/backend/crm/finance/refund') },
+    { path: 'tutor', name: 'Financetutor', meta: { keepAlive: true, role: 238, title: ' 导师销售审核', }, component: () => import('@/views/backend/crm/finance/tutor') },
     // 咨询管理
     { path: 'customer', name: 'Customer', meta: { keepAlive: true, role: 10, title: '咨询管理', }, component: () => import('@/views/layou') },
     { path: 'list', name: 'Customerlist', meta: { keepAlive: true, role: 32, title: '咨询列表', }, component: () => import('@/views/backend/crm/customer/list') },
@@ -39,6 +40,8 @@ export default
     { path: 'cross', name: 'cross', meta: { keepAlive: true, role: 212, title: '跨境中心', }, component: () => import('@/views/layou'), },
     { path: 'receive', name: 'Crossreceive', meta: { keepAlive: true, role: 220, title: '接待设置', }, component: () => import('@/views/backend/crm/cross/receive') },
     { path: 'crosstutor', name: 'Crosstutor', meta: { keepAlive: true, role: 213, title: '导师记录', }, component: () => import('@/views/backend/crm/cross/crosstutor') },
+    { path: 'personal', name: 'Crossdata', meta: { keepAlive: true, role: 242, title: '个人数据', }, component: () => import('@/views/backend/crm/cross/personal') },
+    { path: 'total', name: 'Crosstotal', meta: { keepAlive: true, role: 243, title: '总数据', }, component: () => import('@/views/backend/crm/cross/total') },
 
 
     // 质检中心

@@ -109,6 +109,7 @@ function sendUpdateMessage(message) {
 }
 // 更新处理器
 function updateHandle() {
+  autoUpdater.checkForUpdates();
   var versionInfo = '';
   let message = {
     error: { status: -1, title: '检测更新异常', msg: '检测更新异常' },

@@ -11,13 +11,13 @@ Create Time  : 2020-08-06
       <el-tab-pane label="月数据" name="3" />
     </el-tabs>
     <mixSearch v-model="searchData" :fields="searchFields" />
-    <mixTable :key="key" v-model="tableData" :fields="tableFields" ref="table" />
+    <mixTable :key="key" v-model="tableData" :fields="tableFields" />
     <mixPage v-model="page" />
   </div>
 </template>
 <script>
 export default {
-  name: "Salespersonal",
+  name: "Crossdata",
   data() {
     return {
       key: 0,
@@ -25,24 +25,16 @@ export default {
       searchFields: [],
       tableData: [],
       tableFields: [],
-      dept: [],
       page: { page: 1, limit: 10, total: 0 }
     };
   },
-  async created() {
-    await this.getData();
-    await this.getTable();
-    await this.getDept();
+  created() {
+    this.getData();
+    this.getTable();
     this.handleClick();
   },
 
   methods: {
-    async getDept() {
-      if (this.$store.state.userinfo.role.includes(208) || this.$store.state.userinfo.role.includes(0)) {
-        let { data } = await this.axios("/adminapi/Salepersonal/dept");
-        if (data.code) this.dept = data.data;
-      }
-    },
     handleClick() {
       let arr = [];
       if (this.searchData.type == "1") {
@@ -62,19 +54,11 @@ export default {
       arr.push(
         { label: "昵称", type: "text", prop: "nickname", span: 3 },
         {
-          label: "部门",
-          type: "select",
-          prop: "dept",
-          span: 3,
-          options: this.dept,
-          role: 208
-        },
-        {
           type: "button",
           span: 3,
           options: [
             { label: "搜索", click: this.getData },
-            { label: "导出", click: this.export, style: "danger", role: 147 }
+            { label: "导出", role: 164, style: "danger", click: this.export }
           ]
         }
       );
@@ -84,7 +68,7 @@ export default {
       this.getData();
     },
     async getData() {
-      let { data } = await this.axios("/adminapi/Salepersonal/list", {
+      let { data } = await this.axios("/adminapi/Corssppersonal/list", {
         data: Object.assign({}, this.page, this.searchData)
       });
       if (data.code) {
@@ -94,7 +78,7 @@ export default {
     },
     async getTable() {
       let { data } = await this.axios("/adminapi/Publics/table_th", {
-        data: { table_id: 6 }
+        data: { table_id: 14 }
       });
       if (data.code) {
         this.key = Math.random();
@@ -102,9 +86,11 @@ export default {
       }
     },
     async export() {
-      let { data } = await this.axios("/adminapi/Salepersonal/export");
+      let { data } = await this.axios("/adminapi/Corssppersonal/export");
       if (data.code) this.$refs.table.outTab();
     }
   }
 };
-</script> 
+</script>
+<style lang='less' scoped>
+</style>

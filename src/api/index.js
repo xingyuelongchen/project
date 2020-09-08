@@ -37,6 +37,14 @@ function res(res) {
             message: res.data.msg,
         })
     }
+    if (res.data.code == 5) {
+        notification && notification.close();
+        notification = Notification({
+            type: 'error',
+            title: '账户登录过期，请重新登录！',
+            message: res.data.msg,
+        })
+    }
     return res
 }
 function resError(error) {

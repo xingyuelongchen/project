@@ -303,6 +303,7 @@ export default {
       this.$emit("input", { ...this.fieldsData });
     },
     async onUpload(event, item) {
+      this.$emit("uploadStatus", true);
       this.fileList = event.target.files || [];
       let formData = new FormData();
       this.fileList.forEach(e => {
@@ -315,7 +316,8 @@ export default {
         this.fieldsData[item.prop] = data.data;
       }
       this.fileList = [];
-      event.target.outerHTML = event.target.outerHTML;
+      event.target.outerHTML = "";
+      this.$emit("uploadStatus", false);
     },
     previewFile(file, files) {
       console.log(file, files);

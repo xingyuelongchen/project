@@ -9,7 +9,7 @@ Create Time  : 2020-08-18
       <div class="touxiang">
         <img :src="value.data.pic" alt="">
       </div>
-      <div class="ranking">
+      <div class="ranking" v-if="value.data">
         <div class="item" v-for="(item,index) in value.data.sort" :key="index">
           <img src="~@/assets/image/4.png" alt="" v-if="!index" class="icon">
           <el-avatar :src="item.pic" :size="75" />
@@ -21,7 +21,7 @@ Create Time  : 2020-08-18
         </div>
       </div>
       <div class="message">
-        <span v-text="value.data.msg"></span>
+        <span v-if="value.data" v-text="value.data.msg"></span>
       </div>
     </div>
   </div>

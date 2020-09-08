@@ -53,18 +53,9 @@ Create Time  : 2020-03-27
         <el-button type="primary" @click="saveOrder">保存</el-button>
       </span>
     </el-dialog>
-    <!-- <el-dialog title="客户状态" :visible.sync="statusShow" width="500px">
-      <div style="max-height:500px;height:250px;overflow:hidden">
-        <el-scrollbar>
-          <mixForm v-model="statusData" :fields="statusFields" style="border:none;padding-right:20px" />
-        </el-scrollbar>
-      </div>
-    </el-dialog> -->
-    <!-- <el-dialog title="历史状态" :visible.sync="historyShow" width="900px">
-      <div style="height:350px">
-        <mixTable v-model="historyData" :fields="historyFields" />
-      </div>
-    </el-dialog> -->
+    <el-dialog :visible.sync="jinduShow" title="客户状态" width="500px">
+      <mixForm v-model="statusFormData" :fields="statusFormFields" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -78,6 +69,7 @@ export default {
       show: false,
       maxOrder: null,
       stepShow: false,
+      jinduShow: false,
       page: {
         limit: 10,
         page: 1,
@@ -214,7 +206,9 @@ export default {
       editForm: {},
       editFields: [],
       close: null,
-      selectData: null
+      selectData: null,
+      statusFormData: { label_1: 0 },
+      statusFormFields: []
     };
   },
   watch: {
@@ -281,7 +275,7 @@ export default {
       this.stepShow = true;
 
       // this.statusShow = true;
-      this.statusData = { customer_id: item.id };
+      this.statusData = item;
       // let { data } = await this.axios("/adminapi/Salecustomer/customer_label");
       // if (data.code) {
       //   this.statusFields = [
@@ -384,7 +378,13 @@ export default {
         data: { table_id: 10 }
       });
       if (data.code) {
-        let arr = data.data.concat([
+        let arr = data.data.map(e => {
+          if (e.prop == "label") {
+            e.click = this.tableDialog;
+          }
+          return e;
+        });
+        arr = arr.concat([
           {
             label: "操作",
             type: "manage",
@@ -414,7 +414,7 @@ export default {
               },
               {
                 size: "mini",
-                label: "服务状态",
+                label: "历史状态",
                 style: "primary",
                 click: this.addStatus
               }
@@ -423,6 +423,68 @@ export default {
         ]);
         arr.unshift({ type: "selection", fixed: "left" });
         this.tableFields = arr;
+      }
+    },
+    async changeStep() {
+      await this.axios("/adminapi/Salecustomer/label_add", {
+        data: this.statusFormData
+      });
+      this.jinduShow = false;
+      this.getData();
+    },
+    async tableDialog(item) {
+      // 客户状态进度修改
+      let { data } = await this.axios("/adminapi/Salecustomer/customer_label", {
+        data: item
+      });
+      if (data.code) {
+        let options = data.data.label[0].children.filter(e => {
+          if (!data.data.label_log) return false;
+          console.log(e.progress, data.data.label_log.progress);
+          return e.progress == data.data.label_log.progress;
+        });
+        if (!options.length) options = data.data.label[0].children;
+        options = options[0];
+        this.statusFormData = {
+          customer_id: item.id,
+          label: options.label,
+          label_1: options.id,
+          label_2: options.children[0].id,
+          progress: options.progress
+        };
+
+        this.statusFormFields = [
+          {
+            label: "当前进度：",
+            prop: "label",
+            wrap: true,
+            type: "text",
+            readonly: true,
+            options
+          },
+          {
+            label: "完成状态：",
+            prop: "label_2",
+            wrap: true,
+            type: "radio",
+            options: options.children,
+            change: this.changeServe
+          },
+          {
+            label: "备注",
+            prop: "remak",
+            type: "textarea",
+            wrap: true
+          },
+          {
+            label: "确定",
+            type: "button",
+            style: "primary",
+            click: this.changeStep,
+            wrap: true
+          }
+        ];
+        this.jinduShow = true;
       }
     },
     async gongxiang() {
