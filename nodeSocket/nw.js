@@ -1,11 +1,11 @@
-const name = 'guangyizhou';//项目名称  
+const name = 'guangyizhouSocket';//项目名称  
 let Service = require('node-windows').Service;  
 let EventLogger = require('node-windows').EventLogger;  
 let log = new EventLogger(name);  
 let svc = new Service({  
     name,//服务名称  
     description: '启动广艺舟socket服务',  
-    script: require('path').join(__dirname,'index.js'),//要执行的node文件  
+    script: require('path').join(__dirname,'app.js'),//要执行的node文件  
     wait: 2,//程序重启的时间间隔  
     grow: .5, //程序重启的时间增长值  
     maxRetries: 40 //60秒内最大重启次数  

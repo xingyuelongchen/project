@@ -105,7 +105,6 @@ Create Time  : 2020-07-22
 </template>
 <script>
 import isElectron from "is-electron";
-// import WS from "@/api/websocket";
 import IO from "@/api/socket-io";
 export default {
   name: "Backend",
@@ -161,8 +160,6 @@ export default {
     }
   },
   created() {
-    // this.ws = new WS({ hander: this.onMessage });
-    // this.ws.init();
     IO(this.onMessage);
   },
   updated() {

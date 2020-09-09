@@ -12,7 +12,18 @@ import VXETable from 'vxe-table';
 import 'vxe-table/lib/index.css';
 import version from '../package.json';
 import isElectron from "is-electron";
+import ECharts from 'vue-echarts';
+import echarts from 'echarts';
+import 'echarts/theme/dark';
+import 'echarts/theme/blue';
+import 'echarts/theme/jazz';
+import 'echarts/theme/dark-blue';
+import 'echarts/theme/fruit';
+// import '@/assets/echarts/theme/zidingyi'
+
 Vue.config.productionTip = false;
+Vue.component('v-chart', ECharts);
+Vue.use(echarts);
 Vue.use(VXETable)
 Vue.prototype.$modal = VXETable.modal
 Vue.directive('role', {

@@ -8,13 +8,12 @@ export default function (callback) {
         type: 'init',
         data: null,
         create_time: Date.now(),
-        id: JSON.parse(window.localStorage.getItem('userinfo')).id,
+        uid: JSON.parse(window.localStorage.getItem('userinfo')).id,
         department: JSON.parse(window.localStorage.getItem('userinfo')).department || 0,
     }
-    // msg.type = typeof obj;
-    msg = JSON.stringify(msg);
-    const socket = IO(socketUrl);
-    socket.emit('init', msg);
+    const socket = IO(socketUrl, {
+        query: msg
+    });
     socket.on('message', data => {
         data = JSON.parse(data);
         if (data.type == 'message') {
@@ -37,5 +36,6 @@ export default function (callback) {
             this.ipcRenderer.send('dialog', data);
         }
         callback(data)
-    })
+    });
+    Store.commit('setWS', socket)
 }

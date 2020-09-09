@@ -34,6 +34,14 @@ module.exports = {
                 //     '^/api': '/homes'
                 // }
             },
+            "/statistics/": {
+                target: config.baseUrlDev,
+                ws: true,
+                changeOrigin: true
+                // pathRewrite: {
+                //     '^/api': '/homes'
+                // }
+            },
             "/uploads": {
                 target: config.baseUrlDev,
                 ws: true,

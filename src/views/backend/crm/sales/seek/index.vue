@@ -56,6 +56,9 @@ Create Time  : 2020-03-27
     <el-dialog :visible.sync="jinduShow" title="客户状态" width="500px">
       <mixForm v-model="statusFormData" :fields="statusFormFields" />
     </el-dialog>
+    <el-dialog :visible.sync="tagShow" title="客户信息" width="500px">
+      <mixForm v-model="tagData" :fields="tagFields" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -70,6 +73,9 @@ export default {
       maxOrder: null,
       stepShow: false,
       jinduShow: false,
+      tagShow: false,
+      tagData: {},
+      tagFields: [],
       page: {
         limit: 10,
         page: 1,
@@ -382,6 +388,9 @@ export default {
           if (e.prop == "label") {
             e.click = this.tableDialog;
           }
+          if (e.prop == "tag") {
+            e.click = this.addTag;
+          }
           return e;
         });
         arr = arr.concat([
@@ -431,6 +440,32 @@ export default {
       });
       this.jinduShow = false;
       this.getData();
+    },
+    async addTag(item) {
+      let { data } = await this.axios("/adminapi/Publics/TableFormEdit", {
+        data: { table_id: 16, type: "add" }
+      });
+      let { data: result } = await this.axios(
+        "/adminapi/Salecustomer/tag_info",
+        { data: item }
+      );
+
+      if (data.code) {
+        this.tagFields = data.data.concat({
+          label: "保存",
+          type: "button",
+          click: this.saveTag
+        });
+        this.tagData = { ...item, ...result.data };
+        this.tagShow = true;
+      }
+    },
+    async saveTag() {
+      let { data } = await this.axios("/adminapi/Salecustomer/tag_add", {
+        data: this.tagData
+      });
+      if (data.code) this.tagShow = false;
+      this.getData()
     },
     async tableDialog(item) {
       // 客户状态进度修改

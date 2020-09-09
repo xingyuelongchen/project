@@ -9,7 +9,8 @@ export default new Vuex.Store({
     tabmenu: [],
     routes: [],
     update: false,
-    status: {}
+    status: {},
+    socket: null
   },
   mutations: {
     updateMessage(state, data) {
@@ -22,12 +23,16 @@ export default new Vuex.Store({
     // 清空数据
     setClear(state) {
       for (let k in state) {
-        if (state[k].constructor == Array) state[k] = [];
-        if (state[k].constructor == Object) state[k] = {};
-        if (state[k].constructor == Boolean) state[k] = false;
-        if (state[k].constructor == String) state[k] = '';
-        if (state[k].constructor == Number) state[k] = 0;
+        if (state[k] == null) state[k] = null;
+        else if (state[k].constructor == Array) state[k] = [];
+        else if (state[k].constructor == Object) state[k] = {};
+        else if (state[k].constructor == Boolean) state[k] = false;
+        else if (state[k].constructor == String) state[k] = '';
+        else if (state[k].constructor == Number) state[k] = 0;
       }
+    },
+    setWS(state, data) {
+      state.socket = data
     },
     // 刷新后初始化
     setInit(state, data) {

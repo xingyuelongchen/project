@@ -1,6 +1,7 @@
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+const router = require('./router')
 const bodyParser = require('body-parser');
 const formidableMiddleware = require('express-formidable');
 server.listen(3000, () => {
