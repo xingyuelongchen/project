@@ -82,7 +82,8 @@ export default {
           options: [
             { label: "微信", value: 1 },
             { label: "QQ", value: 2 },
-            { label: "微信、QQ", value: 3 }
+            { label: "手机号", value: 3 },
+            { label: "全部", value: 4 }
           ]
         },
         {
@@ -93,7 +94,8 @@ export default {
           options: [
             { label: "信息流", value: 1 },
             { label: "搜索引擎", value: 2 },
-            { label: "信息流、搜索引擎", value: 3 }
+            { label: "其它", value: 3 },
+            { label: "全部", value: 4 }
           ]
         },
 
@@ -151,7 +153,8 @@ export default {
           options: [
             { label: "信息流", value: 1 },
             { label: "搜索引擎", value: 2 },
-            { label: "信息流、搜索引擎", value: 3 }
+            { label: "其它", value: 3 },
+            { label: "全部", value: 4 }
           ]
         },
         {
@@ -164,7 +167,8 @@ export default {
           options: [
             { label: "微信", value: 1 },
             { label: "QQ", value: 2 },
-            { label: "微信、QQ", value: 3 }
+            { label: "手机号", value: 3 },
+            { label: "全部", value: 4 }
           ]
         },
         {

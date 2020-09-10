@@ -67,6 +67,7 @@ export default {
           if (data.code) {
             this.addUpdateShow = false;
             this.addUpdateData = {};
+            this.getData()
           }
         }
       );

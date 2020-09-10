@@ -61,8 +61,10 @@ Create Time  : 2020-07-22
             </el-form-item>
             <el-form-item>
               <div style="height:40px;display: flex;justify-content:space-between">
+                <span v-if="isElectron">
+                  <el-checkbox v-model="checkPassword">记住账号</el-checkbox>
+                </span>
                 <span>
-                  <el-checkbox v-model="checkPassword" v-if="isElectron">记住账号</el-checkbox>
                   <el-link :underline="false" type="primary" @click="()=>{this.resetPasswordShow=true;this.title='找回密码'}">找回密码</el-link>
                 </span>
                 <div>
@@ -85,6 +87,7 @@ Create Time  : 2020-07-22
     <div class="down" v-if="!isElectron" @click="down">
       下载客户端
     </div>
+    <a :href="downUrl" v-show="false" ref='downDom' target="_blank" download rel="noopener noreferrer"></a>
   </div>
 </template>
 <script>
@@ -94,6 +97,7 @@ export default {
     return {
       title: "登录",
       url: "/adminapi/Login/login",
+      downUrl: "",
       ruleForm: {},
       isLogin: false,
       code: "",
@@ -152,6 +156,11 @@ export default {
     },
     async down() {
       alert("即将上线，敬请期待……");
+      let { data } = await this.axios("/adminapi/Login/client");
+      if (data.code && data.data.version) {
+        this.downUrl = `/guangyizhou Setup ${data.data.version}.exe`;
+        this.$refs.downDom.target.click();
+      }
     },
     register() {
       this.url = "/adminapi/Login/register";

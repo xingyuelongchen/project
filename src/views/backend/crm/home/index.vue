@@ -381,11 +381,10 @@ export default {
     this.isMobile();
   },
   async mounted() {
-    this.$alert("开启消息语音通知", "提示！", {
-      type: "warning"
-    });
+    // this.$alert("开启消息语音通知", "提示！", {
+    //   type: "warning"
+    // });
     this.$store.state.socket.on("real_time_data", data => {
-      console.log(11111);
       data = JSON.parse(data);
       this.handerData(data);
     });
@@ -676,11 +675,11 @@ img {
     }
   }
   .list {
-    padding: 0 0.2rem;
+    // padding: 0 0.2rem;
     display: grid;
     overflow: hidden;
     grid-template-columns: auto auto auto;
-
+    color: #fff;
     .box {
       margin: 0 0.08rem;
       margin-top: 0.35rem;
@@ -720,7 +719,7 @@ img {
           width: 95%;
           height: 95%;
         }
-        width: 6rem;
+        width: 5rem;
         height: 3rem;
         border: 1px solid #06324e;
         position: relative;

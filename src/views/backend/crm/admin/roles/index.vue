@@ -28,16 +28,12 @@ Create Time  : 2020-07-28
           <div>
             <mixTable v-model="roleLeft" :fields="roleLeftFields" />
             <el-pagination background layout="prev, pager, next, total" :page-size="page.left.limit" :total="page.left.total" :current-page.sync="page.left.page" @current-change="left" />
-            <!-- <div style=" position: absolute;">
-              <mixPage v-model="page.left" />
-            </div> -->
+
           </div>
           <div>
             <mixTable v-model="roleRight" :fields="roleRightFields" />
             <el-pagination background layout="prev, pager, next, total" :page-size="page.right.limit" :total="page.right.total" :current-page.sync="page.right.page" @current-change="right" />
-            <!-- <div style=" position: absolute;">
-              <mixPage v-model="page.right" />
-            </div> -->
+
           </div>
         </div>
       </el-card>
@@ -192,7 +188,7 @@ export default {
 .right-content {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  height: calc(100% - 60px);
   > div {
     flex: 1 1 50%;
     height: 100%;

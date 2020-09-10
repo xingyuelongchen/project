@@ -222,7 +222,15 @@ function setRoles() {
  */
 function cache() {
   window.onbeforeunload = () => {
-    sessionStorage.setItem("Store", JSON.stringify(Store.state));
+    try {
+      delete Store.state.nocach;
+      sessionStorage.setItem("Store", JSON.stringify(Store.state));
+
+    } catch (error) {
+      console.log(error);
+      return false
+
+    }
   };
   window.addEventListener("load", () => {
     let data = sessionStorage.getItem("Store") || false;

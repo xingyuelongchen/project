@@ -8,7 +8,7 @@ Create Time  : 2020-07-22
     <div class="app-header" user="primary">
       <div class="left">
         <div class="item logo" :class="{scale:isCollapse}">
-          <img :src="isCollapse?'http://www.guangyizhou.cn/public/home/assets/logo.png':'http://www.guangyizhou.cn/public/home/assets/logo.png'" />
+          <img :src="isCollapse?logo1:logo" />
         </div>
         <div class="item icon">
           <el-tooltip effect="dark" :content="isCollapse?'展开侧边栏':'折叠侧边栏'" placement="right-end">
@@ -106,10 +106,14 @@ Create Time  : 2020-07-22
 <script>
 import isElectron from "is-electron";
 import IO from "@/api/socket-io";
+import logo from "@/assets/image/logo.png";
+import logo1 from "@/assets/image/logo1.png";
 export default {
   name: "Backend",
   data() {
     return {
+      logo,
+      logo1,
       ws: null,
       loading: false,
       message: [],
@@ -125,11 +129,7 @@ export default {
         //   event: () => this.onMessage({ type: "dialog", data: {} }),
         //   show: true
         // },
-        {
-          label: "退出登录",
-          event: () => this.$router.push("/login"),
-          show: !isElectron()
-        },
+        { label: "退出登录", event: this.logout, show: !isElectron() },
         {
           label: "切换账号",
           event: () => {
@@ -215,12 +215,9 @@ export default {
       this.$router.replace(path);
     },
     logout() {
-      if (isElectron()) {
-        window.localStorage.removeItem("userinfo");
-        window.ipcRenderer.send("close");
-      }
+      window.localStorage.removeItem("userinfo");
+      if (this.isElectron) window.ipcRenderer.send("close");
       this.$router.replace("/login");
-      this.ws.close();
     },
     async refresh() {
       this.loading = true;
@@ -239,13 +236,16 @@ export default {
       }, 500);
     },
     update() {
-      window.ipcRenderer.send("queryUpdate");
+      if (this.isElectron) window.ipcRenderer.send("queryUpdate");
     },
     handerSetting(item) {
       item.event();
     }
   },
   beforeDestroy() {
+    this.$store.state.socket.emit("disconnect");
+    this.$store.state.socket.destroy();
+    this.$store.state.socket.close();
     clearTimeout(this.timer);
   }
 };

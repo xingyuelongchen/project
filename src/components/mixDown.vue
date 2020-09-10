@@ -17,9 +17,10 @@ Create Time  : 2020-08-22
         <div class="info">{{info.msg}}</div>
       </div>
       <div class="foot">
+        <el-button size="mini" v-if="info.status == 4" type="success" @click="show=false">后台更新</el-button>
         <el-button size="mini" :loading="info.status !== 2" v-if="info.status == 2" type="success" @click="update">立即更新</el-button>
-        <el-button size="mini" type="primary" v-if="info.status == 2" @click="show=false">下次启动时更新</el-button>
-        <el-button size="mini" type="warning" v-if="info.status == -1" @click="handerDown">手动下载</el-button>
+        <el-button size="mini" type="primary" v-if="info.status == 2" @click="nextUpdate">退出时更新</el-button>
+        <!-- <el-button size="mini" type="warning" v-if="info.status == -1" @click="handerDown">手动下载</el-button> -->
       </div>
     </div>
   </div>
@@ -41,16 +42,23 @@ export default {
       this.ipcRenderer.on("message", (event, data) => {
         this.info = data;
         if (data.status == -1) this.status = "exception";
-        if (data.status == 2) this.status = "success";
-        if (data.status == 3) this.status = "success";
-        if (data.progress) this.progress = Math.floor(data.progress*1) ;
-        this.show = true;
+        if (data.status >= 0) this.status = "success";
+        if (data.progress) this.progress = Math.floor(data.progress * 1);
+        if (data.status == 2 || data.status == 3) {
+          this.status = "success";
+          this.show = true;
+        }
       });
     }
   },
   methods: {
+    nextUpdate() {
+      this.show = false;
+      window.ipcRenderer.send("nextUpdate");
+    },
     handerDown() {
       console.log("手动下载");
+      this.show = false;
     },
     update() {
       //  发送更新请求

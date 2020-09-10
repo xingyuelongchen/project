@@ -10,7 +10,9 @@ export default new Vuex.Store({
     routes: [],
     update: false,
     status: {},
-    socket: null
+    nocach: {
+      socket: null
+    }
   },
   mutations: {
     updateMessage(state, data) {
@@ -32,7 +34,7 @@ export default new Vuex.Store({
       }
     },
     setWS(state, data) {
-      state.socket = data
+      state.nocach.socket = data
     },
     // 刷新后初始化
     setInit(state, data) {

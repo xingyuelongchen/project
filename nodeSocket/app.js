@@ -20,6 +20,16 @@ io.on('connection', function (socket) {
     // 初始化连接，保存连接数据
     let data = socket.handshake.query || {};
     user[socket.id] = { ...data, socketEvent: socket };
+    // 退出登录时，断开链接
+    socket.on('reuserinfo', (data) => {
+        let userinfo = JSON.parse(data);
+        let obj = {}
+        console.log(socket);
+        Object.keys(user).forEach(e => {
+            if (user[e].uid !== userinfo.uid) obj[e] = user[e]
+        });
+        user = obj
+    });
     socket.on('disconnect', () => {
         let obj = {}
         Object.keys(user).forEach(e => {

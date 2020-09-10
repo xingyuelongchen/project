@@ -11,9 +11,7 @@ export default function (callback) {
         uid: JSON.parse(window.localStorage.getItem('userinfo')).id,
         department: JSON.parse(window.localStorage.getItem('userinfo')).department || 0,
     }
-    const socket = IO(socketUrl, {
-        query: msg
-    });
+    const socket = IO(socketUrl, { query: msg });
     socket.on('message', data => {
         data = JSON.parse(data);
         if (data.type == 'message') {
