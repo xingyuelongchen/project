@@ -44,10 +44,7 @@ export default {
         if (data.status == -1) this.status = "exception";
         if (data.status >= 0) this.status = "success";
         if (data.progress) this.progress = Math.floor(data.progress * 1);
-        if (data.status == 2 || data.status == 3) {
-          this.status = "success";
-          this.show = true;
-        }
+        if (data.status !== 4) this.show = true;
       });
     }
   },

@@ -7,7 +7,7 @@ Create Time  : 2020-08-07
   <div class="content">
     <div class="content-cols">
       <mixSearch v-model="searchData" :fields="searchFields" />
-      <mixTable v-model="tableData" :fields="tableFields" />
+      <mixTable v-model="tableData" :fields="tableFields" :key="key" />
       <mixPage v-model="page" />
     </div>
   </div>
@@ -17,6 +17,7 @@ export default {
   name: "Financeindex",
   data() {
     return {
+      key: 0,
       page: {
         page: 1,
         limit: 10,
@@ -68,8 +69,9 @@ export default {
   },
 
   async created() {
-    await this.getData();
     await this.getHeadeData();
+    await this.getData();
+    this.key = 1;
   },
 
   methods: {

@@ -87,11 +87,12 @@ Create Time  : 2020-07-22
             </template>
           </el-tabs>
         </div>
-        <!-- <keep-alive> -->
         <div class="content-body">
-          <router-view></router-view>
+          <keep-alive>
+            <router-view v-if="$route.meta.keepAlive"></router-view>
+          </keep-alive>
+          <router-view v-if="!$route.meta.keepAlive"></router-view>
         </div>
-        <!-- </keep-alive> -->
       </div>
     </div>
     <audio src="~@/assets/audio/msg.mp3" preload ref="audio" />
