@@ -10,9 +10,6 @@ export default new Vuex.Store({
     routes: [],
     update: false,
     status: {},
-    nocach: {
-      socket: null
-    }
   },
   mutations: {
     updateMessage(state, data) {
@@ -25,20 +22,19 @@ export default new Vuex.Store({
     // 清空数据
     setClear(state) {
       for (let k in state) {
-        if (state[k] == null) state[k] = null;
-        else if (state[k].constructor == Array) state[k] = [];
-        else if (state[k].constructor == Object) state[k] = {};
-        else if (state[k].constructor == Boolean) state[k] = false;
-        else if (state[k].constructor == String) state[k] = '';
-        else if (state[k].constructor == Number) state[k] = 0;
+        if (k !== 'nocach') {
+          if (state[k] == null) state[k] = null;
+          else if (state[k].constructor == Array) state[k] = [];
+          else if (state[k].constructor == Object) state[k] = {};
+          else if (state[k].constructor == Boolean) state[k] = false;
+          else if (state[k].constructor == String) state[k] = '';
+          else if (state[k].constructor == Number) state[k] = 0;
+        }
       }
-    },
-    setWS(state, data) {
-      state.nocach.socket = data
     },
     // 刷新后初始化
     setInit(state, data) {
-      for (let k in state) {
+      for (let k in data) {
         state[k] = data[k]
       }
     },

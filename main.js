@@ -37,7 +37,6 @@ function init() {
       }
     })
   }
-
   // 初始化主进程
   app.setAppUserModelId('com.guangyizhou.pc');
   // 监听事件
@@ -49,7 +48,6 @@ function init() {
     createWindow()
     app.on('activate', function () {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
-
     });
     app.on('ready', function () {
 
@@ -80,7 +78,6 @@ function createWindow() {
       preload: path.join(__dirname, './electron/preload.js')
     }
   });
-
   // 更新程序
   updateHandle();
   autoUpdater.checkForUpdates();

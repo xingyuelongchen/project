@@ -12,18 +12,20 @@ import VXETable from 'vxe-table';
 import 'vxe-table/lib/index.css';
 import version from '../package.json';
 import isElectron from "is-electron";
-import ECharts from 'vue-echarts';
-import echarts from 'echarts';
-import 'echarts/theme/dark';
-import 'echarts/theme/blue';
-import 'echarts/theme/jazz';
-import 'echarts/theme/dark-blue';
-import 'echarts/theme/fruit';
+import VCharts from 'v-charts'
+import socket from './api/socket-io'
+// import ECharts from 'vue-echarts';
+// import echarts from 'echarts';
+// import 'echarts/theme/dark';
+// import 'echarts/theme/blue';
+// import 'echarts/theme/jazz';
+// import 'echarts/theme/dark-blue';
+// import 'echarts/theme/fruit';
 // import '@/assets/echarts/theme/zidingyi'
 
 Vue.config.productionTip = false;
-Vue.component('v-chart', ECharts);
-Vue.use(echarts);
+// Vue.component('v-chart', ECharts);
+// Vue.use(echarts);
 Vue.use(VXETable)
 Vue.prototype.$modal = VXETable.modal
 Vue.directive('role', {
@@ -67,6 +69,8 @@ Vue.directive('move', {
 Vue.prototype.axios = axios;
 Vue.prototype.EXEVERSION = version.version;
 Vue.prototype.isElectron = isElectron();
+Vue.prototype.socket = socket();
+Vue.use(VCharts);
 Vue.use(Element);
 Vue.use(template);
 new Vue({

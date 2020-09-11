@@ -18,7 +18,11 @@ export default {
       key: 0,
       searchData: {},
       tableData: [],
-      searchFields: [],
+      searchFields: [
+        { span: 3, label: "选择", type: "month", prop: "month" },
+        { span: 3, label: "花名", type: "text", prop: "nickname" },
+        { span: 10, label: "搜索", type: "button", click: this.getData }
+      ],
       tableFields: [
         { label: "时间", prop: "date_time" },
         { label: "部门", prop: "dept_id" },
@@ -43,23 +47,25 @@ export default {
   },
   methods: {
     async getDept() {
-      let { data } = await this.axios("/adminapi/Saleforming/dept", {
-        data: {}
-      });
-      if (data.code) {
-        this.searchFields = [
-          { span: 3, label: "选择", type: "month", prop: "month" },
-          { span: 3, label: "花名", type: "text", prop: "nickname" },
-          {
-            span: 3,
-            label: "部门选择",
-            type: "select",
-            prop: "dept_id",
-            options: data.data,
-            role: 250
-          },
-          { span: 10, label: "搜索", type: "button", click: this.getData }
-        ];
+      if (this.$store.state.userinfo.role.includes(250) || this.$store.state.userinfo.role.includes(0)) {
+        let { data } = await this.axios("/adminapi/Saleforming/dept", {
+          data: {}
+        });
+        if (data.code) {
+          this.searchFields = [
+            { span: 3, label: "选择", type: "month", prop: "month" },
+            { span: 3, label: "花名", type: "text", prop: "nickname" },
+            {
+              span: 3,
+              label: "部门选择",
+              type: "select",
+              prop: "dept_id",
+              options: data.data,
+              role: 250
+            },
+            { span: 10, label: "搜索", type: "button", click: this.getData }
+          ];
+        }
       }
     },
     async getData() {

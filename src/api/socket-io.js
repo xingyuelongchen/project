@@ -1,39 +1,19 @@
 import IO from 'socket.io-client';
 import config from '@/config.js';
-import isElectron from "is-electron";
-import Store from '@/store';
-export default function (callback) {
-    let socketUrl = config.get('websocket')
-    let msg = {
-        type: 'init',
-        data: null,
-        create_time: Date.now(),
-        uid: JSON.parse(window.localStorage.getItem('userinfo')).id,
-        department: JSON.parse(window.localStorage.getItem('userinfo')).department || 0,
+
+export default function () {
+    let socketUrl = config.get('websocket');
+    const socket = IO(socketUrl);
+    if (window.localStorage.userinfo) {
+        let userinfo = JSON.parse(window.localStorage.userinfo)
+        let msg = {
+            type: "crm",
+            data: null,
+            create_time: userinfo.dateTime,
+            uid: userinfo.id,
+            department: userinfo.department || 0
+        };
+        socket.emit("init", JSON.stringify(msg));
     }
-    const socket = IO(socketUrl, { query: msg });
-    socket.on('message', data => {
-        data = JSON.parse(data);
-        if (data.type == 'message') {
-            Store.commit('updateMessage', true)
-            // 桌面应用端
-            if (isElectron()) {
-                this.ipcRenderer.send('msg', data);
-            } else {
-
-                // 浏览器端 系统信息
-                if (!window.Notification) return;
-                let options = { dir: "ltr", icon: 'favicon.ico', data: data.data.msg, timeoutType: 'never', };
-                let notification = new window.Notification(data.data.title, options);
-                notification.onclick = window.focus;
-            }
-
-        }
-        if (data.type == 'dialog' && isElectron()) {
-            // 桌面应用端 dialog通知
-            this.ipcRenderer.send('dialog', data);
-        }
-        callback(data)
-    });
-    Store.commit('setWS', socket)
+    return socket
 }

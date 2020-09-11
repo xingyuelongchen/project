@@ -18,17 +18,14 @@ server.listen(config.server.port, config.server.domain, () => {
 var user = {};
 io.on('connection', function (socket) {
     // 初始化连接，保存连接数据
-    let data = socket.handshake.query || {};
-    user[socket.id] = { ...data, socketEvent: socket };
-    // 退出登录时，断开链接
-    socket.on('reuserinfo', (data) => {
+    user[socket.id] = { socketEvent: socket };
+    // 用户登录时，保存用户数据
+    socket.on('init', (data) => {
         let userinfo = JSON.parse(data);
-        let obj = {}
-        console.log(socket);
-        Object.keys(user).forEach(e => {
-            if (user[e].uid !== userinfo.uid) obj[e] = user[e]
-        });
-        user = obj
+        user[socket.id] = {
+            socketEvent: socket,
+            ...userinfo,
+        }
     });
     socket.on('disconnect', () => {
         let obj = {}

@@ -8,7 +8,6 @@ Create Time  : 2020-08-12
     <el-card>
       <div slot="header">
         <el-button style="padding:6px;" type="primary" @click="addUpdate">添加更新</el-button>
-        <el-button style="padding:6px;" type="danger" @click="del(false)">删除当前更新</el-button>
       </div>
       <mixTable v-model="tableData" :fields="tableFields" />
     </el-card>
@@ -33,7 +32,14 @@ export default {
       tableFields: [
         { label: "更新版本", prop: "version" },
         { label: "标题", prop: "title" },
-        { label: "更新描述", prop: "remark" }
+        { label: "更新描述", prop: "remark" },
+        {
+          label: "操作",
+          type: "button",
+          options: [
+            { click: this.del, style: "danger", label: "删除缓存", role: 259 }
+          ]
+        }
       ],
       addUpdateFields: [
         { labelWidth: 75, label: "日志标题", type: "text", prop: "title" },
@@ -57,6 +63,7 @@ export default {
     async submitUpdate() {
       this.$confirm("确定更新版本？", "提示", { type: "warning" }).then(
         async () => {
+          this.loading = true;
           let form = new FormData();
           for (let k in this.addUpdateData) {
             form.append(k, this.addUpdateData[k]);
@@ -67,10 +74,21 @@ export default {
           if (data.code) {
             this.addUpdateShow = false;
             this.addUpdateData = {};
-            this.getData()
+            this.getData();
           }
+          this.loading = false;
         }
       );
+    },
+    async del(item) {
+      this.$confirm("确定删除这个版本缓存吗？", "提示!", {
+        type: "warning"
+      }).then(async () => {
+        await this.axios("/adminapi/Edition/del", {
+          data: item
+        });
+        this.getData();
+      });
     },
     async getData() {
       let { data } = await this.axios("/adminapi/Edition/list");

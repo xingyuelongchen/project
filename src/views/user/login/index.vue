@@ -113,7 +113,6 @@ export default {
   },
   created() {
     localStorage.removeItem("userinfo");
-    localStorage.removeItem("Store");
     sessionStorage.removeItem("Store");
     sessionStorage.removeItem("xitong");
     this.$store.commit("setClear");
@@ -155,11 +154,14 @@ export default {
       }
     },
     async down() {
-      alert("即将上线，敬请期待……");
       let { data } = await this.axios("/adminapi/Login/client");
-      if (data.code && data.data.version) {
-        this.downUrl = `/guangyizhou Setup ${data.data.version}.exe`;
-        this.$refs.downDom.target.click();
+      if (data.code && data.data && data.data.version) {
+        if (/^2.+/.test(data.data.version)) {
+          this.downUrl = `/guangyizhou Setup ${data.data.version}.exe`;
+          this.$refs.downDom.click();
+        } else {
+          alert("即将上线，敬请期待……");
+        }
       }
     },
     register() {
@@ -206,6 +208,14 @@ export default {
         userinfo.dateTime = Date.now() + 1 * 24 * 60 * 60 * 1000;
         window.localStorage.setItem("userinfo", JSON.stringify(userinfo));
         this.$store.commit("setUserinfo", userinfo);
+        let msg = {
+          type: "crm",
+          data: null,
+          create_time: userinfo.dateTime,
+          uid: userinfo.id,
+          department: userinfo.department || 0
+        };
+        this.socket.emit("init", JSON.stringify(msg));
         if (!this.history) this.history = {};
         if (this.checkPassword) {
           this.history[this.ruleForm.mobile] = {

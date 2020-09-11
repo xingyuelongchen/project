@@ -104,8 +104,6 @@ Create Time  : 2020-07-22
   </div>
 </template>
 <script>
-import isElectron from "is-electron";
-import IO from "@/api/socket-io";
 import logo from "@/assets/image/logo.png";
 import logo1 from "@/assets/image/logo1.png";
 export default {
@@ -123,22 +121,26 @@ export default {
           event: () => this.$router.push("/user/info"),
           show: true
         },
-        { label: "检查更新", event: this.update, show: isElectron() },
+        { label: "检查更新", event: this.update, show: this.isElectron },
         // {
         //   label: "喜报",
         //   event: () => this.onMessage({ type: "dialog", data: {} }),
         //   show: true
         // },
-        { label: "退出登录", event: this.logout, show: !isElectron() },
+        { label: "退出登录", event: this.logout, show: !this.isElectron },
         {
           label: "切换账号",
           event: () => {
             window.ipcRenderer.send("removeStore", "userinfo");
             this.$router.push("/login");
           },
-          show: isElectron()
+          show: this.isElectron
         },
-        { label: "退出系统", event: this.logout, show: isElectron() }
+        {
+          label: "退出系统",
+          event: () => window.ipcRenderer.send("close"),
+          show: this.isElectron
+        }
       ],
       xibao: { show: false },
       refreshKey: 0,
@@ -160,7 +162,32 @@ export default {
     }
   },
   created() {
-    IO(this.onMessage);
+    // IO(this.onMessage);
+    this.socket.on("message", data => {
+      data = JSON.parse(data);
+      if (data.type == "message") {
+        // 桌面应用端
+        if (this.isElectron) {
+          this.ipcRenderer.send("msg", data);
+        } else {
+          // 浏览器端 系统信息
+          if (!window.Notification) return;
+          let options = {
+            dir: "ltr",
+            icon: "favicon.ico",
+            data: data.data.msg,
+            timeoutType: "never"
+          };
+          let notification = new window.Notification(data.data.title, options);
+          notification.onclick = window.focus;
+        }
+      }
+      if (data.type == "dialog" && this.isElectron) {
+        // 桌面应用端 dialog通知
+        this.ipcRenderer.send("dialog", data);
+      }
+      this.onMessage(data);
+    });
   },
   updated() {
     clearTimeout(this.timer);
@@ -215,8 +242,6 @@ export default {
       this.$router.replace(path);
     },
     logout() {
-      window.localStorage.removeItem("userinfo");
-      if (this.isElectron) window.ipcRenderer.send("close");
       this.$router.replace("/login");
     },
     async refresh() {
@@ -242,11 +267,9 @@ export default {
       item.event();
     }
   },
-  beforeDestroy() {
-    this.$store.state.socket.emit("disconnect");
-    this.$store.state.socket.destroy();
-    this.$store.state.socket.close();
+  beforeRouteLeave(to, from, next) {
     clearTimeout(this.timer);
+    next();
   }
 };
 </script>
