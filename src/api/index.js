@@ -14,7 +14,9 @@ axios.interceptors.response.use(res, resError);
 var notification = null;
 var message = null;
 function req(config) {
-    config.method = config.url.indexOf('/verify') >= 0 ? config.method : 'post'
+    if (/(^\/adminapi\/)/.test(config.url)) {
+        config.method = 'post'
+    }
     return config
 }
 function reqError() {

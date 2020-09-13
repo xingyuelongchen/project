@@ -26,7 +26,7 @@ export default
     { path: 'coefficient', name: 'Salescoefficient', meta: { keepAlive: false, role: 80, title: '提成系数', }, component: () => import('@/views/backend/crm/sales/coefficient') },
     // 数据管理
     { path: 'data', name: 'Data', meta: { keepAlive: false, role: 13, title: '数据管理', }, component: () => import('@/views/layou'), },
-    { path: 'index', name: 'Dataindex', meta: { keepAlive: false, role: 31, title: '数据总览', }, component: () => import('@/views/backend/crm/data/index/') },
+    { path: 'index', name: 'Dataindex', meta: { keepAlive: false, role: 256, title: '数据总览', }, component: () => import('@/views/backend/crm/data/index/') },
     // 导师中心
     { path: 'tutor', name: 'Tutor', meta: { keepAlive: false, role: 8, title: '导师中心', }, component: () => import('@/views/layou'), },
     { path: 'index', name: 'Tutorindex', meta: { keepAlive: false, role: 18, title: '导师记录', }, component: () => import('@/views/backend/crm/tutor/index/') },

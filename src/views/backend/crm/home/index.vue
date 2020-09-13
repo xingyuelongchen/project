@@ -8,16 +8,16 @@ Create Time  : 2020-08-28
     <div class="content">
       <div class="list">
         <div class="item day">
-          <ve-histogram :data="chartData['day'].data" height="100%" :colors="colors" :settings="chartData['day'].settings" :legend-visible="chartData['day'].legendVisible" :judge-width="true" />
+          <ve-histogram :loading="loading" :data="chartData['day'].data" height="100%" :colors="colors" :settings="chartData['day'].settings" :legend-visible="chartData['day'].legendVisible" :judge-width="true" />
         </div>
         <div class="item ranking">
-          <ve-histogram :data="chartData['ranking'].data" :colors="colors" height="100%" :settings="chartData['ranking'].settings" :legend-visible="chartData['ranking'].legendVisible" :judge-width="true" />
+          <ve-histogram :loading="loading" :data="chartData['ranking'].data" :colors="colors" height="100%" :settings="chartData['ranking'].settings" :legend-visible="chartData['ranking'].legendVisible" :judge-width="true" />
         </div>
         <div class="item week">
-          <ve-bar :data="chartData['week'].data" height="100%" :colors="colors" :settings="chartData['week'].settings" :legend-visible="chartData['week'].legendVisible" :judge-width="true" />
+          <ve-bar :loading="loading" :data="chartData['week'].data" height="100%" :colors="colors" :settings="chartData['week'].settings" :legend-visible="chartData['week'].legendVisible" :judge-width="true" />
         </div>
         <div class="item time">
-          <ve-histogram :data="chartData['time'].data" height="100%" :colors="colors" :settings="chartData['time'].settings" :legend-visible="chartData['time'].legendVisible" :judge-width="true" />
+          <ve-histogram :loading="loading" :data="chartData['time'].data" height="100%" :colors="colors" :settings="chartData['time'].settings" :legend-visible="chartData['time'].legendVisible" :judge-width="true" />
         </div>
       </div>
     </div>
@@ -28,6 +28,7 @@ export default {
   name: "Home",
   data() {
     return {
+      loading: true,
       colors: [
         "#20a0ff",
         "#c23531",
@@ -50,7 +51,9 @@ export default {
       data = JSON.parse(data);
       this.handerData(data);
     });
-    await this.axios.get("/statistics/statistics/list?id=1");
+    this.axios.get("/statistics/statistics/list?id=1", {
+      withCredentials: false
+    });
   },
   methods: {
     handerData(data) {
@@ -125,6 +128,7 @@ export default {
           })
         }
       };
+      this.loading = false;
     }
   }
 };

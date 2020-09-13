@@ -12,16 +12,9 @@ import VXETable from 'vxe-table';
 import 'vxe-table/lib/index.css';
 import version from '../package.json';
 import isElectron from "is-electron";
-import VCharts from 'v-charts'
-import socket from './api/socket-io'
-// import ECharts from 'vue-echarts';
-// import echarts from 'echarts';
-// import 'echarts/theme/dark';
-// import 'echarts/theme/blue';
-// import 'echarts/theme/jazz';
-// import 'echarts/theme/dark-blue';
-// import 'echarts/theme/fruit';
-// import '@/assets/echarts/theme/zidingyi'
+import VCharts from 'v-charts';
+import 'v-charts/lib/style.css';
+import socket from './api/socket-io';
 
 Vue.config.productionTip = false;
 // Vue.component('v-chart', ECharts);
