@@ -465,7 +465,7 @@ export default {
         data: this.tagData
       });
       if (data.code) this.tagShow = false;
-      this.getData()
+      this.getData();
     },
     async tableDialog(item) {
       // 客户状态进度修改
@@ -475,17 +475,18 @@ export default {
       if (data.code) {
         let options = data.data.label[0].children.filter(e => {
           if (!data.data.label_log) return false;
-          console.log(e.progress, data.data.label_log.progress);
+          // console.log(e.progress, data.data.label_log.progress);
           return e.progress == data.data.label_log.progress;
         });
         if (!options.length) options = data.data.label[0].children;
+      
         options = options[0];
         this.statusFormData = {
           customer_id: item.id,
-          label: options.label,
-          label_1: options.id,
-          label_2: options.children[0].id,
-          progress: options.progress
+          // label: options.label,
+          // label_1: options.id,
+          // label_2: options.children[0].id,
+          // progress: options.progress
         };
 
         this.statusFormFields = [
@@ -493,18 +494,18 @@ export default {
             label: "当前进度：",
             prop: "label",
             wrap: true,
-            type: "text",
-            readonly: true,
-            options
+            type: "cascader",
+            // readonly: true,
+            options:data.data.label[0].children
           },
-          {
-            label: "完成状态：",
-            prop: "label_2",
-            wrap: true,
-            type: "radio",
-            options: options.children,
-            change: this.changeServe
-          },
+          // {
+          //   label: "完成状态：",
+          //   prop: "label_2",
+          //   wrap: true,
+          //   type: "radio",
+          //   options: options.children,
+          //   change: this.changeServe
+          // },
           {
             label: "备注",
             prop: "remak",

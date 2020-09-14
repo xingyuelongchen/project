@@ -1,6 +1,8 @@
 import axios from 'axios';
 import config from '../config';
 import { Message, Notification } from 'element-ui';
+import Router from '@/router'
+
 if (process.env.NODE_ENV != 'development') {
     axios.defaults['baseURL'] = config.baseUrl;
     // axios.defaults.adapter = require('axios/lib/adapters/http');
@@ -46,6 +48,7 @@ function res(res) {
             title: '账户登录过期，请重新登录！',
             message: res.data.msg,
         })
+        Router.replace('/login')
     }
     return res
 }

@@ -23,8 +23,7 @@ router.use((req, res, next) => {
     }
     for (let k in api) {
         res[k] = api[k];
-    }
-
+    } 
     // 注入api接口
     // res = Object.assign(api)
     res.ApiMD5 = md5;

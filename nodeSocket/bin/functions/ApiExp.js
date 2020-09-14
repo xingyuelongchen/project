@@ -20,8 +20,7 @@ function exp(a, b) {
         type = b
     }
     // 遍历规则列表
-    for (let k in type) {
-
+    for (let k in type) { 
         // 判断当前规则是否为多重验证。
         if (type[k] && (typeof type[k] == 'object')) {
 

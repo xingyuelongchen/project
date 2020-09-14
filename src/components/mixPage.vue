@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-07-27
 -->
 <template>
-  <el-pagination background :layout="value.layout || 'prev, pager, next, total'" :page-size="value.limit" :page-sizes="value.sizes " :total="value.total || total" @current-change="currentChange" hide-on-single-page></el-pagination>
+  <el-pagination background :layout="value.layout || 'prev, pager, next,sizes, total'" :page-size="value.limit" :page-sizes="value.sizes " :total="value.total || total" @size-change="sizeChange" @current-change="currentChange" hide-on-single-page></el-pagination>
 </template>
 <script>
 export default {
@@ -25,8 +25,11 @@ export default {
     return {};
   },
   methods: {
+    sizeChange(val) {
+      this.$emit("input", { ...this.value, limit: val });
+    },
     currentChange(val) {
-      this.$emit("input", Object.assign({}, this.value, { page: val }));
+      this.$emit("input", { ...this.value, page: val });
       if (typeof this.value.event == "function") {
         this.value.event();
       } else if (typeof this.event == "function") {

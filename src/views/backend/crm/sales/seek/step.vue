@@ -30,11 +30,11 @@ Create Time  : 2020-08-26
                     <h4>
                       <span v-if="item.label_2">
                         进度更新为
-                        <el-tag type="parmary"> {{ item.label_2}} </el-tag>
+                        <el-tag v-if="item.label_1" type="parmary"> {{ item.label_1}} </el-tag>
+                        <el-tag v-if="item.label_2" type="danger">{{item.label_2}}</el-tag>
+                        <el-tag v-if="item.label_3" type="warning">{{item.label_3}}</el-tag>
                       </span>
-                      <span v-if="item.label_3">
-                        ，正在 <el-tag type="danger">{{item.label_3}}</el-tag> 状态
-                      </span>
+
                     </h4>
 
                     <div class="remak">
