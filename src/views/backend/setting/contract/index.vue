@@ -71,6 +71,7 @@ export default {
         { labelWidth: 80, label: "套餐名称", prop: "label", type: "text" },
         { labelWidth: 80, label: "套餐价格", prop: "price", type: "number" },
         { labelWidth: 80, label: "有效期", prop: "duration", type: "number" },
+        { labelWidth: 80, label: "套餐封面", prop: "meal_pic", type: "image" },
         { labelWidth: 80, label: "套餐合同", prop: "pic", type: "image" },
         {
           labelWidth: 80,
@@ -83,6 +84,7 @@ export default {
         { labelWidth: 80, label: "套餐名称", prop: "label", type: "text" },
         { labelWidth: 80, label: "套餐价格", prop: "price", type: "number" },
         { labelWidth: 80, label: "有效期", prop: "duration", type: "number" },
+        { labelWidth: 80, label: "套餐封面", prop: "meal_pic", type: "image" },
         { labelWidth: 80, label: "套餐合同", prop: "pic", type: "image" },
         {
           labelWidth: 80,
