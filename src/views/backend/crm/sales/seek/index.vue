@@ -59,6 +59,10 @@ Create Time  : 2020-03-27
     <el-dialog :visible.sync="tagShow" title="客户信息" width="500px">
       <mixForm v-model="tagData" :fields="tagFields" />
     </el-dialog>
+    <el-dialog :visible.sync="advanceShow" title="预付款信息" width="500px">
+      <mixForm v-model="advanceData" :fields="advanceFields" />
+    </el-dialog>
+
   </div>
 </template>
 <script>
@@ -74,6 +78,9 @@ export default {
       stepShow: false,
       jinduShow: false,
       tagShow: false,
+      advanceShow: false,
+      advanceData: {},
+      advanceFields: [],
       tagData: {},
       tagFields: [],
       page: {
@@ -145,6 +152,8 @@ export default {
         {
           type: "button",
           span: 10,
+          sm: 24,
+          xs: 24,
           options: [
             { label: "搜索", style: "success", click: this.getData },
             { label: "重置", style: "wraning", click: this.onReset },
@@ -426,12 +435,61 @@ export default {
                 label: "历史状态",
                 style: "primary",
                 click: this.addStatus
+              },
+              {
+                size: "mini",
+                label: "预设付款",
+                style: "danger",
+                click: this.addAdvance
               }
             ]
           }
         ]);
         arr.unshift({ type: "selection", fixed: "left" });
         this.tableFields = arr;
+      }
+    },
+    async addAdvance(item) {
+      let { customer_id, id } = item;
+      this.advanceData = item;
+      {
+        customer_id, id;
+      }
+      let { data } = await this.axios("/adminapi/Publics/meal_version");
+      if (data.code) {
+        this.advanceFields = [
+          {
+            label: "手机号码",
+            prop: "mobile",
+            type: "number",
+            minlength: 11,
+            maxlength: 11
+          },
+          { label: "预付金额", prop: "price", type: "number" },
+          {
+            label: "预付版本",
+            prop: "version",
+            type: "select",
+            options: data.data.map(e => ({ label: e.label, value: e.id }))
+          },
+          {
+            label: "付款类型",
+            prop: "type",
+            type: "radio",
+            options: [{ label: "新业绩" }, { label: "补欠款" }]
+          },
+          { label: "确定", type: "button", click: this.setAdvance }
+        ];
+        this.advanceShow = true;
+      }
+    },
+    async setAdvance() {
+      let { data } = await this.axios("/adminapi/Salecustomer/payment_order", {
+        data: this.advanceData
+      });
+      if (data.code) {
+        console.log(data);
+        this.advanceShow = false;
       }
     },
     async changeStep() {
@@ -479,10 +537,10 @@ export default {
           return e.progress == data.data.label_log.progress;
         });
         if (!options.length) options = data.data.label[0].children;
-      
+
         options = options[0];
         this.statusFormData = {
-          customer_id: item.id,
+          customer_id: item.id
           // label: options.label,
           // label_1: options.id,
           // label_2: options.children[0].id,
@@ -496,7 +554,7 @@ export default {
             wrap: true,
             type: "cascader",
             // readonly: true,
-            options:data.data.label[0].children
+            options: data.data.label[0].children
           },
           // {
           //   label: "完成状态：",

@@ -254,7 +254,7 @@ export default {
 </script>
 <style lang='less' scoped>
 .wrap {
-  background: url("~@/assets/image/bg_login.jpg") no-repeat top left / 100%;
+  background: url("~@/assets/image/bg_login.png") no-repeat top left / 100% 100%;
   min-height: 100vh;
   height: 100%;
 }

@@ -1,0 +1,14 @@
+{
+    "global": {
+        "$--color-primary": "#2752EE",
+        "$--color-success": "#2BC147",
+        "$--color-warning": "#D77E1F",
+        "$--color-danger": "#B41111",
+        "$--color-text-primary": "#1B1B1B",
+        "$--color-text-regular": "#3A3D41",
+        "$--color-text-secondary": "#5D5F63",
+        "$--color-text-placeholder": "#898C91",
+        "$--border-color-base": "#BEC0C4"
+    },
+    "local": {}
+}

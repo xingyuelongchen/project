@@ -33,7 +33,7 @@ Create Time  : 2020-03-31
                 </el-input>
               </template>
               <template v-if=" item.type=='number'">
-                <el-input clearable class="input" :size="item.size" v-model.number="fieldsData[item.prop]" inline-message :placeholder="item.placeholder" :readonly="!!item.readonly" :disabled="!!item.disabled" :type="item.type" @change="change(item,index,'change')" @input="change(item,index,'input')">
+                <el-input clearable class="input" :size="item.size" v-model.number="fieldsData[item.prop]"  :minlength="item.minlength" :maxlength="item.maxlength" inline-message :placeholder="item.placeholder" :readonly="!!item.readonly" :disabled="!!item.disabled" :type="item.type" @change="change(item,index,'change')" @input="change(item,index,'input')">
                   <span v-if="item.prepend" slot="prepend" @click.stop="click(item,index)">
                     <template v-if="/^(el-icon|my-icon).*/.test(item.prepend)">
                       <i :class="item.prepend"></i>

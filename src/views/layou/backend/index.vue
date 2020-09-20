@@ -34,7 +34,7 @@ Create Time  : 2020-07-22
         </div>
         <div class="itema" @click.stop="$router.push('/user/info')">
           <el-tooltip content="修改个人信息">
-            <el-avatar :size="40" :src="$store.state.userinfo.pic" @error="()=>true"><img src="http://www.guangyizhou.cn/favicon.ico" /></el-avatar>
+            <el-avatar :size="40" :src="$store.state.userinfo.pic" @error="()=>true"><img src="/favicon.ico" /></el-avatar>
           </el-tooltip>
         </div>
         <div class="item">

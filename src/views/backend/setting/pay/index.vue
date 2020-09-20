@@ -58,6 +58,7 @@ export default {
         { labelWidth: 80, label: "商户Api", prop: "key", type: "text" },
         { labelWidth: 80, label: "商户号", prop: "mch_id", type: "text" },
         { labelWidth: 80, label: "回调地址", prop: "notify_url", type: "text" },
+        { labelWidth: 80, label: "商户名称", prop: "merchant", type: "text" },
         { labelWidth: 80, label: "添加", type: "button", click: this.save }
       ],
       tableData: [],
@@ -66,7 +67,13 @@ export default {
         { label: "微信密钥", prop: "appsecret" },
         { label: "商户Api", prop: "key" },
         { label: "商户号", prop: "mch_id" },
-        { label: "回调地址", prop: "notify_url" },
+        {
+          label: "回调地址",
+          prop: "notify_url",
+          type: "input",
+          change: this.tableEdit
+        },
+        { label: "商户名称", prop: "merchant" },
         {
           type: "button",
           options: [{ label: "删除", click: this.del, style: "danger" }]
@@ -83,7 +90,7 @@ export default {
       ],
       editData: {},
       editFields: [
-        { labelWidth: 80, label: "分类名称", prop: "label", type: "text" },
+        { labelWidth: 80, label: "分类名称", prop: "title", type: "text" },
         {
           labelWidth: 80,
           type: "button",
@@ -103,6 +110,12 @@ export default {
     add() {
       this.addShow = true;
       this.addData.pid = 0;
+    },
+    async tableEdit(item) {
+      await this.axios("/adminapi/", {
+        data: item
+      });
+      this.getData();
     },
     async del(item) {
       let id = this.version.id;

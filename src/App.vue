@@ -22,6 +22,7 @@ export default {};
     height: calc(100vh - 165px);
     margin: 20px 20px 30px;
     box-sizing: border-box;
+    position: relative;
   }
   // 主体内容排列布局
   .content-cols {
@@ -105,6 +106,10 @@ export default {};
     display: flex;
     justify-content: space-between;
     width: 100%;
+  }
+  // 编辑器输入框大小
+  .ck.ck-content.ck-editor__editable {
+    min-height: 400px;
   }
 }
 body,
