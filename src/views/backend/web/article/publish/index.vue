@@ -12,15 +12,46 @@ Create Time  : 2020-09-20
       </div>
       <el-scrollbar>
         <mixForm v-model="formData" :fields="formFields" />
-        <ckeditor :editor="editor" v-model="formData.content" :config="config" />
+        <ckeditor v-if="editor" :editor="editor" @ready="onReady" v-model="formData.content" :config="config" />
       </el-scrollbar>
     </el-card>
+
   </div>
 </template>
 <script>
 import CKEditor from "@ckeditor/ckeditor5-vue";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import "@ckeditor/ckeditor5-build-classic/build/translations/zh-cn";
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// import "@ckeditor/ckeditor5-build-classic/build/translations/zh-cn";
+// import ClassicEditor from "../../../../../../editor/ckeditor";
+// import "../../../../../../editor/translations/zh-cn";
+// import "@ckeditor/ckeditor5-build-classic/build/translations/zh-cn";
+// import ClassicEditor from "@/api/ckeditor.js";
+// import "@/api/translations/zh-cn.js";
+// import ClassicEditor from "@/editor/ckeditor";
+import axios from "axios";
+/**
+ * 自定义上传图片插件
+ */
+class MyUploadAdapter {
+  constructor(loader) {
+    this.loader = loader;
+  }
+
+  async upload() {
+    const files = new FormData();
+    files.append("files", await this.loader.file);
+    let { data } = await axios({
+      url: `/adminapi/Publics/uploadsImage`,
+      method: "POST",
+      data: files
+    });
+    // 方法返回数据格式： {default: "url"}
+    return {
+      default: data.data
+    };
+  }
+}
+
 export default {
   name: "Webarticlepublish",
   components: {
@@ -28,9 +59,54 @@ export default {
   },
   data() {
     return {
-      editor: ClassicEditor,
+      editor: null,
       config: {
-        language: "zh-cn"
+        language: "zh-cn",
+        image: {
+          // Configure the available styles.
+          styles: ["alignLeft", "alignCenter", "alignRight"],
+
+          // Configure the available image resize options.
+          resizeOptions: [
+            {
+              name: "imageResize:original",
+              label: "Original",
+              value: null
+            },
+            {
+              name: "imageResize:25",
+              label: "25%",
+              value: "25"
+            },
+            {
+              name: "imageResize:50",
+              label: "50%",
+              value: "50"
+            },
+            {
+              name: "imageResize:75",
+              label: "75%",
+              value: "75"
+            },
+            {
+              name: "imageResize:100",
+              label: "100%",
+              value: "100"
+            }
+          ],
+
+          // You need to configure the image toolbar, too, so it shows the new style
+          // buttons as well as the resize buttons.
+          toolbar: [
+            "imageStyle:alignLeft",
+            "imageStyle:alignCenter",
+            "imageStyle:alignRight",
+            "|",
+            "imageResize",
+            "|",
+            "imageTextAlternative"
+          ]
+        }
       },
       test: "sdfas",
       formData: {},
@@ -82,6 +158,9 @@ export default {
     this.id = query.id || null;
     if (query.id) this.getData();
   },
+  mounted() {
+    this.editor = window.ClassicEditor;
+  },
   methods: {
     async save() {
       await this.axios("/adminapi/", {
@@ -93,25 +172,16 @@ export default {
       if (data.code) {
         this.formData = data.data;
       }
+    },
+    onReady(editor) {
+      // 自定义上传图片插件
+      editor.plugins.get("FileRepository").createUploadAdapter = loader => {
+        return new MyUploadAdapter(loader);
+      };
     }
   }
 };
 </script>
 <style lang="less" scoped>
-.content-cols {
-  padding-bottom: 60px;
-}
-.save {
-  position: absolute;
-  bottom: -40px;
-  left: 0;
-  right: 0;
-  margin: auto;
-  height: 80px;
-  box-shadow: 0 0 10px 5px #ccc;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 </style>
  

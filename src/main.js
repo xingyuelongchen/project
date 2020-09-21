@@ -8,8 +8,8 @@ import template from './components';
 import '@/assets/theme/darkblue/index.css';
 import '@/assets/iconfont/iconfont.css';
 import 'xe-utils';
-import VXETable from 'vxe-table';
-import 'vxe-table/lib/index.css';
+// import VXETable from 'vxe-table';
+// import 'vxe-table/lib/index.css';
 import version from '../package.json';
 import isElectron from "is-electron";
 import VCharts from 'v-charts';
@@ -19,8 +19,8 @@ import socket from './api/socket-io';
 Vue.config.productionTip = false;
 // Vue.component('v-chart', ECharts);
 // Vue.use(echarts);
-Vue.use(VXETable)
-Vue.prototype.$modal = VXETable.modal
+// Vue.use(VXETable)
+// Vue.prototype.$modal = VXETable.modal
 Vue.directive('role', {
   bind(el, binding) {
     if (binding.value == undefined) return;
