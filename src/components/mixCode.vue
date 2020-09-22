@@ -5,7 +5,17 @@ Create Time  : 2020-08-16
 -->
 <template>
 
-  <MonacoEditor :key="key" class="editor" :height="fields.height" :width="fields.width" :language="fields.language" :theme="fields.theme" :code="value" @mounted="onMounted" @codeChange="codeChange" />
+  <MonacoEditor 
+      :key="key" 
+      class="editor" 
+      :height="option.height" 
+      :width="option.width" 
+      :language="option.language" 
+      :theme="option.theme" 
+      :code="value" 
+      @mounted="onMounted" 
+      @codeChange="codeChange" 
+      :editorOptions="option" />
 
 </template>
 <script>
@@ -19,31 +29,30 @@ export default {
       type: String,
       default: () => ""
     },
-    fields: {
-      type: Object,
-      default() {
-        return {
-          height: "100%",
-          width: "100%",
-          language: "json",
-          theme: "vs",
-          selectOnLineNumbers: true,
-          roundedSelection: false,
-          readOnly: false,
-          cursorStyle: "line",
-          automaticLayout: false,
-          glyphMargin: true
-        };
-      }
+    options: {
+      type: Object
     }
   },
   data() {
     return {
-      key: "0"
+      key: "0",
+      option: {
+        height: "100%",
+        width: "100%",
+        language: "json",
+        // theme: "vs",
+        theme: "vs-dark",
+        selectOnLineNumbers: true,
+        roundedSelection: false,
+        readOnly: false,
+        cursorStyle: "line",
+        automaticLayout: false,
+        glyphMargin: true
+      }
     };
   },
   watch: {
-    fields() {
+    options() {
       this.update();
     }
   },
@@ -54,6 +63,7 @@ export default {
   },
   methods: {
     update() {
+      this.option = { ...this.option, ...this.options };
       this.key = Math.random();
     },
     codeChange(editor) {

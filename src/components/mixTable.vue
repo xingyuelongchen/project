@@ -605,8 +605,9 @@ export default {
   }
 }
 .imageong {
-  width: 30px;
+  width: 100%;
   height: 30px;
   text-align: center;
+  background: #ccc;
 }
 </style>

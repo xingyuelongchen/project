@@ -34,7 +34,7 @@
 .user .el-list .el-item:hover {
   transition: all 0.2s;
   cursor: pointer;
-  background: #e6f8f8;
+  background: #2752EE99;
   padding: 0 20px;
 }
 .user .el-list .el-item.active {

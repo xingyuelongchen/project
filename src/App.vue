@@ -66,7 +66,15 @@ export default {};
       height: auto;
     }
   }
-
+  .el-list {
+    .el-item {
+      padding: 20px 10px;
+      height: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
   .el-card {
     height: 100%;
     .el-card__body {
@@ -109,7 +117,8 @@ export default {};
   }
   // 编辑器输入框大小
   .ck.ck-content.ck-editor__editable {
-    min-height: 400px;
+    height: 400px;
+    overflow-y: auto;
   }
 }
 body,
