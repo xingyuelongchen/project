@@ -84,7 +84,7 @@ export default {
         data: { id: item.id }
       });
       if (data.code) {
-        console.log(data);
+        this.getData();
       }
     },
     async change(item) {

@@ -5,7 +5,7 @@ Create Time  : 2020-08-30
 -->
 <template>
   <div style="height:100vh">
-    <mixCode v-model="code" />
+      <mixImages />
   </div>
 </template>
 <script>

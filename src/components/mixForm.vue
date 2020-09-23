@@ -33,7 +33,7 @@ Create Time  : 2020-03-31
                 </el-input>
               </template>
               <template v-if=" item.type=='number'">
-                <el-input clearable class="input" :size="item.size" v-model.number="fieldsData[item.prop]"  :minlength="item.minlength" :maxlength="item.maxlength" inline-message :placeholder="item.placeholder" :readonly="!!item.readonly" :disabled="!!item.disabled" :type="item.type" @change="change(item,index,'change')" @input="change(item,index,'input')">
+                <el-input clearable class="input" :size="item.size" v-model.number="fieldsData[item.prop]" :minlength="item.minlength" :maxlength="item.maxlength" inline-message :placeholder="item.placeholder" :readonly="!!item.readonly" :disabled="!!item.disabled" :type="item.type" @change="change(item,index,'change')" @input="change(item,index,'input')">
                   <span v-if="item.prepend" slot="prepend" @click.stop="click(item,index)">
                     <template v-if="/^(el-icon|my-icon).*/.test(item.prepend)">
                       <i :class="item.prepend"></i>
@@ -128,6 +128,18 @@ Create Time  : 2020-03-31
                   <el-button slot="append" @click.native.stop="$refs['fileUpdate'][0].click()">点击上传</el-button>
                 </el-input>
               </template>
+              <template v-if="item.type=='selectimage'">
+                <mixImages v-if="getImage.show" />
+                <el-button type="primary" :size="item.size || options.size || 'small'" @click="seleceImage(item)">选择图片</el-button>
+                <div v-if="fieldsData[item.prop] && fieldsData[item.prop].length" class="image-box">
+                  <template v-for="(v,i) in fieldsData[item.prop]">
+                    <div class="image-item" :key="i">
+                      <el-image :src="v" :preview-src-list="fieldsData[item.prop]" fit="cover" />
+                      <i class="el-icon-delete" @click="onDelImage(item,i)"></i>
+                    </div>
+                  </template>
+                </div>
+              </template>
             </el-form-item>
           </el-col>
         </template>
@@ -136,6 +148,7 @@ Create Time  : 2020-03-31
   </el-form>
 </template>
 <script>
+import { mapState } from "vuex";
 // import CONFIG from "@/config";
 export default {
   name: "MixForm",
@@ -217,7 +230,14 @@ export default {
     }
   },
   data() {
-    return { key: "key", mapFields: [], files: [], fileList: [], fileName: "" };
+    return {
+      key: "key",
+      mapFields: [],
+      files: [],
+      fileList: [],
+      fileName: "",
+      cacheSelectImage: null
+    };
   },
   watch: {
     fields() {
@@ -225,13 +245,28 @@ export default {
     },
     fieldsData() {
       this.key = Math.random();
+    },
+
+    "getImage.show"() {
+      this.seleceImg();
     }
   },
 
   created() {
     this.onMapFields();
   },
+  computed: {
+    ...mapState(["getImage"])
+  },
   methods: {
+    seleceImg() {
+      this.fieldsData[this.cacheSelectImage.prop] = this.getImage.files;
+    },
+    seleceImage(item) {
+      // 选择图库图片
+      this.cacheSelectImage = item;
+      this.$store.commit("setGetImage", { show: true, all: false });
+    },
     fileUpdate(event, item) {
       this.fileName = event.target.files[0].name;
       this.fieldsData[item.prop] = event.target.files[0];

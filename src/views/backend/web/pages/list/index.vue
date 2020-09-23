@@ -33,7 +33,7 @@ Create Time  : 2020-09-20
           {{title}}
           <el-button type="primary" style="float:right;padding:5px;" @click="onSave">保存编辑</el-button>
         </div>
-        <mixCode :key="key" v-model="code" :options="options" />
+        <mixCode :key="key" v-model="form.code" :options="options" />
       </el-card>
     </div>
     <el-dialog :title="title" :visible.sync="visible" width="400px" :modal="true" top="15vh" @close="close">
@@ -52,7 +52,8 @@ export default {
       code: "",
       title: "代码编辑",
       visible: false,
-      key: 0
+      key: 0,
+      form: { code: "" }
     };
   },
   created() {
@@ -76,7 +77,10 @@ export default {
         data: item
       });
       if (data.code) {
-        this.code = data.data;
+        this.form = {
+          ...item,
+          code: data.data
+        };
         this.options.language = item.type;
         this.key = Math.random();
       }
@@ -88,7 +92,9 @@ export default {
       }
     },
     async onSave() {
-      await this.axios("/adminapi/page/save");
+      await this.axios("/adminapi/page/savefile", {
+        data: this.form
+      });
     },
     close() {},
     treeAdd(item) {

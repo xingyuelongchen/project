@@ -2,18 +2,24 @@ import Vue from "vue";
 import Vuex from "vuex";
 import router from '../router';
 Vue.use(Vuex);
+const STATE = {
+  menu: [],
+  userinfo: {},
+  tabmenu: [],
+  routes: [],
+  update: false,
+  status: {},
+  getImage: { show: false, files: [], all: true },
+}
 export default new Vuex.Store({
-  state: {
-    menu: [],
-    userinfo: {},
-    tabmenu: [],
-    routes: [],
-    update: false,
-    status: {},
-  },
+  state: STATE,
   mutations: {
     updateMessage(state, data) {
       state.update = data
+    },
+    setGetImage(state, data) {
+      state.getImage = data
+      console.log(data);
     },
     // 客户流程状态
     setStatus(state, data) {
@@ -22,20 +28,20 @@ export default new Vuex.Store({
     // 清空数据
     setClear(state) {
       for (let k in state) {
-        if (k !== 'nocach') {
-          if (state[k] == null) state[k] = null;
-          else if (state[k].constructor == Array) state[k] = [];
-          else if (state[k].constructor == Object) state[k] = {};
-          else if (state[k].constructor == Boolean) state[k] = false;
-          else if (state[k].constructor == String) state[k] = '';
-          else if (state[k].constructor == Number) state[k] = 0;
-        }
+        state[k] = STATE[k]
+        // if (state[k] == null) state[k] = null;
+        // else if (state[k].constructor == Array) state[k] = [];
+        // else if (state[k].constructor == Object) state[k] = {};
+        // else if (state[k].constructor == Boolean) state[k] = false;
+        // else if (state[k].constructor == String) state[k] = '';
+        // else if (state[k].constructor == Number) state[k] = 0;
+
       }
     },
     // 刷新后初始化
     setInit(state, data) {
       for (let k in data) {
-        state[k] = data[k]
+        state[k] = STATE[k]
       }
     },
     // 动态路由表

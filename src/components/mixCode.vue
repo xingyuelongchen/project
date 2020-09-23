@@ -5,17 +5,7 @@ Create Time  : 2020-08-16
 -->
 <template>
 
-  <MonacoEditor 
-      :key="key" 
-      class="editor" 
-      :height="option.height" 
-      :width="option.width" 
-      :language="option.language" 
-      :theme="option.theme" 
-      :code="value" 
-      @mounted="onMounted" 
-      @codeChange="codeChange" 
-      :editorOptions="option" />
+  <MonacoEditor :key="key" class="editor" :height="option.height" :width="option.width" :language="option.language" :theme="option.theme" :code="value" @mounted="onMounted" @codeChange="codeChange" :editorOptions="option" />
 
 </template>
 <script>
@@ -55,6 +45,9 @@ export default {
     options() {
       this.update();
     }
+  },
+  created() {
+    this.update();
   },
   mounted() {
     window.onresize = () => {

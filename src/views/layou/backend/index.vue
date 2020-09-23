@@ -102,11 +102,13 @@ Create Time  : 2020-07-22
     </template>
     <mixXibao v-model="xibao" />
     <div class="EXEVERSION">Beta：v{{EXEVERSION}}</div>
+
   </div>
 </template>
 <script>
 import logo from "@/assets/image/logo.png";
 import logo1 from "@/assets/image/logo1.png";
+
 export default {
   name: "Backend",
   data() {
@@ -156,6 +158,7 @@ export default {
     };
   },
   computed: {
+  
     activeName() {
       let name = this.$store.state.tabmenu.filter(e => e.active);
       name = name[0];

@@ -4,7 +4,11 @@ Create author: qinglong
 Create Time  : 2020-07-27
 -->
 <template>
-  <el-pagination background :layout="value.layout || 'prev, pager, next,sizes, total'" :page-size="value.limit" :page-sizes="value.sizes " :total="value.total || total" @size-change="sizeChange" @current-change="currentChange" hide-on-single-page></el-pagination>
+  <div class="mix-page">
+    <slot name="left"></slot>
+    <el-pagination background :layout="value.layout || 'prev, pager, next,sizes, total'" :page-size="value.limit" :page-sizes="value.sizes " :total="value.total || total" @size-change="sizeChange" @current-change="currentChange" hide-on-single-page></el-pagination>
+    <slot name="right"></slot>
+  </div>
 </template>
 <script>
 export default {
@@ -43,8 +47,11 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.el-pagination {
-  padding: 10px 0;
+.mix-page {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
 }
 </style>
  
