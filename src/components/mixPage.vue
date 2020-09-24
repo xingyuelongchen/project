@@ -6,7 +6,7 @@ Create Time  : 2020-07-27
 <template>
   <div class="mix-page">
     <slot name="left"></slot>
-    <el-pagination background :layout="value.layout || 'prev, pager, next,sizes, total'" :page-size="value.limit" :page-sizes="value.sizes " :total="value.total || total" @size-change="sizeChange" @current-change="currentChange" hide-on-single-page></el-pagination>
+    <el-pagination background :layout="value.layout || 'prev, pager, next,sizes, total'" :page-size="value.limit" :page-sizes="value.sizes " :total="value.total || total" @size-change="sizeChange" @current-change="currentChange"></el-pagination>
     <slot name="right"></slot>
   </div>
 </template>
@@ -31,6 +31,7 @@ export default {
   methods: {
     sizeChange(val) {
       this.$emit("input", { ...this.value, limit: val });
+      this.currentChange(1);
     },
     currentChange(val) {
       this.$emit("input", { ...this.value, page: val });

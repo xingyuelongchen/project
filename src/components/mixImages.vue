@@ -38,6 +38,7 @@ export default {
       searchData: {},
       searchFields: [],
       tableFields: [],
+      previewList: [],
       page: {
         page: 1,
         limit: 8,
@@ -126,6 +127,7 @@ export default {
           if (this.ids.includes(e.id)) e.checked = true;
           return e;
         });
+        this.previewList = data.data.map(e => e.url);
         this.page.total = data.count;
         if (this.getImage.all) {
           this.tableFields = [
@@ -210,6 +212,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.2s;
   .box {
     width: 840px;
     height: 550px;
@@ -221,6 +224,9 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      span{
+        cursor: pointer;
+      }
     }
     .body {
       border-top: 1px solid #ccc;

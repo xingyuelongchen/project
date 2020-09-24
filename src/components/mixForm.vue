@@ -123,22 +123,34 @@ Create Time  : 2020-03-31
                 <select-tree v-model="fieldsData[item.prop]" :options="item.options" :props="item.props||{label:'label',value:'value',children:'children'}" />
               </template>
               <template v-if="item.type=='file'">
-                <input ref="fileUpdate" type="file" v-show="false" @change="fileUpdate($event,item)" />
+                <input ref="fileUpdate" type="file" v-show="false" @change="fileUpdate($event,item)" :accept="item.accept" />
                 <el-input v-model="fileName" placeholder="选择上传文件">
                   <el-button slot="append" @click.native.stop="$refs['fileUpdate'][0].click()">点击上传</el-button>
                 </el-input>
               </template>
               <template v-if="item.type=='selectimage'">
                 <mixImages v-if="getImage.show" />
-                <el-button type="primary" :size="item.size || options.size || 'small'" @click="seleceImage(item)">选择图片</el-button>
+                <el-button :type="item.style || 'primary'" :size="item.size || options.size || 'small'" @click="seleceImage(item)">选择图片</el-button>
                 <div v-if="fieldsData[item.prop] && fieldsData[item.prop].length" class="image-box">
-                  <template v-for="(v,i) in fieldsData[item.prop]">
-                    <div class="image-item" :key="i">
+                  <template v-if="typeof fieldsData[item.prop] == 'object'">
+                    <div class="image-item" :key="i" v-for="(v,i) in fieldsData[item.prop]">
                       <el-image :src="v" :preview-src-list="fieldsData[item.prop]" fit="cover" />
                       <i class="el-icon-delete" @click="onDelImage(item,i)"></i>
                     </div>
                   </template>
+                  <template v-else>
+                    <div class="image-item">
+                      <el-image :src="fieldsData[item.prop]" :preview-src-list="[fieldsData[item.prop]]" fit="cover" />
+                      <i class="el-icon-delete" @click="onDelImage(item,i)"></i>
+                    </div>
+                  </template>
                 </div>
+              </template>
+              <template v-if="item.type=='video'">
+                <input ref="uploadFile" type="file" v-show="false" @change="uploadFile($event,item)" :accept="item.accept" />
+                <el-input v-model="fieldsData[item.prop]" :placeholder="'选择上传'+item.label" :key="key" :readonly="!!fieldsData[item.prop]">
+                  <el-button slot="append" @click.native.stop="$refs['uploadFile'][0].click()">{{progress ==null ?'点击上传':'已上传'+progress+'%'}}</el-button>
+                </el-input>
               </template>
             </el-form-item>
           </el-col>
@@ -236,7 +248,9 @@ export default {
       files: [],
       fileList: [],
       fileName: "",
-      cacheSelectImage: null
+      cacheSelectImage: null,
+      progress: null,
+      readonly: false
     };
   },
   watch: {
@@ -259,13 +273,30 @@ export default {
     ...mapState(["getImage"])
   },
   methods: {
+    async uploadFile(event, item) {
+      let file = new FormData();
+      file.append("files", event.target.files[0]);
+      let that = this;
+      let { data } = await this.axios("/adminapi/video/video_upload", {
+        data: file,
+        onUploadProgress(e) {
+          let complete = ((e.loaded / e.total) * 100) | 0;
+          that.progress = complete;
+        }
+      });
+      if (data.code) {
+        this.fieldsData[item.prop] = data.data.url;
+        this.fieldsData["size"] = data.data.size;
+        this.key = Math.random();
+      }
+    },
     seleceImg() {
       this.fieldsData[this.cacheSelectImage.prop] = this.getImage.files;
     },
     seleceImage(item) {
       // 选择图库图片
       this.cacheSelectImage = item;
-      this.$store.commit("setGetImage", { show: true, all: false });
+      this.$store.commit("setGetImage", { show: true, all: item.all });
     },
     fileUpdate(event, item) {
       this.fileName = event.target.files[0].name;
@@ -529,6 +560,10 @@ export default {
     margin: 5px;
     position: relative;
     overflow: hidden;
+    .el-image {
+      width: 100%;
+      height: 100%;
+    }
     i {
       display: none;
       cursor: pointer;

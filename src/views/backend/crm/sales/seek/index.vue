@@ -33,7 +33,7 @@ Create Time  : 2020-03-27
     <mixDrawer style="top:61px" v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose" :isShow="true">
       <mixForm :key="key" v-model="editForm" :fields="editFields" />
     </mixDrawer>
-    <el-dialog :title="dialogName" :visible.sync="dialogVisible" width="50%">
+    <el-dialog :close-on-click-modal="false" :title="dialogName" :visible.sync="dialogVisible" width="50%">
       <div style="max-height:500px;height:500px;overflow:hidden">
         <mixSearch v-model="salesSearchData" :fields="salesSearch" v-if="!show" />
         <mixTable v-model="tableSalesData" :fields="tableSales" v-if="!show" />
@@ -43,7 +43,7 @@ Create Time  : 2020-03-27
         <!-- <el-button @click="dialogVisible = false">关闭窗口</el-button> -->
       </span>
     </el-dialog>
-    <el-dialog title="添加业绩" :visible.sync="qrcode" width="50%">
+    <el-dialog :close-on-click-modal="false" title="添加业绩" :visible.sync="qrcode" width="50%">
       <div style="max-height:500px;height:500px;overflow:hidden">
         <el-scrollbar>
           <mixForm v-model="qrocdeData" :fields="qrocdeFields" style="border:none;padding-right:20px" />
@@ -53,13 +53,13 @@ Create Time  : 2020-03-27
         <el-button type="primary" @click="saveOrder">保存</el-button>
       </span>
     </el-dialog>
-    <el-dialog :visible.sync="jinduShow" title="客户状态" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="jinduShow" title="客户状态" width="500px">
       <mixForm v-model="statusFormData" :fields="statusFormFields" />
     </el-dialog>
-    <el-dialog :visible.sync="tagShow" title="客户信息" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="tagShow" title="客户信息" width="500px">
       <mixForm v-model="tagData" :fields="tagFields" />
     </el-dialog>
-    <el-dialog :visible.sync="advanceShow" title="预付款信息" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="advanceShow" title="预付款信息" width="500px">
       <mixForm v-model="advanceData" :fields="advanceFields" />
     </el-dialog>
 

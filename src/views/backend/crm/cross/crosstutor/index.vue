@@ -11,10 +11,10 @@ Create Time  : 2020-07-24
       <mixTable v-model="tableData" :fields="tableFields" />
       <mixPage v-model="page" />
     </div>
-    <el-dialog :visible.sync="show" title="编辑">
+    <el-dialog :close-on-click-modal="false" :visible.sync="show" title="编辑">
       <mixForm v-model="editData" :fields="editFields" />
     </el-dialog>
-    <el-dialog title="添加业绩" :visible.sync="qrcode" width="50%">
+    <el-dialog :close-on-click-modal="false" title="添加业绩" :visible.sync="qrcode" width="50%">
       <div style="max-height:500px;height:500px;overflow:hidden">
         <el-scrollbar>
           <mixForm v-model="qrocdeData" :fields="qrocdeFields" style="border:none;padding-right:20px" />

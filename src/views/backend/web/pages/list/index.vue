@@ -36,7 +36,7 @@ Create Time  : 2020-09-20
         <mixCode :key="key" v-model="form.code" :options="options" />
       </el-card>
     </div>
-    <el-dialog :title="title" :visible.sync="visible" width="400px" :modal="true" top="15vh" @close="close">
+    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="visible" width="400px" :modal="true" top="15vh" @close="close">
 
     </el-dialog>
   </div>

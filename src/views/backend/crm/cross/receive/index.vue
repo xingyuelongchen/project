@@ -14,7 +14,7 @@ Create Time  : 2020-04-02
     <!-- <mixDrawer v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose">
       <mixForm v-model="editForm" :fields="editFields" />
     </mixDrawer> -->
-    <el-dialog :title="drawerName" :visible="drawer" width="30%" :before-close="drawerClose">
+    <el-dialog :close-on-click-modal="false" :title="drawerName" :visible="drawer" width="30%" :before-close="drawerClose">
       <mixTable v-model="salesList" :fields="dialogTable" @select="select($event,'user')" />
       <span slot="footer">
         <el-button type="primary" @click="onSave">提交</el-button>

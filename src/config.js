@@ -11,10 +11,10 @@ module.exports = {
     // websocketDev: 'ws://192.168.32.194:2346',
     websocketDev: 'ws://192.168.32.240:3000',
     // 接口URL
-    baseUrl: 'http://youzhemei.cn:8000',
+    baseUrl: 'http://admin.guangyizhou.cn:8083',
     baseUrlDev: 'http://192.168.32.194',
     // 更新地址 
-    uploadUrl: 'http://youzhemei.cn/',
+    uploadUrl: 'http://admin.guangyizhou.cn/',
     uploadUrlDev: 'http://192.168.32.240',
     feedUrl: 'http://192.168.32.240',
     feedUrlDev: 'http://192.168.32.240',

@@ -30,13 +30,13 @@ Create Time  : 2020-08-12
         </div>
       </el-card>
     </div>
-    <el-dialog :visible.sync="addShow" title="添加分类" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="addShow" title="添加分类" width="500px">
       <mixForm v-model="addData" :fields="addFields" />
     </el-dialog>
-    <el-dialog :visible.sync="editShow" title="编辑分类" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="editShow" title="编辑分类" width="500px">
       <mixForm v-model="editData" :fields="editFields" />
     </el-dialog>
-    <el-dialog :visible.sync="appShow" title="添加接口" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="appShow" title="添加接口" width="500px">
       <mixForm v-model="addData" :fields="appFields" />
     </el-dialog>
   </div>

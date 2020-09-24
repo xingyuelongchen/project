@@ -46,24 +46,6 @@
                         "icon": "icon-Homehomepagemenu",
                         "children": [
                             {
-                                "id": 120,
-                                "path": "/user/info",
-                                "pid": 87,
-                                "title": "用户资料修改",
-                                "status": 1,
-                                "sort": null,
-                                "icon": ""
-                            },
-                            {
-                                "id": 101,
-                                "path": "adminapi/User/information",
-                                "pid": 87,
-                                "title": "刷新数据权限",
-                                "status": 1,
-                                "sort": null,
-                                "icon": ""
-                            },
-                            {
                                 "id": 91,
                                 "path": "adminapi/Publics/table_th",
                                 "pid": 87,
@@ -106,6 +88,33 @@
                                 "title": "修改头像",
                                 "status": 1,
                                 "sort": 7,
+                                "icon": ""
+                            },
+                            {
+                                "id": 120,
+                                "path": "/user/info",
+                                "pid": 87,
+                                "title": "用户资料修改",
+                                "status": 1,
+                                "sort": 8,
+                                "icon": ""
+                            },
+                            {
+                                "id": 101,
+                                "path": "adminapi/User/information",
+                                "pid": 87,
+                                "title": "刷新数据权限",
+                                "status": 1,
+                                "sort": 9,
+                                "icon": ""
+                            },
+                            {
+                                "id": 260,
+                                "path": "adminapi/Publics/meal_version",
+                                "pid": 87,
+                                "title": "公共获取套餐版本",
+                                "status": 1,
+                                "sort": 10,
                                 "icon": ""
                             }
                         ]
@@ -349,7 +358,7 @@
                                 "id": 213,
                                 "path": "crosstutor",
                                 "pid": 212,
-                                "title": "跨境导师",
+                                "title": "接待记录",
                                 "status": 1,
                                 "sort": 1,
                                 "icon": ""
@@ -502,28 +511,48 @@
                         "children": []
                     },
                     {
+                        "id": 263,
+                        "path": "websetting",
+                        "pid": 3,
+                        "title": "网站设置",
+                        "status": 1,
+                        "sort": null,
+                        "icon": "",
+                        "children": [
+                            {
+                                "id": 264,
+                                "path": "index",
+                                "pid": 263,
+                                "title": "设置",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            }
+                        ]
+                    },
+                    {
                         "id": 173,
                         "path": "video",
                         "pid": 3,
-                        "title": "课程管理",
+                        "title": "视频管理",
                         "status": 1,
                         "sort": 1,
                         "icon": "",
                         "children": [
                             {
                                 "id": 177,
-                                "path": "uploadvideo",
+                                "path": "upload",
                                 "pid": 173,
-                                "title": "上传课程",
+                                "title": "上传视频",
                                 "status": 1,
                                 "sort": null,
                                 "icon": ""
                             },
                             {
                                 "id": 178,
-                                "path": "classvideo",
+                                "path": "class",
                                 "pid": 173,
-                                "title": "课程分类",
+                                "title": "视频分类",
                                 "status": 1,
                                 "sort": null,
                                 "icon": ""
@@ -540,30 +569,21 @@
                         "icon": "",
                         "children": [
                             {
-                                "id": 182,
-                                "path": "publish",
-                                "pid": 174,
-                                "title": "发布文章",
-                                "status": 1,
-                                "sort": null,
-                                "icon": ""
-                            },
-                            {
                                 "id": 183,
-                                "path": "manage",
+                                "path": "list",
                                 "pid": 174,
                                 "title": "文章管理",
                                 "status": 1,
-                                "sort": null,
+                                "sort": 1,
                                 "icon": ""
                             },
                             {
                                 "id": 184,
-                                "path": "classarticle",
+                                "path": "class",
                                 "pid": 174,
                                 "title": "文章分类",
                                 "status": 1,
-                                "sort": null,
+                                "sort": 3,
                                 "icon": ""
                             }
                         ]
@@ -576,7 +596,26 @@
                         "status": 1,
                         "sort": 3,
                         "icon": "",
-                        "children": []
+                        "children": [
+                            {
+                                "id": 262,
+                                "path": "list",
+                                "pid": 175,
+                                "title": "图片管理",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            },
+                            {
+                                "id": 265,
+                                "path": "imageclass",
+                                "pid": 175,
+                                "title": "图片分类",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            }
+                        ]
                     },
                     {
                         "id": 176,
@@ -586,7 +625,17 @@
                         "status": 1,
                         "sort": 4,
                         "icon": "",
-                        "children": []
+                        "children": [
+                            {
+                                "id": 261,
+                                "path": "list",
+                                "pid": 176,
+                                "title": "页面管理",
+                                "status": 1,
+                                "sort": null,
+                                "icon": ""
+                            }
+                        ]
                     }
                 ]
             },
@@ -796,6 +845,6 @@
             }
         ],
         "department": null,
-        "dateTime": 1600077506246
+        "dateTime": 1601023054435
     }
 }

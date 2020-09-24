@@ -31,7 +31,7 @@ Create Time  : 2020-08-06
         </template>
       </div>
     </div>
-    <el-dialog :visible.sync="show" title="编辑">
+    <el-dialog :close-on-click-modal="false" :visible.sync="show" title="编辑">
 
       <template v-for="(item,index) in formData">
         <div :key="index" style="display:flex;margin:5px">
@@ -50,7 +50,7 @@ Create Time  : 2020-08-06
         <el-button @click="save" type="primary">保存当前</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="addShow" title="添加" width="250px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="addShow" title="添加" width="250px">
       选择等级：
       <el-select v-model="grade">
         <template v-for="(item,index) in options">

@@ -12,7 +12,7 @@ Create Time  : 2020-09-20
           <template v-for="(item,index) in list">
             <div class="item" :class="{active:ids.includes(item.id)}" :key="index">
               <div>
-                <el-image :src="item.url" :preview-src-list="[item.url]" fit="contain">
+                <el-image :src="item.url" :preview-src-list=" previewList " fit="contain">
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
                   </div>
@@ -32,9 +32,8 @@ Create Time  : 2020-09-20
   </div>
 </template>
 <script>
-
 export default {
-  name: "mixImages",
+  name: "WebImageslist",
   data() {
     return {
       key: "0",
@@ -44,6 +43,7 @@ export default {
       all: false,
       searchData: {},
       searchFields: [],
+      previewList: [],
       page: {
         page: 1,
         limit: 27,
@@ -141,6 +141,7 @@ export default {
           if (this.ids.includes(e.id)) e.checked = !e.checked;
           return e;
         });
+        this.previewList = data.data.map(e => e.url);
         this.page.total = data.count;
       }
     },

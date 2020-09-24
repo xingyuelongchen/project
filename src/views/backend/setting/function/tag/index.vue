@@ -25,7 +25,7 @@ Create Time  : 2020-08-21
         </el-scrollbar>
       </el-card>
     </div>
-    <el-dialog :title="title" :visible.sync="dialogFormVisible" width="400px" :modal="true" top="15vh">
+    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="dialogFormVisible" width="400px" :modal="true" top="15vh">
       <mixForm v-model="roles" :fields="rolesFields" />
     </el-dialog>
   </div>

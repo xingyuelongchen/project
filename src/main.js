@@ -5,7 +5,7 @@ import store from "./store";
 import Element from 'element-ui';
 import axios from './api';
 import template from './components';
-import '@/assets/theme/darkblue/index.css';
+import '@/assets/theme/blue/index.css';
 import '@/assets/iconfont/iconfont.css';
 import 'xe-utils';
 // import VXETable from 'vxe-table';

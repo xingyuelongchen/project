@@ -48,10 +48,10 @@ Create Time  : 2020-08-12
         </div>
       </el-card>
     </div>
-    <el-dialog :visible.sync="addShow" title="添加套餐" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="addShow" title="添加套餐" width="500px">
       <mixForm v-model="addData" :fields="addFields" />
     </el-dialog>
-    <el-dialog :visible.sync="editShow" title="编辑套餐" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="editShow" title="编辑套餐" width="500px">
       <mixForm v-model="editData" :fields="editFields" />
     </el-dialog>
   </div>

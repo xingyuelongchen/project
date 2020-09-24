@@ -21,7 +21,7 @@ Create Time  : 2020-03-27
     <mixDrawer style="top:180px" v-model="drawer" :title="drawerName" @confirm="onSave" @close="drawerClose" :isShow="true">
       <mixForm v-model="editForm" :fields="editFields" />
     </mixDrawer>
-    <el-dialog :title="dialogName" :visible.sync="dialogVisible" width="50%">
+    <el-dialog :close-on-click-modal="false" :title="dialogName" :visible.sync="dialogVisible" width="50%">
       <div style="max-height:500px;height:500px;overflow:hidden">
         <mixSearch v-model="salesSearchData" :fields="salesSearch" v-if="!show" />
         <mixTable v-model="tableSalesData" :fields="tableSales" v-if="!show" />

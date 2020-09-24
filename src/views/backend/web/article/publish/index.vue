@@ -182,7 +182,7 @@ export default {
           },
           {
             labelWidth: 60,
-            type: "image",
+            type: "selectimage",
             span: 10,
             label: "封面图",
             prop: "pic",

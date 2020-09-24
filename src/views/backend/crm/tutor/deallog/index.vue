@@ -10,17 +10,17 @@ Create Time  : 2020-07-29
       <mixTable v-model="tableData" :fields="tableFields" />
       <mixPage v-model="page" />
     </div>
-    <el-dialog title="编辑" :visible.sync="show" width="30%">
+    <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="show" width="30%">
       <div style="height:500px;overflow:hidden">
         <el-scrollbar>
           <mixForm v-model="editData" :fields="editFields" style="padding-right:20px" />
         </el-scrollbar>
       </div>
     </el-dialog>
-    <el-dialog title="更正" :visible.sync="showa" width="30%">
+    <el-dialog :close-on-click-modal="false" title="更正" :visible.sync="showa" width="30%">
       <mixForm v-model="editData" :fields="editFields" style="padding-right:20px" />
     </el-dialog>
-    <el-dialog title="分配" :visible.sync="fenShow" width="50%">
+    <el-dialog :close-on-click-modal="false" title="分配" :visible.sync="fenShow" width="50%">
       <mixSearch v-model="salesSearchData" :fields="salesSearch" />
       <div style="height:500px;overflow:hidden">
         <mixTable v-model="tableSalesData" :fields="tableSales" />

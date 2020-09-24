@@ -25,7 +25,7 @@ Create Time  : 2020-08-12
                 {{$store.state.userinfo.dept}} - {{$store.state.userinfo.dept_id}}
               </div>
             </div>
-            <el-dialog :visible.sync="show">
+            <el-dialog :close-on-click-modal="false" :visible.sync="show">
               <div style="display:flex;justify-content:space-between">
                 <div style="width:400px;height:400px;border:1px solid #eee">
                   <mixCover v-model="coverImg" :img="img" ref="cover" />

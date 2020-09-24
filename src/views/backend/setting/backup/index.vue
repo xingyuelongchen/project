@@ -38,16 +38,16 @@ Create Time  : 2020-09-01
         </div>
       </el-card>
     </div>
-    <el-dialog :visible.sync="addShow" title="添加数据表" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="addShow" title="添加数据表" width="500px">
       <mixForm v-model="addData" :fields="addFields" />
     </el-dialog>
-    <el-dialog :visible.sync="editShow" title="编辑数据表" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="editShow" title="编辑数据表" width="500px">
       <mixForm v-model="editData" :fields="editFields" />
     </el-dialog>
-    <el-dialog :visible.sync="addFieldShow" title="字段" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="addFieldShow" title="字段" width="500px">
       <mixForm v-model="addData" :fields="appFields" />
     </el-dialog>
-    <el-dialog :visible.sync="resetBackupShow" title="备份数据" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="resetBackupShow" title="备份数据" width="500px">
       <mixTable v-model="resetBackupData" :fields="resetBackupFields" />
     </el-dialog>
   </div>

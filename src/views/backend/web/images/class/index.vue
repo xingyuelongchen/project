@@ -77,9 +77,13 @@ export default {
       this.getData();
     },
     async getArticle(item) {
-      this.currentClass = item;
+      if (item) {
+        this.currentClass = item;
+      } else {
+        item = this.currentClass;
+      }
       let { data } = await this.axios("/adminapi/images/list", {
-        data: { type: item.id }
+        data: { type: item.id, ...this.page }
       });
       if (data.code) {
         this.tableData = data.data;

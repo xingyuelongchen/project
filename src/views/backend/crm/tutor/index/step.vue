@@ -55,7 +55,7 @@ Create Time  : 2020-08-26
         </div>
       </el-card>
     </div>
-    <el-dialog :visible.sync="refundShow" title="退款资料" width="500px" @close="refundData={}">
+    <el-dialog :close-on-click-modal="false" :visible.sync="refundShow" title="退款资料" width="500px" @close="refundData={}">
       <mixForm v-model="refundData" :fields="refundFields" />
     </el-dialog>
   </div>

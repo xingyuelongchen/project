@@ -27,7 +27,7 @@ Create Time  : 2020-08-12
       </el-card>
       <el-card header="组织"></el-card>
     </div>
-    <el-dialog :title="title" :visible.sync="dialogFormVisible" width="400px" :modal="true" top="15vh" @close="close">
+    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="dialogFormVisible" width="400px" :modal="true" top="15vh" @close="close">
       <mixForm v-model="orgForm" :fields="rolesFields" />
     </el-dialog>
   </div>

@@ -9,7 +9,7 @@ Create Time  : 2020-08-14
       <mixSearch v-model="searchData" :fields="searchFields" :key="key" />
       <mixTable v-model="tableData" :fields="tableFields" />
     </div>
-    <el-dialog :visible.sync="show" title="请输入账号" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="show" title="请输入账号" width="500px">
       <mixForm v-model="formData" :fields="[{label:'旺旺账号',type:'text',prop:'wangwang',labelWidth:80} ]" />
       <div slot="footer">
         <el-button @click="extract" type="primary">提取</el-button>

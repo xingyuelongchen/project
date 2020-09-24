@@ -10,7 +10,7 @@ Create Time  : 2020-08-06
       <mixTable v-model="tableData" :fields="tableFields" @select="select" />
       <mixPage v-model="page" />
     </div>
-    <el-dialog :visible.sync="show" title="编辑" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="show" title="编辑" width="500px">
       <mixForm v-model="formData" :fields="formFields" />
     </el-dialog>
   </div>

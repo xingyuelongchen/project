@@ -58,7 +58,7 @@ Create Time  : 2020-07-28
         <mixTable v-model="rolesList" :fields="rolesFields" @select="listCheck" ref="table" />
       </el-card>
     </div>
-    <el-dialog :title="title" :visible.sync="dialogFormVisible" width="400px" :modal="true" top="15vh">
+    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="dialogFormVisible" width="400px" :modal="true" top="15vh">
       <mixForm v-model="roleData" :fields="roleFields" />
     </el-dialog>
   </div>

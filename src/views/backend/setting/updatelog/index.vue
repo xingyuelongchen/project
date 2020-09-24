@@ -11,7 +11,7 @@ Create Time  : 2020-08-12
       </div>
       <mixTable v-model="tableData" :fields="tableFields" />
     </el-card>
-    <el-dialog :visible.sync="addUpdateShow" title="添加更新" width="500px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="addUpdateShow" title="添加更新" width="500px">
       <mixForm v-model="addUpdateData" :fields="addUpdateFields" @uploadStatus='uploadStatus' />
       <div slot="footer">
         <el-button type="primary" @click="submitUpdate" :loading="loading">提交更新</el-button>

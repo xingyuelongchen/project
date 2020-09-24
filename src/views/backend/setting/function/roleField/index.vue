@@ -49,7 +49,7 @@ Create Time  : 2020-03-27
         </el-tabs>
       </div>
     </div>
-    <el-dialog title="新增关联表" :visible.sync="dialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="新增关联表" :visible.sync="dialogVisible" width="30%">
       <mixForm ref="form" v-model="tableFormData" :fields="tableFormfields" :options="{labelWidth:'80px',size:'small'}" />
     </el-dialog>
   </div>
