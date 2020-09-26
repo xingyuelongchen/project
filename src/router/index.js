@@ -137,7 +137,6 @@ function mapRole(routes, menu, roles) {
     if (obj.length) {
       if (e.children && e.children.length) {
         if (roles[0] == 0 || roles.includes(obj[0].meta.role)) {
-          // 
           arr.push({
             ...obj[0],
             meta: { ...obj[0].meta, title: e.title, },
@@ -177,7 +176,7 @@ function setRoles() {
   // 匹配路由权限  
   let route = mapRole(xitong, userinfo.menu, userinfo.role);
   // 获取当前系统菜单
-  let frist = route.filter(e => e.name == targetIndex);
+  let frist = route.filter(e => e.path.toLocaleLowerCase() == '/' + targetIndex.toLocaleLowerCase());
   // 存入Vuex
   Store.commit('setUserinfo', userinfo);
   // 通知 exe 存入用户信息
@@ -187,7 +186,6 @@ function setRoles() {
   Store.commit('setMenu', frist);
   // 设置路由缓存
   Store.commit('setRoutes', route);
-
   if (frist[0].children && frist[0].children.length) {
     // 清空缓存后，添加首页到第一个tabs标签
     Store.commit('setTabmenu', {
@@ -208,11 +206,14 @@ function setRoles() {
         Store.state.menu[0].children[0].path;
     }
     sessionStorage.setItem('xitong', targetIndex);
+
     // 如果在登录页，就会跳转到第一路由。如果不在登录页，只是页面刷新，就会保持原有URL地址
+
     if (isElectron()) {
       setTimeout(() => router.replace({ path }), 100);
-    }
-    if (window.location.hash.indexOf('/login') >= 0) {
+    } else if (router.mode == 'hash' && window.location.hash.indexOf('/login') >= 0) {
+      setTimeout(() => router.replace({ path }), 100);
+    } else if (router.mode == 'history' && window.location.pathname.indexOf('/login') >= 0) {
       setTimeout(() => router.replace({ path }), 100);
     }
   }

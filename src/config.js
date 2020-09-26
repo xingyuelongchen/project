@@ -1,8 +1,8 @@
 module.exports = {
     // 路由模式
-    routeMode: "hash", //history ,hash
+    routeMode: "history", //history ,hash
     //打包路径
-    routePath: './',
+    routePath: '/',
     // 本地缓存前缀
     storeKey: 'myaa',
     port: 80,
