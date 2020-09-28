@@ -1,17 +1,8 @@
 
 <template>
-  <el-select :value="valueTitle" :clearable="clearable" @clear="clearHandle">
+  <el-select :value="valueTitle" :clearable="clearable" @clear="clearHandle" :size="size">
     <el-option :value="valueTitle" :label="valueTitle">
-      <el-tree
-        id="tree-option"
-        ref="selectTree"
-        :accordion="accordion"
-        :data="options"
-        :props="props"
-        :node-key="props.value"
-        :default-expanded-keys="defaultExpandedKey"
-        @node-click="handleNodeClick"
-      ></el-tree>
+      <el-tree id="tree-option" ref="selectTree" :accordion="accordion" :data="options" :props="props" :node-key="props.value" :default-expanded-keys="defaultExpandedKey" @node-click="handleNodeClick"></el-tree>
     </el-option>
   </el-select>
 </template>
@@ -57,6 +48,9 @@ export default {
       default: () => {
         return true;
       }
+    },
+    size: {
+      default: () => ""
     }
   },
   data() {

@@ -27,6 +27,7 @@ export default {
       tableFields: [],
       search: {},
       searchFields: [
+        { type: "text", label: "搜索", prop: "search", span: 3 },
         {
           type: "select",
           label: "搜索",
@@ -47,8 +48,32 @@ export default {
             }
           ]
         },
-
-        { type: "text", label: "搜索", prop: "search", span: 3 },
+        {
+          type: "selectTree",
+          label: "部门选择",
+          prop: "status",
+          span: 3,
+          options: [
+            {
+              label: "在职",
+              id: 1,
+              value: 1,
+              children: [
+                { label: "3部", value: 1, id: 2 },
+                { label: "2部", value: 2, id: 3 },
+                {
+                  label: "3部",
+                  value: 3,
+                  id: 4,
+                  children: [
+                    { label: "1组", value: 1, id: 5 },
+                    { label: "2组", value: 2, id: 6 }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
         {
           type: "button",
           prop: "value",

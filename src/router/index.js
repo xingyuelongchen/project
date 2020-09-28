@@ -85,7 +85,9 @@ export default router;
  * @param {Object} next 
  */
 function beforeRouter(to, from, next) {
-
+  if (to.meta.title) {
+    window.document.title = '广艺舟 - ' + to.meta.title;
+  }
   // 获取用户信息
   let userinfo = localStorage.getItem('userinfo')
   if (userinfo) userinfo = JSON.parse(userinfo);

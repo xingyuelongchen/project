@@ -46,6 +46,9 @@ Create Time  : 2020-04-02
           <template v-if="item.type == 'radio'">
             <el-radio v-for="(k,i) in item.options" :key="i" :name="item.prop" v-model="form[item.prop]" :disabled="item.disabled" :readonly="item.readonly" :label="k.id">{{k.label}}</el-radio>
           </template>
+          <template v-if="item.type=='selectTree'">
+            <select-tree v-model="form[item.prop]" size="mini" :options="item.options" :props="item.props||{label:'label',value:'value',children:'children'}" />
+          </template>
         </el-col>
       </template>
     </el-row>
@@ -54,6 +57,7 @@ Create Time  : 2020-04-02
 <script>
 export default {
   name: "mixSearch",
+  components: { selectTree: () => import("@/components/mixSelectTree") },
   model: {
     prop: "form"
   },

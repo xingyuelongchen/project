@@ -81,7 +81,7 @@ export default {
       });
       if (data.code) {
         this.tableData = data.data;
-        this.page.total = data.data.count;
+        this.page.total = data.count;
       }
     },
     async export() {

@@ -46,7 +46,8 @@ export default {
           prop: "type",
           options: [
             { label: "新业绩", value: "新业绩" },
-            { label: "补欠款", value: "补欠款" }
+            { label: "补欠款", value: "补欠款" },
+            { label: "升级", value: "升级" },
           ]
         },
         { label: "模糊搜索", type: "text", span: 3, prop: "search" },

@@ -26,7 +26,7 @@ module.exports = {
         // https: true,   //是否使用https协议
         // hotOnly: true, //是否开启热更新
         proxy: {
-            "/adminapi": {
+            "/adminapi/": {
                 target: config.baseUrlDev,
                 ws: true,
                 changeOrigin: true
@@ -42,17 +42,17 @@ module.exports = {
                 //     '^/api': '/homes'
                 // }
             },
-            "/uploads": {
+            "/uploads/": {
                 target: config.baseUrlDev,
                 ws: true,
                 changeOrigin: true
             },
-            "/admin": {
+            "/admin/": {
                 target: config.baseUrlDev,
                 ws: true,
                 changeOrigin: true
             },
-            "/studyapi": {
+            "/studyapi/": {
                 target: 'http://www.guangyizhou.cn',
                 ws: true,
                 changeOrigin: true

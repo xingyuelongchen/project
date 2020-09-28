@@ -10,6 +10,12 @@ export default [
         ]
     },
     {
+        path: '/xipi',
+        name: "Xipi",
+        component: () => import('@/views/xipi'),
+        meta: { isAuth: true, title: '数据走势图', keepAlive: true, },
+    },
+    {
         path: '*', redirect: '/error404'
     }
 ]

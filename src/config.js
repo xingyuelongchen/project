@@ -1,6 +1,6 @@
 module.exports = {
     // 路由模式
-    routeMode: "history", //history ,hash
+    routeMode: "hash", //history ,hash
     //打包路径
     routePath: '/',
     // 本地缓存前缀
@@ -20,9 +20,9 @@ module.exports = {
     feedUrlDev: 'http://192.168.32.240',
     get(field) {
         if (process.env.NODE_ENV != 'development') {
-            return this[field]
+            return this[field];
         } else {
-            return this[field + 'Dev']
+            return this[field + "Dev"];
         }
     }
-}
+};
