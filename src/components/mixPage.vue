@@ -29,18 +29,17 @@ export default {
     return {};
   },
   methods: {
-    sizeChange(val) {
-      this.$emit("input", { ...this.value, limit: val });
-      this.currentChange(1);
+    sizeChange(limit) {
+      this.currentChange(1, limit);
     },
-    currentChange(val) {
-      this.$emit("input", { ...this.value, page: val });
+    currentChange(page, limit = 10) {
+      this.$emit("input", { ...this.value, limit, page });
       if (typeof this.value.event == "function") {
         this.value.event();
       } else if (typeof this.event == "function") {
         this.event();
       } else {
-        let a = Object.assign({}, this.value, { page: val });
+        let a = Object.assign({}, this.value, { page });
         this.$parent.getData(a);
       }
     }

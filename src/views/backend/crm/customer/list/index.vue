@@ -368,7 +368,7 @@ export default {
             ]
           }
         ]);
-        this.tableFields = [{ type: "selection" }].concat(arr);
+        this.tableFields = [{ type: "index" },{ type: "selection" }].concat(arr);
       }
     },
     async getData() {

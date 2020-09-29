@@ -10,8 +10,8 @@ export default [
         ]
     },
     {
-        path: '/xipi',
-        name: "Xipi",
+        path: '/xiapi',
+        name: "Xiapi",
         component: () => import('@/views/xipi'),
         meta: { isAuth: true, title: '数据走势图', keepAlive: true, },
     },

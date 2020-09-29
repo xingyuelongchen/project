@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-03-28
 -->
 <template>
-  <el-table ref="table" id="exportTab" row-key="id" class="mix-table" v-loading=" loading || !fieldsData.length && loading" height='100%' :max-height="options.height || '95%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
+  <el-table ref="table" id="exportTab" row-key="id" class="mix-table" v-loading="loading" height='100%' :max-height="options.height || '95%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
     <template v-for="(item,index ) in field">
       <template v-if="item.type == 'expand'">
         <el-table-column :key="index" :type="item.type" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable">
@@ -327,15 +327,16 @@ export default {
           load: null
         };
       }
-    },
-    loading: {
-      type: Boolean,
-      default: () => false
     }
+    // loading: {
+    //   type: Boolean,
+    //   default: () => false
+    // }
   },
   data() {
     return {
       load: true,
+      loading: true,
       showKey: "key",
       key: 0,
       field: [],
@@ -348,7 +349,9 @@ export default {
       this.init();
       this.key = Math.random();
     },
-    fieldsData() {
+    fieldsData(a) {
+      if (a.length == 0) this.loading = true;
+      if (a.length) this.loading = false;
       this.toggleRowSelection();
     }
   },
@@ -357,8 +360,9 @@ export default {
   },
 
   mounted() {
+    this.loading = !this.fieldsData.length;
     this.timer = setTimeout(() => {
-      this.load = false;
+      this.loading = false;
     }, 5000);
   },
   methods: {
@@ -582,7 +586,7 @@ export default {
 }
 .el-table {
   /deep/ td {
-    padding: 5px 0;
+    padding: 6px 0;
   }
   /deep/ th {
     background-color: none;
@@ -590,7 +594,7 @@ export default {
 }
 .input {
   // width: 100%;
-  min-height: 23px;
+  min-height: 28px;
   /deep/ input[readonly="readonly"] {
     border: none;
     background: none;
