@@ -35,6 +35,7 @@ Create Time  : 2020-08-12
             <div class="list" v-if="imageList.length">
               <template v-for="(item,index) in imageList">
                 <div class="item" :key="index">
+                  <div class="name">{{item.src}}</div>
                   <div class="icon">
                     <span> <i class="el-icon-arrow-left" v-if="index" @click="onLeft(item)"></i></span>
                     <span><i class="el-icon-delete" @click="onDel(item)"></i> </span>
@@ -60,6 +61,20 @@ Create Time  : 2020-08-12
 export default {
   name: "Admincontract",
   data() {
+    const contract = [
+      { labelWidth: 80, label: "套餐名称", prop: "label", type: "text" },
+      { labelWidth: 80, label: "是否淘宝", prop: "form_id", type: "switch" },
+      { labelWidth: 80, label: "套餐价格", prop: "price", type: "number" },
+      { labelWidth: 80, label: "有效期", prop: "duration", type: "number" },
+      {
+        labelWidth: 80,
+        label: "套餐封面",
+        prop: "meal_pic",
+        type: "imageonce",
+        all: false
+      },
+      { labelWidth: 80, label: "套餐合同", prop: "pic", type: "imageonce" }
+    ];
     return {
       version: {},
       addShow: false,
@@ -67,31 +82,21 @@ export default {
       list: [],
       imageList: [],
       addData: {},
-      addFields: [
-        { labelWidth: 80, label: "套餐名称", prop: "label", type: "text" },
-        { labelWidth: 80, label: "套餐价格", prop: "price", type: "number" },
-        { labelWidth: 80, label: "有效期", prop: "duration", type: "number" },
-        { labelWidth: 80, label: "套餐封面", prop: "meal_pic", type: "image" },
-        { labelWidth: 80, label: "套餐合同", prop: "pic", type: "image" },
+      addFields: contract.concat([
         {
           labelWidth: 80,
           type: "button",
           options: [{ label: "提交", click: this.save }]
         }
-      ],
+      ]),
       editData: {},
-      editFields: [
-        { labelWidth: 80, label: "套餐名称", prop: "label", type: "text" },
-        { labelWidth: 80, label: "套餐价格", prop: "price", type: "number" },
-        { labelWidth: 80, label: "有效期", prop: "duration", type: "number" },
-        { labelWidth: 80, label: "套餐封面", prop: "meal_pic", type: "image" },
-        { labelWidth: 80, label: "套餐合同", prop: "pic", type: "image" },
+      editFields: contract.concat([
         {
           labelWidth: 80,
           type: "button",
           options: [{ label: "提交", click: this.editSave }]
         }
-      ]
+      ])
     };
   },
   created() {
@@ -102,12 +107,16 @@ export default {
       this.addShow = true;
     },
     async del() {
-      await this.axios("/adminapi/Meal/del", {
-        data: this.version
+      this.$confirm("此操作不可恢复，是否继续", "警告！", {
+        type: "warning"
+      }).then(async () => {
+        await this.axios("/adminapi/Meal/del", {
+          data: this.version
+        });
+        this.version = {};
+        this.imageList = [];
+        this.getData();
       });
-      this.version = {};
-      this.imageList = [];
-      this.getData();
     },
     tab(item) {
       if (item) {
@@ -200,8 +209,8 @@ export default {
     justify-content: flex-start;
     flex-wrap: wrap;
     .item {
-      width: 250px;
-      height: 300px;
+      width: 200px;
+      height: 250px;
       margin: 4px;
       padding: 4px;
       overflow: hidden;
@@ -210,6 +219,20 @@ export default {
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       position: relative;
       transition: all 0.2s;
+      .name {
+        text-align: center;
+        height: 22px;
+        line-height: 22px;
+        background: rgba(0, 0, 0, 0.3);
+        color: #fff;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 100%;
+        z-index: 99;
+      }
       .icon {
         display: none;
         transition: all 0.2s;

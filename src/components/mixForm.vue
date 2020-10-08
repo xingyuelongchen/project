@@ -55,7 +55,7 @@ Create Time  : 2020-03-31
                 <el-input v-else v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :readonly="!!item.readonly"></el-input>
               </template>
               <template v-if="item.type == 'switch'">
-                <el-switch v-model="fieldsData[item.prop]" inactive-color="#ccc" :disabled="!!item.disabled" />
+                <el-switch v-model="fieldsData[item.prop]" inactive-color="#ccc" :disabled="!!item.disabled" :active-value="1" />
               </template>
               <template v-if="item.type == 'slider'">
                 <el-slider v-model="fieldsData[item.prop]" :format-tooltip="item.formatTooltip" :disabled="!!item.disabled" />
@@ -94,18 +94,48 @@ Create Time  : 2020-03-31
                 <el-date-picker :type="item.type" :value-format="item.type =='date'?'yyyy-MM-dd':'yyyy-MM-dd HH:mm:ss'" v-model="fieldsData[item.prop]" :placeholder="item.label" :disabled="!!item.disabled" :readonly="!!item.readonly"></el-date-picker>
               </template>
               <template v-if="item.type == 'image'">
-                <div :key="key" class="image">
+                <div class="image" :key="key">
                   <el-input v-model="files[item.prop]" :readonly="!!item.readonly" type="text" @paste.native.capture.prevent="onPaste($event,item,index)" title="可粘贴截图上传" :placeholder="item.placeholder || '可粘贴截图上传'">
-                    <el-button slot="append" :disabled="!!item.readonly" @click.native.stop="$refs.upload[0].click()">本地上传</el-button>
+                    <el-button slot="append" :disabled="!!item.readonly" @click.native.stop="selectFile(item)">本地上传</el-button>
                   </el-input>
-                  <input ref="upload" type="file" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg" multiple @input="upload($event,item)" v-show="false" />
-                  <div v-if="fieldsData[item.prop] && fieldsData[item.prop].length" class="image-box">
+                  <input :ref="item.prop" type="file" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg" @change="upload($event,item)" v-if="item.all === false" v-show="false" />
+                  <input :ref="item.prop" type="file" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg" multiple @change="upload($event,item)" v-else v-show="false" />
+                  <div v-if="fieldsData[item.prop] && fieldsData[item.prop] instanceof Array" class="image-box">
                     <template v-for="(v,i) in fieldsData[item.prop]">
                       <div class="image-item" :key="i">
                         <el-image :src="v" :preview-src-list="fieldsData[item.prop]" fit="cover" />
                         <i class="el-icon-delete" @click="onDelImage(item,i)"></i>
                       </div>
                     </template>
+                  </div>
+                  <div v-else-if="fieldsData[item.prop]" class="image-box">
+                    <div class="image-item">
+                      <el-image :src="fieldsData[item.prop]" :preview-src-list="[fieldsData[item.prop]]" fit="cover" />
+                      <i class="el-icon-delete" @click="onDelImage(item,i)"></i>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-if="item.type == 'imageonce'">
+                <div class="image" :key="key">
+                  <el-input v-model="files[item.prop]" :readonly="!!item.readonly" type="text">
+                    <el-button slot="append" :disabled="!!item.readonly" @click.native.stop="selectFile(item)">本地上传</el-button>
+                  </el-input>
+                  <input :ref="item.prop" type="file" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg" @change="uploadonce($event,item)" v-if="item.all === false" v-show="false" />
+                  <input :ref="item.prop" type="file" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg" multiple @change="uploadonce($event,item)" v-else v-show="false" />
+                  <div v-if="fieldsData[item.prop] && fieldsData[item.prop] instanceof Array" class="image-box">
+                    <template v-for="(v,i) in fieldsData[item.prop]">
+                      <div class="image-item" :key="i">
+                        <el-image :src="v" :preview-src-list="fieldsData[item.prop]" fit="cover" />
+                        <i class="el-icon-delete" @click="onDelImage(item,i)"></i>
+                      </div>
+                    </template>
+                  </div>
+                  <div v-else-if="fieldsData[item.prop]" class="image-box">
+                    <div class="image-item">
+                      <el-image :src="fieldsData[item.prop]" :preview-src-list="[fieldsData[item.prop]]" fit="cover" />
+                      <i class="el-icon-delete" @click="onDelImage(item,i)"></i>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -131,7 +161,7 @@ Create Time  : 2020-03-31
               <template v-if="item.type=='selectimage'">
                 <mixImages v-if="getImage.show" />
                 <el-button :type="item.style || 'primary'" :size="item.size || options.size || 'small'" @click="seleceImage(item)">选择图片</el-button>
-                <div v-if="fieldsData[item.prop] && fieldsData[item.prop].length" class="image-box">
+                <div v-if="fieldsData[item.prop] && fieldsData[item.prop] instanceof Array" class="image-box">
                   <template v-if="typeof fieldsData[item.prop] == 'object'">
                     <div class="image-item" :key="i" v-for="(v,i) in fieldsData[item.prop]">
                       <el-image :src="v" :preview-src-list="fieldsData[item.prop]" fit="cover" />
@@ -273,6 +303,9 @@ export default {
     ...mapState(["getImage"])
   },
   methods: {
+    selectFile(item) {
+      this.$refs[item.prop][0].click();
+    },
     async uploadFile(event, item) {
       let file = new FormData();
       file.append("files", event.target.files[0]);
@@ -402,13 +435,22 @@ export default {
     },
     // 删除选择的图片
     onDelImage(item, i) {
-      this.fieldsData[item.prop].splice(i, 1);
+      if (item.all === false) {
+        this.fieldsData[item.prop] = "";
+      } else {
+        this.fieldsData[item.prop].splice(i, 1);
+      }
       this.key = Math.random();
     },
     // 点击按钮上传
-    upload(event, item) {
+    upload(event, item) { 
       event.target.files.forEach(e => {
         this.update(e, e.type, item);
+      });
+    },
+    uploadonce(event, item) { 
+      event.target.files.forEach(e => {
+        this.updateonce(e, e.type, item);
       });
     },
     // 粘贴剪切板截图
@@ -432,11 +474,33 @@ export default {
       });
       if (data.code) {
         let imgUrl = data.data;
-        // process.env.NODE_ENV != "development"
-        //   ? CONFIG.baseUrl + "/" + data.data
-        //   : CONFIG.baseUrlDev + "/" + data.data;
-        // let blob = window.URL.createObjectURL(file);
-        if (this.fieldsData[item.prop] && this.fieldsData[item.prop].length) {
+        if (item.all === false) {
+          this.fieldsData[item.prop] = imgUrl;
+        } else if (
+          this.fieldsData[item.prop] &&
+          this.fieldsData[item.prop].length
+        ) {
+          this.fieldsData[item.prop].push(imgUrl);
+        } else {
+          this.fieldsData[item.prop] = [imgUrl];
+        }
+        this.key = Math.random();
+      }
+    },
+    async updateonce(file, mime, item) {
+      let obj = new FormData();
+      obj.append("files", file);
+      let { data } = await this.axios("/adminapi/Publics/uploadsOriginal", {
+        data: obj
+      });
+      if (data.code) {
+        let imgUrl = data.data;
+        if (item.all === false) {
+          this.fieldsData[item.prop] = imgUrl;
+        } else if (
+          this.fieldsData[item.prop] &&
+          this.fieldsData[item.prop].length
+        ) {
           this.fieldsData[item.prop].push(imgUrl);
         } else {
           this.fieldsData[item.prop] = [imgUrl];
