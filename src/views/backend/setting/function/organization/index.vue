@@ -48,7 +48,7 @@ export default {
           label: "上级",
           type: "selectTree",
           labelWidth: "40",
-          prop: "pid",
+          prop: "id",
           props: { label: "label", value: "id" },
           options: []
         },
@@ -119,9 +119,14 @@ export default {
     },
     async treeAdd(data) {
       this.title = "添加部门";
-      console.log(data);
-      let { id:com_id, pid=0 } = data;
-      this.orgForm = { com_id, pid }; 
+      if (data.pid >= 0) {
+        let { com_id = null, id: pid, id } = data;
+        this.orgForm = { com_id, pid, id };
+      } else {
+        let { id: com_id, pid = 0, id } = data;
+        this.orgForm = { com_id, pid, id };
+      }
+      this.treeKey[0] = data.id;
       this.dialogFormVisible = true;
     },
     async treeChange(data) {
@@ -129,13 +134,13 @@ export default {
       this.dialogFormVisible = true;
       this.title = "修改部门";
       this.url = "/adminapi/Company/department_edit";
+      this.treeKey[0] = data.id;
     },
     async treeDel(val) {
       let { data } = await this.axios("/adminapi/Company/department_del", {
         data: val
       });
       if (data.code) {
-        this.$message.success(data.msg);
         this.getOrgList();
         this.orgForm = {};
       }

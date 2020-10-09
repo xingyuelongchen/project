@@ -6,13 +6,13 @@ Create Time  : 2020-07-27
 <template>
   <div class="mix-page">
     <slot name="left"></slot>
-    <el-pagination background :layout="value.layout || 'prev, pager, next,sizes, total'" :page-size="value.limit" :page-sizes="value.sizes " :total="value.total || total" @size-change="sizeChange" @current-change="currentChange"></el-pagination>
+    <el-pagination background :current-page.sync="page.page" :layout="page.layout || 'prev, pager, next,sizes, total'" :page-size="page.limit" :page-sizes="sizes" :total="page.total || total" @size-change="sizeChange" @current-change="currentChange"></el-pagination>
     <slot name="right"></slot>
   </div>
 </template>
 <script>
 export default {
-  name: "MixPage",
+  name: 'MixPage',
   props: {
     value: {
       type: Object,
@@ -20,31 +20,40 @@ export default {
         return {
           page: 1,
           limit: 20
-        };
+        }
       }
     },
     total: Number
   },
+
   data() {
-    return {};
+    return {
+      page: {},
+      sizes: [10, 20, 30, 50, 70, 90, 100]
+    }
+  },
+  created() {
+    this.page = this.value
+    this.sizes.unshift(this.value.limit)
   },
   methods: {
     sizeChange(limit) {
-      this.currentChange(1, limit);
+      this.page.limit = limit
+      this.page.page = 1
+      this.currentChange()
     },
-    currentChange(page, limit = 10) {
-      this.$emit("input", { ...this.value, limit, page });
-      if (typeof this.value.event == "function") {
-        this.value.event();
-      } else if (typeof this.event == "function") {
-        this.event();
+    currentChange() {
+      this.$emit('input', { ...this.page })
+      if (typeof this.value.event == 'function') {
+        this.value.event()
+      } else if (typeof this.event == 'function') {
+        this.event()
       } else {
-        let a = Object.assign({}, this.value, { page });
-        this.$parent.getData(a);
+        this.$parent.getData(this.page)
       }
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .mix-page {

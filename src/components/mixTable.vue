@@ -62,6 +62,14 @@ Create Time  : 2020-03-28
             <template v-if="item.type == 'cascader'">
               <el-cascader :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" :options="item.config || {}" @change="onInput(item,scope,'change',$event)" />
             </template>
+
+            <template v-if="item.type == 'color'">
+              <div class="input" :key="showKey">
+                <span>{{scope.row[item.prop]}}</span>
+                <!-- <el-input v-else :size="item.size||options.size||'mini'" :autofocus="true" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="focusData={}"></el-input> -->
+                <el-color-picker :size="item.size||options.size||'mini'" :predefine="['#fff','#000','#ff0','#f00','#0ff','#00f','#0f0']" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="focusData={}"></el-color-picker>
+              </div>
+            </template>
             <template v-if="item.type == 'input'">
               <div class="input" :key="showKey">
                 <span v-if="focusData[scope.column.id+scope.row.id]!==true">{{scope.row[item.prop]}}</span>
@@ -79,9 +87,9 @@ Create Time  : 2020-03-28
                     <el-dropdown-item></el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
-                <template v-else>
+                <template v-else-if="item.type == 'button' && item.options && item.options.length">
                   <el-button v-for="(k,i) in item.options" v-role="k.role" v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'" :size="item.size||options.size||'mini'" @click="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-button>
-                </template>
+                </template> 
               </div>
             </template>
             <template v-if="item.type == 'icon'">
@@ -113,12 +121,12 @@ Create Time  : 2020-03-28
   </el-table>
 </template>
 <script>
-import FileSaver from "file-saver";
-import XLSX from "xlsx";
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
-  name: "MixTable",
+  name: 'MixTable',
   model: {
-    prop: "fieldsData"
+    prop: 'fieldsData'
   },
   props: {
     // 表头字段
@@ -127,74 +135,74 @@ export default {
       // required: true,
       default: () => [
         {
-          label: "标签",
-          type: "tag",
-          prop: "id"
+          label: '标签',
+          type: 'tag',
+          prop: 'id'
         },
         {
-          label: "input",
-          type: "input",
-          prop: "input"
+          label: 'input',
+          type: 'input',
+          prop: 'input'
         },
         {
-          label: "操作",
-          type: "manage",
-          fixed: "right",
+          label: '操作',
+          type: 'manage',
+          fixed: 'right',
           options: [
             {
-              label: "删除",
+              label: '删除',
               click() {
-                console.log("删除");
+                console.log('删除')
               }
             },
             {
-              label: "修改",
+              label: '修改',
               click() {
-                console.log("修改");
+                console.log('修改')
               }
             },
             {
-              label: "添加",
+              label: '添加',
               click() {
-                console.log("添加");
+                console.log('添加')
               }
             }
           ]
         },
         {
-          label: "开关",
-          type: "switch",
-          prop: "switch",
-          align: "center"
+          label: '开关',
+          type: 'switch',
+          prop: 'switch',
+          align: 'center'
         },
         {
-          label: "dropDown",
-          prop: "dropdown",
-          type: "dropdown",
-          options: [{ label: "下拉a", value: "下拉a" }]
+          label: 'dropDown',
+          prop: 'dropdown',
+          type: 'dropdown',
+          options: [{ label: '下拉a', value: '下拉a' }]
         },
         {
-          label: "tagdown",
-          prop: "tagdown",
-          type: "tagdown",
-          options: [{ label: "下拉a", value: "下拉a" }]
+          label: 'tagdown',
+          prop: 'tagdown',
+          type: 'tagdown',
+          options: [{ label: '下拉a', value: '下拉a' }]
         },
         {
-          label: "选择器",
-          type: "select",
-          prop: "select",
+          label: '选择器',
+          type: 'select',
+          prop: 'select',
           options: [
-            { label: "a", value: "a" },
-            { label: "b", value: "b" }
+            { label: 'a', value: 'a' },
+            { label: 'b', value: 'b' }
           ]
         },
         {
-          label: "表头名称",
-          prop: "title",
-          width: "auto",
+          label: '表头名称',
+          prop: 'title',
+          width: 'auto',
           sort() {},
           click() {
-            console.log("单击事件");
+            console.log('单击事件')
           }
           // dblClick() {
           //   // 单击事件和双击事件只能出现一个
@@ -210,110 +218,110 @@ export default {
       default: () => [
         {
           id: 1,
-          title: "首页",
-          path: "/",
-          select: "a",
-          dropdown: "下拉选择",
+          title: '首页',
+          path: '/',
+          select: 'a',
+          dropdown: '下拉选择',
           switch: false,
-          input: "readonly",
-          tagdown: "tagdown"
+          input: 'readonly',
+          tagdown: 'tagdown'
         },
         {
           id: 2,
-          title: "首页",
-          path: "/",
-          select: "a",
-          dropdown: "下拉选择",
+          title: '首页',
+          path: '/',
+          select: 'a',
+          dropdown: '下拉选择',
           switch: false,
-          input: "readonly",
-          tagdown: "tagdown"
+          input: 'readonly',
+          tagdown: 'tagdown'
         },
         {
           id: 3,
-          title: "首页",
-          path: "/",
-          select: "a",
-          dropdown: "下拉选择",
+          title: '首页',
+          path: '/',
+          select: 'a',
+          dropdown: '下拉选择',
           switch: false,
-          input: "readonly",
-          tagdown: "tagdown"
+          input: 'readonly',
+          tagdown: 'tagdown'
         },
         {
           id: 4,
-          title: "首页",
-          path: "/",
-          select: "a",
-          dropdown: "下拉选择",
+          title: '首页',
+          path: '/',
+          select: 'a',
+          dropdown: '下拉选择',
           switch: false,
-          input: "readonly",
-          tagdown: "tagdown"
+          input: 'readonly',
+          tagdown: 'tagdown'
         },
         {
           id: 5,
-          title: "首页",
-          path: "/",
-          select: "a",
-          dropdown: "下拉选择",
+          title: '首页',
+          path: '/',
+          select: 'a',
+          dropdown: '下拉选择',
           switch: false,
-          input: "readonly",
-          tagdown: "tagdown"
+          input: 'readonly',
+          tagdown: 'tagdown'
         },
         {
           id: 6,
-          title: "首页",
-          path: "/",
-          select: "a",
-          dropdown: "下拉选择",
+          title: '首页',
+          path: '/',
+          select: 'a',
+          dropdown: '下拉选择',
           switch: false,
-          input: "readonly",
-          tagdown: "tagdown"
+          input: 'readonly',
+          tagdown: 'tagdown'
         },
         {
           id: 7,
-          title: "首页",
-          path: "/",
-          select: "a",
-          dropdown: "下拉选择",
+          title: '首页',
+          path: '/',
+          select: 'a',
+          dropdown: '下拉选择',
           switch: false,
-          input: "readonly",
-          tagdown: "tagdown"
+          input: 'readonly',
+          tagdown: 'tagdown'
         },
         {
           id: 8,
-          title: "首页",
-          path: "/",
-          select: "a",
-          dropdown: "下拉选择",
+          title: '首页',
+          path: '/',
+          select: 'a',
+          dropdown: '下拉选择',
           switch: false,
-          input: "readonly",
-          tagdown: "tagdown"
+          input: 'readonly',
+          tagdown: 'tagdown'
         },
         {
           id: 9,
-          title: "首页",
-          path: "/",
-          select: "a",
-          dropdown: "下拉选择",
+          title: '首页',
+          path: '/',
+          select: 'a',
+          dropdown: '下拉选择',
           switch: false,
-          input: "readonly",
-          tagdown: "tagdown"
+          input: 'readonly',
+          tagdown: 'tagdown'
         },
         {
           id: 10,
-          title: "首页",
-          path: "/",
-          select: "a",
-          dropdown: "下拉选择",
+          title: '首页',
+          path: '/',
+          select: 'a',
+          dropdown: '下拉选择',
           switch: false,
-          input: "readonly",
-          tagdown: "tagdown"
+          input: 'readonly',
+          tagdown: 'tagdown'
         },
         {
           id: 11,
-          title: "页",
-          path: "/a",
-          select: "b",
-          dropdown: "下拉",
+          title: '页',
+          path: '/a',
+          select: 'b',
+          dropdown: '下拉',
           switch: false
         }
       ]
@@ -325,7 +333,7 @@ export default {
         return {
           lazy: false,
           load: null
-        };
+        }
       }
     }
     // loading: {
@@ -337,207 +345,201 @@ export default {
     return {
       load: true,
       loading: true,
-      showKey: "key",
+      showKey: 'key',
       key: 0,
       field: [],
       timer: null,
       focusData: {}
-    };
+    }
   },
   watch: {
     fields() {
-      this.init();
-      this.key = Math.random();
+      this.init()
+      this.key = Math.random()
     },
     fieldsData(a) {
-      if (a.length == 0) this.loading = true;
-      if (a.length) this.loading = false;
-      this.toggleRowSelection();
+      if (a.length == 0) this.loading = true
+      if (a.length) this.loading = false
+      this.toggleRowSelection()
     }
   },
   created() {
-    this.init();
+    this.init()
   },
 
   mounted() {
-    this.loading = !this.fieldsData.length;
+    this.loading = !this.fieldsData.length
     this.timer = setTimeout(() => {
-      this.loading = false;
-    }, 5000);
+      this.loading = false
+    }, 5000)
   },
   methods: {
     doLayout() {
-      this.$refs.table.doLayout();
+      this.$refs.table.doLayout()
     },
     async outTab() {
-      let fileName = this.$route.meta.title + Date.now();
-      let xlsxParam = { raw: true }; // 导出的内容只做解析，不进行格式转换
-      let wb = XLSX.utils.table_to_book(
-        document.querySelector("#exportTab"),
-        xlsxParam
-      );
+      let fileName = this.$route.meta.title + Date.now()
+      let xlsxParam = { raw: true } // 导出的内容只做解析，不进行格式转换
+      let wb = XLSX.utils.table_to_book(document.querySelector('#exportTab'), xlsxParam)
 
       /* get binary string as output */
       var wbout = XLSX.write(wb, {
-        bookType: "xlsx",
+        bookType: 'xlsx',
         bookSST: true,
-        type: "array"
-      });
+        type: 'array'
+      })
       try {
-        FileSaver.saveAs(
-          new Blob([wbout], { type: "application/octet-stream" }),
-          fileName + ".xlsx"
-        );
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), fileName + '.xlsx')
       } catch (e) {
-        if (typeof console !== "undefined") {
-          console.log(e, wbout);
+        if (typeof console !== 'undefined') {
+          console.log(e, wbout)
         }
       }
-      return wbout;
+      return wbout
     },
     progressStatus(item) {
-      if (item <= 0) return "exception";
-      if (70 >= item) return "warning";
-      if (item > 70) return "success";
+      if (item <= 0) return 'exception'
+      if (70 >= item) return 'warning'
+      if (item > 70) return 'success'
 
-      return "init";
+      return 'init'
     },
     isShow(k, item, scope) {
       // 按钮是否显示
       if (k.isShow) {
-        let bool = false;
-        if (k.isShow.type == "==") {
-          bool = scope.row[k.isShow.prop] == k.isShow.val;
+        let bool = false
+        if (k.isShow.type == '==') {
+          bool = scope.row[k.isShow.prop] == k.isShow.val
         }
-        if (k.isShow.type == ">=") {
-          bool = scope.row[k.isShow.prop] >= k.isShow.val;
+        if (k.isShow.type == '>=') {
+          bool = scope.row[k.isShow.prop] >= k.isShow.val
         }
-        if (k.isShow.type == "<=") {
-          bool = scope.row[k.isShow.prop] <= k.isShow.val;
+        if (k.isShow.type == '<=') {
+          bool = scope.row[k.isShow.prop] <= k.isShow.val
         }
-        if (k.isShow.type == "===") {
-          bool = scope.row[k.isShow.prop] === k.isShow.val;
+        if (k.isShow.type == '===') {
+          bool = scope.row[k.isShow.prop] === k.isShow.val
         }
-        if (k.isShow.type == "!==") {
-          bool = scope.row[k.isShow.prop] !== k.isShow.val;
+        if (k.isShow.type == '!==') {
+          bool = scope.row[k.isShow.prop] !== k.isShow.val
         }
-        if (k.isShow.type == "!=") {
-          bool = scope.row[k.isShow.prop] != k.isShow.val;
+        if (k.isShow.type == '!=') {
+          bool = scope.row[k.isShow.prop] != k.isShow.val
         }
-        return bool;
+        return bool
       } else {
-        return true;
+        return true
       }
     },
     getTagDownLabel(item, scope) {
       // 标签内容
       try {
         let arr = item.options.filter(e => {
-          return scope.row[item.prop] == e.value;
-        });
-        return arr && arr.length && arr[0].label;
+          return scope.row[item.prop] == e.value
+        })
+        return arr && arr.length && arr[0].label
       } catch (error) {
-        return scope.row[item.prop];
+        return scope.row[item.prop]
       }
     },
     toggleRowSelection() {
       let timer = setTimeout(() => {
-        clearTimeout(timer);
+        clearTimeout(timer)
         this.fieldsData.filter(e => {
-          if (e.checked) this.$refs.table.toggleRowSelection(e);
-        });
-      }, 50);
+          if (e.checked) this.$refs.table.toggleRowSelection(e)
+        })
+      }, 50)
     },
 
     onInput(item, scope, type, event) {
-      if (type == "change" && item["change"]) {
-        this.click(item[type], scope.row, scope, event);
+      if (type == 'change' && item['change']) {
+        this.click(item[type], scope.row, scope, event)
       }
     },
     toogle(item, value) {
       if (item.options) {
         try {
-          let style = item.options.filter(e => e.value == value)[0];
-          return style.style || style.value;
+          let style = item.options.filter(e => e.value == value)[0]
+          return style.style || style.value
         } catch (error) {
-          return null;
+          return null
         }
       }
     },
     init() {
-      this.field = this.fields.map(e => e);
+      this.field = this.fields.map(e => e)
     },
     // 复选框状态改变时触发
     selectionChange(selection) {
-      this.$emit("select", selection);
+      this.$emit('select', selection)
     },
     tooltip(text) {
-      this.$alert(text, "提示", {
-        confirmButtonText: "关闭"
-      });
+      this.$alert(text, '提示', {
+        confirmButtonText: '关闭'
+      })
     },
     // 点击单元格
     cellClick(row, column, cell, event) {
-      let data = this.field.filter(e => e.prop == column.property);
-      data = data.length && data[0];
+      let data = this.field.filter(e => e.prop == column.property)
+      data = data.length && data[0]
       // 输入框获取焦点
-      if (data.type == "input") {
-        if (this.focusData[column.id + row.id]) return;
-        this.focusData = {};
-        this.focusData[column.id + row.id] = true;
-        this.showKey = Math.random();
-        clearTimeout(this.timer);
+      if (data.type == 'input') {
+        if (this.focusData[column.id + row.id]) return
+        this.focusData = {}
+        this.focusData[column.id + row.id] = true
+        this.showKey = Math.random()
+        clearTimeout(this.timer)
         this.timer = setTimeout(() => {
-          cell.querySelector("input").focus();
-        }, 50);
+          cell.querySelector('input').focus()
+        }, 50)
       }
       // 提示信息
-      if (data.tooltip) this.tooltip(row[data.tooltip]);
-      if (data.dialog) data.dialog(row, data);
+      if (data.tooltip) this.tooltip(row[data.tooltip])
+      if (data.dialog) data.dialog(row, data)
       // click事件
-      if (!data.click || data.dblClick) return;
-      this.click(data["click"], row, column, cell, event, data);
+      if (!data.click || data.dblClick) return
+      this.click(data['click'], row, column, cell, event, data)
     },
     // 双击单元格
     cellDblClick(row, column, cell, event) {
-      let data = this.field.filter(e => e.prop == column.property);
-      data = data.length && data[0];
-      if (!data.dblClick) return;
-      this.click(data["dblClick"], column, cell, event, row, data);
+      let data = this.field.filter(e => e.prop == column.property)
+      data = data.length && data[0]
+      if (!data.dblClick) return
+      this.click(data['dblClick'], column, cell, event, row, data)
     },
     click(type, row, column, cell, event) {
-      if (typeof type == "function") {
-        type(row, column, cell, event, type);
+      if (typeof type == 'function') {
+        type(row, column, cell, event, type)
       }
-      if (typeof this.$parent[type] == "function") {
-        this.$parent[type](row, column, cell, event, type);
+      if (typeof this.$parent[type] == 'function') {
+        this.$parent[type](row, column, cell, event, type)
       }
     },
     // 下拉选择
     dropDown(item, k, scope) {
-      scope.row[item.prop] = k.value || k.label;
-      let click = item["change"];
-      if (!click) return;
-      if (typeof click == "function") {
-        click(scope.row, scope.column, scope);
-        return;
+      scope.row[item.prop] = k.value || k.label
+      let click = item['change']
+      if (!click) return
+      if (typeof click == 'function') {
+        click(scope.row, scope.column, scope)
+        return
       }
-      if (typeof this.$parent[click] == "function") {
-        this.$parent[click](scope.row, scope.column, scope);
-        return;
+      if (typeof this.$parent[click] == 'function') {
+        this.$parent[click](scope.row, scope.column, scope)
+        return
       }
     }
   },
 
   filters: {
     getTagDownLabel(val, item) {
-      console.log(val, item);
+      console.log(val, item)
     }
   },
   beforeDestroy() {
-    clearTimeout(this.timer);
+    clearTimeout(this.timer)
   }
-};
+}
 </script>
 <style lang='less' scoped>
 .demo-table-expand {
@@ -595,7 +597,7 @@ export default {
 .input {
   // width: 100%;
   min-height: 28px;
-  /deep/ input[readonly="readonly"] {
+  /deep/ input[readonly='readonly'] {
     border: none;
     background: none;
   }

@@ -14,7 +14,10 @@ Create Time  : 2020-08-12
         <div class="left">
           <el-scrollbar>
             <template v-if="list.length">
-              <div v-for="(item,index) in  list" class="item" user=card-active :key="index" @click="tab(item)" :class="{active:version.id==item.id}">{{item.label}}</div>
+              <div v-for="(item,index) in  list" class="item" style="display: flex; justify-content: space-between; align-items: center;padding-right: 10px;" user=card-active :key="index" @click="tab(item)" :class="{active:version.id==item.id}">
+                <span>{{item.label}}</span>
+                <span class="el-icon-plus" @click="addPic(item)"></span>
+              </div>
             </template>
           </el-scrollbar>
         </div>
@@ -27,11 +30,12 @@ Create Time  : 2020-08-12
             <el-button style="padding:3px 6px;" size="mini" type="info"> 价格：{{version.price }}元</el-button>
             <el-button style="padding:3px 6px;" size="mini" type="danger" @click="del">删除当前套餐</el-button>
             <el-button style="padding:3px 6px;" size="mini" type="success" @click="edit">编辑套餐</el-button>
-            <el-button style="padding:3px 6px;" size="mini" type="warning" @click="changeSave">保存图片修改</el-button>
+            <!-- <el-button style="padding:3px 6px;" size="mini" type="warning" @click="changeSave">添加图片</el-button> -->
           </template>
         </div>
         <div class="right">
-          <el-scrollbar>
+          <mixTable v-model="imageList" :fields="tableFields" />
+          <el-scrollbar v-show="false">
             <div class="list" v-if="imageList.length">
               <template v-for="(item,index) in imageList">
                 <div class="item" :key="index">
@@ -55,6 +59,10 @@ Create Time  : 2020-08-12
     <el-dialog :close-on-click-modal="false" :visible.sync="editShow" title="编辑套餐" width="500px">
       <mixForm v-model="editData" :fields="editFields" />
     </el-dialog>
+    <el-dialog :close-on-click-modal="false" :visible.sync="picShow" title="添加图片" width="500px">
+      <mixForm v-model="picData" :fields="picFields" />
+    </el-dialog>
+
   </div>
 </template>
 <script>
@@ -72,15 +80,24 @@ export default {
         prop: "meal_pic",
         type: "imageonce",
         all: false
-      },
-      { labelWidth: 80, label: "套餐合同", prop: "pic", type: "imageonce" }
+      }
+      // { labelWidth: 80, label: "套餐合同", prop: "pic", type: "imageonce" }
     ];
     return {
       version: {},
       addShow: false,
       editShow: false,
+      picShow: false,
       list: [],
       imageList: [],
+      picData: {},
+      picFields: [
+        // { label: "图片名称", type: "text", prop: "label" },
+        { label: "图片排序", type: "number", prop: "sort" },
+        { label: "上传图片", prop: "pic", type: "imageonce", all: false },
+        { label: "是否需要签名", type: "switch", prop: "is_sign" },
+        { label: "确定", type: "button", click: this.changeSave }
+      ],
       addData: {},
       addFields: contract.concat([
         {
@@ -96,7 +113,53 @@ export default {
           type: "button",
           options: [{ label: "提交", click: this.editSave }]
         }
-      ])
+      ]),
+      tableFields: [
+        { label: "缩略图", prop: "pic", type: "image" },
+        { change: this.changeEdit, label: "排序", prop: "sort", type: "input" },
+        {
+          change: this.changeEdit,
+          label: "名称",
+          prop: "label",
+          type: "input"
+        },
+        {
+          change: this.changeEdit,
+          label: "是否签名",
+          prop: "is_sign",
+          type: "switch"
+        },
+        {
+          change: this.changeEdit,
+          label: "字体色",
+          prop: "font_color",
+          type: "input"
+        },
+        {
+          change: this.changeEdit,
+          label: "字号",
+          prop: "font_size",
+          type: "input"
+        },
+        {
+          change: this.changeEdit,
+          label: "签名位置1",
+          prop: "position_a",
+          type: "input"
+        },
+        {
+          change: this.changeEdit,
+          label: "签名位置2",
+          prop: "position_b",
+          type: "input"
+        },
+        {
+          change: this.changeEdit,
+          label: "签名位置3",
+          prop: "position_c",
+          type: "input"
+        }
+      ]
     };
   },
   created() {
@@ -105,6 +168,19 @@ export default {
   methods: {
     add() {
       this.addShow = true;
+    },
+    async addPic(item) {
+      this.picShow = true;
+      this.picData.meal_id = item.id;
+    },
+    async changeEdit(item) {
+      console.log(item);
+      item = { ...item };
+      delete item.create_time;
+      delete item.update_time;
+      await this.axios("/adminapi/meal/sign_edit", {
+        data: item
+      });
     },
     async del() {
       this.$confirm("此操作不可恢复，是否继续", "警告！", {
@@ -118,11 +194,18 @@ export default {
         this.getData();
       });
     },
-    tab(item) {
-      if (item) {
-        this.version = item;
-        this.imageList = item.pic.map((e, i) => ({ id: i, src: e }));
+    async tab(item) {
+      this.version = item;
+      let { data } = await this.axios("/adminapi/meal/list_mael", {
+        data: { id: item.id }
+      });
+      if (data.code) {
+        console.log(data);
+        this.imageList = data.data;
       }
+      // if (item) {
+      //   this.imageList = item.pic.map((e, i) => ({ id: i, src: e }));
+      // }
     },
     edit() {
       this.editShow = true;
@@ -157,9 +240,10 @@ export default {
     },
     async changeSave() {
       await this.axios("/adminapi/Meal/picture", {
-        data: this.version
+        data: this.picData
       });
       this.getData();
+      this.picShow = false;
     },
     async editSave() {
       let { data } = await this.axios("/adminapi/Meal/edit", {
