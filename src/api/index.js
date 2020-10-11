@@ -5,8 +5,6 @@ import Router from '@/router'
 
 if (process.env.NODE_ENV != 'development') {
     axios.defaults['baseURL'] = config.baseUrl;
-    // axios.defaults.adapter = require('axios/lib/adapters/http');
-    // axios.defaults.adapter = require('axios/lib/adapters/xhr');
 };
 
 axios.defaults['withCredentials'] = true;
