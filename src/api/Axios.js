@@ -12,9 +12,11 @@ NProgress.configure({
     showSpinner: false
 });
 // 配置线上默认请求地址
-if (process.env.NODE_ENV != 'development') {
-    axios.defaults['baseURL'] = Config.baseUrl;
-};
+// if (process.env.NODE_ENV != 'development') {
+    axios.defaults['baseURL'] = Config.axios.baseUrl;
+    // axios.defaults.adapter = require('axios/lib/adapters/http');
+    axios.defaults.adapter = require('axios/lib/adapters/xhr');
+// };
 
 // 请求超时时间(毫秒)
 axios.defaults['timeout'] = Config.axios.timeout || 60 * 10;

@@ -65,9 +65,9 @@ export default {
   stepShow(a) {
     !a && this.getData();
   },
-  created() {
-    this.getData();
-    this.getTable();
+  async created() {
+    await this.getData();
+    await this.getTable();
   },
   methods: {
     async getTable() {

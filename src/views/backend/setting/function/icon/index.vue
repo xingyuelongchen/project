@@ -4,7 +4,7 @@ Create author: qinglong
 Create Time  : 2020-08-10
 -->
 <template>
-  <div class="content">积极筹备中…… </div>
+  <div class="content">当前页面暂无内容 </div>
 </template>
 <script>
 export default {

@@ -41,9 +41,9 @@ export default {
       imgList: []
     }
   },
-  created() {
-    this.getSearch()
-    this.getData()
+  async created() {
+    await this.getSearch()
+    await this.getData()
   },
   methods: {
     async getSearch() {

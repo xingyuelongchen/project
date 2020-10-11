@@ -12,7 +12,7 @@ module.exports = {
     websocketDev: 'ws://192.168.32.240:3000',
     // 接口URL
     baseUrl: 'http://youzhemei.cn:8000',
-    baseUrlDev: 'http://192.168.32.194',
+    baseUrlDev: 'http://youzhemei.cn:8000',
     // 更新地址 
     uploadUrl: 'http://youzhemei.cn/',
     uploadUrlDev: 'http://192.168.32.240',

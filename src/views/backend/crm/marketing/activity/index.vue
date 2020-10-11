@@ -6,7 +6,7 @@ Create Time  : 2020-08-16
 -->
 <template>
   <div class="content">
-    积极筹备中
+    当前页面暂无内容
   </div>
 </template>
 <script>

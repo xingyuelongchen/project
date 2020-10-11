@@ -28,10 +28,10 @@ export default {
       page: { page: 1, limit: 10, total: 0 }
     };
   },
-  created() {
-    this.getData();
-    this.getTable();
-    this.handleClick();
+  async created() {
+    await this.getData();
+    await this.getTable();
+    await this.handleClick();
   },
   mounted() {
     this.handleClick();
