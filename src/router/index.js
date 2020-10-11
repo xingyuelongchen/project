@@ -87,7 +87,7 @@ export default router;
  */
 function beforeRouter(to, from, next) {
   if (to.meta.title) {
-    window.document.title = '广艺舟 - ' + to.meta.title;
+    window.document.title = '管理系统 - ' + to.meta.title;
   }
   // 获取用户信息
   let userinfo = getStore('userinfo')

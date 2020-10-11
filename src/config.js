@@ -7,14 +7,14 @@ module.exports = {
     storeKey: 'myaa',
     port: 8000,
     // websocket
-    websocket: 'ws://admin.guangyizhou.cn:3000',
+    websocket: 'ws://youzhemei.cn:3000',
     // websocketDev: 'ws://192.168.32.194:2346',
     websocketDev: 'ws://192.168.32.240:3000',
     // 接口URL
-    baseUrl: 'http://admin.guangyizhou.cn:8083',
+    baseUrl: 'http://youzhemei.cn:8000',
     baseUrlDev: 'http://192.168.32.194',
     // 更新地址 
-    uploadUrl: 'http://admin.guangyizhou.cn/',
+    uploadUrl: 'http://youzhemei.cn/',
     uploadUrlDev: 'http://192.168.32.240',
     feedUrl: 'http://192.168.32.240',
     feedUrlDev: 'http://192.168.32.240',

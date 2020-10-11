@@ -52,11 +52,7 @@ module.exports = {
                 ws: true,
                 changeOrigin: true
             },
-            "/studyapi/": {
-                target: 'http://www.guangyizhou.cn',
-                ws: true,
-                changeOrigin: true
-            }
+            
         }
     }
 };

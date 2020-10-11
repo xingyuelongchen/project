@@ -38,7 +38,7 @@ function init() {
     })
   }
   // 初始化主进程
-  app.setAppUserModelId('com.guangyizhou.pc');
+  app.setAppUserModelId('com.xingyuelongchen.pc');
   // 监听事件
   setIpcMainList();
   app.whenReady().then(() => {
@@ -228,7 +228,7 @@ function closed() {
   tray.on('click', () => {
     mainWindow.show();
   })
-  tray.setToolTip('广艺舟');
+  tray.setToolTip('管理系统');
   tray.setContextMenu(contextMenu);
 }
 // 托盘图标闪动

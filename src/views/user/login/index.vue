@@ -153,7 +153,7 @@ export default {
       let { data } = await this.axios('/adminapi/Login/client')
       if (data.code && data.data && data.data.version) {
         if (/^2.+/.test(data.data.version)) {
-          this.downUrl = `/guangyizhou Setup ${data.data.version}.exe`
+          this.downUrl = `/管理系统 Setup ${data.data.version}.exe`
           this.$refs.downDom.click()
         } else {
           alert('即将上线，敬请期待……')

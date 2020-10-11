@@ -29,7 +29,7 @@ npm run lint
 
 ### 构建window平台安装包
 ```
-"electron-build": "vue-cli-service build && electron-packager ./dist 广艺舟 --arch=x64 --icon=dist/favicon.ico  --overwrite",
+"electron-build": "vue-cli-service build && electron-packager ./dist  --arch=x64 --icon=dist/favicon.ico  --overwrite",
 ```
 
 

@@ -9,7 +9,7 @@ module.exports = {
     },
     axios: {                                    // axios 请求配置
         timeout: 60 * 10,                       // 默认6分钟超时, 单位（秒）
-        baseUrl: 'http://admin.guangyizhou.cn:8083',
+        baseUrl: 'http://youzhemei.cn:8000',
         baseUrlDev:'http://192.168.32.194'
     },
     store: {                                    // 本地储存配置 （localstorage,sessionstorage,cookie）
