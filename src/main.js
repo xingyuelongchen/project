@@ -15,7 +15,7 @@ import isElectron from "is-electron";
 import VCharts from 'v-charts';
 import 'v-charts/lib/style.css';
 import socket from './api/socket-io';
-
+// asdfasdfasdf
 Vue.config.productionTip = false;
 // Vue.component('v-chart', ECharts);
 // Vue.use(echarts);
