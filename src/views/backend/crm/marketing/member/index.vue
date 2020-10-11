@@ -35,10 +35,12 @@ export default {
         { label: '状态', prop: 'status', type: 'switch' },
         {
           label: '操作',
-          type: 'button',
+          type: 'manage',
+          width: 100,
           options: [
             { label: '查看合同', click: this.views, style: 'primary' },
-            { label: '重置合同', click: this.reset, style: 'danger' }
+            { label: '重置合同', click: this.reset, style: 'danger' },
+            { label: '密码重置', click: this.resetPw, style: 'danger' }
           ]
         }
       ],
@@ -86,6 +88,12 @@ export default {
         })
         this.getData()
       })
+    },
+    async resetPw(item) {
+      this.$confirm('此操作不可恢复，是否继续？', '警告！', { type: 'warning' }).then(async () => {
+        await this.axios('/adminapi/Members/resetPassword', { data: { uid: item.id } })
+      })
+      console.log(0)
     }
   }
 }
