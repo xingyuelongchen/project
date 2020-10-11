@@ -2,9 +2,10 @@ import axios from 'axios';
 import Config from './Config';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
-
+import { Message } from 'element-ui';
+import Router from '@/router'
 // 请求进度条
-
+var message = null;
 NProgress.configure({
     easing: 'ease',
     speed: 500,
@@ -28,23 +29,48 @@ axios.interceptors.request.use(req, reqError);
 axios.interceptors.response.use(res, resError);
 
 function req(config) {
-    NProgress.inc(0.2);
+    // NProgress.inc(0.2);
+    NProgress.start()
     return config
 }
 function reqError() {
-    NProgress.done();
-    // 错误请求，请联系管理员
-    return
-
+    NProgress.done()
+    message && message.close();
+    message = Message.error('错误请求，请联系管理员')
 }
 function res(res) {
-    NProgress.done();
-
+    NProgress.done()
+    if (res.data.code == 0) {
+        Message.error({
+            title: '错误',
+            message: res.data.msg,
+            // showClose: false
+        })
+    }
+    if (res.data.code == 4) {
+        message && message.close();
+        message = Message({
+            type: 'success',
+            title: '成功',
+            message: res.data.msg,
+        })
+    }
+    if (res.data.code == 5) {
+        message && message.close();
+        message = Message({
+            type: 'error',
+            title: '账户登录过期，请重新登录！',
+            message: res.data.msg,
+        })
+        Router.replace('/login')
+    }
     return res
 }
 function resError(error) {
-    // 服务器出现错误，请联系管理员
-    NProgress.done();
+    NProgress.done()
+    message && message.close();
+    message = Message.error('服务器响应错误，请联系管理员');
     return error
+
 }
 export default axios;

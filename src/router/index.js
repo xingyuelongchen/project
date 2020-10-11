@@ -71,7 +71,6 @@ VueRouter.prototype.setRoles = setRoles;
 const router = new VueRouter(routeOption);
 let target = true;
 if (userinfo) {
-  userinfo = JSON.parse(userinfo);
   // 刷新页面时，重新加载路由表 
   setRoles();
   // 页面刷新保持选项卡
@@ -92,7 +91,6 @@ function beforeRouter(to, from, next) {
   }
   // 获取用户信息
   let userinfo = getStore('userinfo')
-  if (userinfo) userinfo = JSON.parse(userinfo);
 
   // 是否需要登录权限,如果用户信息过期，清空用户信息并跳转到登录
   if (to.matched.some(e => e.meta.isAuth) && (!userinfo || userinfo.dateTime < Date.now())) {
@@ -103,7 +101,7 @@ function beforeRouter(to, from, next) {
   }
 
   // 页面访问权限
-  if (to.meta.role && userinfo.role[0] !== 0) {
+  if (to.meta.role && !userinfo && userinfo.role[0] !== 0) {
     if (!userinfo || !userinfo.role.includes(to.meta.role)) {
       console.log('需要权限');
       next('/error401');
@@ -175,8 +173,7 @@ function setRoles() {
   let targetIndex = sessionStorage.getItem('xitong') || 'crm';
   // 拼接路由地址
   let xitong = backend.concat(app, web, minApp, setting);
-  // 解析账号信息
-  if (userinfo) userinfo = JSON.parse(userinfo);
+  // 解析账号信息 
   // 匹配路由权限  
   let route = mapRole(xitong, userinfo.menu, userinfo.role);
   // 获取当前系统菜单

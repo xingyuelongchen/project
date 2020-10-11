@@ -1,5 +1,5 @@
 export default [
-    { path: 'setting', name: 'Setting', meta: { keepAlive: true, role: 118, title: '系统设置', }, component: () => import('@/views/layou/backend'), },
+    { path: 'setting', name: 'Setting',redirect:'setting/function',  meta: { keepAlive: true, role: 118, title: '系统设置', }, component: () => import('@/views/layou/backend'), },
     { path: 'function', name: 'Function', meta: { keepAlive: true, role: 119, title: '功能设置', }, component: () => import('@/views/layou') },
     { path: 'icon', name: 'Settingicon', meta: { keepAlive: true, role: 117, title: '图标管理', }, component: () => import('@/views/backend/setting/function/icon') },
     { path: 'roles', name: 'Roles', meta: { keepAlive: true, role: 21, title: '权限菜单', }, component: () => import('@/views/backend/setting/function/roles') },
@@ -9,7 +9,6 @@ export default [
     { path: 'system-setting', name: 'Systemsetting', meta: { keepAlive: true, role: 46, title: '系统配置', }, component: () => import('@/views/backend/setting/function/systemSetting') },
     { path: 'organization', name: 'Adminorganization', meta: { keepAlive: true, role: 75, title: '组织构架', }, component: () => import('@/views/backend/setting/function/organization') },
     { path: 'tag', name: 'Admintag', meta: { keepAlive: true, role: 190, title: '流程标签', }, component: () => import('@/views/backend/setting/function/tag') },
-
     { path: 'contract', name: 'Admincontract', meta: { keepAlive: true, role: 121, title: '合同管理', }, component: () => import('@/views/backend/setting/contract') },
     { path: 'pay', name: 'Settingpay', meta: { keepAlive: true, role: 191, title: '支付管理', }, component: () => import('@/views/backend/setting/pay') },
     { path: 'backup', name: 'Settingbackup', meta: { keepAlive: true, role: 210, title: '数据备份', }, component: () => import('@/views/backend/setting/backup') },

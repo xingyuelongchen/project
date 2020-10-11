@@ -1,142 +1,142 @@
 {
-  "name": "guangyizhou",
-  "version": "1.2.13",
-  "main": "main.js",
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "back": "nodemon nodeSocket/app.js",
-    "dev": "electron .",
-    "dist": "vue-cli-service build && electron-builder"
-  },
-  "repository": "https://github.com/xingyuelongchen/project --all",
-  "keywords": [
-    "Electron"
-  ],
-  "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^22.0.0",
-    "@ckeditor/ckeditor5-vue": "^1.0.2",
-    "axios": "^0.19.2",
-    "core-js": "^3.6.5",
-    "cropperjs": "^1.5.7",
-    "echarts": "^4.9.0",
-    "electron-updater": "^4.3.5",
-    "element-ui": "^2.13.2",
-    "file-saver": "^2.0.2",
-    "is-electron": "^2.2.0",
-    "less-loader": "^6.2.0",
-    "pingpp-js": "^2.2.21",
-    "socket.io": "^2.3.0",
-    "socket.io-client": "^2.3.0",
-    "v-charts": "^1.19.0",
-    "vue": "^2.6.11",
-    "vue-cropper": "^0.5.5",
-    "vue-echarts": "^5.0.0-beta.0",
-    "vue-monaco-editor": "^0.0.19",
-    "vue-router": "^3.2.0",
-    "vuex": "^3.4.0",
-    "xe-utils": "^2.7.1",
-    "xingyuelongchen": "^1.0.3",
-    "xlsx": "^0.16.4"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.4.0",
-    "@vue/cli-plugin-eslint": "~4.4.0",
-    "@vue/cli-plugin-router": "~4.4.0",
-    "@vue/cli-plugin-vuex": "~4.4.0",
-    "@vue/cli-service": "~4.4.0",
-    "@vue/eslint-config-prettier": "^6.0.0",
-    "babel-eslint": "^10.1.0",
-    "body-parser": "^1.19.0",
-    "electron": "9.3.0",
-    "electron-builder": "^22.8.0",
-    "electron-packager": "^15.0.0",
-    "electron-webpack": "^2.8.2",
-    "electron-updater": "^4.3.1",
-    "eslint": "^6.7.2",
-    "eslint-plugin-prettier": "^3.1.3",
-    "eslint-plugin-vue": "^6.2.2",
-    "express": "^4.17.1",
-    "express-formidable": "^1.2.0",
-    "md5": "^2.3.0",
-    "mongodb": "^3.6.1",
-    "multiparty": "^4.2.2",
-    "node-windows": "^1.0.0-beta.5",
-    "nodemon": "^2.0.4",
-    "pingpp": "^2.1.5",
-    "prettier": "^1.19.1",
-    "request": "^2.88.2",
-    "sass": "^1.26.5",
-    "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
+    "name": "xingyuelongchen",
+    "version": "1.0.5",
+    "main": "main.js",
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint",
+        "back": "nodemon nodeSocket/app.js",
+        "dev": "electron .",
+        "dist": "vue-cli-service build && electron-builder"
     },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended",
-      "@vue/prettier"
+    "repository": "https://github.com/xingyuelongchen/project --all",
+    "keywords": [
+        "Electron"
     ],
-    "parserOptions": {
-      "parser": "babel-eslint"
+    "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "^22.0.0",
+        "@ckeditor/ckeditor5-vue": "^1.0.2",
+        "axios": "^0.19.2",
+        "core-js": "^3.6.5",
+        "cropperjs": "^1.5.7",
+        "echarts": "^4.9.0",
+        "electron-updater": "^4.3.5",
+        "element-ui": "^2.13.2",
+        "file-saver": "^2.0.2",
+        "is-electron": "^2.2.0",
+        "less-loader": "^6.2.0",
+        "pingpp-js": "^2.2.21",
+        "socket.io": "^2.3.0",
+        "socket.io-client": "^2.3.0",
+        "v-charts": "^1.19.0",
+        "vue": "^2.6.11",
+        "vue-cropper": "^0.5.5",
+        "vue-echarts": "^5.0.0-beta.0",
+        "vue-monaco-editor": "^0.0.19",
+        "vue-router": "^3.2.0",
+        "vuex": "^3.4.0",
+        "xe-utils": "^2.7.1",
+        "xingyuelongchen": "^1.0.3",
+        "xlsx": "^0.16.4"
     },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ],
-  "build": {
-    "asar": true,
-    "productName": "guangyizhou",
-    "appId": "com.guangyizhou.pc",
-    "copyright": "青龙",
-    "directories": {
-      "output": "build"
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "~4.4.0",
+        "@vue/cli-plugin-eslint": "~4.4.0",
+        "@vue/cli-plugin-router": "~4.4.0",
+        "@vue/cli-plugin-vuex": "~4.4.0",
+        "@vue/cli-service": "~4.4.0",
+        "@vue/eslint-config-prettier": "^6.0.0",
+        "babel-eslint": "^10.1.0",
+        "body-parser": "^1.19.0",
+        "electron": "9.3.0",
+        "electron-builder": "^22.8.0",
+        "electron-packager": "^15.0.0",
+        "electron-webpack": "^2.8.2",
+        "electron-updater": "^4.3.1",
+        "eslint": "^6.7.2",
+        "eslint-plugin-prettier": "^3.1.3",
+        "eslint-plugin-vue": "^6.2.2",
+        "express": "^4.17.1",
+        "express-formidable": "^1.2.0",
+        "md5": "^2.3.0",
+        "mongodb": "^3.6.1",
+        "multiparty": "^4.2.2",
+        "node-windows": "^1.0.0-beta.5",
+        "nodemon": "^2.0.4",
+        "pingpp": "^2.1.5",
+        "prettier": "^1.19.1",
+        "request": "^2.88.2",
+        "sass": "^1.26.5",
+        "sass-loader": "^8.0.2",
+        "vue-template-compiler": "^2.6.11"
     },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowElevation": true,
-      "allowToChangeInstallationDirectory": true,
-      "installerIcon": "./electron/favicon.ico",
-      "uninstallerIcon": "./electron/favicon.ico",
-      "uninstallDisplayName": "guangyizhou",
-      "installerHeaderIcon": "./electron/favicon.ico",
-      "createDesktopShortcut": "always",
-      "createStartMenuShortcut": true,
-      "warningsAsErrors": false,
-      "shortcutName": "广艺舟"
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "eslint:recommended",
+            "@vue/prettier"
+        ],
+        "parserOptions": {
+            "parser": "babel-eslint"
+        },
+        "rules": {}
     },
-    "publish": [
-      {
-        "provider": "generic",
-        "url": "",
-        "channel": "latest"
-      }
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
     ],
-    "files": [
-      "main.js",
-      "dist/",
-      "src/config.js",
-      "electron/"
-    ],
-    "win": {
-      "icon": "./electron/favicon.ico",
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
+    "build": {
+        "asar": true,
+        "productName": "管理系统",
+        "appId": "com.xingyuelongchen.pc",
+        "copyright": "xingyuelongchen",
+        "directories": {
+            "output": "build"
+        },
+        "nsis": {
+            "oneClick": false,
+            "perMachine": true,
+            "allowElevation": true,
+            "allowToChangeInstallationDirectory": true,
+            "installerIcon": "./electron/favicon.ico",
+            "uninstallerIcon": "./electron/favicon.ico",
+            "uninstallDisplayName": "xiezai",
+            "installerHeaderIcon": "./electron/favicon.ico",
+            "createDesktopShortcut": "always",
+            "createStartMenuShortcut": true,
+            "warningsAsErrors": false,
+            "shortcutName": "管理系统"
+        },
+        "publish": [
+            {
+                "provider": "generic",
+                "url": "",
+                "channel": "latest"
+            }
+        ],
+        "files": [
+            "main.js",
+            "dist/",
+            "src/config.js",
+            "electron/"
+        ],
+        "win": {
+            "icon": "./electron/favicon.ico",
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                }
+            ]
         }
-      ]
     }
-  }
 }

@@ -4,11 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const config = require('../src/config');
 const gotTheLock = app.requestSingleInstanceLock();
-<<<<<<< HEAD:main.js
-const filePath = path.join(__dirname, './electron/store.json');
-=======
 const filePath = path.join(__dirname, 'store.json');
->>>>>>> 4dd8443b7ecc3704eb178a33e53e051d1dc8249d:electron/main.js
 const menu = new Menu();
 var mainWindow = null, tray = null, uploadUrl, isQuill = true, timer = null, zhudong = false;
 
@@ -38,7 +34,7 @@ function init() {
   }
 
   // 初始化主进程
-  app.setAppUserModelId('com.guangyizhou.pc');
+  app.setAppUserModelId('com.xingyuelongchen.pc');
   // 监听事件
   setIpcMainList();
   app.whenReady().then(() => {
@@ -90,7 +86,6 @@ function createWindow() {
     accelerator: 'CmdOrCtrl+shift+i',
     click: () => { mainWindow.webContents.openDevTools(); }
   }))
-<<<<<<< HEAD:main.js
   menu.append(new MenuItem({
     // label: 'tools',
     accelerator: 'CmdOrCtrl+r',
@@ -103,15 +98,6 @@ function createWindow() {
     mainWindow.loadFile('./dist/index.html');
   } else {
     // 调试 
-=======
-  mainWindow.setMenu(menu);
-  // 判断当前运行环境
-  if (app.isPackaged) {
-    mainWindow.loadFile('../dist/index.html');
-    // mainWindow.loadURL(config.feedUrl);
-  } else {
-    // mainWindow.loadFile('../dist/index.html'); 
->>>>>>> 4dd8443b7ecc3704eb178a33e53e051d1dc8249d:electron/main.js
     mainWindow.loadURL(config.feedUrl);
   }
 
@@ -243,7 +229,7 @@ function closed() {
   tray.on('click', () => {
     mainWindow.show();
   })
-  tray.setToolTip('广艺舟');
+  tray.setToolTip('管理系统');
   tray.setContextMenu(contextMenu);
 }
 // 托盘图标闪动

@@ -22,9 +22,9 @@ Create Time  : 2020-07-22
             </span>
           </el-tooltip>
         </div>
-        <!-- <template v-for="(item,index) in $store.state.routes">
+        <template v-for="(item,index) in $store.state.routes">
           <div class="itema" :key="index" :class="{active:targetIndex == item.name}" @click="toggle(item.name)" v-role="item.id">{{item.meta.title}}</div>
-        </template> -->
+        </template>
       </div>
       <div class="center"></div>
       <div class="right">
@@ -313,8 +313,8 @@ export default {
       align-items: center;
       height: 100%;
       .logo {
-        max-width: 220px;
-        width: 220px;
+        max-width: 150px;
+        width: 150px;
         height: 90%;
         overflow: hidden;
         margin: 0 5px;
