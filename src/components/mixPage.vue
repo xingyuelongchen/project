@@ -6,7 +6,7 @@ Create Time  : 2020-07-27
 <template>
   <div class="mix-page">
     <slot name="left"></slot>
-    <el-pagination background :current-page.sync="page.page" :layout="page.layout || 'prev, pager, next,sizes, total'" :page-size="page.limit" :page-sizes="sizes" :total="page.total || total" @size-change="sizeChange" @current-change="currentChange"></el-pagination>
+    <el-pagination :current-page.sync="page.page" :layout="page.layout || 'prev, pager, next,sizes, total'" :page-size="page.limit" :page-sizes="sizes" :total="page.total || total" @size-change="sizeChange" @current-change="currentChange"></el-pagination>
     <slot name="right"></slot>
   </div>
 </template>
@@ -19,7 +19,8 @@ export default {
       default() {
         return {
           page: 1,
-          limit: 20
+          limit: 12,
+          total: 0
         }
       }
     },
@@ -60,7 +61,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 10px 0;
 }
 </style>
  

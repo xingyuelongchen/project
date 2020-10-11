@@ -5,7 +5,7 @@ module.exports = {
     routePath: '/',
     // 本地缓存前缀
     storeKey: 'myaa',
-    port: 80,
+    port: 8000,
     // websocket
     websocket: 'ws://admin.guangyizhou.cn:3000',
     // websocketDev: 'ws://192.168.32.194:2346',

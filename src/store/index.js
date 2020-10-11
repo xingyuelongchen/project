@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from '../router';
+import { setStore } from '../api/Storage';
 Vue.use(Vuex);
 const STATE = {
   menu: [],
@@ -57,7 +58,8 @@ export default new Vuex.Store({
       if (data.id) {
         state.userinfo = data;
         data = JSON.stringify(data);
-        window.localStorage.setItem('userinfo', data)
+        setStore('userinfo', data)
+        // window.localStorage.setItem('userinfo', data)
       }
     },
     // 添加tab选项卡

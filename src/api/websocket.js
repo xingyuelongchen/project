@@ -1,6 +1,7 @@
 import config from '@/config.js';
 import isElectron from "is-electron";
 import Store from '@/store';
+import { getStore } from '../api/Storage';
 class WS {
     constructor(options) {
         this.options = {
@@ -17,8 +18,8 @@ class WS {
                     type,
                     data: null,
                     create_time: Date.now(),
-                    id: JSON.parse(window.localStorage.getItem('userinfo')).id,
-                    department: JSON.parse(window.localStorage.getItem('userinfo')).department || 0,
+                    id: getStore('userinfo').id,
+                    department: getStore('userinfo').department || 0,
                 }
                 if (typeof obj == 'object') msg.data = { msg, data: obj };
                 if (typeof obj == 'string') msg.data = obj;

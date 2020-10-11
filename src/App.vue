@@ -26,11 +26,11 @@ export default {};
   }
   // 主体内容排列布局
   .content-cols {
-    height: 100%;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    align-items: stretch;
+    // height: 100%;
+    // display: flex;
+    // justify-content: flex-start;
+    // flex-direction: column;
+    // align-items: stretch;
     box-sizing: border-box;
     overflow: hidden;
     > .mix-table {

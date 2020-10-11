@@ -7,17 +7,24 @@ Create Time  : 2020-07-22
   <div class="app-body user" :key="refreshKey" v-loading="loading" element-loading-text="正在释放缓存……" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
     <div class="app-header" user="primary">
       <div class="left">
-        <div class="item logo" :class="{scale:isCollapse}">
-          <img :src="isCollapse?logo1:logo" />
+        <div class="item logo">
+          管理后台
         </div>
         <div class="item icon">
-          <el-tooltip effect="dark" :content="isCollapse?'展开侧边栏':'折叠侧边栏'" placement="right-end">
+          <el-tooltip effect="light" :content="isCollapse?'显示侧边栏':'隐藏侧边栏'" placement="right-end">
             <i :class="[isCollapse?'el-icon-s-unfold':'el-icon-s-fold']" @click="isCollapse=!isCollapse"></i>
           </el-tooltip>
         </div>
-        <template v-for="(item,index) in $store.state.routes">
+        <div class="item itema" @click="refresh">
+          <el-tooltip content="刷新缓存" effect="light">
+            <span>
+              <i class="el-icon-refresh"></i>
+            </span>
+          </el-tooltip>
+        </div>
+        <!-- <template v-for="(item,index) in $store.state.routes">
           <div class="itema" :key="index" :class="{active:targetIndex == item.name}" @click="toggle(item.name)" v-role="item.id">{{item.meta.title}}</div>
-        </template>
+        </template> -->
       </div>
       <div class="center"></div>
       <div class="right">
@@ -25,16 +32,9 @@ Create Time  : 2020-07-22
           <el-tooltip content="修改主题色">
           </el-tooltip>
         </div>
-        <div class="itema" @click="refresh">
-          <el-tooltip content="刷新缓存">
-            <span>
-              <i class="el-icon-refresh"></i>刷新
-            </span>
-          </el-tooltip>
-        </div>
         <div class="itema" @click.stop="$router.push('/user/info')">
           <el-tooltip content="修改个人信息">
-            <el-avatar :size="40" :src="$store.state.userinfo.pic" @error="()=>true"><img src="/favicon.ico" /></el-avatar>
+            <el-avatar :size="30" :src="$store.state.userinfo.pic" @error="()=>true"><img src="/favicon.ico" /></el-avatar>
           </el-tooltip>
         </div>
         <div class="item">
@@ -55,7 +55,7 @@ Create Time  : 2020-07-22
       </div>
     </div>
     <div class="app-container">
-      <div class="app-side">
+      <div class="app-side" v-show="!isCollapse">
         <el-scrollbar>
           <el-menu :collapse-transition="false" :default-active="$route.name" :collapse="isCollapse" class="el-menu-vertical-demo" router unique-opened>
             <template v-for="(item,index) in $store.state.menu[0].children">
@@ -94,23 +94,29 @@ Create Time  : 2020-07-22
           <router-view v-if="!$route.meta.keepAlive"></router-view>
         </div>
       </div>
+
     </div>
     <audio src="~@/assets/audio/msg.mp3" preload ref="audio" />
     <audio src="~@/assets/audio/xibao.mp3" preload ref="dialogAudio"></audio>
     <template v-for="item in message">
       <mixMessage :value="item" :key="item.id" v-if="item.show" @input="item.show=false" />
     </template>
-    <mixXibao v-model="xibao" />
-    <div class="EXEVERSION">Beta：v{{EXEVERSION}}</div>
-
+    <!-- <mixXibao v-model="xibao" /> -->
+    <!-- <div class="EXEVERSION">Beta：v{{EXEVERSION}}</div> -->
+    <el-dialog :visible.sync="userinfoShow.show" width="900px" title="资料管理">
+      <userinfoChange :isShow="userinfoShow" style="height:60vh;min-height:600px" />
+    </el-dialog>
   </div>
 </template>
 <script>
-import logo from "@/assets/image/logo.png";
-import logo1 from "@/assets/image/logo1.png";
+import logo from '@/assets/image/logo.png'
+import logo1 from '@/assets/image/logo1.png'
 
 export default {
-  name: "Backend",
+  name: 'Backend',
+  components: {
+    userinfoChange: () => import('@/views/user/info')
+  },
   data() {
     return {
       logo,
@@ -118,30 +124,41 @@ export default {
       ws: null,
       loading: false,
       message: [],
+      userinfoShow: { show: false },
       settingList: [
         {
-          label: "修改资料",
-          event: () => this.$router.push("/user/info"),
+          label: '修改资料',
+          event: () => (this.userinfoShow = { show: true, type: 'info' }),
           show: true
         },
-        { label: "检查更新", event: this.update, show: this.isElectron },
+        {
+          label: '修改头像',
+          event: () => (this.userinfoShow = { show: true, type: 'avatar' }),
+          show: true
+        },
+        {
+          label: '修改密码',
+          event: () => (this.userinfoShow = { show: true, type: 'password' }),
+          show: true
+        },
+        { label: '检查更新', event: this.update, show: this.isElectron },
         // {
         //   label: "喜报",
         //   event: () => this.onMessage({ type: "dialog", data: {} }),
         //   show: true
         // },
-        { label: "退出登录", event: this.logout, show: !this.isElectron },
+        { label: '退出登录', event: this.logout, show: !this.isElectron },
         {
-          label: "切换账号",
+          label: '切换账号',
           event: () => {
-            window.ipcRenderer.send("removeStore", "userinfo");
-            this.$router.push("/login");
+            window.ipcRenderer.send('removeStore', 'userinfo')
+            this.$router.push('/login')
           },
           show: this.isElectron
         },
         {
-          label: "退出系统",
-          event: () => window.ipcRenderer.send("close"),
+          label: '退出系统',
+          event: () => window.ipcRenderer.send('close'),
           show: this.isElectron
         }
       ],
@@ -152,130 +169,123 @@ export default {
       // 风格主题
       theme: this.$store.state.userinfo.theme,
       // 当前管理系统
-      targetIndex: sessionStorage.getItem("xitong") || "crm",
+      targetIndex: sessionStorage.getItem('xitong') || 'crm',
       // 用户信息
-      userinfo: JSON.parse(localStorage.getItem("userinfo")) || {}
-    };
+      userinfo: this.getstore('userinfo') || {}
+    }
   },
   computed: {
-  
     activeName() {
-      let name = this.$store.state.tabmenu.filter(e => e.active);
-      name = name[0];
-      return name && name.fullPath;
+      let name = this.$store.state.tabmenu.filter(e => e.active)
+      name = name[0]
+      return name && name.fullPath
     }
   },
   created() {
     // IO(this.onMessage);
-    this.socket.on("message", data => {
-      data = JSON.parse(data);
-      if (data.type == "message") {
+    this.socket.on('message', data => {
+      data = JSON.parse(data)
+      if (data.type == 'message') {
         // 桌面应用端
         if (this.isElectron) {
-          this.ipcRenderer.send("msg", data);
+          this.ipcRenderer.send('msg', data)
         } else {
           // 浏览器端 系统信息
-          if (!window.Notification) return;
+          if (!window.Notification) return
           let options = {
-            dir: "ltr",
-            icon: "favicon.ico",
+            dir: 'ltr',
+            icon: 'favicon.ico',
             data: data.data.msg,
-            timeoutType: "never"
-          };
-          let notification = new window.Notification(data.data.title, options);
-          notification.onclick = window.focus;
+            timeoutType: 'never'
+          }
+          let notification = new window.Notification(data.data.title, options)
+          notification.onclick = window.focus
         }
       }
-      if (data.type == "dialog" && this.isElectron) {
+      if (data.type == 'dialog' && this.isElectron) {
         // 桌面应用端 dialog通知
-        this.ipcRenderer.send("dialog", data);
+        this.ipcRenderer.send('dialog', data)
       }
-      this.onMessage(data);
-    });
+      this.onMessage(data)
+    })
   },
   updated() {
-    clearTimeout(this.timer);
+    clearTimeout(this.timer)
     this.timer = setTimeout(() => {
-      this.loading = false;
-    }, 1000);
+      this.loading = false
+    }, 1000)
   },
   methods: {
     onMessage(data) {
-      if (data.type == "message") {
-        console.log(data);
-        this.$refs.audio.play();
-        this.message.push({ ...data.data, show: true });
+      if (data.type == 'message') {
+        console.log(data)
+        this.$refs.audio.play()
+        this.message.push({ ...data.data, show: true })
       }
-      if (data.type == "dialog") {
-        this.$refs.dialogAudio.play();
+      if (data.type == 'dialog') {
+        this.$refs.dialogAudio.play()
         this.$refs.dialogAudio.onended = () => {
-          this.xibao.show = false;
-        };
-        this.xibao.show = true;
-        this.xibao.data = data.data;
+          this.xibao.show = false
+        }
+        this.xibao.show = true
+        this.xibao.data = data.data
       }
-      if (data.type == "dashboard") {
-        console.log("dashboard");
+      if (data.type == 'dashboard') {
+        console.log('dashboard')
       }
     },
     delTab(name) {
-      this.$store.commit("delTabmenu", name);
+      this.$store.commit('delTabmenu', name)
     },
     onTab(item) {
-      this.$router.push(item.name);
+      this.$router.push(item.name)
     },
     toggle(val) {
-      if (this.targetIndex == val) return;
-      this.targetIndex = val;
-      sessionStorage.setItem("xitong", val);
+      if (this.targetIndex == val) return
+      this.targetIndex = val
+      sessionStorage.setItem('xitong', val)
       // 初始化路由表
-      this.$router.setRoles();
+      this.$router.setRoles()
       // 初始化tabmenu
-      this.$store.commit("removeTabmenu");
-      let path = this.$store.state.menu[0].path;
-      if (
-        this.$store.state.menu[0].children &&
-        this.$store.state.menu[0].children[0]
-      ) {
-        path =
-          this.$store.state.menu[0].path +
-          "/" +
-          this.$store.state.menu[0].children[0].path;
+      this.$store.commit('removeTabmenu')
+      let path = this.$store.state.menu[0].path
+      if (this.$store.state.menu[0].children && this.$store.state.menu[0].children[0]) {
+        path = this.$store.state.menu[0].path + '/' + this.$store.state.menu[0].children[0].path
       }
       // console.log(path);
-      this.$router.replace(path);
+      this.$router.replace(path)
     },
     logout() {
-      this.$router.replace("/login");
+      this.$router.replace('/login')
     },
     async refresh() {
-      this.loading = true;
-      this.refreshKey = Math.random();
-      let { data } = await this.axios("/adminapi/User/information", {
+      this.loading = true
+      this.refreshKey = Math.random()
+      let { data } = await this.axios('/adminapi/User/information', {
         data: { uid: this.userinfo.id }
-      });
+      })
       if (!data.code) {
-        this.$router.replace("/login");
-        return;
+        this.$router.replace('/login')
+        return
       }
-      this.$store.commit("setUserinfo", data.data);
-      this.$router.setRoles();
+      this.$store.commit('setUserinfo', data.data)
+      this.$router.setRoles()
       setTimeout(() => {
-        window.location.reload();
-      }, 500);
+        window.location.reload()
+      }, 500)
     },
     update() {
-      if (this.isElectron) window.ipcRenderer.send("queryUpdate");
+      if (this.isElectron) window.ipcRenderer.send('queryUpdate')
     },
     handerSetting(item) {
-      item.event();
+      item.event()
     }
   },
   beforeRouteLeave(to, from, next) {
-    clearTimeout(this.timer);
-    next();
+    clearTimeout(this.timer)
+    next()
   }
-};
+}
 </script>
 <style lang='less' scoped>
 .v-enter-active {
@@ -291,7 +301,7 @@ export default {
   min-width: 900px;
   height: 100vh;
   .app-header {
-    height: 60px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -303,8 +313,8 @@ export default {
       align-items: center;
       height: 100%;
       .logo {
-        max-width: 170px;
-        width: 170px;
+        max-width: 220px;
+        width: 220px;
         height: 90%;
         overflow: hidden;
         margin: 0 5px;
@@ -361,18 +371,17 @@ export default {
   .app-container {
     display: flex;
     justify-content: space-between;
-    height: calc(100% - 61px);
+    height: calc(100% - 41px);
     .app-side {
       border-right: 1px solid #e6e6e6;
       box-shadow: 0 10px 10px rgba(1, 1, 1, 0.1);
       height: 100%;
       overflow: hidden;
       .el-menu-vertical-demo:not(.el-menu--collapse) {
-        width: 200px;
-        min-width: 200px;
-        min-height: 400px;
+        width: 250px;
+        min-width: 250px;
+        min-height: 250px;
       }
-
       .el-menu {
         border: none;
       }
@@ -381,6 +390,7 @@ export default {
       flex: 1;
       height: 100%;
       overflow: hidden;
+      transition: all 0.2s;
       .top {
         box-shadow: 0 0 20px rgba(1, 1, 1, 0.1);
         /deep/ .el-tabs__header.is-top {

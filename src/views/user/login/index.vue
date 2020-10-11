@@ -8,9 +8,6 @@ Create Time  : 2020-07-22
     <div class="login">
       <div @keypress.enter="setRoutes" class="login-box">
         <div class="title">{{title}}</div>
-        <div class="logo">
-          <img src="http://www.guangyizhou.cn/public/home/assets/logo.png" alt />
-        </div>
         <div v-if="resetPasswordShow">
           <el-form :model="resetPasswordData" status-icon ref="login" label-width="80px" class="demo-ruleForm">
             <el-form-item label="手机号" prop="mobile" :rules="{required:true,message:'请输入手机号码'}">
@@ -92,15 +89,15 @@ Create Time  : 2020-07-22
 </template>
 <script>
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     return {
-      title: "登录",
-      url: "/adminapi/Login/login",
-      downUrl: "",
+      title: '登录',
+      url: '/adminapi/Login/login',
+      downUrl: '',
       ruleForm: {},
       isLogin: false,
-      code: "",
+      code: '',
       userinfo: {},
       history: {},
       isHistory: false,
@@ -109,152 +106,142 @@ export default {
       resetPasswordData: {},
       resetcodeloading: 0,
       resetPasswordFields: []
-    };
+    }
   },
   created() {
-    localStorage.removeItem("userinfo");
-    sessionStorage.removeItem("Store");
-    sessionStorage.removeItem("xitong");
-    this.$store.commit("setClear");
+    localStorage.removeItem('userinfo')
+    sessionStorage.removeItem('Store')
+    sessionStorage.removeItem('xitong')
+    this.$store.commit('setClear')
     if (this.isElectron) {
-      this.history =
-        window.ipcRenderer.sendSync("getStore", "history") || false;
+      this.history = window.ipcRenderer.sendSync('getStore', 'history') || false
     }
-    this.getCode();
+    this.getCode()
   },
   methods: {
     async resetPassword() {
       if (!this.resetPasswordData.code) {
-        this.$alert("请输入手机验证码");
+        this.$alert('请输入手机验证码')
       }
-      let { data } = await this.axios("/adminapi/Login/editpass", {
+      let { data } = await this.axios('/adminapi/Login/editpass', {
         data: this.resetPasswordData
-      });
+      })
       if (data.code) {
-        this.resetPasswordShow = false;
+        this.resetPasswordShow = false
       }
     },
     async getMobileCode() {
       if (!this.resetPasswordData.mobile) {
-        this.$alert("请输入手机号码");
-        return;
+        this.$alert('请输入手机号码')
+        return
       }
-      let i = 60;
-      let { data } = await this.axios("/adminapi/Login/forget", {
+      let i = 60
+      let { data } = await this.axios('/adminapi/Login/forget', {
         data: this.resetPasswordData
-      });
+      })
       if (data.code) {
         let timer = setInterval(() => {
-          i--;
-          this.resetcodeloading = i;
+          i--
+          this.resetcodeloading = i
           if (i == 0) {
-            clearInterval(timer);
+            clearInterval(timer)
           }
-        }, 1000);
+        }, 1000)
       }
     },
     async down() {
-      let { data } = await this.axios("/adminapi/Login/client");
+      let { data } = await this.axios('/adminapi/Login/client')
       if (data.code && data.data && data.data.version) {
         if (/^2.+/.test(data.data.version)) {
-          this.downUrl = `/guangyizhou Setup ${data.data.version}.exe`;
-          this.$refs.downDom.click();
+          this.downUrl = `/guangyizhou Setup ${data.data.version}.exe`
+          this.$refs.downDom.click()
         } else {
-          alert("即将上线，敬请期待……");
+          alert('即将上线，敬请期待……')
         }
       }
     },
     register() {
-      this.url = "/adminapi/Login/register";
-      this.title = "用户注册";
-      this.isLogin = true;
-      this.ruleForm = {};
+      this.url = '/adminapi/Login/register'
+      this.title = '用户注册'
+      this.isLogin = true
+      this.ruleForm = {}
     },
     login() {
-      this.url = "/adminapi/Login/login";
-      this.title = "用户登录";
-      this.isLogin = false;
-      this.ruleForm = {};
+      this.url = '/adminapi/Login/login'
+      this.title = '用户登录'
+      this.isLogin = false
+      this.ruleForm = {}
     },
     async getCode() {
       this.axios
-        .get("/adminapi/Login/verify?v=" + Math.random(), {
-          responseType: "arraybuffer",
+        .get('/adminapi/Login/verify?v=' + Math.random(), {
+          responseType: 'arraybuffer',
           headers: {
-            "Content-Type": "image/png; charset=utf-8"
+            'Content-Type': 'image/png; charset=utf-8'
           }
         })
         .then(e => {
-          return (
-            "data:image/png;base64," +
-            btoa(
-              new Uint8Array(e.data).reduce(
-                (data, byte) => data + String.fromCharCode(byte),
-                ""
-              )
-            )
-          );
+          return 'data:image/png;base64,' + btoa(new Uint8Array(e.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
         })
         .then(data => {
-          this.code = data;
-        });
+          this.code = data
+        })
     },
     async setRoutes() {
       let { data } = await this.axios(this.url, {
         data: this.ruleForm
-      });
+      })
       if (data.code && !this.isLogin) {
-        let userinfo = data.data;
-        userinfo.dateTime = Date.now() + 1 * 24 * 60 * 60 * 1000;
-        window.localStorage.setItem("userinfo", JSON.stringify(userinfo));
-        this.$store.commit("setUserinfo", userinfo);
+        let userinfo = data.data
+        userinfo.dateTime = Date.now() + 1 * 24 * 60 * 60 * 1000; 
+        this.$store.commit('setUserinfo', userinfo)
         let msg = {
-          type: "crm",
+          type: 'crm',
           data: null,
           create_time: userinfo.dateTime,
           uid: userinfo.id,
           department: userinfo.department || 0
-        };
-        this.socket.emit("init", JSON.stringify(msg));
-        if (!this.history) this.history = {};
+        }
+        this.socket.emit('init', JSON.stringify(msg))
+        if (!this.history) this.history = {}
         if (this.checkPassword) {
           this.history[this.ruleForm.mobile] = {
             mobile: this.ruleForm.mobile,
             password: this.ruleForm.password
-          };
+          }
         } else {
-          delete this.history[this.ruleForm.mobile];
+          delete this.history[this.ruleForm.mobile]
         }
         if (this.isElectron) {
-          window.ipcRenderer.send("setStore", {
-            title: "history",
+          window.ipcRenderer.send('setStore', {
+            title: 'history',
             data: this.history
-          });
+          })
         }
-        if (userinfo) this.$router.setRoles();
+        if (userinfo) this.$router.setRoles()
         if (this.isLogin) {
-          this.login();
-          this.ruleForm = {};
-          return;
+          this.login()
+          this.ruleForm = {}
+          return
         }
       }
-      this.getCode();
+      this.getCode()
     },
     removerHistory() {
-      this.isHistory = false;
-      window.ipcRenderer.send("removeStore", "history");
-      this.history = false;
+      this.isHistory = false
+      window.ipcRenderer.send('removeStore', 'history')
+      this.history = false
     },
     check(item) {
-      this.ruleForm = item;
-      this.isHistory = false;
+      this.ruleForm = item
+      this.isHistory = false
     }
   }
-};
+}
 </script>
 <style lang='less' scoped>
 .wrap {
-  background: url("~@/assets/image/bg_login.jpg") no-repeat top left / 100% 100%;
+
   min-height: 100vh;
   height: 100%;
 }

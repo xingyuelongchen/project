@@ -2,25 +2,19 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import Element from 'element-ui';
-import axios from './api';
+import Element from 'element-ui'; 
 import template from './components';
-import '@/assets/theme/blue/index.css';
+import '@/assets/theme/black/index.css';
 import '@/assets/iconfont/iconfont.css';
 import 'xe-utils';
-// import VXETable from 'vxe-table';
-// import 'vxe-table/lib/index.css';
 import version from '../package.json';
 import isElectron from "is-electron";
 import VCharts from 'v-charts';
 import 'v-charts/lib/style.css';
 import socket from './api/socket-io';
-// asdfasdfasdf
+// import api from 'xingyuelongchen';
+import api from './api';
 Vue.config.productionTip = false;
-// Vue.component('v-chart', ECharts);
-// Vue.use(echarts);
-// Vue.use(VXETable)
-// Vue.prototype.$modal = VXETable.modal
 Vue.directive('role', {
   bind(el, binding) {
     if (binding.value == undefined) return;
@@ -58,8 +52,7 @@ Vue.directive('move', {
 
   }
 });
-
-Vue.prototype.axios = axios;
+Vue.use(api);
 Vue.prototype.EXEVERSION = version.version;
 Vue.prototype.isElectron = isElectron();
 Vue.prototype.socket = socket();

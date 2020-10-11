@@ -1,60 +1,47 @@
-import axios from 'axios';
-import config from '../config';
-import { Message, Notification } from 'element-ui';
-import Router from '@/router'
 
-if (process.env.NODE_ENV != 'development') {
-    axios.defaults['baseURL'] = config.baseUrl;
+
+ /* eslint-disable */ 
+export const Axios = require('./Axios').default;
+export const Storage = require('./Storage').default;
+export const FormatDate = require('./FormatDate').default;
+export const Config = require('./Config');
+export const Validate = require('./Validate');
+const obj = { Axios, Config, Storage, ...Storage, Validate, FormatDate };
+
+export default {
+    ...obj,
+    install(VM) {
+        var version = Number(VM.version.split('.')[0])
+        if (version == 3) {
+            // vue ^3.0  版本扩展方法
+            VM.config.globalProperties = obj;
+        } else {
+            // vue 2.0+  版本扩展方法 
+            Object.keys(obj).forEach(e => {
+                VM.prototype[e.toLocaleLowerCase()] = obj[e]
+            })
+        }
+    }
 };
+/**
+ * 缓存tab选项卡
+ */
+function cache() {
+    window.onbeforeunload = () => {
+        try {
+            delete Store.state.nocach;
+            sessionStorage.setItem("Store", JSON.stringify(Store.state));
 
-axios.defaults['withCredentials'] = true;
-axios.interceptors.request.use(req, reqError);
-axios.interceptors.response.use(res, resError);
+        } catch (error) {
+            console.log(error);
+            return false
 
-var notification = null;
-var message = null;
-function req(config) {
-    if (/(^\/adminapi\/)/.test(config.url)) {
-        config.method = 'post'
-    }
-    return config
-}
-function reqError() {
-    message && message.close();
-    message = Message.error('错误请求，请联系管理员')
-}
-function res(res) {
-    if (res.data.code == 0) {
-        Notification.error({
-            title: '错误',
-            message: res.data.msg,
-            // showClose: false
-        })
-    }
-    if (res.data.code == 4) {
-        notification && notification.close();
-        notification = Notification({
-            type: 'success',
-            title: '成功',
-            message: res.data.msg,
-        })
-    }
-    if (res.data.code == 5) {
-        notification && notification.close();
-        notification = Notification({
-            type: 'error',
-            title: '账户登录过期，请重新登录！',
-            message: res.data.msg,
-        })
-        Router.replace('/login')
-    }
-    return res
-}
-function resError(error) {
-    message && message.close();
-    message = Message.error('服务器响应错误，请联系管理员');
-    return error
-
+        }
+    };
+    window.addEventListener("load", () => {
+        let data = sessionStorage.getItem("Store") || false;
+        if (data) Store.commit("setInit", JSON.parse(data));
+        sessionStorage.removeItem("Store");
+    });
 }
 
-export default axios;

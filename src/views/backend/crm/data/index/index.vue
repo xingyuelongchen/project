@@ -24,58 +24,61 @@ Create Time  : 2020-09-13
 </template>
 <script>
 export default {
-  name: "Dataindex",
+  name: 'Dataindex',
   data() {
     return {
       echartData: {
         settings: {
           area: true
         },
-        data: null,
-        interval: null
+        data: [],
+        interval: []
       },
       loading: false,
       tableFields: [],
       searchData: {
-        type: "1"
+        type: '1'
       },
       searchFields: [
-        { span: 6, label: "选择", type: "daterange", prop: "date" },
+        { span: 6, label: '选择', type: 'daterange', prop: 'date' },
         // { span: 3, label: "选择部门", type: "cascader", prop: "dept" },
-        { span: 3, label: "查看数据", type: "button", click: this.getData }
-      ],
-     
-    };
+        { span: 3, label: '查看数据', type: 'button', click: this.getData }
+      ]
+    }
   },
   created() {
-    this.getData();
+    this.getData()
   },
   methods: {
     async getData() {
-      this.loading = true;
-      let { data } = await this.axios("/adminapi/Analysis/list", {
+      this.loading = true
+      let { data } = await this.axios('/adminapi/Analysis/list', {
         data: this.searchData
-      });
+      })
       if (data.code) {
-        this.$set(this.echartData, "data", {
-          columns: Object.keys(data.data.day[0]),
-          rows: data.data.day
-        });
-        this.$set(this.echartData, "interval", data.data.interval);
-        this.tableFields = Object.keys(data.data.interval[0]).map(e => {
-          return {
-            label: e,
-            prop: e
-          };
-        });
+        if (data.data.day instanceof Array) {
+          this.$set(this.echartData, 'data', {
+            columns: Object.keys(data.data.day[0]),
+            rows: data.data.day
+          })
+        }
+        if (data.data.interval instanceof Array) {
+          this.$set(this.echartData, 'interval', data.data.interval)
+          this.tableFields = Object.keys(data.data.interval[0]).map(e => {
+            return {
+              label: e,
+              prop: e
+            }
+          })
+        }
       }
-      this.loading = false;
+      this.loading = false
     },
     handleClick() {
-      this.getData();
+      this.getData()
     }
   }
-};
+}
 </script>
 <style lang='less' scoped>
 </style>

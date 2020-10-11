@@ -56,10 +56,10 @@ Create Time  : 2020-04-02
 </template>
 <script>
 export default {
-  name: "mixSearch",
-  components: { selectTree: () => import("@/components/mixSelectTree") },
+  name: 'mixSearch',
+  components: { selectTree: () => import('@/components/mixSelectTree') },
   model: {
-    prop: "form"
+    prop: 'form'
   },
   props: {
     form: {
@@ -75,81 +75,81 @@ export default {
     return {
       pickerOptions: {
         disabledDate: time => {
-          return new Date().getMonth() - new Date(time).getMonth() > 3;
+          return new Date().getMonth() - new Date(time).getMonth() > 3
         },
         shortcuts: [
           {
-            text: "昨天",
+            text: '昨天',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
-              end.setTime(start.getTime());
-              picker.$emit("pick", [start, end]);
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
+              end.setTime(start.getTime())
+              picker.$emit('pick', [start, end])
             }
           },
           {
-            text: "今天",
+            text: '今天',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime());
-              picker.$emit("pick", [start, end]);
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime())
+              picker.$emit('pick', [start, end])
             }
           },
           {
-            text: "最近一周",
+            text: '最近一周',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 6);
-              picker.$emit("pick", [start, end]);
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 6)
+              picker.$emit('pick', [start, end])
             }
           },
           {
-            text: "最近30天",
+            text: '最近30天',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
             }
           },
           {
-            text: "最近90天",
+            text: '最近90天',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
             }
           }
         ]
       }
-    };
+    }
   },
   methods: {
     click(type, index, item) {
-      let click = type["click"];
-      if (!click) return;
+      let click = type['click']
+      if (!click) return
 
-      if (typeof click == "function") {
-        click(type, index, item);
-        return;
+      if (typeof click == 'function') {
+        click(type, index, item)
+        return
       }
-      if (typeof this.$parent[click] == "function") {
-        this.$parent[click](type, index, item);
-        return;
+      if (typeof this.$parent[click] == 'function') {
+        this.$parent[click](type, index, item)
+        return
       }
     }
   }
-};
+}
 </script>
 <style lang='less' scoped>
 .mix-search {
   margin: 5px 0;
-  padding: 5px;
-  background: #f0f0f0;
+  padding: 5px; 
+ 
 }
 .el-date-editor {
   width: 100%;

@@ -4,121 +4,126 @@ Create author: qinglong
 Create Time  : 2020-03-28
 -->
 <template>
-  <el-table ref="table" id="exportTab" row-key="id" class="mix-table" v-loading="loading" height='100%' :max-height="options.height || '95%'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
-    <template v-for="(item,index ) in field">
-      <template v-if="item.type == 'expand'">
-        <el-table-column :key="index" :type="item.type" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable">
-          <template slot-scope="props">
-            <div class="demo-table-expand">
-              <template v-for="(k,i) in fields">
-                <div class="item" v-if="!!(k.prop && props.row[k.prop]) " :label="k.label" :key="i">
-                  <span class="label">{{k.label}}</span>
-                  <span>{{ props.row[k.prop] }}</span>
-                </div>
-              </template>
-            </div>
-          </template>
-        </el-table-column>
-      </template>
-      <template v-else-if="['selection','index','expand'].includes(item.type)">
-        <el-table-column :key="index" :type="item.type || 'selection'" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable" />
-      </template>
-      <template v-else-if="item.type && !['selection','index','expand'].includes(item.type)">
-        <el-table-column :key="index" :prop="item.prop" :label="item.label" :filters="item.filters" :sortable="!!item.sort" :fixed="item.fixed||false" :formatter="item.formatter" :class-name="item.className||''" :resizable="item.resizable || false" :header-align="item.headAlign||item.align||'left'" :align="item.align||item.headAlign||'left'" :width="item.width||item.minWidth ||''" :show-overflow-tooltip="item.tootip || true" :reserve-selection="item.reserveSelection||false" :min-width="item.minWidth || item.type=='manage'?'178':'0'">
-          <template slot-scope="scope">
-            <template v-if="item.type == 'tag'">
-              <div v-if="item.options" class="box">
-                <template v-for="(k,i) in item.options">
-                  <el-tag effect="plain" :size="item.size||options.size||'mini'" disable-transitions v-if="k.value==scope.row[item.prop]" :type="k.style" :key="i">{{k.label || k}}</el-tag>
+  <div class="mix-table">
+    <div class="head">
+      <slot name="head"></slot>
+    </div>
+    <el-table ref="table" id="exportTab" row-key="id" v-loading="loading" :max-height="options.height || '550px'" tooltip-effect="dark" :size="options.size || 'mini'" :header-row-style="{background:'#f9f9f9'}" :header-cell-style="{background:'none'}" :border="true" :fit="true" :data="fieldsData" :lazy="options.lazy|| false" :load="options.load || null" :tree-props="options.treeProps || {hasChildren:'children'}" @cell-click="cellClick" @cell-dblclick="cellDblClick" @selection-change="selectionChange">
+      <template v-for="(item,index ) in field">
+        <template v-if="item.type == 'expand'">
+          <el-table-column :key="index" :type="item.type" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable">
+            <template slot-scope="props">
+              <div class="demo-table-expand">
+                <template v-for="(k,i) in fields">
+                  <div class="item" v-if="!!(k.prop && props.row[k.prop]) " :label="k.label" :key="i">
+                    <span class="label">{{k.label}}</span>
+                    <span>{{ props.row[k.prop] }}</span>
+                  </div>
                 </template>
               </div>
-              <el-tag v-else disable-transitions :type="item.style">{{ scope.row[item.prop] || '空'}}</el-tag>
             </template>
-            <template v-if="item.type == 'select'">
-              <!-- {{typeof scope.row[item.prop]}} -->
-              <el-select v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" :size="item.size||options.size||'mini'">
-                <el-option v-for="(k,i) in item.options" :key="i" :label="k.label" :value="k.value"></el-option>
-              </el-select>
-            </template>
-            <template v-if="item.type == 'dropdown'">
-              <el-dropdown :size="item.size||options.size||'mini'">
-                <span>{{scope.row[item.prop]}}</span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="(k,i) in item.options" :key="i" @click.stop.native="dropDown(item,k,scope)">{{k.label}}</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </template>
-            <template v-if="item.type == 'tagdown'">
-              <el-dropdown :size="item.size||options.size||'mini'">
-                <el-tag class="hover" effect="plain" :size="item.size||options.size||'mini'" :type="toogle(item,scope.row[item.prop])">{{ getTagDownLabel(item,scope) }}</el-tag>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="(k,i) in item.options" :key="i" @click.self.stop.native="dropDown(item,k,scope)">{{k.label}}</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </template>
-            <template v-if="item.type == 'switch'">
-              <el-switch :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" :active-value="1" :inactive-value="0" @change="onInput(item,scope,'change',$event)" inactive-color="#ccc" :disabled="item.readonly" />
-            </template>
-            <template v-if="item.type == 'cascader'">
-              <el-cascader :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" :options="item.config || {}" @change="onInput(item,scope,'change',$event)" />
-            </template>
-
-            <template v-if="item.type == 'color'">
-              <div class="input" :key="showKey">
-                <span>{{scope.row[item.prop]}}</span>
-                <!-- <el-input v-else :size="item.size||options.size||'mini'" :autofocus="true" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="focusData={}"></el-input> -->
-                <el-color-picker :size="item.size||options.size||'mini'" :predefine="['#fff','#000','#ff0','#f00','#0ff','#00f','#0f0']" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="focusData={}"></el-color-picker>
-              </div>
-            </template>
-            <template v-if="item.type == 'input'">
-              <div class="input" :key="showKey">
-                <span v-if="focusData[scope.column.id+scope.row.id]!==true">{{scope.row[item.prop]}}</span>
-                <el-input v-else :size="item.size||options.size||'mini'" :autofocus="true" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="focusData={}"></el-input>
-              </div>
-            </template>
-            <template v-if="['manage','button'].includes(item.type)">
-              <div class="box">
-                <el-dropdown v-if="item.type == 'manage'" trigger="click">
-                  <el-button class="hover" :size="item.size||options.size||'mini'" type="primary">{{ item.label || '操作'}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
-                  <el-dropdown-menu slot="dropdown" res="dropdownMenu">
-                    <template v-for="(k,i) in item.options">
-                      <el-dropdown-item v-show="isShow(k,item,scope)" v-role="k.role" :key="i" @click.native="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-dropdown-item>
-                    </template>
-                    <el-dropdown-item></el-dropdown-item>
+          </el-table-column>
+        </template>
+        <template v-else-if="['selection','index','expand'].includes(item.type)">
+          <el-table-column :key="index" :type="item.type || 'selection'" :label="item.label" :fixed="item.fixed" :align="item.align||item.headAlign||'left'" :header-align="item.headAlign||'left'" :resizable="item.resizable" />
+        </template>
+        <template v-else-if="item.type && !['selection','index','expand'].includes(item.type)">
+          <el-table-column :key="index" :prop="item.prop" :label="item.label" :filters="item.filters" :sortable="!!item.sort" :fixed="item.fixed||false" :formatter="item.formatter" :class-name="item.className||''" :resizable="item.resizable || false" :header-align="item.headAlign||item.align||'left'" :align="item.align||item.headAlign||'left'" :width="item.width||item.minWidth ||''" :show-overflow-tooltip="item.tootip || true" :reserve-selection="item.reserveSelection||false" :min-width="item.minWidth || item.type=='manage'?'178':'0'">
+            <template slot-scope="scope">
+              <template v-if="item.type == 'tag'">
+                <div v-if="item.options" class="box">
+                  <template v-for="(k,i) in item.options">
+                    <el-tag effect="plain" :size="item.size||options.size||'mini'" disable-transitions v-if="k.value==scope.row[item.prop]" :type="k.style" :key="i">{{k.label || k}}</el-tag>
+                  </template>
+                </div>
+                <el-tag v-else disable-transitions :type="item.style">{{ scope.row[item.prop] || '空'}}</el-tag>
+              </template>
+              <template v-if="item.type == 'select'">
+                <!-- {{typeof scope.row[item.prop]}} -->
+                <el-select v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" :size="item.size||options.size||'mini'">
+                  <el-option v-for="(k,i) in item.options" :key="i" :label="k.label" :value="k.value"></el-option>
+                </el-select>
+              </template>
+              <template v-if="item.type == 'dropdown'">
+                <el-dropdown :size="item.size||options.size||'mini'">
+                  <span>{{scope.row[item.prop]}}</span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-for="(k,i) in item.options" :key="i" @click.stop.native="dropDown(item,k,scope)">{{k.label}}</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
-                <template v-else-if="item.type == 'button' && item.options && item.options.length">
-                  <el-button v-for="(k,i) in item.options" v-role="k.role" v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'" :size="item.size||options.size||'mini'" @click="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-button>
-                </template> 
-              </div>
-            </template>
-            <template v-if="item.type == 'icon'">
-              <i :class="scope.row[item.prop]"></i>
-            </template>
-            <template v-if="item.type == 'plan'">
-              <el-progress :percentage="scope.row[item.prop]" text-inside type="line" :status="progressStatus(scope.row[item.prop])" :stroke-width="15"></el-progress>
-            </template>
-            <template v-if="item.type == 'image'">
-              <template v-if="scope.row[item.prop] && typeof scope.row[item.prop] == 'object'  && scope.row[item.prop].length">
-                <el-image class="image" v-for="(k,i) in scope.row[item.prop]" :key="i" :src="k" fit="cover" :preview-src-list="scope.row[item.prop]" />
               </template>
-              <template v-else-if="typeof scope.row[item.prop] == 'string' ">
-                <div class="imageong">
-                  <el-image :key="index" :src="scope.row[item.prop]" fit="contain" :preview-src-list="[scope.row[item.prop]]">
-                    <img slot="error">
-                  </el-image>
+              <template v-if="item.type == 'tagdown'">
+                <el-dropdown :size="item.size||options.size||'mini'">
+                  <el-tag class="hover" effect="plain" :size="item.size||options.size||'mini'" :type="toogle(item,scope.row[item.prop])">{{ getTagDownLabel(item,scope) }}</el-tag>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-for="(k,i) in item.options" :key="i" @click.self.stop.native="dropDown(item,k,scope)">{{k.label}}</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </template>
+              <template v-if="item.type == 'switch'">
+                <el-switch :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" :active-value="1" :inactive-value="0" @change="onInput(item,scope,'change',$event)" inactive-color="#ccc" :disabled="item.readonly" />
+              </template>
+              <template v-if="item.type == 'cascader'">
+                <el-cascader :size="item.size||options.size||'mini'" v-model="scope.row[item.prop]" :options="item.config || {}" @change="onInput(item,scope,'change',$event)" />
+              </template>
+
+              <template v-if="item.type == 'color'">
+                <div class="input" :key="showKey">
+                  <span>{{scope.row[item.prop]}}</span>
+                  <!-- <el-input v-else :size="item.size||options.size||'mini'" :autofocus="true" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="focusData={}"></el-input> -->
+                  <el-color-picker :size="item.size||options.size||'mini'" :predefine="['#fff','#000','#ff0','#f00','#0ff','#00f','#0f0']" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="focusData={}"></el-color-picker>
                 </div>
               </template>
-              <span v-else>无</span>
+              <template v-if="item.type == 'input'">
+                <div class="input" :key="showKey">
+                  <span v-if="focusData[scope.column.id+scope.row.id]!==true">{{scope.row[item.prop]}}</span>
+                  <el-input v-else :size="item.size||options.size||'mini'" :autofocus="true" v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" @blur="focusData={}"></el-input>
+                </div>
+              </template>
+              <template v-if="['manage','button'].includes(item.type)">
+                <div class="box">
+                  <el-dropdown v-if="item.type == 'manage'" trigger="click">
+                    <el-button class="hover" :size="item.size||options.size||'mini'" type="primary">{{ item.label || '操作'}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+                    <el-dropdown-menu slot="dropdown" res="dropdownMenu">
+                      <template v-for="(k,i) in item.options">
+                        <el-dropdown-item v-show="isShow(k,item,scope)" v-role="k.role" :key="i" @click.native="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-dropdown-item>
+                      </template>
+                      <el-dropdown-item></el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                  <template v-else-if="item.type == 'button' && item.options && item.options.length">
+                    <el-button v-for="(k,i) in item.options" v-role="k.role" v-show="isShow(k,item,scope)" :underline="false" :key="i" :type="k.style || 'default'" :size="item.size||options.size||'mini'" @click="click(k.click,scope.row,k,scope.column)">{{k.label}}</el-button>
+                  </template>
+                </div>
+              </template>
+              <template v-if="item.type == 'icon'">
+                <i :class="scope.row[item.prop]"></i>
+              </template>
+              <template v-if="item.type == 'plan'">
+                <el-progress :percentage="scope.row[item.prop]" text-inside type="line" :status="progressStatus(scope.row[item.prop])" :stroke-width="15"></el-progress>
+              </template>
+              <template v-if="item.type == 'image'">
+                <template v-if="scope.row[item.prop] && typeof scope.row[item.prop] == 'object'  && scope.row[item.prop].length">
+                  <el-image class="image" v-for="(k,i) in scope.row[item.prop]" :key="i" :src="k" fit="cover" :preview-src-list="scope.row[item.prop]" />
+                </template>
+                <template v-else-if="typeof scope.row[item.prop] == 'string' ">
+                  <div class="imageong">
+                    <el-image :key="index" :src="scope.row[item.prop]" fit="contain" :preview-src-list="[scope.row[item.prop]]">
+                      <img slot="error">
+                    </el-image>
+                  </div>
+                </template>
+                <span v-else>无</span>
+              </template>
             </template>
-          </template>
-        </el-table-column>
+          </el-table-column>
+        </template>
+        <template v-else>
+          <el-table-column :key="index" :prop="item.prop" :label="item.label" :sortable="!!item.sort" :fixed="item.fixed||false" :formatter="item.formatter" :width="item.width||'auto'" :align="item.align||item.headAlign||'left'" :class-name="item.className||''" :min-width="item.minWidth || 100" :resizable="item.resizable || false" :header-align="item.headAlign||'left'" :show-overflow-tooltip="item.tootip || true" :reserve-selection="item.reserveSelection||false"></el-table-column>
+        </template>
       </template>
-      <template v-else>
-        <el-table-column :key="index" :prop="item.prop" :label="item.label" :sortable="!!item.sort" :fixed="item.fixed||false" :formatter="item.formatter" :width="item.width||'auto'" :align="item.align||item.headAlign||'left'" :class-name="item.className||''" :min-width="item.minWidth || 100" :resizable="item.resizable || false" :header-align="item.headAlign||'left'" :show-overflow-tooltip="item.tootip || true" :reserve-selection="item.reserveSelection||false"></el-table-column>
-      </template>
-    </template>
-  </el-table>
+    </el-table>
+  </div>
 </template>
 <script>
 import FileSaver from 'file-saver'
@@ -542,6 +547,10 @@ export default {
 }
 </script>
 <style lang='less' scoped>
+.mix-table {
+  background: #eee;
+  height: 100%;
+}
 .demo-table-expand {
   // width: 75vw;
   display: grid;
