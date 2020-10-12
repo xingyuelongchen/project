@@ -8,13 +8,7 @@ export default [
         children: [
             { path: 'info', name: 'Userinfo', meta: { keepAlive: true, title: '资料管理', }, component: () => import('@/views/user/info') },
         ]
-    },
-    {
-        path: '/xiapi',
-        name: "Xiapi",
-        component: () => import('@/views/xipi'),
-        meta: { isAuth: true, title: '数据走势图', keepAlive: true, },
-    },
+    }, 
     {
         path: '*', redirect: '/error404'
     }

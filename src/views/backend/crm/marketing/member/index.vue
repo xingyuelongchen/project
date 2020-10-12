@@ -8,12 +8,8 @@ Create Time  : 2020-08-16
     <mixSearch v-model="searchData" :fields="searchFields" />
     <mixTable v-model="tableData" :fields="tableFields" />
     <mixPage v-model="page" />
-    <el-dialog :visible.sync="show" title="合同预览">
-      <el-carousel height="150px">
-        <el-carousel-item v-for="(item,index) in imgList" :key="index">
-          <el-image :src="item" :preview-src-list="imgList"></el-image>
-        </el-carousel-item>
-      </el-carousel>
+    <el-dialog :visible.sync="show" title="合同预览" width="780px" :fullscreen="false" top="5vh">
+      <el-image v-for="(item,index) in imgList" :key="index" :src="item" :preview-src-list="imgList" fit="contaion"></el-image>
     </el-dialog>
   </div>
 </template>
@@ -47,9 +43,9 @@ export default {
       imgList: []
     }
   },
-  created() {
-    this.getSearch()
-    this.getData()
+  async created() {
+    await this.getSearch()
+    await this.getData()
   },
   methods: {
     async getSearch() {

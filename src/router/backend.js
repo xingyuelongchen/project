@@ -52,7 +52,7 @@ export default
     { path: 'marketing', name: 'Marketing', meta: { keepAlive: false, role: 179, title: '营销', }, component: () => import('@/views/layou'), },
     { path: 'activity', name: 'Marketingactivity', meta: { keepAlive: false, role: 180, title: '活动管理', }, component: () => import('@/views/backend/crm/marketing/activity') },
     { path: 'member', name: 'Marketingmember', meta: { keepAlive: false, role: 181, title: '会员数据', }, component: () => import('@/views/backend/crm/marketing/member') },
-
+    { path: 'contract', name: 'Admincontract', meta: { keepAlive: true, role: 121, title: '合同管理', }, component: () => import('@/views/backend/crm/marketing/contract') },
 
 
   ]

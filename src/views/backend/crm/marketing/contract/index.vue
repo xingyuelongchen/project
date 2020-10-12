@@ -62,220 +62,250 @@ Create Time  : 2020-08-12
     <el-dialog :close-on-click-modal="false" :visible.sync="picShow" title="添加图片" width="500px">
       <mixForm v-model="picData" :fields="picFields" />
     </el-dialog>
+    <el-dialog :close-on-click-modal="false" :visible.sync="editPicShow" title="修改图片" width="500px">
+      <mixForm v-model="editPicData" :fields="editPicFields" />
+    </el-dialog>
 
   </div>
 </template>
 <script>
 export default {
-  name: "Admincontract",
+  name: 'Admincontract',
   data() {
     const contract = [
-      { labelWidth: 80, label: "套餐名称", prop: "label", type: "text" },
-      { labelWidth: 80, label: "是否淘宝", prop: "form_id", type: "switch" },
-      { labelWidth: 80, label: "套餐价格", prop: "price", type: "number" },
-      { labelWidth: 80, label: "有效期", prop: "duration", type: "number" },
+      { labelWidth: 80, label: '套餐名称', prop: 'label', type: 'text' },
+      { labelWidth: 80, label: '是否淘宝', prop: 'form_id', type: 'switch' },
+      { labelWidth: 80, label: '套餐价格', prop: 'price', type: 'number' },
+      { labelWidth: 80, label: '有效期', prop: 'duration', type: 'number' },
       {
         labelWidth: 80,
-        label: "套餐封面",
-        prop: "meal_pic",
-        type: "imageonce",
+        label: '套餐封面',
+        prop: 'meal_pic',
+        type: 'imageonce',
         all: false
       }
       // { labelWidth: 80, label: "套餐合同", prop: "pic", type: "imageonce" }
-    ];
+    ]
     return {
       version: {},
       addShow: false,
       editShow: false,
       picShow: false,
+      editPicShow: false,
       list: [],
       imageList: [],
       picData: {},
       picFields: [
         // { label: "图片名称", type: "text", prop: "label" },
-        { label: "图片排序", type: "number", prop: "sort" },
-        { label: "上传图片", prop: "pic", type: "imageonce", all: false },
-        { label: "是否需要签名", type: "switch", prop: "is_sign" },
-        { label: "确定", type: "button", click: this.changeSave }
+        { label: '图片排序', type: 'number', prop: 'sort' },
+        { label: '上传图片', prop: 'pic', type: 'imageonce', all: false },
+        { label: '是否需要签名', type: 'switch', prop: 'is_sign' },
+        { label: '确定', type: 'button', click: this.changeSave }
       ],
       addData: {},
       addFields: contract.concat([
         {
           labelWidth: 80,
-          type: "button",
-          options: [{ label: "提交", click: this.save }]
+          type: 'button',
+          options: [{ label: '提交', click: this.save }]
         }
       ]),
       editData: {},
       editFields: contract.concat([
         {
           labelWidth: 80,
-          type: "button",
-          options: [{ label: "提交", click: this.editSave }]
+          type: 'button',
+          options: [{ label: '提交', click: this.editSave }]
         }
       ]),
+      editPicData: {},
+      editPicFields: [
+        // { label: "图片名称", type: "text", prop: "label" },
+        { label: '图片排序', type: 'number', prop: 'sort' },
+        { label: '上传图片', prop: 'pic', type: 'imageonce', all: false },
+        { label: '是否需要签名', type: 'switch', prop: 'is_sign' },
+        {
+          type: 'button',
+          options: [{ label: '提交', click: this.editPic }]
+        }
+      ],
+
       tableFields: [
-        { label: "缩略图", prop: "pic", type: "image" },
-        { change: this.changeEdit, label: "排序", prop: "sort", type: "input" },
+        { label: '缩略图', prop: 'pic', type: 'image' },
+        { change: this.changeEdit, label: '排序', prop: 'sort', type: 'input' },
         {
           change: this.changeEdit,
-          label: "名称",
-          prop: "label",
-          type: "input"
+          label: '名称',
+          prop: 'label',
+          type: 'input'
         },
         {
           change: this.changeEdit,
-          label: "是否签名",
-          prop: "is_sign",
-          type: "switch"
+          label: '是否签名',
+          prop: 'is_sign',
+          type: 'switch'
         },
         {
           change: this.changeEdit,
-          label: "字体色",
-          prop: "font_color",
-          type: "input"
+          label: '字体色',
+          prop: 'font_color',
+          type: 'input'
         },
         {
           change: this.changeEdit,
-          label: "字号",
-          prop: "font_size",
-          type: "input"
+          label: '字号',
+          prop: 'font_size',
+          type: 'input'
         },
         {
           change: this.changeEdit,
-          label: "签名位置1",
-          prop: "position_a",
-          type: "input"
+          label: '签名位置1',
+          prop: 'position_a',
+          type: 'input'
         },
         {
           change: this.changeEdit,
-          label: "签名位置2",
-          prop: "position_b",
-          type: "input"
+          label: '签名位置2',
+          prop: 'position_b',
+          type: 'input'
         },
         {
           change: this.changeEdit,
-          label: "签名位置3",
-          prop: "position_c",
-          type: "input"
+          label: '签名位置3',
+          prop: 'position_c',
+          type: 'input'
+        },
+        {
+          label: '操作',
+          type: 'button',
+          options: [{ label: '修改图片', click: this.changeEditPic, style: 'warning' }]
         }
       ]
-    };
+    }
   },
   created() {
-    this.getData();
+    this.getData()
   },
   methods: {
     add() {
-      this.addShow = true;
+      this.addShow = true
     },
     async addPic(item) {
-      this.picShow = true;
-      this.picData.meal_id = item.id;
+      this.picShow = true
+      this.picData.meal_id = item.id
     },
     async changeEdit(item) {
-      console.log(item);
-      item = { ...item };
-      delete item.create_time;
-      delete item.update_time;
-      await this.axios("/adminapi/meal/sign_edit", {
+      item = { ...item }
+      delete item.create_time
+      delete item.update_time
+      await this.axios('/adminapi/meal/sign_edit', {
         data: item
-      });
+      })
     },
     async del() {
-      this.$confirm("此操作不可恢复，是否继续", "警告！", {
-        type: "warning"
+      this.$confirm('此操作不可恢复，是否继续', '警告！', {
+        type: 'warning'
       }).then(async () => {
-        await this.axios("/adminapi/Meal/del", {
+        await this.axios('/adminapi/Meal/del', {
           data: this.version
-        });
-        this.version = {};
-        this.imageList = [];
-        this.getData();
-      });
+        })
+        this.version = {}
+        this.imageList = []
+        this.getData()
+      })
     },
     async tab(item) {
-      this.version = item;
-      let { data } = await this.axios("/adminapi/meal/list_mael", {
+      this.version = item
+      let { data } = await this.axios('/adminapi/meal/list_mael', {
         data: { id: item.id }
-      });
+      })
       if (data.code) {
-        console.log(data);
-        this.imageList = data.data;
+        console.log(data)
+        this.imageList = data.data
       }
       // if (item) {
       //   this.imageList = item.pic.map((e, i) => ({ id: i, src: e }));
       // }
     },
     edit() {
-      this.editShow = true;
-      this.editData = this.version;
+      this.editShow = true
+      this.editData = this.version
     },
     onLeft(item) {
-      item = { ...item };
-      this.imageList = this.imageList.filter(e => e.id != item.id);
-      this.imageList.splice(item.id - 1, 0, item);
+      item = { ...item }
+      this.imageList = this.imageList.filter(e => e.id != item.id)
+      this.imageList.splice(item.id - 1, 0, item)
       this.imageList = this.imageList.map((e, i) => {
-        e.id = i;
-        return e;
-      });
-      let arr = this.imageList.map(e => e.src);
-      this.version.pic = arr;
+        e.id = i
+        return e
+      })
+      let arr = this.imageList.map(e => e.src)
+      this.version.pic = arr
     },
     onRight(item) {
-      item = { ...item };
-      this.imageList = this.imageList.filter(e => e.id != item.id);
-      this.imageList.splice(item.id + 1, 0, item);
+      item = { ...item }
+      this.imageList = this.imageList.filter(e => e.id != item.id)
+      this.imageList.splice(item.id + 1, 0, item)
       this.imageList = this.imageList.map((e, i) => {
-        e.id = i;
-        return e;
-      });
-      let arr = this.imageList.map(e => e.src);
-      this.version.pic = arr;
+        e.id = i
+        return e
+      })
+      let arr = this.imageList.map(e => e.src)
+      this.version.pic = arr
     },
     onDel(item) {
-      this.imageList = this.imageList.filter(e => e.id != item.id);
-      let arr = this.imageList.map(e => e.src);
-      this.version.pic = arr;
+      this.imageList = this.imageList.filter(e => e.id != item.id)
+      let arr = this.imageList.map(e => e.src)
+      this.version.pic = arr
     },
     async changeSave() {
-      await this.axios("/adminapi/Meal/picture", {
+      await this.axios('/adminapi/Meal/picture', {
         data: this.picData
-      });
-      this.getData();
-      this.picShow = false;
+      })
+      this.getData()
+      this.picShow = false
     },
     async editSave() {
-      let { data } = await this.axios("/adminapi/Meal/edit", {
+      let { data } = await this.axios('/adminapi/Meal/edit', {
         data: this.editData
-      });
+      })
       if (data.code) {
-        this.getData();
-        this.editShow = false;
+        this.getData()
+        this.editShow = false
       }
     },
     async getData() {
-      let { data } = await this.axios("/adminapi/meal/list");
+      let { data } = await this.axios('/adminapi/meal/list')
       if (data.code) {
-        this.list = data.data;
+        this.list = data.data
         if (!this.version.id) {
-          this.version = data.data[0];
-          this.tab(this.version);
+          this.version = data.data[0]
+          this.tab(this.version)
         }
       }
     },
     async save() {
-      let { data } = await this.axios("/adminapi/Meal/add", {
+      let { data } = await this.axios('/adminapi/Meal/add', {
         data: this.addData
-      });
+      })
       if (data.code) {
-        this.addShow = false;
-        this.addData = {};
-        this.getData();
+        this.addShow = false
+        this.addData = {}
+        this.getData()
       }
+    },
+    async changeEditPic(item) {
+      this.editPicShow = true
+      this.editPicData = item
+    },
+    async editPic() {
+      await this.axios('/adminapi/meal/sign_edit', {
+        data: this.editPicData
+      })
+      this.editPicShow=false;
     }
   }
-};
+}
 </script>
 <style lang='less' scoped>
 .left {
