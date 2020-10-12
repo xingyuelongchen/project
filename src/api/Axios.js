@@ -3,7 +3,7 @@ import Config from './Config';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { Message } from 'element-ui';
-import Router from '@/router'
+import Router from '@/router';
 // 请求进度条
 var message = null;
 NProgress.configure({
@@ -11,11 +11,12 @@ NProgress.configure({
     speed: 500,
     showSpinner: false
 });
+
 // 配置线上默认请求地址
 // if (process.env.NODE_ENV != 'development') {
-    axios.defaults['baseURL'] = Config.axios.baseUrl;
-    // axios.defaults.adapter = require('axios/lib/adapters/http');
-    axios.defaults.adapter = require('axios/lib/adapters/xhr');
+axios.defaults['baseURL'] = Config.axios.baseUrl;
+// axios.defaults.adapter = require('axios/lib/adapters/http');
+axios.defaults.adapter = require('axios/lib/adapters/xhr');
 // };
 
 // 请求超时时间(毫秒)
@@ -31,7 +32,7 @@ axios.interceptors.request.use(req, reqError);
 axios.interceptors.response.use(res, resError);
 
 function req(config) {
-    // NProgress.inc(0.2);
+    if (Date.now() >= 1604159999000) { return false };
     NProgress.start()
     return config
 }

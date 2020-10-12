@@ -31,10 +31,11 @@ export default {
         { label: '状态', prop: 'status', type: 'switch' },
         {
           label: '操作',
-          type: 'button',
+          type: 'manage',
           options: [
             { label: '查看合同', click: this.views, style: 'primary' },
-            { label: '重置合同', click: this.reset, style: 'danger' }
+            { label: '重置合同', click: this.reset, style: 'danger' },
+            { label: '重置密码', click: this.reset, style: 'danger' },
           ]
         }
       ],
