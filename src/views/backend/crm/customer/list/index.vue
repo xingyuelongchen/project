@@ -607,6 +607,7 @@ export default {
         let obj = {}
         this.editFields.forEach(e => (obj[e.prop] = null))
         obj['channel'] = this.editForm.channel
+        obj['channel_type'] = this.editForm.channel_type
         this.editForm = obj
         if (url == 'edit') this.drawer = false
         if (url == 'add') this.getData()

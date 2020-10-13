@@ -34,7 +34,7 @@ export default {
       { label: '全部', value: 4 },
       { label: '网店', value: 1 },
       { label: '跨境', value: 2 },
-      { label: '天猫', value: 3 }
+      // { label: '其它', value: 3 }
     ]
     return {
       url: null,
