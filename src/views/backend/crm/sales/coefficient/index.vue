@@ -50,7 +50,7 @@ Create Time  : 2020-08-06
         <el-button @click="save" type="primary">保存当前</el-button>
       </div>
     </el-dialog>
-    <el-dialog :close-on-click-modal="false" :visible.sync="addShow" title="添加" width="250px">
+    <el-dialog :close-on-click-modal="false" :visible.sync="addShow" title="添加" width="350px">
       选择等级：
       <el-select v-model="grade">
         <template v-for="(item,index) in options">
@@ -99,7 +99,7 @@ export default {
       formData: [{ price: "", rate: "" }]
     };
   },
-  created() {
+  async created() {
     this.getData();
   },
   methods: {
@@ -129,7 +129,7 @@ export default {
       }
     },
     async addGrade() {
-      await this.axios("adminapi/Salerate/add", {
+      await this.axios("/adminapi/Salerate/add", {
         data: { grade: this.grade, ...this.searchData }
       });
       this.getData();

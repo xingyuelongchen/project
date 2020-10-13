@@ -165,7 +165,7 @@ export default {
       return name && name.fullPath;
     }
   },
-  created() {
+  async created() {
     // IO(this.onMessage);
     this.socket.on("message", data => {
       data = JSON.parse(data);

@@ -98,7 +98,7 @@ export default {
       tableData: [],
       tableFields: [
         { type: "selection" },
-        { sort: true, label: "ID", prop: "id" },
+        // { sort: true, label: "ID", prop: "id" },
         { sort: true, label: "花名", prop: "nickname" },
         { sort: true, label: "部门ID", prop: "cross_group_zid" },
         { sort: true, label: "累计接待", prop: "count" },
@@ -158,7 +158,7 @@ export default {
       editFields: []
     };
   },
-  created() {
+  async created() {
     this.usersList();
     this.getDepartment();
     this.getData(false);

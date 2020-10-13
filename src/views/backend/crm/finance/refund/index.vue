@@ -43,7 +43,7 @@ export default {
       !a && this.getData();
     }
   },
-  created() {
+  async created() {
     this.getTable();
     this.getData();
   },

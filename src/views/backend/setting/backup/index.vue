@@ -184,7 +184,7 @@ export default {
       ]
     };
   },
-  created() {
+  async created() {
     this.getData();
   },
   methods: {

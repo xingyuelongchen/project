@@ -29,10 +29,13 @@ export default {
         { label: "花名", prop: "nickname" },
         { label: "等级", prop: "grade" },
         { label: "目标金额", prop: "dest_sale_amount" },
+        { label: "客单价", prop: "unit_price" },
         { label: "实际销售额", prop: "payment_total" },
+        { label: "转化率", prop: "rate_conversion" },
         { label: "进度", prop: "progress" },
         { label: "出单数", prop: "count_sale" },
-        { label: "接待数", prop: "count_enter" }
+        { label: "接待数", prop: "count_enter" },
+
       ],
       page: {
         page: 1,
@@ -41,7 +44,7 @@ export default {
       }
     };
   },
-  created() {
+  async created() {
     this.getDept();
     this.getData();
   },

@@ -123,7 +123,7 @@ export default {
       }
     };
   },
-  created() {
+  async created() {
     this.getData();
     this.getMenuData();
   },

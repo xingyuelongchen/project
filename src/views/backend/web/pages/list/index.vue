@@ -56,7 +56,7 @@ export default {
       form: { code: "" }
     };
   },
-  created() {
+  async created() {
     this.getData();
   },
   methods: {

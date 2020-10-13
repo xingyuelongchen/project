@@ -28,7 +28,7 @@ export default {
       page: { page: 1, limit: 10, total: 0 }
     };
   },
-  created() {
+  async created() {
     this.getData();
     this.getTable();
     this.handleClick();

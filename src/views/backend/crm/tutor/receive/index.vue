@@ -120,7 +120,7 @@ export default {
       tableData: [],
       tableFields: [
         { type: "selection" },
-        { sort: true, label: "ID", prop: "id" },
+        // { sort: true, label: "ID", prop: "id" },
         { sort: true, label: "花名", prop: "nickname" },
         { sort: true, label: "部门ID", prop: "servicer_group_zid" },
         { sort: true, label: "累计接待", prop: "count" },
@@ -213,7 +213,7 @@ export default {
       ],
       dialogTable: [
         { type: "selection" },
-        { sort: true, label: "ID", prop: "id" },
+        // { sort: true, label: "ID", prop: "id" },
         { sort: true, label: "花名", prop: "nickname" },
         { sort: true, label: "部门", prop: "dept_id" }
       ],
@@ -221,7 +221,7 @@ export default {
       editFields: []
     };
   },
-  created() {
+  async created() {
     this.usersList();
     this.getDepartment();
     this.getData(false);

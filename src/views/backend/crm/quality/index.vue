@@ -29,7 +29,7 @@ export default {
       page: { page: 1, limit: 10, total: 0 }
     };
   },
-  created() {
+  async created() {
     this.getTable();
     this.getData();
   },

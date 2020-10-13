@@ -64,7 +64,7 @@ export default {
       ]
     };
   },
-  created() {
+  async created() {
     this.getRoleList();
     this.getOrgList();
   },

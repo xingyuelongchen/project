@@ -501,7 +501,7 @@ export default {
       tableOptions: { maxHeight: "590px", selection: false, size: "mini" }
     };
   },
-  created() {
+  async created() {
     this.getTreeList();
   },
   methods: {

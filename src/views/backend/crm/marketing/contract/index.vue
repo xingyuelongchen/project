@@ -45,7 +45,7 @@ Create Time  : 2020-08-12
                     <span><i class="el-icon-delete" @click="onDel(item)"></i> </span>
                     <span> <i class="el-icon-arrow-right" v-if="index<imageList.length-1" @click="onRight(item)"></i></span>
                   </div>
-                  <el-image pr fit="contain" :preview-src-list="version.pic" :src="item.src" />
+                  <el-image pr fit="contain" :preview-src-list="imageList" :src="item.src" />
                 </div>
               </template>
             </div>
@@ -178,12 +178,15 @@ export default {
         {
           label: '操作',
           type: 'button',
-          options: [{ label: '修改图片', click: this.changeEditPic, style: 'warning' }]
+          options: [
+            { label: '修改图片', click: this.changeEditPic, style: 'warning' },
+            { label: '删除图片', click: this.delEditPic, style: 'danger' }
+          ]
         }
       ]
     }
   },
-  created() {
+  async created() {
     this.getData()
   },
   methods: {
@@ -219,8 +222,7 @@ export default {
       let { data } = await this.axios('/adminapi/meal/list_mael', {
         data: { id: item.id }
       })
-      if (data.code) {
-        console.log(data)
+      if (data.code) { 
         this.imageList = data.data
       }
       // if (item) {
@@ -302,7 +304,13 @@ export default {
       await this.axios('/adminapi/meal/sign_edit', {
         data: this.editPicData
       })
-      this.editPicShow=false;
+      this.editPicShow = false
+    },
+    async delEditPic(item) {
+      await this.axios('/adminapi/meal/sign_del', {
+        data: item
+      })
+      this.getData()
     }
   }
 }
