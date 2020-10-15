@@ -29,9 +29,9 @@ export default {
     };
   },
   async created() {
-    this.getData();
-    this.getTable();
-    this.handleClick();
+    await this.getData();
+    await this.getTable();
+    await this.handleClick();
   },
 
   methods: {
@@ -78,8 +78,9 @@ export default {
       }
     },
     async export() {
-      let { data } = await this.axios("/adminapi/Servicetotal/export");
-      if (data.code) this.$refs.table.outTab();
+      // let { data } = await this.axios("/adminapi/Servicetotal/export");
+      // if (data.code)
+       this.$refs.table.outTab();
     }
   }
 };

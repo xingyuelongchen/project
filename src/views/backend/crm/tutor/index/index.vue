@@ -85,10 +85,9 @@ export default {
       this.getData()
     },
     async tableDialog(item) {
-      console.log(item);
       // 客户状态进度修改
       let { data } = await this.axios('/adminapi/Service/customer_label', {
-        data: {...item,service_id:item.id}
+        data: { ...item, service_id: item.id }
       })
       if (data.code) {
         let options = data.data.label[0].children.filter(e => {
@@ -208,7 +207,8 @@ export default {
       this.step = {
         customer_id: item.customer_id,
         service_id: item.id,
-        sale_id: item.sale_id
+        sale_id: item.sale_id,
+        label_id: item.label_id
       }
       this.stepShow = true
     },

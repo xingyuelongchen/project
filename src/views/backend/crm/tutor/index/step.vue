@@ -67,7 +67,7 @@ export default {
     item: {
       type: Object,
       default() {
-        return {}
+        return {};
       }
     }
   },
@@ -82,18 +82,18 @@ export default {
       isRefund: true,
       refundFields: [],
       refundData: {}
-    }
+    };
   },
   async created() {
-    this.stepData = this.item
-    this.init()
-    this.getForm()
+    this.stepData = this.item;
+    await this.getForm();
+    this.init();
   },
   methods: {
     async getForm() {
       let { data } = await this.axios('/adminapi/Publics/TableFormEdit', {
         data: { type: 'add', table_id: 11 }
-      })
+      });
       if (data.code) {
         this.refundFields = data.data.concat([
           {
@@ -101,59 +101,59 @@ export default {
             type: 'button',
             click: this.refund
           }
-        ])
+        ]);
       }
     },
     async refund(bool) {
       if (!bool) {
-        this.refundShow = true
-        return
+        this.refundShow = true;
+        return;
       }
       let { data } = await this.axios('/adminapi/Refund/add', {
         data: { ...this.refundData, ...this.item, ...this.stepData }
-      })
+      });
       if (data.code) {
-        this.refundShow = false
-        this.$emit('input', false)
+        this.refundShow = false;
+        this.$emit('input', false);
       }
     },
     async init() {
       let { data } = await this.axios('/adminapi/Service/label_list', {
         data: this.stepData
-      })
+      });
       if (data.code) {
-        this.isRefund = data.data.refund
-        this.label_list = data.data.label_list
-        this.stepList = data.data.label[0].children
-        this.stepData = { ...this.stepData, ...data.data.label_log }
+        this.isRefund = data.data.refund;
+        this.label_list = data.data.label_list;
+        this.stepList = data.data.label[0].children;
+        this.stepData = { ...this.stepData, ...data.data.label_log };
         if (data.data.label_log && data.data.label_log.progress) {
           this.stepData = {
             label_1: this.stepList[0].id,
             label_2: this.stepList[0].children && this.stepList[0].children[0] ? this.stepList[0].children[0].id : '',
             progress: data.data.label_log.progress || 1
-          }
+          };
         } else {
           this.stepData = {
             label_1: this.stepList[0].id,
             label_2: this.stepList[0].children[0].id,
             progress: 1
-          }
+          };
         }
-        let item = this.stepList.filter(e => e.progress == this.stepData.progress)
-        this.stepClick(item[0])
+        let item = this.stepList.filter(e => e.progress == this.stepData.progress);
+        this.stepClick(item[0]);
       }
     },
     async changeStep() {
-      delete this.stepData.id
+      delete this.stepData.id;
       await this.axios('/adminapi/Service/label_add', {
         data: { ...this.stepData, ...this.item }
-      })
-      this.$emit('input', false)
+      });
+      this.$emit('input', false);
     },
     stepClick(item) {
-      this.stepData.progress = item.progress
-      this.stepData.label_1 = item.id
-      if (item.children) this.stepData.label_2 = item.children[0].id
+      this.stepData.progress = item.progress;
+      this.stepData.label_1 = item.id;
+      if (item.children) this.stepData.label_2 = item.children[0].id;
       if (!this.isRefund) {
         this.stepFields = [
           {
@@ -179,11 +179,11 @@ export default {
             span: 8,
             wrap: true
           }
-        ]
+        ];
       }
     },
     changeServe(item) {
-      let obj = item.options.filter(e => e.id == this.stepData['label_2'])
+      let obj = item.options.filter(e => e.id == this.stepData['label_2']);
       if (obj && obj[0] && obj[0].children && obj[0].children.length) {
         this.stepFields.splice(1, 0, {
           label: '当前状态',
@@ -192,13 +192,13 @@ export default {
           prop: 'label_3',
           span: 24,
           wrap: true
-        })
+        });
       } else {
-        this.stepFields = this.stepFields.filter(e => e.prop !== 'label_3')
+        this.stepFields = this.stepFields.filter(e => e.prop !== 'label_3');
       }
     }
   }
-}
+};
 </script>
 <style lang='less' scoped>
 .content-wrap {

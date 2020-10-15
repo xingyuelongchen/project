@@ -11,7 +11,7 @@ Create Time  : 2020-08-06
       <el-tab-pane label="月数据" name="3" />
     </el-tabs>
     <mixSearch v-model="searchData" :fields="searchFields" />
-    <mixTable :key="key" v-model="tableData" :fields="tableFields" />
+    <mixTable ref='table' :key="key" v-model="tableData" :fields="tableFields" />
     <mixPage v-model="page" />
   </div>
 </template>
@@ -29,9 +29,9 @@ export default {
     };
   },
   async created() {
-    this.getData();
-    this.getTable();
-    this.handleClick();
+    await this.getData();
+    await this.getTable();
+    await this.handleClick();
   },
 
   methods: {
@@ -86,8 +86,9 @@ export default {
       }
     },
     async export() {
-      let { data } = await this.axios("/adminapi/Servicepersonal/export");
-      if (data.code) this.$refs.table.outTab();
+      // let { data } = await this.axios("/adminapi/Servicepersonal/export");
+      // if (data.code) 
+      this.$refs.table.outTab();
     }
   }
 };

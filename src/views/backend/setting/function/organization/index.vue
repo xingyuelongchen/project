@@ -65,8 +65,8 @@ export default {
     };
   },
   async created() {
-    this.getRoleList();
-    this.getOrgList();
+    await this.getRoleList();
+    await this.getOrgList();
   },
   methods: {
     nodeClick(data) {

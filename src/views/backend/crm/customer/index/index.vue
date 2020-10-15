@@ -29,9 +29,9 @@ export default {
     };
   },
   async created() {
-    this.getData();
-    this.getTable();
-    this.handleClick();
+    await this.getData();
+   await  this.getTable();
+   await  this.handleClick();
   },
 
   methods: {

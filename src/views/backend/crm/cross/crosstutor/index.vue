@@ -66,8 +66,8 @@ export default {
     !a && this.getData();
   },
   async created() {
-    this.getData();
-    this.getTable();
+    await this.getData();
+    await this.getTable();
   },
   methods: {
     async getTable() {

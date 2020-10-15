@@ -124,8 +124,8 @@ export default {
     };
   },
   async created() {
-    this.getData();
-    this.getMenuData();
+    await this.getData();
+    await this.getMenuData();
   },
   methods: {
     changeGroup(val, item) {

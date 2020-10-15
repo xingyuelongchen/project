@@ -30,8 +30,8 @@ export default {
     };
   },
   async created() {
-    this.getTable();
-    this.getData();
+    await this.getTable();
+    await this.getData();
   },
   watch: {
     stepShow(a) {

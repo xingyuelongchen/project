@@ -159,9 +159,9 @@ export default {
     };
   },
   async created() {
-    this.usersList();
-    this.getDepartment();
-    this.getData(false);
+    await this.usersList();
+    await this.getDepartment();
+    await this.getData(false);
   },
   methods: {
     async usersList() {

@@ -9,14 +9,14 @@ Create Time  : 2020-08-12
       <el-card>
         <div slot="header">
           版本
-          <el-button style="padding:6px;float:right" type="primary" @click="add">添加版本</el-button>
+          <el-button style="padding:6px;float:right" type="primary" @click="add" v-role="297">添加版本</el-button>
         </div>
         <div class="left">
           <el-scrollbar>
             <template v-if="list.length">
               <div v-for="(item,index) in  list" class="item" style="display: flex; justify-content: space-between; align-items: center;padding-right: 10px;" user=card-active :key="index" @click="tab(item)" :class="{active:version.id==item.id}">
                 <span>{{item.label}}</span>
-                <span class="el-icon-plus" @click="addPic(item)"></span>
+                <span class="el-icon-plus" @click="addPic(item)" v-role="299"></span>
               </div>
             </template>
           </el-scrollbar>
@@ -28,8 +28,8 @@ Create Time  : 2020-08-12
             <el-button style="padding:3px 6px;" size="mini" type="info"> 版本：{{version.label  }} </el-button>
             <el-button style="padding:3px 6px;" size="mini" type="info"> 时长：{{version.duration  }} 个月</el-button>
             <el-button style="padding:3px 6px;" size="mini" type="info"> 价格：{{version.price }}元</el-button>
-            <el-button style="padding:3px 6px;" size="mini" type="danger" @click="del">删除当前套餐</el-button>
-            <el-button style="padding:3px 6px;" size="mini" type="success" @click="edit">编辑套餐</el-button>
+            <el-button style="padding:3px 6px;" size="mini" type="danger" @click="del" v-role="301">删除当前套餐</el-button>
+            <el-button style="padding:3px 6px;" size="mini" type="success" @click="edit" v-role="298">编辑套餐</el-button>
             <!-- <el-button style="padding:3px 6px;" size="mini" type="warning" @click="changeSave">添加图片</el-button> -->
           </template>
         </div>
@@ -85,7 +85,7 @@ export default {
         all: false
       }
       // { labelWidth: 80, label: "套餐合同", prop: "pic", type: "imageonce" }
-    ]
+    ];
     return {
       version: {},
       addShow: false,
@@ -179,31 +179,31 @@ export default {
           label: '操作',
           type: 'button',
           options: [
-            { label: '修改图片', click: this.changeEditPic, style: 'warning' },
-            { label: '删除图片', click: this.delEditPic, style: 'danger' }
+            { label: '修改图片', click: this.changeEditPic, style: 'warning',role:300  },
+            { label: '删除图片', click: this.delEditPic, style: 'danger',role:307 }
           ]
         }
       ]
-    }
+    };
   },
   async created() {
-    this.getData()
+    this.getData();
   },
   methods: {
     add() {
-      this.addShow = true
+      this.addShow = true;
     },
     async addPic(item) {
-      this.picShow = true
-      this.picData.meal_id = item.id
+      this.picShow = true;
+      this.picData.meal_id = item.id;
     },
     async changeEdit(item) {
-      item = { ...item }
-      delete item.create_time
-      delete item.update_time
+      item = { ...item };
+      delete item.create_time;
+      delete item.update_time;
       await this.axios('/adminapi/meal/sign_edit', {
         data: item
-      })
+      });
     },
     async del() {
       this.$confirm('此操作不可恢复，是否继续', '警告！', {
@@ -211,109 +211,111 @@ export default {
       }).then(async () => {
         await this.axios('/adminapi/Meal/del', {
           data: this.version
-        })
-        this.version = {}
-        this.imageList = []
-        this.getData()
-      })
+        });
+        this.version = {};
+        this.imageList = [];
+        this.getData();
+      });
     },
     async tab(item) {
-      this.version = item
+      this.version = item;
       let { data } = await this.axios('/adminapi/meal/list_mael', {
         data: { id: item.id }
-      })
-      if (data.code) { 
-        this.imageList = data.data
+      });
+      if (data.code) {
+        this.imageList = data.data;
       }
       // if (item) {
       //   this.imageList = item.pic.map((e, i) => ({ id: i, src: e }));
       // }
     },
     edit() {
-      this.editShow = true
-      this.editData = this.version
+      this.editShow = true;
+      this.editData = this.version;
     },
     onLeft(item) {
-      item = { ...item }
-      this.imageList = this.imageList.filter(e => e.id != item.id)
-      this.imageList.splice(item.id - 1, 0, item)
+      item = { ...item };
+      this.imageList = this.imageList.filter(e => e.id != item.id);
+      this.imageList.splice(item.id - 1, 0, item);
       this.imageList = this.imageList.map((e, i) => {
-        e.id = i
-        return e
-      })
-      let arr = this.imageList.map(e => e.src)
-      this.version.pic = arr
+        e.id = i;
+        return e;
+      });
+      let arr = this.imageList.map(e => e.src);
+      this.version.pic = arr;
     },
     onRight(item) {
-      item = { ...item }
-      this.imageList = this.imageList.filter(e => e.id != item.id)
-      this.imageList.splice(item.id + 1, 0, item)
+      item = { ...item };
+      this.imageList = this.imageList.filter(e => e.id != item.id);
+      this.imageList.splice(item.id + 1, 0, item);
       this.imageList = this.imageList.map((e, i) => {
-        e.id = i
-        return e
-      })
-      let arr = this.imageList.map(e => e.src)
-      this.version.pic = arr
+        e.id = i;
+        return e;
+      });
+      let arr = this.imageList.map(e => e.src);
+      this.version.pic = arr;
     },
     onDel(item) {
-      this.imageList = this.imageList.filter(e => e.id != item.id)
-      let arr = this.imageList.map(e => e.src)
-      this.version.pic = arr
+      this.imageList = this.imageList.filter(e => e.id != item.id);
+      let arr = this.imageList.map(e => e.src);
+      this.version.pic = arr;
     },
     async changeSave() {
       await this.axios('/adminapi/Meal/picture', {
         data: this.picData
-      })
-      this.getData()
-      this.picShow = false
+      });
+      this.getData();
+      this.picShow = false;
     },
     async editSave() {
       let { data } = await this.axios('/adminapi/Meal/edit', {
         data: this.editData
-      })
+      });
       if (data.code) {
-        this.getData()
-        this.editShow = false
+        this.getData();
+        this.editShow = false;
       }
     },
     async getData() {
-      let { data } = await this.axios('/adminapi/meal/list')
+      let { data } = await this.axios('/adminapi/meal/list');
       if (data.code) {
-        this.list = data.data
+        this.list = data.data;
         if (!this.version.id) {
-          this.version = data.data[0]
-          this.tab(this.version)
+          this.version = data.data[0];
+          this.tab(this.version);
         }
       }
     },
     async save() {
       let { data } = await this.axios('/adminapi/Meal/add', {
         data: this.addData
-      })
+      });
       if (data.code) {
-        this.addShow = false
-        this.addData = {}
-        this.getData()
+        this.addShow = false;
+        this.addData = {};
+        this.getData();
       }
     },
     async changeEditPic(item) {
-      this.editPicShow = true
-      this.editPicData = item
+      this.editPicShow = true;
+      this.editPicData = item;
     },
     async editPic() {
       await this.axios('/adminapi/meal/sign_edit', {
         data: this.editPicData
-      })
-      this.editPicShow = false
+      });
+      this.editPicShow = false;
     },
     async delEditPic(item) {
-      await this.axios('/adminapi/meal/sign_del', {
-        data: item
-      })
-      this.getData()
+      this.$confirm('删除后不可恢复，是否删除？', '警告!', { type: 'warning' }).then(async () => {
+        await this.axios('/adminapi/meal/sign_del', {
+          data: item
+        });
+        this.getData();
+      });
     }
   }
-}
+};
 </script>
 <style lang='less' scoped>
 .left {

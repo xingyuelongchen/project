@@ -17,80 +17,80 @@ Create Time  : 2020-08-06
 </template>
 <script>
 export default {
-  name: "Crossdata",
+  name: 'Crossdata',
   data() {
     return {
       key: 0,
-      searchData: { type: "1" },
+      searchData: { type: '1' },
       searchFields: [],
       tableData: [],
       tableFields: [],
       page: { page: 1, limit: 10, total: 0 }
-    };
+    }
   },
   async created() {
-    this.getData();
-    this.getTable();
-    this.handleClick();
+    await this.getData()
+    await this.getTable()
+    await this.handleClick()
   },
 
   methods: {
     handleClick() {
-      let arr = [];
-      if (this.searchData.type == "1") {
-        arr[0] = { label: "选择", type: "date", prop: "date", span: 3 };
+      let arr = []
+      if (this.searchData.type == '1') {
+        arr[0] = { label: '选择', type: 'date', prop: 'date', span: 3 }
       }
-      if (this.searchData.type == "2") {
+      if (this.searchData.type == '2') {
         arr[0] = {
-          label: "选择",
-          type: "daterange",
-          prop: "date",
+          label: '选择',
+          type: 'daterange',
+          prop: 'date',
           span: 5.5
-        };
+        }
       }
-      if (this.searchData.type == "3") {
-        arr[0] = { label: "选择", type: "month", prop: "date", span: 3 };
+      if (this.searchData.type == '3') {
+        arr[0] = { label: '选择', type: 'month', prop: 'date', span: 3 }
       }
       arr.push(
-        { label: "昵称", type: "text", prop: "nickname", span: 3 },
+        { label: '昵称', type: 'text', prop: 'nickname', span: 3 },
         {
-          type: "button",
+          type: 'button',
           span: 3,
           options: [
-            { label: "搜索", click: this.getData },
-            { label: "导出", role: 164, style: "danger", click: this.export }
+            { label: '搜索', click: this.getData },
+            { label: '导出', role: 164, style: 'danger', click: this.export }
           ]
         }
-      );
-      let { type } = this.searchData;
-      this.searchData = { type };
-      this.searchFields = arr;
-      this.getData();
+      )
+      let { type } = this.searchData
+      this.searchData = { type }
+      this.searchFields = arr
+      this.getData()
     },
     async getData() {
-      let { data } = await this.axios("/adminapi/Corssppersonal/list", {
+      let { data } = await this.axios('/adminapi/Corssppersonal/list', {
         data: Object.assign({}, this.page, this.searchData)
-      });
+      })
       if (data.code) {
-        this.page.total = data.count;
-        this.tableData = data.data;
+        this.page.total = data.count
+        this.tableData = data.data
       }
     },
     async getTable() {
-      let { data } = await this.axios("/adminapi/Publics/table_th", {
+      let { data } = await this.axios('/adminapi/Publics/table_th', {
         data: { table_id: 14 }
-      });
+      })
       if (data.code) {
-        this.key = Math.random();
-        this.tableFields = data.data;
+        this.key = Math.random()
+        this.tableFields = data.data
       }
     },
     async export() {
-      let { data } = await this.axios("/adminapi/Corssppersonal/export");
-      if (data.code) this.$refs.table.outTab();
+      let { data } = await this.axios('/adminapi/Corssppersonal/export')
+      if (data.code) this.$refs.table.outTab()
     }
   }
-};
+}
 </script>
 <style lang='less' scoped>
 </style>

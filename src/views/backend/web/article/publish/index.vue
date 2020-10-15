@@ -158,6 +158,22 @@ export default {
           },
           {
             labelWidth: 60,
+            type: "text",
+            span: 10,
+            label: "关键词",
+            prop: "keywords",
+            wrap: true
+          },
+          {
+            labelWidth: 60,
+            type: "textarea",
+            span: 10,
+            label: "描述",
+            prop: "description",
+            wrap: true
+          },
+          {
+            labelWidth: 60,
             type: "number",
             span: 10,
             label: "浏览量",
