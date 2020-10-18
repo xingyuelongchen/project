@@ -114,7 +114,7 @@ export default {
     }
   },
   async created() {
-    this.getData()
+    await this.getData()
   },
   methods: {
     async nodeClick(val) {

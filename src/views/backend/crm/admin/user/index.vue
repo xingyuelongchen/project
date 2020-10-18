@@ -98,8 +98,8 @@ export default {
     };
   },
   async created() {
-    this.getData();
-    this.getTableData();
+    await this.getData();
+    await this.getTableData();
   },
   methods: {
     async getTableData() {

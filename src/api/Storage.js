@@ -4,7 +4,7 @@ import config from './Config'
 
 const keyName = config.store.storeKey + '-'
 /**
- * 
+ * 设置storage缓存
  * @param {String or Object} name 可以是所有参数的对象集合 {name:...,content:...,type:...}
  * @param {any} content 存储的数据
  * @param {Boolean} type 布尔值，true表示存储到 sessionStorage，反之存储到 localStoreage
@@ -130,7 +130,7 @@ export function setCookie(params = {}) {
         else var [name, data = null] = [...arguments];
         name = keyName + name;
         data = JSON.stringify({ content: data })
-        document.cookie = `${name}=${escape(data)}; Max-Age=${Date.now() + config.store.maxage}`
+        document.cookie = `${name}=${escape(data)}; Max-Age=${config.store.maxage}; domain=${config.store.doamin};path=/`
         return true
     } catch (error) {
         return false
@@ -146,13 +146,18 @@ export function getCookie(name) {
     cookie.split('; ').map(e => e.split('=')).forEach(e => {
         cookies[e[0]] = e[1]
     })
-    return cookies[name] ? unescape(cookies[name]) : false
+    cookie = cookies[name] ? unescape(cookies[name]) : false;
+    if (cookie) {
+        return JSON.parse(cookie).content
+    } else {
+        return false
+    }
 }
 /**
  * 删除cookie
  */
 export function removeCookie(name) {
     name = keyName + name;
-    document.cookie = `${name}=null; expires=0`
+    document.cookie = `${name}=0; Max-Age=0; domain=${config.store.doamin};path=/`
 }
 export default { removeStore, getAllStore, getStore, clearStore, setStore, setCookie, getCookie, removeCookie }
