@@ -53,6 +53,7 @@ Vue.directive('move', {
   }
 });
 Vue.use(api);
+
 Vue.prototype.EXEVERSION = version.version;
 Vue.prototype.isElectron = isElectron();
 Vue.prototype.socket = socket();

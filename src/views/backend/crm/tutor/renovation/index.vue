@@ -54,7 +54,7 @@ export default {
       searchData: {}
     };
   },
-  created() {
+  async created() {
     this.getData();
   },
   methods: {

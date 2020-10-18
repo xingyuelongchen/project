@@ -77,7 +77,7 @@ export default {
   },
   async created() {
     await this.getClass();
-    this.getData();
+    await this.getData();
   },
   methods: {
     async getClass() {

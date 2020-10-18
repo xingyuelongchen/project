@@ -108,7 +108,7 @@ export default {
       resetPasswordFields: []
     }
   },
-  created() {
+  async created() {
     localStorage.removeItem('userinfo')
     sessionStorage.removeItem('Store')
     sessionStorage.removeItem('xitong')

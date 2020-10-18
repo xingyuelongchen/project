@@ -86,8 +86,8 @@ export default {
   },
   async created() {
     this.stepData = this.item;
-    this.init();
-    this.getForm();
+    await this.init();
+    await this.getForm();
   },
   methods: {
     async getForm() {

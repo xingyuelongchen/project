@@ -221,10 +221,10 @@ export default {
       editFields: []
     };
   },
-  created() {
-    this.usersList();
-    this.getDepartment();
-    this.getData(false);
+  async created() {
+    await this.usersList();
+    await this.getDepartment();
+    await this.getData(false);
   },
   methods: {
     async usersList() {

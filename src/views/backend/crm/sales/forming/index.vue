@@ -41,9 +41,9 @@ export default {
       }
     };
   },
-  created() {
-    this.getDept();
-    this.getData();
+  async created() {
+    await this.getDept();
+    await this.getData();
   },
   methods: {
     async getDept() {

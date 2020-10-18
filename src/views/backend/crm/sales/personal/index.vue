@@ -33,7 +33,7 @@ export default {
     await this.getData();
     await this.getTable();
     await this.getDept();
-    this.handleClick();
+    await this.handleClick();
   },
 
   methods: {

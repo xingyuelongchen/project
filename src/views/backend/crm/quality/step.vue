@@ -81,7 +81,7 @@ export default {
   },
   async created() {
     this.stepData = this.item;
-    this.init();
+    await this.init();
   },
   methods: {
     async refund(bool) {

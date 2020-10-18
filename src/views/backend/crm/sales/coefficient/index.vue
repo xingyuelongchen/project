@@ -99,8 +99,8 @@ export default {
       formData: [{ price: "", rate: "" }]
     };
   },
-  created() {
-    this.getData();
+  async created() {
+    await this.getData();
   },
   methods: {
     addLine() {

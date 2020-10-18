@@ -29,9 +29,9 @@ export default {
       page: { page: 1, limit: 10, total: 0 }
     };
   },
-  created() {
-    this.getTable();
-    this.getData();
+  async created() {
+    await this.getTable();
+    await this.getData();
   },
   watch: {
     stepShow(a) {

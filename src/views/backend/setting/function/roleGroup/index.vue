@@ -123,9 +123,9 @@ export default {
       }
     };
   },
-  created() {
-    this.getData();
-    this.getMenuData();
+  async created() {
+    await this.getData();
+    await this.getMenuData();
   },
   methods: {
     changeGroup(val, item) {

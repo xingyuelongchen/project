@@ -89,9 +89,9 @@ export default {
       ]
     };
   },
-  created() {
-    this.getData();
-    this.getTable();
+  async created() {
+    await this.getData();
+    await this.getTable();
   },
   methods: {
     select(item) {

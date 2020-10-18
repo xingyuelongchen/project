@@ -50,7 +50,7 @@ export default {
       list: []
     };
   },
-  created() {
+  async created() {
     this.getData();
   },
   methods: {

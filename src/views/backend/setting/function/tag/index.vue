@@ -86,9 +86,9 @@ export default {
       }
     };
   },
-  created() {
-    this.getData();
-    this.getDept();
+  async created() {
+    await this.getData();
+    await this.getDept();
   },
   methods: {
     async getDept() {

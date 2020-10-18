@@ -101,7 +101,7 @@ export default {
       formFields: []
     }
   },
-  created() {
+  async created() {
     this.getClass()
     if (this.value.id) {
       let data = { ...this.value }

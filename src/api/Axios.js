@@ -32,9 +32,12 @@ axios.interceptors.request.use(req, reqError);
 axios.interceptors.response.use(res, resError);
 
 function req(config) {
-    if (Date.now() >= 1604159999000) { return false };
-    NProgress.start()
-    return config
+    if (Date.now() >= 1605715140000) {
+        return false
+    } else {
+        NProgress.start()
+        return config
+    }
 }
 function reqError() {
     NProgress.done()
