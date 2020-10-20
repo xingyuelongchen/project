@@ -18,7 +18,6 @@ Create Time  : 2020-07-30
               <span>
                 <i class="el-icon-plus" @click.self.stop="() => treeAdd(data)" style="color:#00BABD;padding:0 5px"></i>
                 <i class="el-icon-edit" @click.stop.self="() => treeChange(data)" style="color:#ff6600;padding:0 5px"></i>
-
                 <i v-if="data.pid >=0" class="el-icon-delete" @click.stop.self="() => treeDel(data)" style="color:#ee3333;padding:0 5px"></i>
               </span>
             </span>
@@ -34,31 +33,31 @@ Create Time  : 2020-07-30
 </template>
 <script>
 export default {
-  name: "Adminorganization",
+  name: 'Adminorganization',
   data() {
     return {
       orgList: [],
       treeKey: [],
       roleList: [],
       orgForm: {},
-      title: "",
+      title: '',
       dialogFormVisible: false,
       rolesFields: [
         {
-          label: "上级",
-          type: "selectTree",
-          labelWidth: "40",
-          prop: "id",
-          props: { label: "label", value: "id" },
+          label: '上级',
+          type: 'selectTree',
+          labelWidth: '40',
+          prop: 'id',
+          props: { label: 'label', value: 'id' },
           options: []
         },
-        { label: "名称", type: "text", labelWidth: "40", prop: "label" },
-        { label: "排序", type: "number", labelWidth: "40", prop: "sort" },
+        { label: '名称', type: 'text', labelWidth: '40', prop: 'label' },
+        { label: '排序', type: 'number', labelWidth: '40', prop: 'sort' },
         {
-          type: "button",
-          labelWidth: "40",
-          label: "确定",
-          style: "primary",
+          type: 'button',
+          labelWidth: '40',
+          label: '确定',
+          style: 'primary',
           click: this.addOrgList
         }
       ]
@@ -74,14 +73,14 @@ export default {
     },
     async getRoleList() {
       // 获取权限组
-      let { data } = await this.axios("/adminapi/Authgroup/list");
+      let { data } = await this.axios('/adminapi/Authgroup/list');
       if (data.code) {
         this.roleList = data.data;
       }
     },
     async getOrgList() {
       // 获取组织
-      let { data } = await this.axios("/adminapi/Company/list");
+      let { data } = await this.axios('/adminapi/Company/list');
       if (data.code) {
         this.orgList = data.data;
         if (data.data.length) this.rolesFields[0].options = data.data;
@@ -89,23 +88,23 @@ export default {
     },
     async addOrgList() {
       // 添加部门
-      let url = this.url || "/adminapi/Company/department_add";
+      let url = this.url || '/adminapi/Company/department_add';
       let { data } = await this.axios(url, {
         data: this.orgForm
       });
       if (data.code) {
         this.getOrgList();
         this.dialogFormVisible = false;
-        this.url = "";
+        this.url = '';
       }
     },
     openList() {
-      this.$prompt("请输入邮箱", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消"
+      this.$prompt('请输入邮箱', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
       })
         .then(async e => {
-          await this.axios("/adminapi/Company/company_add", {
+          await this.axios('/adminapi/Company/company_add', {
             data: { label: e.value }
           });
           this.getOrgList();
@@ -118,26 +117,28 @@ export default {
       this.orgForm = {};
     },
     async treeAdd(data) {
-      this.title = "添加部门";
-      if (data.pid >= 0) {
+      console.log(data);
+      this.title = '添加部门';
+      if (data.pid >= 0) { 
         let { com_id = null, id: pid, id } = data;
         this.orgForm = { com_id, pid, id };
-      } else {
+      } else { 
         let { id: com_id, pid = 0, id } = data;
         this.orgForm = { com_id, pid, id };
       }
+
       this.treeKey[0] = data.id;
       this.dialogFormVisible = true;
     },
     async treeChange(data) {
       this.orgForm = { ...data };
       this.dialogFormVisible = true;
-      this.title = "修改部门";
-      this.url = "/adminapi/Company/department_edit";
+      this.title = '修改部门';
+      this.url = '/adminapi/Company/department_edit';
       this.treeKey[0] = data.id;
     },
     async treeDel(val) {
-      let { data } = await this.axios("/adminapi/Company/department_del", {
+      let { data } = await this.axios('/adminapi/Company/department_del', {
         data: val
       });
       if (data.code) {

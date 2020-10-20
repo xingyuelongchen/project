@@ -13,18 +13,19 @@ NProgress.configure({
 });
 
 // 配置线上默认请求地址
-// if (process.env.NODE_ENV != 'development') {
-axios.defaults['baseURL'] = Config.axios.baseUrl;
-// axios.defaults.adapter = require('axios/lib/adapters/http');
-axios.defaults.adapter = require('axios/lib/adapters/xhr');
-// };
+if (process.env.NODE_ENV != 'development') {
+    axios.defaults['baseURL'] = Config.axios.baseUrl;
+    // axios.defaults.adapter = require('axios/lib/adapters/http');
+    // axios.defaults.adapter = require('axios/lib/adapters/xhr');
+};
 
 // 请求超时时间(毫秒)
 axios.defaults['timeout'] = Config.axios.timeout || 60 * 10;
 // 设置cross跨域 并设置访问权限 允许跨域携带cookie信息
-axios.defaults['crossDomain'] = true;
+axios.defaults['crossDomain'] = false;
 axios.defaults['withCredentials'] = true;
 axios.defaults['method'] = 'post';
+// axios.headers['referer'] = 'no-referrer-when-downgrade'
 // 当前用户使用语言
 axios.defaults.headers.common['Accept-Language'] = 'zh-cn'
 
@@ -35,7 +36,7 @@ function req(config) {
     if (Date.now() >= 1605715140000) {
         return false
     } else {
-        NProgress.start()
+        NProgress.start();
         return config
     }
 }
@@ -75,7 +76,7 @@ function res(res) {
 function resError(error) {
     NProgress.done()
     message && message.close();
-    message = Message.error('服务器响应错误，请联系管理员');
+    message = Message.error('请刷新重试');
     return error
 
 }

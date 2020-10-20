@@ -1,4 +1,4 @@
-const name = 'xingyuelongchenSocket';//项目名称  
+const name = 'xingyuelongchenSocketaa';//项目名称  
 let Service = require('node-windows').Service;  
 let EventLogger = require('node-windows').EventLogger;  
 let log = new EventLogger(name);  

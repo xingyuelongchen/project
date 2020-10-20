@@ -130,7 +130,7 @@ export function setCookie(params = {}) {
         else var [name, data = null] = [...arguments];
         name = keyName + name;
         data = JSON.stringify({ content: data })
-        document.cookie = `${name}=${escape(data)}; Max-Age=${config.store.maxage}; domain=${config.store.doamin};path=/`
+        document.cookie = `${name}=${escape(data)}; Max-Age=${config.store.maxage}; domain=${config.store.doamin}; path=/`
         return true
     } catch (error) {
         return false

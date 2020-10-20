@@ -93,6 +93,7 @@ export default {};
       .el-tab-pane {
         flex: auto;
         display: flex;
+        overflow: hidden;
       }
     }
   }

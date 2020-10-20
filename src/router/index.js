@@ -10,7 +10,7 @@ import minApp from './minApp';
 import app from './app';
 import web from './web';
 import setting from './setting';
-import { setCookie, getCookie } from '../api/Storage';
+import { setStore, getStore } from '../api/Storage';
 Vue.use(VueRouter);
 // 基础路由表
 const routes = [
@@ -22,6 +22,7 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
+    meta: { title: '用户登录' },
     component: () => import('@/views/user/login')
   },
   {
@@ -62,11 +63,11 @@ VueRouter.prototype.replace = function replace(location) {
 if (isElectron()) {
   let userinfo = window.ipcRenderer.sendSync("getStore", 'userinfo');
   if (userinfo)
-    setCookie('userinfo', userinfo);
+    setStore('userinfo', userinfo, true);
   // window.localStorage.setItem('userinfo', JSON.stringify(userinfo));
 }
 // let userinfo = localStorage.getItem('userinfo');
-let userinfo = getCookie('userinfo');
+let userinfo = getStore('userinfo');
 VueRouter.prototype.setRoles = setRoles;
 const router = new VueRouter(routeOption);
 let target = true;
@@ -90,7 +91,7 @@ function beforeRouter(to, from, next) {
     window.document.title = '管理系统 - ' + to.meta.title;
   }
   // 获取用户信息
-  let userinfo = getCookie('userinfo')
+  let userinfo = getStore('userinfo')
 
   // 是否需要登录权限,如果用户信息过期，清空用户信息并跳转到登录
   if (to.matched.some(e => e.meta.isAuth) && (!userinfo || userinfo.dateTime < Date.now())) {
@@ -168,7 +169,7 @@ function mapRole(routes, menu, roles) {
 function setRoles() {
   Store.commit("setClear");
   // 获取账号信息
-  let userinfo = getCookie('userinfo');
+  let userinfo = getStore('userinfo');
   // 获取当前所在系统，默认为： crm
   let targetIndex = sessionStorage.getItem('xitong') || 'crm';
   // 拼接路由地址

@@ -30,6 +30,21 @@ Create Time  : 2020-04-02
 export default {
   name: 'Salesreceive',
   data() {
+    const source = [
+      { label: '微信', value: 1 },
+      { label: 'QQ', value: 2 },
+      { label: '手机号', value: 3 },
+      { label: '全部', value: 4 }
+    ];
+    const channel = [
+      { label: '信息流', value: 1 },
+      { label: '搜索引擎', value: 2 },
+      { label: '全部', value: 3 }
+    ];
+    const channel_type = [
+      { label: '快商通', value: 1 },
+      { label: '快手', value: 2 }
+    ];
     return {
       url: null,
       drawerName: '',
@@ -79,24 +94,14 @@ export default {
           type: 'select',
           prop: 'source',
           span: 2,
-          options: [
-            { label: '微信', value: 1 },
-            { label: 'QQ', value: 2 },
-            { label: '手机号', value: 3 },
-            { label: '全部', value: 4 }
-          ]
+          options: source
         },
         {
           label: '渠道',
           type: 'select',
           prop: 'channel',
           span: 2,
-          options: [
-            { label: '信息流', value: 1 },
-            { label: '搜索引擎', value: 2 },
-            { label: '其它', value: 3 },
-            { label: '全部', value: 4 }
-          ]
+          options: channel
         },
 
         {
@@ -150,12 +155,7 @@ export default {
           type: 'select',
           change: this.change,
           minWidth: 150,
-          options: [
-            { label: '信息流', value: 1 },
-            { label: '搜索引擎', value: 2 },
-            { label: '其它', value: 3 },
-            { label: '全部', value: 4 }
-          ]
+          options: channel
         },
         {
           sort: true,
@@ -164,19 +164,21 @@ export default {
           type: 'select',
           change: this.change,
           minWidth: 150,
-          options: [
-            { label: '微信', value: 1 },
-            { label: 'QQ', value: 2 },
-            { label: '手机号', value: 3 },
-            { label: '全部', value: 4 }
-          ]
+          options: source
+        },
+        {
+          sort: true,
+          label: '信息来源',
+          prop: 'channel_type',
+          type: 'select',
+          change: this.change,
+          minWidth: 150,
+          options: channel_type
         },
         {
           sort: true,
           label: '权重',
           prop: 'weight',
-          type: 'input',
-          change: this.change,
           minWidth: 100
         },
         {
@@ -228,53 +230,53 @@ export default {
       dialogTable: [{ type: 'selection' }, { sort: true, label: 'ID', prop: 'id' }, { sort: true, label: '花名', prop: 'nickname' }, { sort: true, label: '部门', prop: 'dept_id' }],
       editForm: { user: [] },
       editFields: []
-    }
+    };
   },
   async created() {
-    await this.usersList()
-    await this.getDepartment()
-    await this.getData(false)
+    await this.usersList();
+    await this.getDepartment();
+    await this.getData(false);
   },
   methods: {
     async usersList() {
-      let { data } = await this.axios('/adminapi/Customerrefunder/UserList')
+      let { data } = await this.axios('/adminapi/Customerrefunder/UserList');
       if (data.code) {
-        this.salesList = data.data
+        this.salesList = data.data;
       }
     },
     async getDepartment() {
-      let { data } = await this.axios('/adminapi/Customerrefunder/dept')
+      let { data } = await this.axios('/adminapi/Customerrefunder/dept');
       if (data.code) {
         this.searchFields = this.searchFields.map(e => {
           if (e.prop == 'saler_group_zid') {
-            e.options = data.data
+            e.options = data.data;
           }
-          return e
-        })
+          return e;
+        });
       }
     },
     async getData(type = true) {
-      let form = type ? Object.assign({}, this.search, this.page) : this.page
+      let form = type ? Object.assign({}, this.search, this.page) : this.page;
       let { data } = await this.axios('/adminapi/Customerrefunder/list', {
         data: form
-      })
+      });
       if (data.code) {
-        this.tableData = data.data
-        this.page.total = data.total
+        this.tableData = data.data;
+        this.page.total = data.total;
       }
     },
     async onAdd() {
-      await this.usersList()
-      this.drawerOpen('添加')
-      this.url = '/adminapi/Customerrefunder/add'
+      await this.usersList();
+      this.drawerOpen('添加');
+      this.url = '/adminapi/Customerrefunder/add';
     },
     select(select, type) {
-      console.log(select, type)
+      console.log(select, type);
       // 多选数据
       if (type == 'user') {
-        this.editForm.user = select.map(e => e.id)
+        this.editForm.user = select.map(e => e.id);
       } else {
-        this.selectList = select
+        this.selectList = select;
       }
     },
 
@@ -284,14 +286,14 @@ export default {
         this.$notify.error({
           title: '错误',
           message: '请选择需要修改的数据'
-        })
-        return
+        });
+        return;
       }
-      let obj = { id: this.selectList.map(e => e.id), ...this.selectionData }
-      let url = '/adminapi/Customerrefunder/batch_del'
-      let { data } = await this.axios(url, { data: obj })
+      let obj = { id: this.selectList.map(e => e.id), ...this.selectionData };
+      let url = '/adminapi/Customerrefunder/batch_del';
+      let { data } = await this.axios(url, { data: obj });
       if (data.code) {
-        this.getData(false)
+        this.getData(false);
       }
     },
     async selectEdit() {
@@ -300,23 +302,23 @@ export default {
         this.$notify.error({
           title: '错误',
           message: '请选择需要修改的数据'
-        })
-        return
+        });
+        return;
       }
-      let obj = { id: this.selectList.map(e => e.id), ...this.selectionData }
-      let url = '/adminapi/Customerrefunder/edit'
-      let { data } = await this.axios(url, { data: obj })
+      let obj = { id: this.selectList.map(e => e.id), ...this.selectionData };
+      let url = '/adminapi/Customerrefunder/edit';
+      let { data } = await this.axios(url, { data: obj });
       if (data.code) {
-        this.getData(false)
+        this.getData(false);
       }
     },
 
     onSearch() {
-      this.getData()
+      this.getData();
     },
     onReset() {
-      this.getData(false)
-      this.search = {}
+      this.getData(false);
+      this.search = {};
     },
     async weight(item) {
       this.$prompt('请输入权重', '提示', {
@@ -329,62 +331,62 @@ export default {
         .then(async e => {
           await this.axios('/adminapi/Customerrefunder/control', {
             data: { id: item.id, weight: e.value }
-          })
-          this.getData()
+          });
+          this.getData();
         })
         .catch(e => {
-          console.log(e)
-        })
+          console.log(e);
+        });
     },
     async change(item, scope) {
-      let obj = { id: item.id }
-      obj[scope.column.property] = item[scope.column.property]
-      let url = '/adminapi/Customerrefunder/edit'
-      await this.axios(url, { data: obj })
+      let obj = { id: item.id };
+      obj[scope.column.property] = item[scope.column.property];
+      let url = '/adminapi/Customerrefunder/edit';
+      await this.axios(url, { data: obj });
     },
     async control(item) {
       await this.axios('/adminapi/Customerrefunder/control', {
         data: { id: item.id, control: item.control == '是' ? 0 : 1 }
-      })
-      this.getData()
+      });
+      this.getData();
     },
     async tableDel(item) {
       let { data } = await this.axios('/adminapi/Customerrefunder/del', {
         data: { id: item.id }
-      })
+      });
       if (data.code) {
-        this.getData()
+        this.getData();
       }
     },
     manage() {
-      console.log('操作')
+      console.log('操作');
     },
 
     drawerOpen(title) {
-      this.drawer = true
-      this.drawerName = title
+      this.drawer = true;
+      this.drawerName = title;
     },
     drawerClose() {
-      this.drawer = false
-      this.editForm = {}
+      this.drawer = false;
+      this.editForm = {};
     },
     sizeChange(a) {
-      this.page.limit = a
-      this.getData()
+      this.page.limit = a;
+      this.getData();
     },
     currentChange(a) {
-      this.page.page = a
-      this.getData()
+      this.page.page = a;
+      this.getData();
     },
     async onSave() {
       let { data } = await this.axios(this.url, {
         data: this.editForm.user
-      })
+      });
       if (data.code) {
-        this.drawerClose()
-        this.getData()
+        this.drawerClose();
+        this.getData();
       }
     }
   }
-}
+};
 </script>

@@ -66,8 +66,7 @@ export default {
   methods: {
     // 初始化值
     initHandle() {
-      if (this.valueId) {
-        console.log(this.valueId);
+      if (this.valueId) { 
         this.valueTitle = this.$refs.selectTree.getNode(this.valueId).data[
           this.props.label
         ]; // 初始化显示
