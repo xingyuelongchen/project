@@ -10,7 +10,7 @@ import minApp from './minApp';
 import app from './app';
 import web from './web';
 import setting from './setting';
-
+import {getAxiosRequest} from '../api'
 Vue.use(VueRouter);
 // 基础路由表
 const routes = [
@@ -22,6 +22,7 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
+    meta: { title: '用户登录' },
     component: () => import('@/views/user/login')
   },
   {
@@ -84,14 +85,13 @@ export default router;
  * @param {Object} from 源路由
  * @param {Object} next 
  */
-function beforeRouter(to, from, next) {
+function beforeRouter(to, from, next) { 
   if (to.meta.title) {
     window.document.title = '广艺舟 - ' + to.meta.title;
   }
   // 获取用户信息
-  let userinfo = localStorage.getItem('userinfo')
+  let userinfo = localStorage.getItem('userinfo');
   if (userinfo) userinfo = JSON.parse(userinfo);
-
   // 是否需要登录权限,如果用户信息过期，清空用户信息并跳转到登录
   if (to.matched.some(e => e.meta.isAuth) && (!userinfo || userinfo.dateTime < Date.now())) {
     console.log('需要登录');

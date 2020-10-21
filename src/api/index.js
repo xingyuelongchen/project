@@ -6,17 +6,25 @@ import Router from '@/router'
 if (process.env.NODE_ENV != 'development') {
     axios.defaults['baseURL'] = config.baseUrl;
 };
-
+window.axiosRequestCancel = [];
+axios.defaults['method'] = 'post';
+// 请求超时时间(毫秒)
+axios.defaults['timeout'] = 360000;
 axios.defaults['withCredentials'] = true;
 axios.interceptors.request.use(req, reqError);
 axios.interceptors.response.use(res, resError);
 
 var notification = null;
 var message = null;
+var axiosRequestList = [];
 function req(config) {
     if (/(^\/adminapi\/)/.test(config.url)) {
         config.method = 'post'
     }
+    // let CancelToken = axios.CancelToken;
+    // let source = CancelToken.source();
+    // config.cancelToken = source.token;
+    // axiosRequestList.push(source);
     return config
 }
 function reqError() {
@@ -53,8 +61,7 @@ function res(res) {
 function resError(error) {
     message && message.close();
     message = Message.error('服务器响应错误，请联系管理员');
-    return error
-
+    return { code: false, error }
 }
-
+export const getAxiosRequest = axiosRequestList;
 export default axios;

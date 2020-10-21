@@ -48,7 +48,7 @@ Create Time  : 2020-03-31
               </template>
               <template v-if="item.type == 'select'">
                 <el-select clearable v-if="!item.readonly" :size="item.size" v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :multiple="item.multiple" :collapse-tags="item.multiple" @change="change(item,index,'change')">
-                  <el-option v-for="(k,i) in item.options" :key="i" :disabled="!!k.disabled" :value-id="k.id" :label="k.label || k[item.config.label]" :value="k.value || k[item.config.value] ||k.label|| k" />
+                  <el-option v-for="(k,i) in item.options" :key="i" :label="item.config &&k[item.config.label] || k.label " :value="item.config && k[item.config.value] || item.config && k[item.config.label] || k.value || k.id "></el-option>
                 </el-select>
                 <el-input v-else v-model="fieldsData[item.prop]" :disabled="!!item.disabled" :readonly="!!item.readonly"></el-input>
               </template>
@@ -70,14 +70,14 @@ Create Time  : 2020-03-31
               </template>
               <template v-if="item.type == 'checkboxgroup'">
                 <el-checkbox-group v-model="fieldsData[item.prop]" :disabled="!!item.disabled">
-                  <el-checkbox v-for="(k,i) in item.options" :label="k.value||k.id||k.label" :key="i" :disabled="!!k.disabled" :checked="k.checked">{{k.label || k[item.config.label] }}</el-checkbox>
+                  <el-checkbox v-for="(k,i) in item.options" :label="k.value || k.id || k.label" :key="i" :disabled="!!k.disabled" :checked="k.checked">{{k.label || k[item.config.label] }}</el-checkbox>
                 </el-checkbox-group>
               </template>
               <template v-if="item.type == 'radio'">
                 <template v-if="item.options && item.options.length">
-                  <el-radio v-model="fieldsData[item.prop]" v-for="(k,i) in item.options" :key="i" :label="k.value || k.id || k.label" :disabled="!!k.disabled" @change="change(item,index,'change')">{{k.label}}</el-radio>
+                  <el-radio v-model="fieldsData[item.prop]" v-for="(k,i) in item.options" :key="i" :label=" item.config && k[item.config.value] || k.value || k.id || k.label" :disabled="!!item.disabled || !!item.readonly" @change="change(item,index,'change')">{{item.config &&k[item.config.label] || k.label}}</el-radio>
                 </template>
-                <el-radio v-else v-model="fieldsData[item.prop]" :label="item.options.value" :disabled="!!item.disabled" @change="change(item,index,'change')">{{item.options.label}}</el-radio>
+                <el-radio v-else v-model="fieldsData[item.prop]" :label="item.options.value" :disabled="!!item.disabled || !!item.readonly" @change="change(item,index,'change')">{{item.options.label}}</el-radio>
               </template>
               <template v-if="item.type == 'radiogroup'">
                 <el-radio-group v-model="fieldsData[item.prop]" :disabled="!!item.disabled" @change="change(item,index,'change')">
@@ -188,7 +188,7 @@ Create Time  : 2020-03-31
   </el-form>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 // import CONFIG from "@/config";
 export default {
   name: 'MixForm',
@@ -207,7 +207,7 @@ export default {
           rule: null,
           append: 'arrow-right',
           click: (item, index) => {
-            console.log(item, index)
+            console.log(item, index);
           }
         },
         {
@@ -259,13 +259,13 @@ export default {
           checkboxgroup: [],
           radio: true,
           radiogroup: []
-        }
+        };
       }
     },
     options: {
       type: Object,
       default: () => {
-        return {}
+        return {};
       }
     }
   },
@@ -279,283 +279,283 @@ export default {
       cacheSelectImage: null,
       progress: null,
       readonly: false
-    }
+    };
   },
   watch: {
     fields() {
-      this.onMapFields()
+      this.onMapFields();
     },
     fieldsData() {
-      this.key = Math.random()
+      this.key = Math.random();
     },
 
     'getImage.show'() {
-      this.seleceImg()
+      this.seleceImg();
     }
   },
 
   created() {
-    this.onMapFields()
+    this.onMapFields();
   },
   computed: {
     ...mapState(['getImage'])
   },
   methods: {
     selectFile(item) {
-      this.$refs[item.prop][0].click()
+      this.$refs[item.prop][0].click();
     },
     async uploadFile(event, item) {
-      let file = new FormData()
-      file.append('files', event.target.files[0])
-      let that = this
+      let file = new FormData();
+      file.append('files', event.target.files[0]);
+      let that = this;
       let { data } = await this.axios('/adminapi/video/video_upload', {
         data: file,
         onUploadProgress(e) {
-          let complete = ((e.loaded / e.total) * 100) | 0
-          that.progress = complete
+          let complete = ((e.loaded / e.total) * 100) | 0;
+          that.progress = complete;
         }
-      })
+      });
       if (data.code) {
-        this.fieldsData[item.prop] = data.data.url
-        this.fieldsData['size'] = data.data.size
-        this.key = Math.random()
+        this.fieldsData[item.prop] = data.data.url;
+        this.fieldsData['size'] = data.data.size;
+        this.key = Math.random();
       }
     },
     seleceImg() {
-      this.fieldsData[this.cacheSelectImage.prop] = this.getImage.files
+      this.fieldsData[this.cacheSelectImage.prop] = this.getImage.files;
     },
     seleceImage(item) {
       // 选择图库图片
-      this.cacheSelectImage = item
-      this.$store.commit('setGetImage', { show: true, all: item.all })
+      this.cacheSelectImage = item;
+      this.$store.commit('setGetImage', { show: true, all: item.all });
     },
     fileUpdate(event, item) {
-      this.fileName = event.target.files[0].name
-      this.fieldsData[item.prop] = event.target.files[0]
+      this.fileName = event.target.files[0].name;
+      this.fieldsData[item.prop] = event.target.files[0];
     },
     isShow(k, item, scope) {
       // 按钮是否显示
       if (k.isShow) {
-        let bool = false
+        let bool = false;
         if (k.isShow.type == '==') {
-          bool = scope.row[k.isShow.prop] == k.isShow.val
+          bool = scope.row[k.isShow.prop] == k.isShow.val;
         }
         if (k.isShow.type == '>=') {
-          bool = scope.row[k.isShow.prop] >= k.isShow.val
+          bool = scope.row[k.isShow.prop] >= k.isShow.val;
         }
         if (k.isShow.type == '<=') {
-          bool = scope.row[k.isShow.prop] <= k.isShow.val
+          bool = scope.row[k.isShow.prop] <= k.isShow.val;
         }
         if (k.isShow.type == '===') {
-          bool = scope.row[k.isShow.prop] === k.isShow.val
+          bool = scope.row[k.isShow.prop] === k.isShow.val;
         }
         if (k.isShow.type == '!==') {
-          bool = scope.row[k.isShow.prop] !== k.isShow.val
+          bool = scope.row[k.isShow.prop] !== k.isShow.val;
         }
         if (k.isShow.type == '!=') {
-          bool = scope.row[k.isShow.prop] != k.isShow.val
+          bool = scope.row[k.isShow.prop] != k.isShow.val;
         }
-        return bool
+        return bool;
       } else {
-        return true
+        return true;
       }
     },
     compute(item) {
       // 计算
-      let a = 0
-      let b = 0
-      let c = 0
+      let a = 0;
+      let b = 0;
+      let c = 0;
       this.fields.forEach(e => {
         if (e.prop == item.compute.val) {
           if (e.options && e.options.length) {
             e.options.forEach(e => {
-              if (e.value == this.fieldsData[e.prop]) b = e.sub
-            })
+              if (e.value == this.fieldsData[e.prop]) b = e.sub;
+            });
           } else {
-            b = this.fieldsData[e.prop]
+            b = this.fieldsData[e.prop];
           }
         }
         if (e.prop == item.compute.sub) {
           if (e.options && e.options.length) {
             e.options.forEach(e => {
-              if (e.value == this.fieldsData[e.prop]) c = e.sub
-            })
+              if (e.value == this.fieldsData[e.prop]) c = e.sub;
+            });
           } else {
-            c = this.fieldsData[e.prop]
+            c = this.fieldsData[e.prop];
           }
         }
         if (e.prop == item.compute.prop) {
           if (e.options && e.options.length) {
             e.options.forEach(k => {
-              if (k.value == this.fieldsData[e.prop]) a = k.sub
-            })
+              if (k.value == this.fieldsData[e.prop]) a = k.sub;
+            });
           } else {
-            a = this.fieldsData[e.prop]
+            a = this.fieldsData[e.prop];
           }
         }
-      })
-      a = `${a}${item.compute.type[0]}${b}${item.compute.type[1]}${c}`
-      let result = eval(a)
-      this.fieldsData[item.prop] = result
-      this.$emit('input', { ...this.fieldsData })
+      });
+      a = `${a}${item.compute.type[0]}${b}${item.compute.type[1]}${c}`;
+      let result = eval(a);
+      this.fieldsData[item.prop] = result;
+      this.$emit('input', { ...this.fieldsData });
     },
     async onUpload(event, item) {
-      this.$emit('uploadStatus', true)
-      this.fileList = event.target.files || []
-      let formData = new FormData()
+      this.$emit('uploadStatus', true);
+      this.fileList = event.target.files || [];
+      let formData = new FormData();
       this.fileList.forEach(e => {
-        formData.append('files', e)
-      })
+        formData.append('files', e);
+      });
       let { data } = await this.axios('/adminapi/Publics/UploadFiles', {
         data: formData
-      })
+      });
       if (data.code) {
-        this.fieldsData[item.prop] = data.data
+        this.fieldsData[item.prop] = data.data;
       }
-      this.fileList = []
-      event.target.outerHTML = ''
-      this.$emit('uploadStatus', false)
+      this.fileList = [];
+      event.target.outerHTML = '';
+      this.$emit('uploadStatus', false);
     },
     previewFile(file, files) {
-      console.log(file, files)
+      console.log(file, files);
     },
     removeFile(file, files) {
-      console.log(file, files)
+      console.log(file, files);
     },
     // 上传图片
     list(item) {
       if (item && item.length) {
         return item.map(e => {
-          return e.blob || e
-        })
+          return e.blob || e;
+        });
       }
-      return []
+      return [];
     },
     // 删除选择的图片
     onDelImage(item, i) {
       if (item.all === false) {
-        this.fieldsData[item.prop] = ''
+        this.fieldsData[item.prop] = '';
       } else {
-        this.fieldsData[item.prop].splice(i, 1)
+        this.fieldsData[item.prop].splice(i, 1);
       }
-      this.key = Math.random()
+      this.key = Math.random();
     },
     // 点击按钮上传
     upload(event, item) {
       event.target.files.forEach(e => {
-        this.update(e, e.type, item)
-      })
+        this.update(e, e.type, item);
+      });
     },
     uploadonce(event, item) {
       event.target.files.forEach(e => {
-        this.updateonce(e, e.type, item)
-      })
+        this.updateonce(e, e.type, item);
+      });
     },
     // 粘贴剪切板截图
     onPaste(event, item) {
       if (!(event.clipboardData && event.clipboardData.items)) {
-        this.$message.error('当前环境不支持粘贴上传，\n请手动点击上传图片')
-        return
+        this.$message.error('当前环境不支持粘贴上传，\n请手动点击上传图片');
+        return;
       }
       if (event.clipboardData.items[0].type.indexOf('image') >= 0) {
-        let file = event.clipboardData.items[0].getAsFile()
-        let mime = event.clipboardData.items[0].type
-        this.update(file, mime, item)
+        let file = event.clipboardData.items[0].getAsFile();
+        let mime = event.clipboardData.items[0].type;
+        this.update(file, mime, item);
       }
     },
     // 更新表单数据源字段内容
     async update(file, mime, item) {
-      let obj = new FormData()
-      obj.append('files', file)
+      let obj = new FormData();
+      obj.append('files', file);
       let { data } = await this.axios('/adminapi/Publics/uploadsImage', {
         data: obj
-      })
+      });
       if (data.code) {
-        let imgUrl = data.data
+        let imgUrl = data.data;
         if (item.all === false) {
-          this.fieldsData[item.prop] = imgUrl
+          this.fieldsData[item.prop] = imgUrl;
         } else if (this.fieldsData[item.prop] && this.fieldsData[item.prop].length) {
-          this.fieldsData[item.prop].push(imgUrl)
+          this.fieldsData[item.prop].push(imgUrl);
         } else {
-          this.fieldsData[item.prop] = [imgUrl]
+          this.fieldsData[item.prop] = [imgUrl];
         }
-        this.key = Math.random()
+        this.key = Math.random();
       }
     },
     async updateonce(file, mime, item) {
-      let obj = new FormData()
-      obj.append('files', file)
+      let obj = new FormData();
+      obj.append('files', file);
       let { data } = await this.axios('/adminapi/Publics/uploadsOriginal', {
         data: obj
-      })
+      });
       if (data.code) {
-        let imgUrl = data.data
+        let imgUrl = data.data;
         if (item.all === false) {
-          this.fieldsData[item.prop] = imgUrl
+          this.fieldsData[item.prop] = imgUrl;
         } else if (this.fieldsData[item.prop] && this.fieldsData[item.prop].length) {
-          this.fieldsData[item.prop].push(imgUrl)
+          this.fieldsData[item.prop].push(imgUrl);
         } else {
-          this.fieldsData[item.prop] = [imgUrl]
+          this.fieldsData[item.prop] = [imgUrl];
         }
-        this.key = Math.random()
+        this.key = Math.random();
       }
     },
     onMapFields() {
-      this.mapFields = []
-      let arr = []
+      this.mapFields = [];
+      let arr = [];
       this.fields.forEach(e => {
         if (e.wrap) {
-          this.mapFields.push(arr)
-          arr = []
+          this.mapFields.push(arr);
+          arr = [];
         }
-        arr.push(e)
-      })
-      this.mapFields.push(arr)
+        arr.push(e);
+      });
+      this.mapFields.push(arr);
     },
     change(item, index, type) {
-      let click = item[type]
-      if (!click) return
-      this.onClick(click, item, index, type)
+      let click = item[type];
+      if (!click) return;
+      this.onClick(click, item, index, type);
     },
     click(item, index, option) {
-      let click = item['click']
-      if (!click) return
-      this.onClick(click, item, index, option)
+      let click = item['click'];
+      if (!click) return;
+      this.onClick(click, item, index, option);
     },
     onClick(click, item, index, option) {
       if (typeof click == 'function') {
-        click(item, index, option)
-        return
+        click(item, index, option);
+        return;
       }
       if (typeof this.$parent[click] == 'function') {
-        this.$parent[click](item, index, option)
-        return
+        this.$parent[click](item, index, option);
+        return;
       }
     },
     // 输入触发验证
     validated(prop) {
       // 验证
-      console.log('表单验证字段：', prop)
+      console.log('表单验证字段：', prop);
     },
     // 表单验证
     async validate() {
       try {
-        return await this.$refs['form'].validate()
+        return await this.$refs['form'].validate();
       } catch (error) {
-        return error
+        return error;
       }
     },
     resetFields() {
-      this.$refs['form'].resetFields()
+      this.$refs['form'].resetFields();
     },
     clearValidate() {
-      this.$refs['form'].clearValidate()
+      this.$refs['form'].clearValidate();
     },
     resetForm() {
-      this.$refs['form'].resetFields()
+      this.$refs['form'].resetFields();
     }
   }
-}
+};
 </script>
 <style lang='less' scoped>
 .el-form {

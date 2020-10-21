@@ -37,7 +37,7 @@ Create Time  : 2020-03-28
             <template v-if="item.type == 'select'">
               <!-- {{typeof scope.row[item.prop]}} -->
               <el-select v-model="scope.row[item.prop]" @change="onInput(item,scope,'change')" :size="item.size||options.size||'mini'">
-                <el-option v-for="(k,i) in item.options" :key="i" :label="k.label" :value="k.value"></el-option>
+                <el-option v-for="(k,i) in item.options" :key="i" :label="item.config && k[item.config.label] || k.label" :value="item.config && k[item.config.value] || k.value"></el-option>
               </el-select>
             </template>
             <template v-if="item.type == 'dropdown'">
@@ -132,199 +132,12 @@ export default {
     // 表头字段
     fields: {
       type: Array,
-      // required: true,
-      default: () => [
-        {
-          label: '标签',
-          type: 'tag',
-          prop: 'id'
-        },
-        {
-          label: 'input',
-          type: 'input',
-          prop: 'input'
-        },
-        {
-          label: '操作',
-          type: 'manage',
-          fixed: 'right',
-          options: [
-            {
-              label: '删除',
-              click() {
-                console.log('删除');
-              }
-            },
-            {
-              label: '修改',
-              click() {
-                console.log('修改');
-              }
-            },
-            {
-              label: '添加',
-              click() {
-                console.log('添加');
-              }
-            }
-          ]
-        },
-        {
-          label: '开关',
-          type: 'switch',
-          prop: 'switch',
-          align: 'center'
-        },
-        {
-          label: 'dropDown',
-          prop: 'dropdown',
-          type: 'dropdown',
-          options: [{ label: '下拉a', value: '下拉a' }]
-        },
-        {
-          label: 'tagdown',
-          prop: 'tagdown',
-          type: 'tagdown',
-          options: [{ label: '下拉a', value: '下拉a' }]
-        },
-        {
-          label: '选择器',
-          type: 'select',
-          prop: 'select',
-          options: [
-            { label: 'a', value: 'a' },
-            { label: 'b', value: 'b' }
-          ]
-        },
-        {
-          label: '表头名称',
-          prop: 'title',
-          width: 'auto',
-          sort() {},
-          click() {
-            console.log('单击事件');
-          }
-          // dblClick() {
-          //   // 单击事件和双击事件只能出现一个
-          //   console.log("双击事件");
-          // }
-        }
-      ]
+      required: true
     },
     // 表格数据
     fieldsData: {
       type: Array,
-      // required: true,
-      default: () => [
-        {
-          id: 1,
-          title: '首页',
-          path: '/',
-          select: 'a',
-          dropdown: '下拉选择',
-          switch: false,
-          input: 'readonly',
-          tagdown: 'tagdown'
-        },
-        {
-          id: 2,
-          title: '首页',
-          path: '/',
-          select: 'a',
-          dropdown: '下拉选择',
-          switch: false,
-          input: 'readonly',
-          tagdown: 'tagdown'
-        },
-        {
-          id: 3,
-          title: '首页',
-          path: '/',
-          select: 'a',
-          dropdown: '下拉选择',
-          switch: false,
-          input: 'readonly',
-          tagdown: 'tagdown'
-        },
-        {
-          id: 4,
-          title: '首页',
-          path: '/',
-          select: 'a',
-          dropdown: '下拉选择',
-          switch: false,
-          input: 'readonly',
-          tagdown: 'tagdown'
-        },
-        {
-          id: 5,
-          title: '首页',
-          path: '/',
-          select: 'a',
-          dropdown: '下拉选择',
-          switch: false,
-          input: 'readonly',
-          tagdown: 'tagdown'
-        },
-        {
-          id: 6,
-          title: '首页',
-          path: '/',
-          select: 'a',
-          dropdown: '下拉选择',
-          switch: false,
-          input: 'readonly',
-          tagdown: 'tagdown'
-        },
-        {
-          id: 7,
-          title: '首页',
-          path: '/',
-          select: 'a',
-          dropdown: '下拉选择',
-          switch: false,
-          input: 'readonly',
-          tagdown: 'tagdown'
-        },
-        {
-          id: 8,
-          title: '首页',
-          path: '/',
-          select: 'a',
-          dropdown: '下拉选择',
-          switch: false,
-          input: 'readonly',
-          tagdown: 'tagdown'
-        },
-        {
-          id: 9,
-          title: '首页',
-          path: '/',
-          select: 'a',
-          dropdown: '下拉选择',
-          switch: false,
-          input: 'readonly',
-          tagdown: 'tagdown'
-        },
-        {
-          id: 10,
-          title: '首页',
-          path: '/',
-          select: 'a',
-          dropdown: '下拉选择',
-          switch: false,
-          input: 'readonly',
-          tagdown: 'tagdown'
-        },
-        {
-          id: 11,
-          title: '页',
-          path: '/a',
-          select: 'b',
-          dropdown: '下拉',
-          switch: false
-        }
-      ]
+      required: true
     },
     // 表格配置
     options: {
@@ -361,6 +174,9 @@ export default {
       if (a.length == 0) this.loading = true;
       if (a.length) this.loading = false;
       this.toggleRowSelection();
+      this.timer = setTimeout(() => {
+        this.loading = false;
+      }, 5000);
     }
   },
   created() {
@@ -542,6 +358,9 @@ export default {
 };
 </script>
 <style lang='less' scoped>
+.mix-table {
+  width: 100%;
+}
 .demo-table-expand {
   // width: 75vw;
   display: grid;

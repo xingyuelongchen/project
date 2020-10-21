@@ -47,12 +47,18 @@ export default
     // 质检中心
     { path: 'quality', name: 'Quality', meta: { keepAlive: true, role: 9, title: '质检中心', }, component: () => import('@/views/layou'), },
     { path: 'index', name: 'Qualityindex', meta: { keepAlive: true, role: 19, title: '数据管理', }, component: () => import('@/views/backend/crm/quality') },
-    { path: 'extend', name: 'Ether', meta: { keepAlive: true, role: 11, title: '扩展管理', }, component: () => import('@/views/backend/crm/extend'), },
+
     // 营销中心
     { path: 'marketing', name: 'Marketing', meta: { keepAlive: true, role: 179, title: '营销', }, component: () => import('@/views/layou'), },
     { path: 'activity', name: 'Marketingactivity', meta: { keepAlive: true, role: 180, title: '活动管理', }, component: () => import('@/views/backend/crm/marketing/activity') },
     { path: 'member', name: 'Marketingmember', meta: { keepAlive: true, role: 181, title: '会员数据', }, component: () => import('@/views/backend/crm/marketing/member') },
     { path: 'contract', name: 'Admincontract', meta: { keepAlive: true, role: 121, title: '合同管理', }, component: () => import('@/views/backend/crm/marketing/contract') },
 
+    // 扩展管理
+    { path: 'extend', name: 'Ether', meta: { keepAlive: true, role: 11, title: '扩展管理', }, component: () => import('@/views/layou') },
+    { path: 'goodnews', name: 'Goodnews', meta: { keepAlive: true, role: 314, title: '战报管理', }, component: () => import('@/views/backend/crm/extend/goodnews') },
+    { path: 'coupon', name: 'Coupon', meta: { keepAlive: true, role: 313, title: '礼包管理', }, component: () => import('@/views/backend/crm/extend/coupon') },
+    { path: 'gift', name: 'Gift', meta: { keepAlive: true, role: 315, title: '礼包管理', }, component: () => import('@/views/backend/crm/extend/gift') },
+    { path: 'book', name: 'Book', meta: { keepAlive: true, role: 316, title: '学员证书', }, component: () => import('@/views/backend/crm/extend/book') },
 
   ]
