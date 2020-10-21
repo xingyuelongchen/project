@@ -20,7 +20,7 @@ if (process.env.NODE_ENV != 'development') {
 };
 
 // 请求超时时间(毫秒)
-axios.defaults['timeout'] = Config.axios.timeout || 60 * 10;
+axios.defaults['timeout'] = Config.axios.timeout || 6 * 60 * 1000;
 // 设置cross跨域 并设置访问权限 允许跨域携带cookie信息
 axios.defaults['crossDomain'] = false;
 axios.defaults['withCredentials'] = true;
@@ -46,7 +46,7 @@ function reqError() {
     message = Message.error('错误请求，请联系管理员')
 }
 function res(res) {
-    NProgress.done()
+    NProgress.done();
     if (res.data.code == 0) {
         Message.error({
             title: '错误',
@@ -74,10 +74,10 @@ function res(res) {
     return res
 }
 function resError(error) {
+    console.info(error);
     NProgress.done()
     message && message.close();
     message = Message.error('请刷新重试');
     return error
-
 }
 export default axios;

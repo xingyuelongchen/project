@@ -43,7 +43,8 @@ export default {
     ];
     const channel_type = [
       { label: '快商通', value: 1 },
-      { label: '快手', value: 2 }
+      { label: '快手', value: 2 },
+      { label: '全部', value: 3 },
     ];
     return {
       url: null,

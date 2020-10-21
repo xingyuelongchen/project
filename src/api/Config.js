@@ -8,7 +8,7 @@ module.exports = {
         publicPath: '/'
     },
     axios: {                                    // axios 请求配置
-        timeout: 60 * 10,                       // 默认6分钟超时, 单位（秒）
+        timeout: 6*60*1000,                       // 默认6分钟超时, 单位（毫秒）
         baseUrl: 'http://youzhemei.cn:8000',
         baseUrlDev: 'http://192.168.32.194'
     },

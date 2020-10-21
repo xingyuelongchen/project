@@ -161,7 +161,7 @@ export default {
       qrcode: false,
       qrocdeData: {},
       qrocdeFields: [],
-      editForm: { channel: 2,channel_type:2 },
+      editForm: { channel: 2, channel_type: 2 },
       editFields: [],
       close: null,
       selectData: null
@@ -443,12 +443,17 @@ export default {
     quick(item) {
       try {
         if (this.editForm.channel_type == 2) {
-          let arr = this.editForm[item.prop].split(' ');
+          let arr = this.editForm[item.prop].replace(/(\s\s\s*|\n\n*|\t)/g, '; ').split('; ');
           this.editForm.mobile = arr[1];
           this.editForm.remark = arr[arr.length - 1];
-          this.editForm.title = arr[7];
-          this.editForm.keywords = arr[7];
-          this.editForm.referer_type = arr[13];
+          this.editForm.date = arr[5];
+          this.editForm.referer_url = arr[6];
+          this.editForm.browse_url = arr[8];
+          this.editForm.referer_type = arr[9];
+          this.editForm.title = arr[10];
+          let weixin = arr[arr.length - 1].match(/(?<=微信: ).*$/);
+          this.editForm.weixin = weixin.length && weixin[0];
+
         } else {
           this.editForm[item.prop]
             .split('\n')
