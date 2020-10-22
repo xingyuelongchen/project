@@ -19,8 +19,9 @@ export default {
       default() {
         return {
           page: 1,
-          limit: 20
-        }
+          limit: 20,
+          total: 0
+        };
       }
     },
     total: Number
@@ -30,30 +31,30 @@ export default {
     return {
       page: {},
       sizes: [10, 20, 30, 50, 70, 90, 100]
-    }
+    };
   },
   created() {
-    this.page = this.value
-    this.sizes.unshift(this.value.limit)
+    this.page = this.value;
+    if (!this.sizes.includes(this.value.limit)) this.sizes.unshift(this.value.limit);
   },
   methods: {
     sizeChange(limit) {
-      this.page.limit = limit
-      this.page.page = 1
-      this.currentChange()
+      this.page.limit = limit;
+      this.page.page = 1;
+      this.currentChange();
     },
     currentChange() {
-      this.$emit('input', { ...this.page })
+      this.$emit('input', { ...this.page });
       if (typeof this.value.event == 'function') {
-        this.value.event()
+        this.value.event();
       } else if (typeof this.event == 'function') {
-        this.event()
+        this.event();
       } else {
-        this.$parent.getData(this.page)
+        this.$parent.getData(this.page);
       }
     }
   }
-}
+};
 </script>
 <style lang="less" scoped>
 .mix-page {

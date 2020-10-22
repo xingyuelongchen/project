@@ -24,6 +24,7 @@ export default
     { path: 'personal', name: 'Salespersonal', meta: { keepAlive: true, role: 76, title: '个人数据', }, component: () => import('@/views/backend/crm/sales/personal') },
     { path: 'commission', name: 'Salescommission', meta: { keepAlive: true, role: 78, title: '提成设置', }, component: () => import('@/views/backend/crm/sales/commission') },
     { path: 'coefficient', name: 'Salescoefficient', meta: { keepAlive: true, role: 80, title: '提成系数', }, component: () => import('@/views/backend/crm/sales/coefficient') },
+    { path: 'return_customer', name: 'Salesreturn_customer', meta: { keepAlive: true, role: 324, title: '回流客户', }, component: () => import('@/views/backend/crm/sales/return_customer') },
     // 数据管理
     { path: 'data', name: 'Data', meta: { keepAlive: true, role: 13, title: '数据管理', }, component: () => import('@/views/layou'), },
     { path: 'index', name: 'Dataindex', meta: { keepAlive: true, role: 256, title: '数据总览', }, component: () => import('@/views/backend/crm/data/index/') },

@@ -66,7 +66,7 @@ Create Time  : 2020-03-27
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 export default {
   name: 'Saleseek',
   components: { step: () => import('./step') },
@@ -220,114 +220,114 @@ export default {
       selectData: null,
       statusFormData: { label_1: 0 },
       statusFormFields: []
-    }
+    };
   },
   watch: {
     update() {
-      this.getData()
+      this.getData();
     },
     refresh(a) {
       if (a) {
-        this.getData()
-        this.$store.commit('setRefresh', false)
+        this.getData();
+        this.$store.commit('setRefresh', false);
       }
     },
     stepShow(a) {
-      !a && this.getData()
+      !a && this.getData();
     },
     addOrderData: {
       handler(a, b) {
-        this.toggleForm(a, b)
+        this.toggleForm(a, b);
       },
       deep: true
     }
   },
 
   async created() {
-    this.init()
+    this.init();
   },
   computed: {
     ...mapState(['update']),
     refresh() {
-      return this.$store.state.refresh
+      return this.$store.state.refresh;
     }
   },
   methods: {
     async stopMaxOrder() {
       // 暂停接单
-      let { data } = await this.axios('/adminapi/Salecustomer/control')
+      let { data } = await this.axios('/adminapi/Salecustomer/control');
       if (data.code) {
-        this.maxOrder = data.data
+        this.maxOrder = data.data;
       }
     },
     async stopOrder() {
       await this.axios('/adminapi/Salecustomer/control_update', {
         data: this.maxOrder
-      })
+      });
     },
     async init() {
-      await this.stopMaxOrder()
+      await this.stopMaxOrder();
       // 表头数据
-      await this.getTable()
+      await this.getTable();
       // 表格内容数据
-      await this.getData()
-      this.key = Math.random()
+      await this.getData();
+      this.key = Math.random();
     },
     async addHistory(item) {
       let { data } = await this.axios('/adminapi/Salecustomer/label_log', {
         data: { customer_id: item.id }
-      })
+      });
       if (data.code) {
-        this.historyShow = true
-        this.historyData = data.data
+        this.historyShow = true;
+        this.historyData = data.data;
       }
     },
     async addStatus(item) {
-      this.stepShow = true
-      this.statusData = item
+      this.stepShow = true;
+      this.statusData = item;
     },
     async statusSave() {
       await this.axios('/adminapi/Salecustomer/label_add', {
         data: this.statusData
-      })
-      this.getData()
+      });
+      this.getData();
       // this.statusShow = false;
     },
     changeImage(item) {
-      this.qrcode = true
-      this.editForm = { id: item.id, screenshot: item.screenshot }
+      this.qrcode = true;
+      this.editForm = { id: item.id, screenshot: item.screenshot };
     },
     async changeImageSave() {
       // this.change(this.editForm, { property: "screenshot" });
 
       await this.axios('/adminapi/Customers/CustomersScreenshot', {
         data: this.editForm
-      })
-      this.getData()
-      this.qrcode = false
+      });
+      this.getData();
+      this.qrcode = false;
     },
     async CategorieList() {
-      let { data } = await this.axios('/adminapi/Saleorders/CategorieList')
+      let { data } = await this.axios('/adminapi/Saleorders/CategorieList');
       if (data.code) {
-        this.categorieList = data.data
+        this.categorieList = data.data;
       }
     },
     async getNaves() {
-      let { data } = await this.axios('/adminapi/Saleorders/NavesList')
+      let { data } = await this.axios('/adminapi/Saleorders/NavesList');
       if (data.code) {
-        this.$set(this.addOrderFields[0], 'options', data.data)
-        this.options = data.data
+        this.$set(this.addOrderFields[0], 'options', data.data);
+        this.options = data.data;
       }
     },
     async getDepartment() {
-      let { data } = await this.axios('/adminapi/Salecustomer/dept')
+      let { data } = await this.axios('/adminapi/Salecustomer/dept');
       if (data.code) {
         this.salesSearch = this.salesSearch.map(e => {
           if (e.prop == 'saler_group_zid') {
-            e.options = data.data
+            e.options = data.data;
           }
-          return e
-        })
+          return e;
+        });
       }
     },
     async setShare(item) {
@@ -335,16 +335,16 @@ export default {
         sale_id: item.id,
         nickname: item.nickname,
         customer_id: this.id
-      }
+      };
       await this.axios('/adminapi/Salecustomer/share', {
         data: item
-      })
-      this.dialogVisible = false
-      this.id = null
+      });
+      this.dialogVisible = false;
+      this.id = null;
     },
     async share(item) {
-      this.id = item.id
-      this.getDepartment()
+      this.id = item.id;
+      this.getDepartment();
       this.tableSales = [
         { label: '昵称', prop: 'nickname' },
         { label: '部门', prop: 'saler_group_zid' },
@@ -360,29 +360,29 @@ export default {
           type: 'button',
           options: [{ label: '共享', click: this.setShare, style: 'primary' }]
         }
-      ]
-      let { data } = await this.axios('/adminapi/Salecustomer/refunder')
+      ];
+      let { data } = await this.axios('/adminapi/Salecustomer/refunder');
       if (data.code) {
-        this.dialogVisible = true
-        this.dialogName = '选择共享人员'
-        this.show = false
-        this.tableSalesData = data.data
+        this.dialogVisible = true;
+        this.dialogName = '选择共享人员';
+        this.show = false;
+        this.tableSalesData = data.data;
       }
     },
     async getTable() {
       let { data } = await this.axios('/adminapi/Publics/table_th', {
         data: { table_id: 10 }
-      })
+      });
       if (data.code) {
         let arr = data.data.map(e => {
           if (e.prop == 'label') {
-            e.click = this.tableDialog
+            e.click = this.tableDialog;
           }
           if (e.prop == 'tag') {
-            e.click = this.addTag
+            e.click = this.addTag;
           }
-          return e
-        })
+          return e;
+        });
         arr = arr.concat([
           {
             label: '操作',
@@ -422,21 +422,27 @@ export default {
                 label: '预设付款',
                 style: 'danger',
                 click: this.addAdvance
+              },
+              {
+                size: 'mini',
+                label: '释放客户',
+                style: 'danger',
+                click: this.release
               }
             ]
           }
-        ])
-        arr.unshift({ type: 'selection', fixed: 'left' })
-        this.tableFields = arr
+        ]);
+        arr.unshift({ type: 'selection', fixed: 'left' });
+        this.tableFields = arr;
       }
     },
     async addAdvance(item) {
-      let { customer_id, id } = item
-      this.advanceData = item
+      let { customer_id, id } = item;
+      this.advanceData = item;
       {
-        customer_id, id
+        customer_id, id;
       }
-      let { data } = await this.axios('/adminapi/Publics/meal_version')
+      let { data } = await this.axios('/adminapi/Publics/meal_version');
       if (data.code) {
         this.advanceFields = [
           {
@@ -460,70 +466,70 @@ export default {
             options: [{ label: '新业绩' }, { label: '补欠款' }]
           },
           { label: '确定', type: 'button', click: this.setAdvance }
-        ]
-        this.advanceShow = true
+        ];
+        this.advanceShow = true;
       }
     },
     async setAdvance() {
       let { data } = await this.axios('/adminapi/Salecustomer/payment_order', {
         data: this.advanceData
-      })
+      });
       if (data.code) {
-        console.log(data)
-        this.advanceShow = false
+        console.log(data);
+        this.advanceShow = false;
       }
     },
     async changeStep() {
       await this.axios('/adminapi/Salecustomer/label_add', {
         data: this.statusFormData
-      })
-      this.jinduShow = false
-      this.getData()
+      });
+      this.jinduShow = false;
+      this.getData();
     },
     async addTag(item) {
       let { data } = await this.axios('/adminapi/Publics/TableFormEdit', {
         data: { table_id: 16, type: 'add' }
-      })
-      let { data: result } = await this.axios('/adminapi/Salecustomer/tag_info', { data: item })
+      });
+      let { data: result } = await this.axios('/adminapi/Salecustomer/tag_info', { data: item });
 
       if (data.code) {
         this.tagFields = data.data.concat({
           label: '保存',
           type: 'button',
           click: this.saveTag
-        })
-        this.tagData = { ...item, ...result.data }
-        this.tagShow = true
+        });
+        this.tagData = { ...item, ...result.data };
+        this.tagShow = true;
       }
     },
     async saveTag() {
       let { data } = await this.axios('/adminapi/Salecustomer/tag_add', {
         data: this.tagData
-      })
-      if (data.code) this.tagShow = false
-      this.getData()
+      });
+      if (data.code) this.tagShow = false;
+      this.getData();
     },
     async tableDialog(item) {
       // 客户状态进度修改
       let { data } = await this.axios('/adminapi/Salecustomer/customer_label', {
         data: item
-      })
+      });
       if (data.code) {
         let options = data.data.label[0].children.filter(e => {
-          if (!data.data.label_log) return false
+          if (!data.data.label_log) return false;
           // console.log(e.progress, data.data.label_log.progress);
-          return e.progress == data.data.label_log.progress
-        })
-        if (!options.length) options = data.data.label[0].children
+          return e.progress == data.data.label_log.progress;
+        });
+        if (!options.length) options = data.data.label[0].children;
 
-        options = options[0]
+        options = options[0];
         this.statusFormData = {
           customer_id: item.id
           // label: options.label,
           // label_1: options.id,
           // label_2: options.children[0].id,
           // progress: options.progress
-        }
+        };
 
         this.statusFormFields = [
           {
@@ -555,28 +561,28 @@ export default {
             click: this.changeStep,
             wrap: true
           }
-        ]
-        this.jinduShow = true
+        ];
+        this.jinduShow = true;
       }
     },
     async gongxiang() {
-      this.tableData = []
+      this.tableData = [];
       let { data } = await this.axios('/adminapi/Salecustomer/shares', {
         data: { ...this.search }
-      })
+      });
       if (data.code) {
-        this.tableData = data.data
-        this.page.total = data.count
-        this.key = Math.random()
+        this.tableData = data.data;
+        this.page.total = data.count;
+        this.key = Math.random();
       }
     },
     async getData() {
       let { data } = await this.axios('/adminapi/Salecustomer/list', {
         data: { ...this.page, ...this.search }
-      })
+      });
       if (data.code) {
-        this.tableData = data.data
-        this.page.total = data.count
+        this.tableData = data.data;
+        this.page.total = data.count;
       }
     },
     async onAdd() {
@@ -587,154 +593,154 @@ export default {
           type: 'textarea',
           input: this.quick
         }
-      ]
+      ];
       let { data } = await this.axios('/adminapi/Publics/TableFormEdit', {
         data: { table_id: 10, type: 'add' }
-      })
+      });
       if (data.code) {
-        let obj = {}
-        let arr = b.concat(data.data)
+        let obj = {};
+        let arr = b.concat(data.data);
         arr.forEach(e => {
-          obj[e.prop] = ''
-        })
+          obj[e.prop] = '';
+        });
 
-        this.editForm = { ...obj, channel: this.editForm.channel }
+        this.editForm = { ...obj, channel: this.editForm.channel };
         this.editFields = arr.map(e => {
           if (e.prop == 'mobile') {
             e.rule = {
               validator: (rule, val, callback) => {
                 if (!/^\d*$/.test(val) || !/^\d{11}$/.test(val)) {
-                  callback(new Error('请输入正确的手机号码'))
+                  callback(new Error('请输入正确的手机号码'));
                 } else {
-                  callback()
+                  callback();
                 }
               },
               trigger: 'blur'
-            }
+            };
           }
-          return e
-        })
+          return e;
+        });
       }
-      this.drawerOpen('添加咨询信息')
-      this.key = Math.random()
+      this.drawerOpen('添加咨询信息');
+      this.key = Math.random();
     },
     quick(item) {
       try {
         this.editForm[item.prop]
           .split('\n')
           .map(e => {
-            let a = e.split('：')
+            let a = e.split('：');
             if (a[1]) {
               return {
                 label: a[0].replace(/\s/g, ''),
                 value: a[1].replace(/\s/g, '')
-              }
+              };
             } else {
-              return { label: a[0].replace(/\s/g, ''), value: null }
+              return { label: a[0].replace(/\s/g, ''), value: null };
             }
           })
           .forEach(e => {
             this.editFields.forEach(k => {
               if (e.label.toLocaleLowerCase() == k.label.toLocaleLowerCase()) {
-                this.editForm[k.prop] = e.value
+                this.editForm[k.prop] = e.value;
               }
-            })
-          })
-        this.key = Math.random()
+            });
+          });
+        this.key = Math.random();
       } catch (error) {
-        this.$message.error('数据解析错误，请手动填写')
+        this.$message.error('数据解析错误，请手动填写');
       }
     },
     async tableEdit(item) {
       let { data } = await this.axios('/adminapi/Publics/TableFormEdit', {
         data: { table_id: 10, type: 'edit' }
-      })
+      });
       if (data.code) {
-        this.editFields = data.data
-        this.editForm = item
+        this.editFields = data.data;
+        this.editForm = item;
       }
-      this.drawerOpen('编辑')
-      this.key = Math.random()
+      this.drawerOpen('编辑');
+      this.key = Math.random();
     },
     async change(item, scope) {
-      let obj = { id: item.id }
-      obj[scope.property] = item[scope.property]
-      let url = '/adminapi/Salecustomer/CustomersEdit'
+      let obj = { id: item.id };
+      obj[scope.property] = item[scope.property];
+      let url = '/adminapi/Salecustomer/CustomersEdit';
       if (['trace_status', 'label', 'qualifications_status', 'trademark_status'].includes(scope.property)) {
-        url = '/adminapi/Salecustomer/traceStatus'
+        url = '/adminapi/Salecustomer/traceStatus';
       }
       let { data } = await this.axios(url, {
         data: obj
-      })
+      });
       if (data.code) {
-        this.qrcode = false
+        this.qrcode = false;
       }
     },
     selection(select) {
-      this.id = select.map(e => e.id)
+      this.id = select.map(e => e.id);
     },
     async autoDistribution(item, type) {
       // 批量自动分配
       if (!this.id) {
-        this.$message.error('请选择数据')
-        return
+        this.$message.error('请选择数据');
+        return;
       }
       if (type) {
         let { data } = await this.axios('/adminapi/Salecustomer/many_automatic ', {
           data: { id: this.id }
-        })
+        });
         if (data.code) {
-          this.getData()
+          this.getData();
         }
-        return
+        return;
       }
     },
     async autoDistributiona(item, type) {
-      console.log(item)
+      console.log(item);
       if (type !== true) {
-        this.id = item.id
+        this.id = item.id;
       }
       let { data } = await this.axios('/adminapi/Salecustomer/automatic ', {
         data: { id: this.id }
-      })
+      });
       if (data.code) {
-        this.getData()
+        this.getData();
       }
     },
     async handDistribution(item, type) {
       if (type !== true) {
-        this.id = item.id
+        this.id = item.id;
       }
       // 批量手动分配
       if (!this.id) {
-        this.$message.error('请选择数据')
-        return
+        this.$message.error('请选择数据');
+        return;
       }
-      this.getDepartment()
-      let { data } = await this.axios('/adminapi/Salecustomer/refunder')
+      this.getDepartment();
+      let { data } = await this.axios('/adminapi/Salecustomer/refunder');
       if (data.code) {
-        this.dialogVisible = true
-        this.dialogName = '选择接待人员'
-        this.show = false
-        this.tableSalesData = data.data
+        this.dialogVisible = true;
+        this.dialogName = '选择接待人员';
+        this.show = false;
+        this.tableSalesData = data.data;
       }
     },
     async onDistribution(item) {
-      let url = '/adminapi/Salecustomer/manual'
+      let url = '/adminapi/Salecustomer/manual';
       if (this.id && this.id.constructor == Array) {
-        url = '/adminapi/Salecustomer/many_manual'
+        url = '/adminapi/Salecustomer/many_manual';
       }
       let { data } = await this.axios(url, {
         data: { uid: item.id, id: this.id }
-      })
+      });
       if (data.code) {
-        this.getData()
-        this.dialogVisible = false
-        this.id = null
+        this.getData();
+        this.dialogVisible = false;
+        this.id = null;
       }
     },
     distribution(item) {
-      this.id = item.id
+      this.id = item.id;
       this.$confirm('是否执行自动分配?', '提示', {
         confirmButtonText: '自动分配',
         cancelButtonText: '手动分配',
@@ -743,18 +749,18 @@ export default {
         closeOnClickModal: false
       })
         .then(async () => {
-          this.autoDistribution()
+          this.autoDistribution();
         })
         .catch(async () => {
-          this.handDistribution()
-        })
+          this.handDistribution();
+        });
     },
     async onSalesSearch() {
       let { data } = await this.axios('/adminapi/Salecustomer/refunder', {
         data: this.salesSearchData
-      })
+      });
       if (data.code) {
-        this.tableSalesData = data.data
+        this.tableSalesData = data.data;
       }
     },
     async tableDel(item) {
@@ -764,87 +770,87 @@ export default {
         type: 'warning',
         showClose: false,
         closeOnClickModal: false
-      }).catch(() => {})
-      if (!bool) return
+      }).catch(() => {});
+      if (!bool) return;
 
       let { data } = await this.axios('/adminapi/Salecustomer/del', {
         data: { id: item.id }
-      })
+      });
       if (data.code) {
-        this.getData()
+        this.getData();
       }
     },
     async saveOrder() {
       // 添加业绩保存
-      let form = {}
+      let form = {};
       for (let k of this.qrocdeFields) {
-        form[k.prop] = this.qrocdeData[k.prop]
+        form[k.prop] = this.qrocdeData[k.prop];
       }
-      form.id = this.qrocdeData.id
+      form.id = this.qrocdeData.id;
       let { data } = await this.axios('/adminapi/Sale/add', {
         data: form
-      })
+      });
       if (data.code) {
-        this.getData()
-        this.qrcode = false
+        this.getData();
+        this.qrcode = false;
       }
     },
     async addOrder(item) {
       // 添加业绩
       let { data } = await this.axios('/adminapi/Publics/TableFormEdit', {
         data: { type: 'add', table_id: 3 }
-      })
+      });
       if (data.code) {
-        let obj = JSON.parse(JSON.stringify(item))
-        delete obj.remark
-        this.qrocdeData = { ...obj, discount: 0 }
+        let obj = JSON.parse(JSON.stringify(item));
+        delete obj.remark;
+        this.qrocdeData = { ...obj, discount: 0 };
         this.qrocdeFields = data.data.map(e => {
           if (e.prop == 'type' && item.xin) {
-            e.options.shift()
+            e.options.shift();
           }
           if (e.prop == 'debt') {
-            e.type = 'compute'
+            e.type = 'compute';
             e.compute = {
               type: ['-', '-'],
               prop: 'package_version',
               val: 'payment',
               sub: 'discount'
-            }
+            };
           }
           if (e.prop == 'is_timely' && item.xin) {
-            e.type = 'hidden'
+            e.type = 'hidden';
           }
           if (e.prop == 'is_goods' && item.xin) {
-            e.type = 'hidden'
+            e.type = 'hidden';
           }
-          return e
-        })
-        this.qrcode = true
+          return e;
+        });
+        this.qrcode = true;
       }
     },
     onReset() {
-      console.log('重置')
-      this.search = {}
-      this.getData(false)
+      console.log('重置');
+      this.search = {};
+      this.getData(false);
     },
     drawerOpen(title) {
-      this.drawer = true
-      this.drawerName = title
+      this.drawer = true;
+      this.drawerName = title;
     },
     drawerClose() {
-      this.drawer = false
-      this.editFields = []
+      this.drawer = false;
+      this.editFields = [];
     },
     async onExport() {
       // 导出表格
       let { data } = await this.axios('/adminapi/Salecustomer/export', {
         data: this.search
-      })
+      });
       if (data.code) {
-        const link = document.createElement('a')
-        link.href = data.data.url
-        let a = window.open(data.data.url, '_blank')
-        a.close()
+        const link = document.createElement('a');
+        link.href = data.data.url;
+        let a = window.open(data.data.url, '_blank');
+        a.close();
         // link.setAttribute("download", data.data.title);
         // document.body.appendChild(link);
         // link.click();
@@ -853,25 +859,33 @@ export default {
     },
     async onSave() {
       // 添加咨询信息
-      let body = this.editForm
-      delete body.quick
-      let url = this.drawerName == '编辑' ? 'edit' : 'add'
+      let body = this.editForm;
+      delete body.quick;
+      let url = this.drawerName == '编辑' ? 'edit' : 'add';
       let { data } = await this.axios('/adminapi/Salecustomer/' + url, {
         data: body
-      })
+      });
       if (data.code) {
-        this.getData(false)
-        let obj = {}
-        this.editFields.forEach(e => (obj[e.prop] = null))
-        obj['channel'] = this.editForm.channel
-        this.editForm = obj
-        url == 'edit' && (this.drawer = false)
-        this.getData()
-        this.qrcode = false
+        this.getData(false);
+        let obj = {};
+        this.editFields.forEach(e => (obj[e.prop] = null));
+        obj['channel'] = this.editForm.channel;
+        this.editForm = obj;
+        url == 'edit' && (this.drawer = false);
+        this.getData();
+        this.qrcode = false;
       }
+    },
+    release(item) {
+      this.$confirm('确定释放后数据无法恢复，是否释放？', '警告！', { type: 'warning' }).then(async () => {
+        await this.axios('/adminapi/Salecustomer/release', {
+          data: item
+        });
+        this.getData();
+      });
     }
   }
-}
+};
 </script>
 <style lang='less' scoped>
 .info {
