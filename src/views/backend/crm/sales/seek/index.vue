@@ -424,6 +424,7 @@ export default {
                 click: this.addAdvance
               },
               {
+                role: 325,
                 size: 'mini',
                 label: '释放客户',
                 style: 'danger',

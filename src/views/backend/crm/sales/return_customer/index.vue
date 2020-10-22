@@ -5,7 +5,7 @@ Create Time  : 2020-10-22
 -->
 <template>
   <div class="content-cols">
-    <mixSearch v-model="searchData" :fields="searchFields" />
+    <mixSearch v-model="searchData" :fields="searchFields" v-role="327" />
     <mixTable v-model="tableData" :fields="tableFields" />
     <mixPage v-model="page" />
   </div>
@@ -26,6 +26,7 @@ export default {
               size: 'mini',
               label: '提取客户',
               style: 'danger',
+              role: 327,
               click: this.extracted
             }
           ]
