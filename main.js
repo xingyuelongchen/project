@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain, Notification, dialog, Menu, MenuItem, Tray 
 const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs');
-const config = require('./src/config');
+const { axios, location } = require('./src/api/Config');
 const gotTheLock = app.requestSingleInstanceLock();
 const filePath = path.join(__dirname, './electron/store.json');
 const menu = new Menu();
@@ -15,10 +15,10 @@ var mainWindow = null,
 
 if (app.isPackaged) {
   // 线上地址
-  uploadUrl = config.uploadUrl // 更新地址 
+  uploadUrl = axios.update // 更新地址 
 } else {
   // 线下地址 更新地址 
-  uploadUrl = config.uploadUrlDev
+  uploadUrl = axios.update
 }
 init();
 // 初始化主进程
@@ -100,7 +100,7 @@ function createWindow() {
     mainWindow.loadFile('./dist/index.html');
   } else {
     // 调试 
-    let url = config.port ? config.feedUrl + ':' + config.port : config.feedUrl
+    let url = location.port ? location.url + ':' + location.port : location.url
     mainWindow.loadURL(url);
   }
 

@@ -1,11 +1,10 @@
 import IO from 'socket.io-client';
-import config from '@/config.js';
-
+import { axios } from './Config';
+import { getStore } from './Storage';
 export default function () {
-    let socketUrl = config.get('websocket');
-    const socket = IO(socketUrl);
-    if (window.localStorage.userinfo) {
-        let userinfo = JSON.parse(window.localStorage.userinfo)
+    let userinfo = getStore('userinfo');
+    const socket = IO(axios.socket);
+    if (userinfo) {
         let msg = {
             type: "crm",
             data: null,

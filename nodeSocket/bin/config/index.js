@@ -4,7 +4,7 @@ const config = {
     rootSrc: path.resolve(__dirname, '../../src'),
     server: {
         domain: '0.0.0.0',
-        port: 3001,
+        port: 82,
         image: ''
     },
     db: {
