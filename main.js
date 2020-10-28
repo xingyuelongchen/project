@@ -81,7 +81,7 @@ function createWindow() {
   });
   // 更新程序
   updateHandle();
-  autoUpdater.checkForUpdates();
+  // autoUpdater.checkForUpdates();
   // 初始化系统托盘图标
   closed();
   menu.append(new MenuItem({
