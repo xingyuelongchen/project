@@ -51,7 +51,7 @@ Create Time  : 2020-07-22
             <el-form-item label="验证码" prop="code" :rules="{required:true,message:'请输入验证码'}">
               <div class="yzm">
                 <div class="code" @click="getCode">
-                  <img :src="code" alt='验证码' />
+                  <img :key="codeKey" :src="code" alt='验证码' />
                 </div>
                 <el-input clearable v-model="ruleForm.code" autocomplete="on"></el-input>
               </div>
@@ -98,6 +98,7 @@ export default {
       ruleForm: {},
       isLogin: false,
       code: '',
+      codeKey: 0,
       userinfo: {},
       history: {},
       isHistory: false,
@@ -184,6 +185,7 @@ export default {
         })
         .then(data => {
           this.code = data;
+          this.codeKey = Math.random();
         });
     },
     async setRoutes() {

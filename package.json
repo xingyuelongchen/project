@@ -1,6 +1,6 @@
 {
     "name": "xingyuelongchen",
-    "version": "1.0.32",
+    "version": "1.0.34",
     "main": "main.js",
     "scripts": {
         "serve": "vue-cli-service serve",
@@ -123,7 +123,7 @@
         "files": [
             "main.js",
             "dist/",
-            "src/config.js",
+            "src/api/Config.js",
             "electron/"
         ],
         "win": {

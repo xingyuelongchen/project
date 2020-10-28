@@ -73,6 +73,7 @@ function createWindow() {
     width: 1300,
     height: 700,
     frame: true,
+    // icon: path.join(__dirname, './electron/favicon.ico'),
     webPreferences: {
       nodeIntegration: true, // 使用了预加载之后,即使nodeIntegration为false,也可以使用Node API访问到ipcRenderer
       preload: path.join(__dirname, './electron/preload.js')

@@ -11,9 +11,9 @@ module.exports = {
     axios: {                                    // axios 请求配置
         timeout: 6 * 60 * 1000,                       // 默认6分钟超时, 单位（毫秒）
         baseUrl: 'http://118.31.186.172:81',
-        baseUrlDev: 'http://118.31.186.172:81',
+        baseUrlDev: 'http://192.168.32.194:8081',
         socket: 'ws://118.31.186.172:82',
-        update: 'http://118.31.186.172',
+        update: 'http://bcrm.beilabei.com',
     },
     store: {                                    // 本地储存配置 （localstorage,sessionstorage,cookie）
         storeKey: 'sokepid',                    // 本地缓存前缀信息
