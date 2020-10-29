@@ -81,18 +81,18 @@ function createWindow() {
   });
   // 更新程序
   updateHandle();
-  // autoUpdater.checkForUpdates();
+  autoUpdater.checkForUpdates();
   // 初始化系统托盘图标
   closed();
+  menu.append(new MenuItem({
+    label: '刷新',
+    accelerator: 'CmdOrCtrl+r',
+    click: () => { mainWindow.webContents.reload(); }
+  }))
   menu.append(new MenuItem({
     // label: 'tools',
     accelerator: 'CmdOrCtrl+shift+i',
     click: () => { mainWindow.webContents.openDevTools(); }
-  }))
-  menu.append(new MenuItem({
-    // label: '刷新',
-    accelerator: 'CmdOrCtrl+r',
-    click: () => { mainWindow.webContents.reload(); }
   }))
   mainWindow.setMenu(menu);
   // 判断当前运行环境
