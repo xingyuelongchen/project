@@ -64,7 +64,7 @@ export default {
             type: 'button',
             options: [
               { label: '搜索', click: this.getData },
-              { label: '添加会员', click: this.addMember, style: 'danger' }
+              { label: '添加会员', click: this.addMember, style: 'danger', role: 310 }
             ]
           }
         ];

@@ -34,7 +34,7 @@ Create Time  : 2020-04-02
             <el-button v-if="!item.options" :key="index" :type="item.style || 'primary'" v-role="item.role" :size="item.size||'mini'" :icon="item.icon" @click.stop="click(item)">{{item.label}}</el-button>
             <template v-else>
               <template v-for="(k,i) in item.options">
-                <el-button v-if="k.type=='info'" :key="i" v-role="k.role" type="info" size="mini" plain> {{k.label}} : {{form[k.prop]}} </el-button>
+                <el-button v-if="k.type=='info'" :key="i+form[k.prop]" v-role="k.role" type="info" size="mini" plain> {{k.label}} : {{form[k.prop]}} </el-button>
                 <el-button v-else :key="i" v-role="k.role" :icon="k.icon" :type="k.style||item.style || 'primary'" :size="k.size || item.size || 'mini'" @click.stop="click(k)">{{k.label}}</el-button>
               </template>
             </template>
