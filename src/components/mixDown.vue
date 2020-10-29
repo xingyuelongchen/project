@@ -10,7 +10,7 @@ Create Time  : 2020-08-22
         <div class="left">{{info.title}}</div>
         <div class="right"><i class="el-icon-close" @click="show=false"></i></div>
       </div>
-      <div class="body">
+      <div class="body" :key="key">
         <div class="progress">
           <el-progress type="circle" :percentage="progress" :status="status"></el-progress>
         </div>
@@ -30,19 +30,21 @@ export default {
   data() {
     return {
       show: false,
+      key: 0,
       ipcRenderer: null,
       info: {},
-      status: "",
+      status: '',
       progress: 1
     };
   },
   mounted() {
     if (this.isElectron) {
       this.ipcRenderer = window.ipcRenderer;
-      this.ipcRenderer.on("message", (event, data) => {
+      this.ipcRenderer.on('message', (event, data) => {
         this.info = data;
-        if (data.status == -1) this.status = "exception";
-        if (data.status >= 0) this.status = "success";
+        this.key = Math.random();
+        if (data.status == -1) this.status = 'exception';
+        if (data.status >= 0) this.status = 'success';
         if (data.progress) this.progress = Math.floor(data.progress * 1);
         if (data.status !== 4) this.show = true;
       });
@@ -51,15 +53,15 @@ export default {
   methods: {
     nextUpdate() {
       this.show = false;
-      window.ipcRenderer.send("nextUpdate");
+      window.ipcRenderer.send('nextUpdate');
     },
     handerDown() {
-      console.log("手动下载");
+      console.log('手动下载');
       this.show = false;
     },
     update() {
       //  发送更新请求
-      window.ipcRenderer.send("updateNow");
+      window.ipcRenderer.send('updateNow');
     }
   },
   beforeDestroy() {

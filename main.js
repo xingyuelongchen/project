@@ -73,7 +73,7 @@ function createWindow() {
     width: 1300,
     height: 700,
     frame: true,
-    // icon: path.join(__dirname, './electron/favicon.ico'),
+    icon: path.join(__dirname, './electron/favicon.ico'),
     webPreferences: {
       nodeIntegration: true, // 使用了预加载之后,即使nodeIntegration为false,也可以使用Node API访问到ipcRenderer
       preload: path.join(__dirname, './electron/preload.js')
@@ -120,7 +120,7 @@ function updateHandle() {
     updateNotAva: { status: 3, title: '检查完成', progress: 100, msg: '您现在使用的版本为最新版本，无需更新!' },
     progress: { status: 4, title: '正在下载更新', msg: '检测到新版本,正在下载,请稍后……', progress: 1 },
   }
-  autoUpdater.setFeedURL(uploadUrl)
+  autoUpdater.setFeedURL(axios.update);
   autoUpdater.on('error', (info) => {
     // 更新发生错误
     sendUpdateMessage(message.error)

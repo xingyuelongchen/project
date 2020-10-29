@@ -1,6 +1,6 @@
 {
     "name": "xingyuelongchen",
-    "version": "1.0.34",
+    "version": "1.0.42",
     "main": "main.js",
     "scripts": {
         "serve": "vue-cli-service serve",
@@ -106,7 +106,7 @@
             "allowToChangeInstallationDirectory": true,
             "installerIcon": "./electron/favicon.ico",
             "uninstallerIcon": "./electron/favicon.ico",
-            "uninstallDisplayName": "xiezai",
+            "uninstallDisplayName": "卸载管理系统",
             "installerHeaderIcon": "./electron/favicon.ico",
             "createDesktopShortcut": "always",
             "createStartMenuShortcut": true,

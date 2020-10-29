@@ -196,7 +196,7 @@ export default {
         let userinfo = data.data;
         userinfo.dateTime = Date.now() + 1 * 24 * 60 * 60 * 1000;
         this.$store.commit('setUserinfo', userinfo);
-        this.setstore('userinfo', userinfo);
+        this.setstore('userinfo', userinfo, true);
         let msg = {
           type: 'crm',
           data: null,

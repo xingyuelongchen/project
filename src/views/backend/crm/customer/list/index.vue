@@ -630,7 +630,7 @@ export default {
         const link = document.createElement('a');
         link.href = data.data.url;
         let a = window.open(data.data.url, '_blank');
-        setTimeout(a.close, 100);
+        setTimeout(a.close, 500);
         // link.setAttribute("download", data.data.title);
         // document.body.appendChild(link);
         // link.click();

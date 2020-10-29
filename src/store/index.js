@@ -57,7 +57,7 @@ export default new Vuex.Store({
     setUserinfo(state, data) {
       if (data.id) {
         state.userinfo = data;
-        setStore('userinfo', data)
+        setStore('userinfo', data, true)
         // data = JSON.stringify(data);
         // window.localStorage.setItem('userinfo', data)
       }
