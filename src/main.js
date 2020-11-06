@@ -62,6 +62,7 @@ Vue.directive('move', {
 Vue.prototype.axios = axios;
 Vue.prototype.EXEVERSION = version.version;
 Vue.prototype.isElectron = isElectron();
+Vue.prototype.ipcRenderer = window.ipcRenderer;
 Vue.prototype.socket = socket();
 Vue.use(VCharts);
 Vue.use(Element);

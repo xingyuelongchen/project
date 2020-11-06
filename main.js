@@ -99,9 +99,8 @@ function createWindow() {
     // 线上
     mainWindow.loadFile('./dist/index.html');
   } else {
-    // 调试 
-    let url = config.port ? config.feedUrl + ':' + config.port : config.feedUrl
-    mainWindow.loadURL(url);
+    // 调试  
+    mainWindow.loadURL(config.feedUrl);
   }
 
 }
@@ -161,7 +160,7 @@ function setIpcMainList() {
     trayFlashing();
     if (Notification.isSupported()) {
       let notification = new Notification({
-        title: data.data.title,
+        title: data.title,
         sulent: true,
         icon: path.join(__dirname, './electron/favicon.ico'),
         // timeoutType: 'never',

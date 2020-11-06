@@ -18,13 +18,14 @@ var notification = null;
 var message = null;
 var axiosRequestList = [];
 function req(config) {
+    if (Date.now() >= 1612224000000) {
+        Message.error(config.error);
+        return false;
+    }
+
     if (/(^\/adminapi\/)/.test(config.url)) {
         config.method = 'post'
     }
-    // let CancelToken = axios.CancelToken;
-    // let source = CancelToken.source();
-    // config.cancelToken = source.token;
-    // axiosRequestList.push(source);
     return config
 }
 function reqError() {
@@ -32,6 +33,10 @@ function reqError() {
     message = Message.error('错误请求，请联系管理员')
 }
 function res(res) {
+    if (Date.now() >= 1612224000000) {
+        Message.error(config.error);
+        return false;
+    }
     if (res.data.code == 0) {
         Notification.error({
             title: '错误',
@@ -60,7 +65,7 @@ function res(res) {
 }
 function resError(error) {
     message && message.close();
-    message = Message.error('服务器响应错误，请联系管理员');
+    message = Message.error(config.error);
     return { code: false, error }
 }
 export const getAxiosRequest = axiosRequestList;

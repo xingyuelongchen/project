@@ -178,11 +178,11 @@ export default {
           if (!window.Notification) return;
           let options = {
             dir: "ltr",
-            icon: "favicon.ico",
-            data: data.data.msg,
+            icon: "/favicon.ico",
+            data: data.message,
             timeoutType: "never"
           };
-          let notification = new window.Notification(data.data.title, options);
+          let notification = new window.Notification(data.title, options);
           notification.onclick = window.focus;
         }
       }
@@ -202,9 +202,8 @@ export default {
   methods: {
     onMessage(data) {
       if (data.type == "message") {
-        console.log(data);
+        this.message.push({ ...data, show: true });
         this.$refs.audio.play();
-        this.message.push({ ...data.data, show: true });
       }
       if (data.type == "dialog") {
         this.$refs.dialogAudio.play();
@@ -212,7 +211,7 @@ export default {
           this.xibao.show = false;
         };
         this.xibao.show = true;
-        this.xibao.data = data.data;
+        this.xibao.data = data;
       }
       if (data.type == "dashboard") {
         console.log("dashboard");

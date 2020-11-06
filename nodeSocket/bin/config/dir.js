@@ -9,17 +9,10 @@ const formidableMiddleware = require('express-formidable');
 server.listen(config.server.port, config.server.domain, () => {
     console.log('server ', 'http://' + config.server.domain + ':' + config.server.port)
 });
-// 挂载 请求解析模块
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json({ type: 'text/plain' }));
-// app.use(bodyParser.json({ type: 'application/json' }));
-// app.use(bodyParser.json());
 
 var user = {};
 io.on('connection', function (socket) {
-    // 初始化连接，保存连接数据
     user[socket.id] = { socketEvent: socket };
-    // 用户登录时，保存用户数据
     socket.on('init', (data) => {
         let userinfo = JSON.parse(data);
         user[socket.id] = {
@@ -35,7 +28,7 @@ io.on('connection', function (socket) {
         user = obj
     })
 });
-app.use(formidableMiddleware());//formdata解析模块
+app.use(formidableMiddleware());
 app.use('/favicon.ico', function () {
     return
 })

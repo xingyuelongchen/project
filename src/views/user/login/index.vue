@@ -155,12 +155,8 @@ export default {
     async down() {
       let { data } = await this.axios('/adminapi/Login/client');
       if (data.code && data.data && data.data.version) {
-        if (/^2.+/.test(data.data.version)) {
           this.downUrl = `/guangyizhou Setup ${this.EXEVERSION}.exe`;
           setTimeout(() => this.$refs.downDom.click(), 200);
-        } else {
-          alert('即将上线，敬请期待……');
-        }
       }
     },
     register() {

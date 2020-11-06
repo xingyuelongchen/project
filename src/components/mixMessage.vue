@@ -5,14 +5,17 @@ Create Time  : 2020-08-17
 -->
 <template>
   <div class="msg-box" ref="box" :style="ClassStyle">
-    <div class="title" user="primary" @mousedown.stop.prevent="mousedown" @mouseup.stop="mouseup">
-      <span>{{value.title || '您有新消息！'}}</span>
+    <div
+      class="title"
+      user="primary"
+      @mousedown.stop.prevent="mousedown"
+      @mouseup.stop="mouseup"
+    >
+      <span>{{ value.title || "您有新消息！" }}</span>
       <span><i class="el-icon-close" @click.stop="close"></i></span>
     </div>
-    <div class="body" ref="msg" v-html="value.message">
-
-    </div>
-    <el-image-viewer v-if="url" :on-close=" url='' " :url-list="[url]" />
+    <div class="body" ref="msg" v-html="value.message"></div>
+    <el-image-viewer v-if="url" :on-close="colseImage" :url-list="[url]" />
   </div>
 </template>
 <script>
@@ -35,11 +38,16 @@ export default {
     };
   },
   mounted() {
-    this.$refs.msg.querySelector("img").onclick = e => {
-      this.url = e.target.src;
-    };
+    if (this.$refs.msg.querySelector("img")) {
+      this.$refs.msg.querySelector("img").onclick = e => {
+        this.url = e.target.src;
+      };
+    }
   },
   methods: {
+    colseImage() {
+      this.url = "";
+    },
     close() {
       this.$emit("input");
     },
