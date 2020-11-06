@@ -49,6 +49,7 @@ export default {
   async mounted() {
     this.socket.on("real_time_data", data => {
       data = JSON.parse(data);
+      console.log(data);
       this.handerData(data);
     });
     this.axios.get("/statistics/statistics/list?id=1", {
@@ -68,7 +69,7 @@ export default {
         },
         data: {
           columns: ["name", "value"],
-          rows: data.data.day.data
+          rows: data.day.data
         }
       };
       this.chartData.week = {
@@ -83,7 +84,7 @@ export default {
         },
         data: {
           columns: ["name", "value"],
-          rows: data.data.week.data
+          rows: data.week.data
         }
       };
       this.chartData.ranking = {
@@ -99,7 +100,7 @@ export default {
         },
         data: {
           columns: ["name", "value"],
-          rows: data.data.ranking.data
+          rows: data.ranking.data
         }
       };
       this.chartData.time = {
@@ -119,7 +120,7 @@ export default {
         },
         data: {
           columns: ["name", "value", "rate"],
-          rows: data.data.time.data.map(e => {
+          rows: data.time.data.map(e => {
             e.rate = e.rate / 100;
             e.value = e.value / 10000;
             return e;

@@ -4,82 +4,220 @@ Create author: qinglong
 Create Time  : 2020-07-22
 -->
 <template>
-  <div class="wrap" @click.self="isHistory=false">
+  <div class="wrap" @click.self="isHistory = false">
     <div class="login">
       <div @keypress.enter="setRoutes" class="login-box">
-        <div class="title">{{title}}</div>
+        <div class="title">{{ title }}</div>
         <div class="logo">
-          <img src="http://www.guangyizhou.cn/public/home/assets/logo.png" alt />
+          <img
+            src="http://www.guangyizhou.cn/public/home/assets/logo.png"
+            alt
+          />
         </div>
         <div v-if="resetPasswordShow">
-          <el-form :model="resetPasswordData" status-icon ref="login" label-width="80px" class="demo-ruleForm">
-            <el-form-item label="手机号" prop="mobile" :rules="{required:true,message:'请输入手机号码'}">
-              <el-input clearable v-model="resetPasswordData.mobile" autocomplete="on"></el-input>
+          <el-form
+            :model="resetPasswordData"
+            status-icon
+            ref="login"
+            label-width="80px"
+            class="demo-ruleForm"
+          >
+            <el-form-item
+              label="手机号"
+              prop="mobile"
+              :rules="{ required: true, message: '请输入手机号码' }"
+            >
+              <el-input
+                clearable
+                v-model="resetPasswordData.mobile"
+                autocomplete="on"
+              ></el-input>
             </el-form-item>
-            <el-form-item label="新密码" prop="password" :rules="{required:true,message:'请输入密码'}">
-              <el-input clearable type="password" v-model="resetPasswordData.password" autocomplete="on"></el-input>
+            <el-form-item
+              label="新密码"
+              prop="password"
+              :rules="{ required: true, message: '请输入密码' }"
+            >
+              <el-input
+                clearable
+                type="password"
+                v-model="resetPasswordData.password"
+                autocomplete="on"
+              ></el-input>
             </el-form-item>
-            <el-form-item label="验证码" prop="code" :rules="{required:true,message:'请输入短信验证码'}">
+            <el-form-item
+              label="验证码"
+              prop="code"
+              :rules="{ required: true, message: '请输入短信验证码' }"
+            >
               <div style="display:flex;justify-content:space-between">
-                <el-input clearable v-model="resetPasswordData.code" autocomplete="on"></el-input>
+                <el-input
+                  clearable
+                  v-model="resetPasswordData.code"
+                  autocomplete="on"
+                ></el-input>
                 <div style="margin-left:5px">
-                  <el-button :loading="!!resetcodeloading" @click="getMobileCode">获取验证码{{resetcodeloading? '('+resetcodeloading+')' :'' }}</el-button>
+                  <el-button
+                    :loading="!!resetcodeloading"
+                    @click="getMobileCode"
+                    >获取验证码{{
+                      resetcodeloading ? "(" + resetcodeloading + ")" : ""
+                    }}</el-button
+                  >
                 </div>
               </div>
             </el-form-item>
             <el-form-item>
-              <div style="height:40px;display: flex;justify-content:space-between">
-
-                <el-link :underline="false" type="primary" @click="()=>{ this.login(),this.resetPasswordShow=false}">立即登录</el-link>
-
+              <div
+                style="height:40px;display: flex;justify-content:space-between"
+              >
+                <el-link
+                  :underline="false"
+                  type="primary"
+                  @click="
+                    () => {
+                      this.login(), (this.resetPasswordShow = false);
+                    }
+                  "
+                  >立即登录</el-link
+                >
               </div>
             </el-form-item>
           </el-form>
-          <el-button type="primary" style="width:100%" @click="resetPassword">重置密码</el-button>
+          <el-button type="primary" style="width:100%" @click="resetPassword"
+            >重置密码</el-button
+          >
         </div>
         <div v-else>
-          <el-form :model="ruleForm" status-icon ref="login" label-width="80px" class="demo-ruleForm">
-            <el-form-item label="手机号码" prop="mobile" :rules="{required:true,message:'请输入账号'}">
-              <el-input clearable v-model="ruleForm.mobile" autocomplete="on" @focus="isHistory=true" @input="isHistory=false"></el-input>
+          <el-form
+            :model="ruleForm"
+            status-icon
+            ref="login"
+            label-width="80px"
+            class="demo-ruleForm"
+          >
+            <el-form-item
+              label="手机号码"
+              prop="mobile"
+              :rules="{ required: true, message: '请输入账号' }"
+            >
+              <el-input
+                clearable
+                v-model="ruleForm.mobile"
+                autocomplete="on"
+                @focus="isHistory = true"
+                @input="isHistory = false"
+              ></el-input>
             </el-form-item>
-            <el-form-item label="花名" prop="nickname" :rules="{required:true,message:'请输入账号'}" v-if="isLogin">
-              <el-input clearable v-model="ruleForm.nickname" autocomplete="on"></el-input>
+            <el-form-item
+              label="花名"
+              prop="nickname"
+              :rules="{ required: true, message: '请输入账号' }"
+              v-if="isLogin"
+            >
+              <el-input
+                clearable
+                v-model="ruleForm.nickname"
+                autocomplete="on"
+              ></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="password" :rules="{required:true,message:'请输入密码'}">
-              <el-input clearable type="password" v-model="ruleForm.password" autocomplete="on"></el-input>
+            <el-form-item
+              label="密码"
+              prop="password"
+              :rules="{ required: true, message: '请输入密码' }"
+            >
+              <el-input
+                clearable
+                type="password"
+                v-model="ruleForm.password"
+                autocomplete="on"
+              ></el-input>
             </el-form-item>
-            <el-form-item label="确认密码" prop="password_confirm" :rules="{required:true,message:'请输入密码'}" v-if="isLogin">
-              <el-input clearable type="password" v-model="ruleForm.password_confirm" autocomplete="on"></el-input>
+            <el-form-item
+              label="确认密码"
+              prop="password_confirm"
+              :rules="{ required: true, message: '请输入密码' }"
+              v-if="isLogin"
+            >
+              <el-input
+                clearable
+                type="password"
+                v-model="ruleForm.password_confirm"
+                autocomplete="on"
+              ></el-input>
             </el-form-item>
-            <el-form-item label="验证码" prop="code" :rules="{required:true,message:'请输入验证码'}">
+            <el-form-item
+              label="验证码"
+              prop="code"
+              :rules="{ required: true, message: '请输入验证码' }"
+            >
               <div class="yzm">
                 <div class="code" @click="getCode">
-                  <img :src="code" alt='验证码' />
+                  <img :src="code" alt="验证码" />
                 </div>
-                <el-input clearable v-model="ruleForm.code" autocomplete="on"></el-input>
+                <el-input
+                  clearable
+                  v-model="ruleForm.code"
+                  autocomplete="on"
+                ></el-input>
               </div>
             </el-form-item>
             <el-form-item>
-              <div style="height:40px;display: flex;justify-content:space-between">
+              <div
+                style="height:40px;display: flex;justify-content:space-between"
+              >
                 <span v-if="isElectron">
                   <el-checkbox v-model="checkPassword">记住账号</el-checkbox>
                 </span>
                 <span>
-                  <el-link :underline="false" type="primary" @click="()=>{this.resetPasswordShow=true;this.title='找回密码'}">找回密码</el-link>
+                  <el-link
+                    :underline="false"
+                    type="primary"
+                    @click="
+                      () => {
+                        this.resetPasswordShow = true;
+                        this.title = '找回密码';
+                      }
+                    "
+                    >找回密码</el-link
+                  >
                 </span>
                 <div>
-                  <el-link :underline="false" type="primary" @click="register" v-if="!isLogin">立即注册</el-link>
-                  <el-link :underline="false" type="primary" @click="login" v-else>立即登录</el-link>
+                  <el-link
+                    :underline="false"
+                    type="primary"
+                    @click="register"
+                    v-if="!isLogin"
+                    >立即注册</el-link
+                  >
+                  <el-link
+                    :underline="false"
+                    type="primary"
+                    @click="login"
+                    v-else
+                    >立即登录</el-link
+                  >
                 </div>
               </div>
             </el-form-item>
           </el-form>
-          <el-button v-if="!resetPasswordShow" type="primary" @click="setRoutes" style="width:100%">确认{{title}}</el-button>
-          <div class="history" v-if="history && isHistory && !isLogin && isElectron ">
-            <template v-for="(item,key,index) in history">
-              <div class="item" :key="index" @click="check(item)">{{key}} </div>
+          <el-button
+            v-if="!resetPasswordShow"
+            type="primary"
+            @click="setRoutes"
+            style="width:100%"
+            >确认{{ title }}</el-button
+          >
+          <div
+            class="history"
+            v-if="history && isHistory && !isLogin && isElectron"
+          >
+            <template v-for="(item, key, index) in history">
+              <div class="item" :key="index" @click="check(item)">
+                {{ key }}
+              </div>
             </template>
-            <div class="item" @click="removerHistory"> 清除历史记录 </div>
+            <div class="item" @click="removerHistory">清除历史记录</div>
           </div>
         </div>
       </div>
@@ -87,20 +225,27 @@ Create Time  : 2020-07-22
     <div class="down" v-if="!isElectron" @click="down">
       下载客户端
     </div>
-    <a :href="downUrl" v-show="false" ref='downDom' target="_blank" download rel="noopener noreferrer"></a>
+    <a
+      :href="downUrl"
+      v-show="false"
+      ref="downDom"
+      target="_blank"
+      download
+      rel="noopener noreferrer"
+    ></a>
   </div>
 </template>
 <script>
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     return {
-      title: '登录',
-      url: '/adminapi/Login/login',
-      downUrl: '',
+      title: "登录",
+      url: "/adminapi/Login/login",
+      downUrl: "",
       ruleForm: {},
       isLogin: false,
-      code: '',
+      code: "",
       userinfo: {},
       history: {},
       isHistory: false,
@@ -112,21 +257,22 @@ export default {
     };
   },
   async created() {
-    localStorage.removeItem('userinfo');
-    sessionStorage.removeItem('Store');
-    sessionStorage.removeItem('xitong');
-    this.$store.commit('setClear');
+    localStorage.removeItem("userinfo");
+    sessionStorage.removeItem("Store");
+    sessionStorage.removeItem("xitong");
+    this.$store.commit("setClear");
     if (this.isElectron) {
-      this.history = window.ipcRenderer.sendSync('getStore', 'history') || false;
+      this.history =
+        window.ipcRenderer.sendSync("getStore", "history") || false;
     }
     this.getCode();
   },
   methods: {
     async resetPassword() {
       if (!this.resetPasswordData.code) {
-        this.$alert('请输入手机验证码');
+        this.$alert("请输入手机验证码");
       }
-      let { data } = await this.axios('/adminapi/Login/editpass', {
+      let { data } = await this.axios("/adminapi/Login/editpass", {
         data: this.resetPasswordData
       });
       if (data.code) {
@@ -135,11 +281,11 @@ export default {
     },
     async getMobileCode() {
       if (!this.resetPasswordData.mobile) {
-        this.$alert('请输入手机号码');
+        this.$alert("请输入手机号码");
         return;
       }
       let i = 60;
-      let { data } = await this.axios('/adminapi/Login/forget', {
+      let { data } = await this.axios("/adminapi/Login/forget", {
         data: this.resetPasswordData
       });
       if (data.code) {
@@ -153,34 +299,39 @@ export default {
       }
     },
     async down() {
-      let { data } = await this.axios('/adminapi/Login/client');
-      if (data.code && data.data && data.data.version) {
-          this.downUrl = `/guangyizhou Setup ${this.EXEVERSION}.exe`;
-          setTimeout(() => this.$refs.downDom.click(), 200);
-      }
+      this.downUrl = `/guangyizhou Setup ${this.EXEVERSION}.exe`;
+      setTimeout(() => this.$refs.downDom.click(), 200);
     },
     register() {
-      this.url = '/adminapi/Login/register';
-      this.title = '用户注册';
+      this.url = "/adminapi/Login/register";
+      this.title = "用户注册";
       this.isLogin = true;
       this.ruleForm = {};
     },
     login() {
-      this.url = '/adminapi/Login/login';
-      this.title = '用户登录';
+      this.url = "/adminapi/Login/login";
+      this.title = "用户登录";
       this.isLogin = false;
       this.ruleForm = {};
     },
     async getCode() {
       this.axios
-        .get('/adminapi/Login/verify?v=' + Math.random(), {
-          responseType: 'arraybuffer',
+        .get("/adminapi/Login/verify?v=" + Math.random(), {
+          responseType: "arraybuffer",
           headers: {
-            'Content-Type': 'image/png; charset=utf-8'
+            "Content-Type": "image/png; charset=utf-8"
           }
         })
         .then(e => {
-          return 'data:image/png;base64,' + btoa(new Uint8Array(e.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+          return (
+            "data:image/png;base64," +
+            btoa(
+              new Uint8Array(e.data).reduce(
+                (data, byte) => data + String.fromCharCode(byte),
+                ""
+              )
+            )
+          );
         })
         .then(data => {
           this.code = data;
@@ -193,16 +344,16 @@ export default {
       if (data.code && !this.isLogin) {
         let userinfo = data.data;
         userinfo.dateTime = Date.now() + 1 * 24 * 60 * 60 * 1000;
-        window.localStorage.setItem('userinfo', JSON.stringify(userinfo));
-        this.$store.commit('setUserinfo', userinfo);
+        window.localStorage.setItem("userinfo", JSON.stringify(userinfo));
+        this.$store.commit("setUserinfo", userinfo);
         let msg = {
-          type: 'crm',
+          type: "crm",
           data: null,
           create_time: userinfo.dateTime,
           uid: userinfo.id,
           department: userinfo.department || 0
         };
-        this.socket.emit('init', JSON.stringify(msg));
+        this.socket.emit("init", JSON.stringify(msg));
         if (!this.history) this.history = {};
         if (this.checkPassword) {
           this.history[this.ruleForm.mobile] = {
@@ -213,8 +364,8 @@ export default {
           delete this.history[this.ruleForm.mobile];
         }
         if (this.isElectron) {
-          window.ipcRenderer.send('setStore', {
-            title: 'history',
+          window.ipcRenderer.send("setStore", {
+            title: "history",
             data: this.history
           });
         }
@@ -229,7 +380,7 @@ export default {
     },
     removerHistory() {
       this.isHistory = false;
-      window.ipcRenderer.send('removeStore', 'history');
+      window.ipcRenderer.send("removeStore", "history");
       this.history = false;
     },
     check(item) {
@@ -241,7 +392,7 @@ export default {
 </script>
 <style lang='less' scoped>
 .wrap {
-  background: url('~@/assets/image/bg_login.jpg') no-repeat top left / 100% 100%;
+  background: url("~@/assets/image/bg_login.jpg") no-repeat top left / 100% 100%;
   min-height: 100vh;
   height: 100%;
 }
